@@ -39,3 +39,4 @@ func start_run(selected_genes:Array[Gene]):
 func start_battle():
 
 	battle_manager.start_battle()
+	
