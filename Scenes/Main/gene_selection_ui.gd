@@ -8,18 +8,14 @@ var options: Array[GeneResource] = []
 
 
 func open(database):
-
 	show()
-
 	var choices = database.get_random_genes(3)
-
 	display_choices(choices)
 
 
 func display_choices(genes:Array[GeneResource]):
-
 	options = genes
-
+	
 	var buttons = container.get_children()
 
 	for i in range(buttons.size()):
@@ -27,23 +23,16 @@ func display_choices(genes:Array[GeneResource]):
 		var btn = buttons[i]
 
 		if i < genes.size():
-
 			btn.text = genes[i].gene_name
 			btn.show()
-
 			if not btn.pressed.is_connected(_on_button_pressed.bind(i)):
 				btn.pressed.connect(_on_button_pressed.bind(i))
-
 		else:
 			btn.hide()
 
 
 func _on_button_pressed(index:int):
-
 	var selected_gene: GeneResource = options[index]
-
 	var selected: Array[GeneResource] = [selected_gene]
-
 	hide()
-
 	genes_selected.emit(selected)

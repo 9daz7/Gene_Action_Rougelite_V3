@@ -1,6 +1,9 @@
 [gd_scene format=3 uid="uid://d0et5656fij0b"]
 
+[ext_resource type="Script" uid="uid://cjyluyrq21x3k" path="res://Scenes/Battle/BattleScene.gd" id="1_u2duk"]
+
 [node name="BattleScene" type="Node2D" unique_id=953255763]
+script = ExtResource("1_u2duk")
 
 [node name="Background" type="Sprite2D" parent="." unique_id=1252619315]
 

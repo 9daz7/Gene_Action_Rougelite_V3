@@ -32,7 +32,7 @@ var slot_capacity := {
 # GENES
 #
 
-func add_gene(gene: Gene) -> bool:
+func add_gene(gene: GeneResource) -> bool:
 	if gene == null:
 		return false
 		

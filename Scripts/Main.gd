@@ -12,18 +12,12 @@ extends Node
 @onready var gene_selection = $UI/GeneSelectionUI
 
 func _ready():
-
 	gene_database.load_genes()
-
 	gene_selection.genes_selected.connect(start_run)
-
 	gene_selection.open(gene_database)
 
 
 func start_run(selected_genes:Array[GeneResource]):
-
 	gene_selection.hide()
-
 	run_manager.setup_run(selected_genes)
-
 	battle_manager.start_battle()

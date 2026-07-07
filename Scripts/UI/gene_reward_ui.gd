@@ -1,6 +1,6 @@
 extends Control
 
-signal gene_chosen(gene: Gene)
+signal gene_chosen(gene: GeneResource)
 
 var options: Array[GeneResource] = []
 

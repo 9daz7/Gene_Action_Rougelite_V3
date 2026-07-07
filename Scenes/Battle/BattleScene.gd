@@ -12,7 +12,7 @@ var enemy
 func spawn_player(player_scene):
 	player = player_scene.instantiate()
 	player_container.add_child(player)
-	player.position = player_spawn.global_position
+	player.global_position = player_spawn.global_position
 	return player
 
 
