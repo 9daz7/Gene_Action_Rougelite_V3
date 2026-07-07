@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://d0et5656fij0b"]
 
 [ext_resource type="Script" uid="uid://cjyluyrq21x3k" path="res://Scenes/Battle/BattleScene.gd" id="1_u2duk"]
+[ext_resource type="PackedScene" uid="uid://cfbv4hu5i6pr2" path="res://Scenes/UI/BattleUI.tscn" id="2_jaxsk"]
 
 [node name="BattleScene" type="Node2D" unique_id=953255763]
 script = ExtResource("1_u2duk")
@@ -20,3 +21,5 @@ position = Vector2(600, 300)
 [node name="EffectContainer" type="Node2D" parent="." unique_id=1947693126]
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1153670719]
+
+[node name="BattleUI" parent="." unique_id=1277132647 instance=ExtResource("2_jaxsk")]

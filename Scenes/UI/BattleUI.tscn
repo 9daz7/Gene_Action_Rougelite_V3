@@ -1,0 +1,39 @@
+[gd_scene format=3 uid="uid://cfbv4hu5i6pr2"]
+
+[ext_resource type="Script" uid="uid://ie8t5uvb4gse" path="res://Scripts/UI/BattleUI.gd" id="1_o21vf"]
+
+[node name="BattleUI" type="Control" unique_id=1277132647]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_o21vf")
+
+[node name="PlayerHP" type="ProgressBar" parent="." unique_id=458044599]
+layout_mode = 0
+offset_right = 4.0
+offset_bottom = 27.0
+
+[node name="EnemyHP" type="ProgressBar" parent="." unique_id=43262124]
+layout_mode = 0
+offset_right = 4.0
+offset_bottom = 27.0
+
+[node name="MoveButtons" type="HBoxContainer" parent="." unique_id=270229014]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="AttackButton" type="Button" parent="MoveButtons" unique_id=1974191994]
+layout_mode = 2
+text = "Attack"
+
+[node name="ProtectButton" type="Button" parent="MoveButtons" unique_id=1125897058]
+layout_mode = 2
+text = "Protect"
+
+[node name="Move3Button" type="Button" parent="MoveButtons" unique_id=1367933585]
+layout_mode = 2
+text = "Temp 3"
+
+[node name="Move4Button" type="Button" parent="MoveButtons" unique_id=510207000]
+layout_mode = 2
+text = "Temp 4"

@@ -5,6 +5,7 @@ extends Node2D
 @onready var player_spawn = $PlayerContainer/PlayerSpawn
 
 @onready var enemy_container = $EnemyContainer
+@onready var battle_ui = $BattleUI
 
 var player
 var enemy

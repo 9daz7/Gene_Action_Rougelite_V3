@@ -6,8 +6,8 @@ const ENEMY_SCENE = preload("res://Scenes/Animals/EnemyAnimal.tscn")
 
 @onready var turn_manager = $"../TurnManager"
 
-var current_battle
-var player
+var current_battle = null
+var player = null
 var enemies: Array = []
 
 
@@ -46,7 +46,11 @@ func initialize_battle():
 			enemy.start_battle()
 
 	if turn_manager:
-		turn_manager.start_battle(player, enemies)
+		turn_manager.start_battle(
+			player, 
+			enemies,
+			current_battle.battle_ui
+		)
 	else:
 		print("ERROR: TurnManager not found")
 		

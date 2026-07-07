@@ -10,22 +10,34 @@ enum TurnState {
 
 var current_state := TurnState.NONE
 
-var player
+var battle_ui = null
+var player = null
 var enemies:Array = []
 
-func start_battle(player_ref, enemy_refs:Array):
+func start_battle(player_ref, enemy_refs:Array, ui):
 	player = player_ref
 	enemies = enemy_refs
+	battle_ui = ui
 	
 	print("Turn system started")
 	
+	if battle_ui:
+		battle_ui.move_selected.connect(
+			_on_move_selected
+		)
+		
 	start_player_turn()
 	
 func start_player_turn():
+	if current_state == TurnState.BATTLE_OVER:
+		return
+		
 	current_state = TurnState.PLAYER_TURN
 	print("Player turn")
 	
 func start_enemy_turn():
+	if current_state == TurnState.BATTLE_OVER:
+		return
 	current_state = TurnState.ENEMY_TURN
 	print("Enemy turn")
 	
@@ -34,35 +46,65 @@ func start_enemy_turn():
 		var enemy = enemies[0]
 		var action = enemy.choose_action(player)
 		
-		if action == "attack":
-			enemy.attack(player)
-		else:
-			print("Enemy protects")
+		match action:
+			"attack":
+				enemy.attack(player)
+			"protect":
+				print("Enemy protects")
 			
 	check_battle_end()
 	
+	if current_state != TurnState.BATTLE_OVER:
+		
+		start_player_turn()
 	
-func player_attack():
+	
+func _on_move_selected(move_index:int):
 	if current_state != TurnState.PLAYER_TURN:
 		return
-	
-	print("Player attacks")
-	
+
+	if enemies.size() == 0:
+		return
+
 	var enemy = enemies[0]
-	var damage = player.get_attack()
-	enemy.take_damage(damage)
+
+	print("Player selected move: ", move_index)
+
+	player.use_move(move_index, enemy)
+
 	check_battle_end()
-	
+
 	if current_state != TurnState.BATTLE_OVER:
+
 		start_enemy_turn()
 	
+	
+#func player_attack():
+	#if current_state != TurnState.PLAYER_TURN:
+		#return
+	#
+	#print("Player attacks")
+	#
+	#var enemy = enemies[0]
+	#var damage = player.get_attack()
+	#enemy.take_damage(damage)
+	#check_battle_end()
+	#
+	#if current_state != TurnState.BATTLE_OVER:
+		#start_enemy_turn()
+	
 func check_battle_end():
+	if player == null:
+		return
+		
 	if player.hp <= 0:
 		print("Player defeated")
 		current_state = TurnState.BATTLE_OVER
+		return
 	
 	for enemy in enemies:
 		if enemy.hp <= 0:
 			print("Enemy defeated")
 			current_state = TurnState.BATTLE_OVER
+			return
 		
