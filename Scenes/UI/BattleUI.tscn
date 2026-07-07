@@ -2,25 +2,58 @@
 
 [ext_resource type="Script" uid="uid://ie8t5uvb4gse" path="res://Scripts/UI/BattleUI.gd" id="1_o21vf"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2a143"]
+bg_color = Color(0.11666278, 0.45212668, 0, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xlvfx"]
+bg_color = Color(0.7645044, 0.019060427, 9.62615e-08, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+
 [node name="BattleUI" type="Control" unique_id=1277132647]
 layout_mode = 3
 anchors_preset = 0
 script = ExtResource("1_o21vf")
 
 [node name="PlayerHP" type="ProgressBar" parent="." unique_id=458044599]
-layout_mode = 0
-offset_right = 4.0
-offset_bottom = 27.0
+layout_mode = 1
+anchors_preset = -1
+offset_left = 8.01
+offset_top = 474.165
+offset_right = 285.01
+offset_bottom = 501.16525
+theme_override_styles/fill = SubResource("StyleBoxFlat_2a143")
 
 [node name="EnemyHP" type="ProgressBar" parent="." unique_id=43262124]
-layout_mode = 0
-offset_right = 4.0
-offset_bottom = 27.0
+layout_mode = 1
+anchors_preset = -1
+offset_left = 8.0
+offset_top = 120.125
+offset_right = 285.0
+offset_bottom = 147.125
+theme_override_styles/fill = SubResource("StyleBoxFlat_xlvfx")
 
 [node name="MoveButtons" type="HBoxContainer" parent="." unique_id=270229014]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 1
+anchors_preset = -1
+offset_left = 173.06
+offset_top = 538.52
+offset_right = 438.06
+offset_bottom = 578.51996
 
 [node name="AttackButton" type="Button" parent="MoveButtons" unique_id=1974191994]
 layout_mode = 2
