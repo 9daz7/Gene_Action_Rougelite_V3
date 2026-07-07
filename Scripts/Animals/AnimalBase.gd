@@ -3,12 +3,21 @@ class_name AnimalBase
 
 signal hp_changed(new_hp)
 
+# base stats
 var base_hp := 100
 var hp := 100
 
 var base_attack := 10
 var base_speed := 10
 
+# genes
+var equiped_genes: Array[GeneResource] = []
+
+# moves
+var learned_moves:Array[MoveResource] = []
+
+# status effects
+var status_effects:Array = []
 
 # Gene slots
 var gene_slots := {
@@ -54,6 +63,11 @@ func add_gene(gene: GeneResource) -> bool:
 
 	return true
 
+func add_move(move:MoveResource):
+	if move == null:
+		return
+		
+	learned_moves.append(move)
 
 #
 # STATS
@@ -97,6 +111,7 @@ func get_speed() -> int:
 func take_damage(amount:int):
 	hp -= amount
 	hp = clamp(hp, 0, get_max_hp())
+	print(name, " took ", amount, " damage. HP:", hp)
 	hp_changed.emit(hp)
 
 
@@ -111,3 +126,37 @@ func get_synergy_bonus(slot:GeneResource.SlotType) -> int:
 		return 1
 
 	return 0
+	
+	
+func use_move(index:int, target):
+	if index < 0:
+		return
+		
+	if index >= learned_moves.size():
+		return
+		
+	var move = learned_moves[index]
+	move.execute(self, target)
+	
+
+func setup_basic_moves():
+	learned_moves.clear()
+	
+	var attack = MoveResource.new()
+	
+	attack.move_name = "Attack"
+	attack.power = 0
+	attack.description = "A basic attack."
+	
+	add_move(attack)
+	
+	var protect = MoveResource.new()
+	
+	protect.move_name = "Protect"
+	protect.power = -1
+	protect.description = "Reduce incoming damage."
+	
+	add_move(protect)
+	
+	print(name, " learned basic moves")
+	

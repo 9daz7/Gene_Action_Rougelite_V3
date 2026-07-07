@@ -51,22 +51,6 @@ func initialize_battle():
 		print("ERROR: TurnManager not found")
 		
 
-func test_turn():
-	print("---- TURN ----")
-
-	if enemies.size() == 0:
-		return
-
-	var enemy = enemies[0]
-
-	var action = enemy.choose_action(player)
-
-	if action == "attack":
-		enemy.attack(player)
-	else:
-		print("Enemy protects")
-
-
 
 func end_battle():
 	print("Cleaning battle")
