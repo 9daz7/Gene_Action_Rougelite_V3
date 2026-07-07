@@ -1,5 +1,5 @@
 extends Resource
-class_name GeneResource
+class_name Gene
 
 enum Rarity {
 	COMMON,

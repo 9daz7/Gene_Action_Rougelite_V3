@@ -3,8 +3,8 @@
 [ext_resource type="Script" uid="uid://bnj7yu0fuav50" path="res://Scripts/Main.gd" id="1_qw60k"]
 [ext_resource type="Script" uid="uid://mvejoab1jhjx" path="res://Scripts/Managers/RunManager.gd" id="2_5yls4"]
 [ext_resource type="Script" uid="uid://dyciqvsf3mwgk" path="res://Scripts/Managers/BattleManager.gd" id="2_p6jpk"]
+[ext_resource type="Script" uid="uid://3le5bg14c80l" path="res://Scripts/UI/GeneSelectionScreen.gd" id="3_p6jpk"]
 [ext_resource type="Script" uid="uid://dlec22tbrybl3" path="res://Scripts/Genes/GeneDatabase.gd" id="4_p6jpk"]
-[ext_resource type="Script" uid="uid://b7i2wjhann78x" path="res://Scenes/Main/gene_selection_ui.gd" id="5_2a143"]
 
 [node name="Main" type="Node" unique_id=1435261983]
 script = ExtResource("1_qw60k")
@@ -17,9 +17,9 @@ script = ExtResource("2_p6jpk")
 [node name="RunManager" type="Node" parent="Managers" unique_id=1223530463]
 script = ExtResource("2_5yls4")
 
-[node name="MapManager" type="Node" parent="Managers" unique_id=270194661]
-
 [node name="UIManager" type="Node" parent="Managers" unique_id=2111793402]
+
+[node name="MapManager" type="Node" parent="Managers" unique_id=270194661]
 
 [node name="GeneDatabase" type="Node" parent="Managers" unique_id=1652956824]
 script = ExtResource("4_p6jpk")
@@ -40,26 +40,12 @@ anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="GeneSelectionUI" type="Control" parent="UI" unique_id=1168691594]
+[node name="GeneSelectionScreen" type="Control" parent="UI" unique_id=779126167]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
-script = ExtResource("5_2a143")
-
-[node name="VBoxContainer" type="VBoxContainer" parent="UI/GeneSelectionUI" unique_id=224692771]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="Button" type="Button" parent="UI/GeneSelectionUI/VBoxContainer" unique_id=545747798]
-layout_mode = 2
-
-[node name="Button2" type="Button" parent="UI/GeneSelectionUI/VBoxContainer" unique_id=1202751677]
-layout_mode = 2
-
-[node name="Button3" type="Button" parent="UI/GeneSelectionUI/VBoxContainer" unique_id=1806738684]
-layout_mode = 2
+script = ExtResource("3_p6jpk")
 
 [node name="GeneRewardUI" type="Control" parent="UI" unique_id=1805312372]
 visible = false

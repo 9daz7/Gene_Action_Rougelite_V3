@@ -1,11 +1,12 @@
 extends Node
 
+
 # Genes equipped for THIS run
-var active_genes: Array[Gene] = []
+var active_genes: Array[GeneResource] = []
 
 
 # Genes unlocked permanently
-var gene_collection: Array[Gene] = []
+var gene_collection: Array[GeneResource] = []
 
 
 var adaptation_limit := 6
@@ -13,7 +14,7 @@ var used_adaptations := 0
 
 
 
-func setup_run(starting_genes:Array[Gene]):
+func setup_run(starting_genes:Array[GeneResource]):
 
 	clear_run()
 
@@ -22,7 +23,7 @@ func setup_run(starting_genes:Array[Gene]):
 
 
 
-func equip_gene(gene:Gene)->bool:
+func equip_gene(gene:GeneResource) -> bool:
 
 	if used_adaptations + gene.adaptation_cost > adaptation_limit:
 		print("Not enough adaptation slots")
@@ -44,7 +45,7 @@ func apply_genes_to_player(player):
 
 
 
-func collect_gene(gene:Gene):
+func collect_gene(gene:GeneResource):
 
 	if not gene_collection.has(gene):
 		gene_collection.append(gene)

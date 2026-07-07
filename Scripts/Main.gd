@@ -20,7 +20,7 @@ func _ready():
 	gene_selection.open(gene_database)
 
 
-func start_run(selected_genes:Array[Gene]):
+func start_run(selected_genes:Array[GeneResource]):
 
 	gene_selection.hide()
 

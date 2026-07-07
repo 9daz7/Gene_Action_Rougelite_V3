@@ -1,29 +1,52 @@
 extends Control
 
 
-signal genes_selected(genes:Array[Gene])
+signal genes_selected(genes:Array[GeneResource])
 
 
-@onready var gene_screen = $GeneSelectionScreen
+var options: Array[GeneResource] = []
 
+
+@onready var container = $VBoxContainer
 
 
 func open(database):
 
 	show()
 
-	gene_screen.open(database)
+	var choices = database.get_random_genes(3)
 
-
-	if not gene_screen.genes_selected.is_connected(
-		_on_genes_selected
-	):
-		gene_screen.genes_selected.connect(
-			_on_genes_selected
-		)
+	display_choices(choices)
 
 
 
-func _on_genes_selected(genes):
+func display_choices(genes:Array[GeneResource]):
 
-	genes_selected.emit(genes)
+	options = genes
+
+	var buttons = container.get_children()
+
+	for i in range(buttons.size()):
+
+		var btn = buttons[i]
+
+		if i < genes.size():
+
+			btn.text = genes[i].gene_name
+			btn.show()
+
+			if not btn.pressed.is_connected(_on_button_pressed.bind(i)):
+				btn.pressed.connect(_on_button_pressed.bind(i))
+
+		else:
+			btn.hide()
+
+
+
+func _on_button_pressed(index:int):
+
+	var selected_gene = options[index]
+
+	hide()
+
+	genes_selected.emit([selected_gene])
