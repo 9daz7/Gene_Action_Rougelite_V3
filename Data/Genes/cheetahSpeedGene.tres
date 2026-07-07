@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="Gene" format=3 uid="uid://evtpo6myq0a1"]
+
+[ext_resource type="Script" uid="uid://duqswf0lnik8h" path="res://Scripts/genes/gene.gd" id="1_5miya"]
+
+[resource]
+script = ExtResource("1_5miya")
+gene_name = "Cheetah_Speed"
+attack_bonus = 2
+speed_bonus = 5
+species = "Cheetah"
+metadata/_custom_type_script = "uid://duqswf0lnik8h"

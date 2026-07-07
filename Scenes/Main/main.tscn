@@ -1,0 +1,81 @@
+[gd_scene format=3 uid="uid://clikthhda4ilv"]
+
+[ext_resource type="Script" uid="uid://bnj7yu0fuav50" path="res://Scripts/Main.gd" id="1_qw60k"]
+[ext_resource type="Script" uid="uid://mvejoab1jhjx" path="res://Scripts/Managers/RunManager.gd" id="2_5yls4"]
+[ext_resource type="Script" uid="uid://3le5bg14c80l" path="res://Scripts/UI/GeneSelectionScreen.gd" id="3_p6jpk"]
+
+[node name="Main" type="Node" unique_id=1435261983]
+script = ExtResource("1_qw60k")
+
+[node name="Managers" type="Node" parent="." unique_id=1603099653]
+
+[node name="BattleManager" type="Node" parent="Managers" unique_id=991561839]
+
+[node name="RunManager" type="Node" parent="Managers" unique_id=1223530463]
+script = ExtResource("2_5yls4")
+
+[node name="MapManager" type="Node" parent="Managers" unique_id=270194661]
+
+[node name="UIManager" type="Node" parent="Managers" unique_id=2111793402]
+
+[node name="World" type="Node2D" parent="." unique_id=903047276]
+
+[node name="BattleRoot" type="Node2D" parent="World" unique_id=252651737]
+
+[node name="MapRoot" type="Node2D" parent="World" unique_id=334794433]
+
+[node name="Effects" type="Node2D" parent="World" unique_id=510555822]
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=1736721601]
+
+[node name="BattleUI" type="Control" parent="UI" unique_id=789315724]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="GeneSelectionUI" type="Control" parent="UI" unique_id=779126167]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("3_p6jpk")
+
+[node name="GeneRewardUI" type="Control" parent="UI" unique_id=1805312372]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="MapUI" type="Control" parent="UI" unique_id=329266484]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="LabUI" type="Control" parent="UI" unique_id=204244767]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="PauseMenu" type="Control" parent="UI" unique_id=39544824]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Transition" type="Control" parent="UI" unique_id=1850224517]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Audio" type="Node" parent="." unique_id=1494023738]
+
+[node name="Music" type="AudioStreamPlayer" parent="Audio" unique_id=889126413]
+
+[node name="SFX" type="Node" parent="Audio" unique_id=111965674]

@@ -1,5 +1,6 @@
-extends Resource
 class_name Gene
+extends Resource
+
 
 enum Rarity {
 	COMMON,

@@ -5,9 +5,9 @@ var all_common_genes: Array[Gene] = []
 
 func load_genes():
 	all_common_genes = [
-		preload("res://resources/genes/BoarSkinGene.tres"),
-		preload("res://resources/genes/cheetahSpeedGene.tres"),
-		preload("res://resources/genes/TigerStrengthGene.tres")
+		preload("res://Assets/genes/BoarSkinGene.tres"),
+		preload("res://Assets/genes/cheetahSpeedGene.tres"),
+		preload("res://Assets/genes/TigerStrengthGene.tres")
 	]
 
 func get_random_starting_genes(count: int) -> Array[Gene]:

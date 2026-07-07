@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://d0et5656fij0b"]
+
+[node name="BattleScene" type="Node2D" unique_id=953255763]
+
+[node name="Background" type="Sprite2D" parent="." unique_id=1252619315]
+
+[node name="PlayerContainer" type="Node2D" parent="." unique_id=1121529056]
+
+[node name="PlayerSpawn" type="Marker2D" parent="PlayerContainer" unique_id=783683835]
+
+[node name="EnemyContainer" type="Node2D" parent="." unique_id=2143289975]
+
+[node name="EffectContainer" type="Node2D" parent="." unique_id=1947693126]
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1153670719]
