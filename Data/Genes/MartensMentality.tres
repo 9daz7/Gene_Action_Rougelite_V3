@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="GeneResource" format=3 uid="uid://b63650onw8qfj"]
+
+[ext_resource type="Script" uid="uid://cnlwwn0eoa0pn" path="res://Scripts/Genes/GeneResource.gd" id="1_84u6t"]
+
+[resource]
+script = ExtResource("1_84u6t")
+gene_name = "Marten"
+attack_bonus = 1
+speed_bonus = 2
+defense_bonus = -1
+metadata/_custom_type_script = "uid://cnlwwn0eoa0pn"

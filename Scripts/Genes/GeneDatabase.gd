@@ -8,8 +8,8 @@ var all_common_genes: Array[GeneResource] = []
 func load_genes():
 	all_common_genes = [
 		preload("res://Data/Genes/BoarSkinGene.tres"),
-		preload("res://Data/Genes/cheetahSpeedGene.tres"),
-		preload("res://Data/Genes/TigerStrengthGene.tres")
+		preload("res://Data/Genes/CheetahSpeedGene.tres"),
+		preload("res://Data/Genes/TigerStrenghtGene.tres")
 	]
 
 

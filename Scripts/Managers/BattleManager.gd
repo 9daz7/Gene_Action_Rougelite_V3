@@ -4,6 +4,8 @@ const BATTLE_SCENE = preload("res://Scenes/Battle/BattleScene.tscn")
 const PLAYER_SCENE = preload("res://Scenes/Animals/PlayerAnimal.tscn")
 const ENEMY_SCENE = preload("res://Scenes/Animals/EnemyAnimal.tscn")
 
+@onready var turn_manager = $"../TurnManager"
+
 var current_battle
 var player
 var enemies: Array = []
@@ -35,18 +37,19 @@ func start_battle():
 func initialize_battle():
 	print("Battle initialized")
 
-	if player:
-		if player.has_method("start_battle"):
-			player.start_battle()
+	if player.has_method("start_battle"):
+		player.start_battle()
 
 
 	for enemy in enemies:
 		if enemy.has_method("start_battle"):
 			enemy.start_battle()
 
-	test_turn()
-
-
+	if turn_manager:
+		turn_manager.start_battle(player, enemies)
+	else:
+		print("ERROR: TurnManager not found")
+		
 
 func test_turn():
 	print("---- TURN ----")

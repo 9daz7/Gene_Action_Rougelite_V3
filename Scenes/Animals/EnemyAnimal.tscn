@@ -4,3 +4,7 @@
 
 [node name="EnemyAnimal" type="Node2D" unique_id=44273970]
 script = ExtResource("1_fbirj")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1577365520]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1364075243]

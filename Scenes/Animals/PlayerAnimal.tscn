@@ -4,3 +4,9 @@
 
 [node name="PlayerAnimal" type="Node2D" unique_id=215963547]
 script = ExtResource("1_lbnkj")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1971900039]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1706417400]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=653483851]

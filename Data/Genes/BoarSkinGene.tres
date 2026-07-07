@@ -1,12 +1,11 @@
-[gd_resource type="Resource" script_class="Gene" format=3 uid="uid://b5q3he7vtsinp"]
+[gd_resource type="Resource" script_class="GeneResource" format=3 uid="uid://fkdeujyg7eca"]
 
-[ext_resource type="Script" uid="uid://duqswf0lnik8h" path="res://Scripts/genes/gene.gd" id="1_fm0bq"]
+[ext_resource type="Script" uid="uid://cnlwwn0eoa0pn" path="res://Scripts/Genes/GeneResource.gd" id="1_x756j"]
 
 [resource]
-script = ExtResource("1_fm0bq")
-gene_name = "Boar_skin"
-description = "Thick skin bolsters defense"
-hp_bonus = 20
-defense_bonus = 2
-species = "Boar"
-metadata/_custom_type_script = "uid://duqswf0lnik8h"
+script = ExtResource("1_x756j")
+gene_name = "Boar"
+slot_type = 1
+hp_bonus = 1
+defense_bonus = 3
+metadata/_custom_type_script = "uid://cnlwwn0eoa0pn"
