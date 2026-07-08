@@ -8,3 +8,19 @@ func start_battle():
 	
 	setup_basic_moves()
 	
+	
+#func test_gene():
+	#
+	#var gene = preload("res://Data/Genes/TigerStrenghtGene.tres")
+	#
+	#add_gene(gene)
+	#print("Current genes:")
+	#
+	#for g in equipped_genes:
+		#print(g.gene_name)
+	#
+	#print("Current moves:")
+	#
+	#for move in learned_moves:
+		#print(move.move_name)
+		

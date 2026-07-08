@@ -34,9 +34,14 @@ func execute(user, target):
 	
 	if move_name == "Protect":
 		print(user.name," uses protect")
+		user.activate_protect()
 		return
 		
-	var damage = user.get_attack() + power
+	var damage = DamageCalculator.calculate_damage(
+		user,
+		target,
+		self
+	)
 		
 	print(
 		user.name,
@@ -46,8 +51,6 @@ func execute(user, target):
 		damage,
 		" damage"
 	)
-		
-	print("Targets:", target)
 		
 	target.take_damage(damage)
 		

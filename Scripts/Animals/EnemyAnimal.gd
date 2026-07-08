@@ -9,7 +9,10 @@ func start_battle():
 	setup_basic_moves()
 
 
-func choose_action(_player) -> MoveResource:
+func choose_action(_player):
 
-	return get_move(0)
+	if learned_moves.size() > 0:
+		return learned_moves[0]
+		
+	return null
 		
