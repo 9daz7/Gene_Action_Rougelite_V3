@@ -6,17 +6,26 @@ class_name MoveResource
 @export var description:String = ""
 
 func execute(user, target):
-	if power > 0:
-		var damage = user.get_attack() + power
-		print(
-			user.name,
-			" uses ",
-			move_name,
-			" for ",
-			damage,
-			" damage"
-		)
+	print("Executing move:", move_name, " Power:", power)
+	
+	if move_name == "Protect":
+		print(user.name, "protects")
+		user.is_protected = true
+		return
 		
-		target.take_damage(damage)
+	var damage = user.get_attack() + power
+		
+	print(
+		user.name,
+		" uses ",
+		move_name,
+		" for ",
+		damage,
+		" damage"
+	)
+		
+	print("Targets:", target)
+		
+	target.take_damage(damage)
 		
 		

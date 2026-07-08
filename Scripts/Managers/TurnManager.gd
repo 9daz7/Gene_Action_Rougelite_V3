@@ -96,12 +96,12 @@ func _on_move_selected(move_index:int):
 func check_battle_end():
 	if player == null:
 		return
-		
+
 	if player.hp <= 0:
 		print("Player defeated")
 		current_state = TurnState.BATTLE_OVER
 		return
-	
+
 	for enemy in enemies:
 		if enemy.hp <= 0:
 			print("Enemy defeated")

@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://cfbv4hu5i6pr2"]
 
 [ext_resource type="Script" uid="uid://ie8t5uvb4gse" path="res://Scripts/UI/BattleUI.gd" id="1_o21vf"]
-[ext_resource type="Script" uid="uid://bcfv1qu4c8wh8" path="res://Scripts/UI/PlayerHP.gd" id="2_31gad"]
-[ext_resource type="Script" uid="uid://dvsi4fgq53wkp" path="res://Scripts/UI/EnemyHP.gd" id="3_tr5vc"]
+[ext_resource type="Script" uid="uid://bcfv1qu4c8wh8" path="res://Scripts/UI/playerHP.gd" id="2_31gad"]
+[ext_resource type="Script" uid="uid://dvsi4fgq53wkp" path="res://Scripts/UI/enemy_hp.gd" id="3_tr5vc"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2a143"]
 bg_color = Color(0.11666278, 0.45212668, 0, 1)

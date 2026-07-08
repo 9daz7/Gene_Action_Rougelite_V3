@@ -10,6 +10,8 @@ var hp := 100
 var base_attack := 10
 var base_speed := 10
 
+var is_protected := false
+
 # genes
 var equiped_genes: Array[GeneResource] = []
 
@@ -109,6 +111,11 @@ func get_speed() -> int:
 #
 
 func take_damage(amount:int):
+	if is_protected:
+		amount = int(amount * 0.2)
+		print(name, " blocked damage with protect")
+		is_protected = false
+
 	hp -= amount
 	hp = clamp(hp, 0, get_max_hp())
 	print(name, " took ", amount, " damage. HP:", hp)
@@ -145,7 +152,7 @@ func setup_basic_moves():
 	var attack = MoveResource.new()
 	
 	attack.move_name = "Attack"
-	attack.power = 0
+	attack.power = 1
 	attack.description = "A basic attack."
 	
 	add_move(attack)

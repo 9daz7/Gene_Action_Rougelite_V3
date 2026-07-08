@@ -31,6 +31,8 @@ func start_battle():
 
 	enemies.append(enemy)
 
+	current_battle.setup_hp_bars(player, enemy)
+	
 	initialize_battle()
 
 

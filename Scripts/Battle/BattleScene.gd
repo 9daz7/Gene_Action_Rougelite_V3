@@ -2,24 +2,27 @@ extends Node2D
 
 
 @onready var player_container = $PlayerContainer
-@onready var player_spawn = $PlayerContainer/PlayerSpawn
-
 @onready var enemy_container = $EnemyContainer
+
 @onready var battle_ui = $BattleUI
+@onready var player_hp = $BattleUI/PlayerHP
+@onready var enemy_hp = $BattleUI/EnemyHP
 
-var player
-var enemy
 
-func spawn_player(player_scene):
-	player = player_scene.instantiate()
+func spawn_player(scene):
+	var player = scene.instantiate()
 	player_container.add_child(player)
-	player.position = player_spawn.global_position
+	player.position = $PlayerContainer/PlayerSpawn.position
 	return player
 
 
-
-func spawn_enemy(enemy_scene):
-	enemy = enemy_scene.instantiate()
+func spawn_enemy(scene):
+	var enemy = scene.instantiate()
 	enemy_container.add_child(enemy)
-	enemy.global_position = Vector2(500, 300)
 	return enemy
+
+
+func setup_hp_bars(player, enemy):
+	print("Setting up HP bars")
+	player_hp.set_player(player)
+	enemy_hp.set_enemy(enemy)
