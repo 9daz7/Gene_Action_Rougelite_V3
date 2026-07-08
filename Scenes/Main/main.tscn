@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" uid="uid://bnj7yu0fuav50" path="res://Scripts/Main.gd" id="1_qw60k"]
 [ext_resource type="Script" uid="uid://mvejoab1jhjx" path="res://Scripts/Managers/RunManager.gd" id="2_5yls4"]
-[ext_resource type="Script" uid="uid://dyciqvsf3mwgk" path="res://Scripts/Managers/BattleManager.gd" id="2_p6jpk"]
-[ext_resource type="Script" uid="uid://c7cp2g5ftrdc4" path="res://Scripts/Managers/TurnManager.gd" id="3_2a143"]
+[ext_resource type="Script" uid="uid://dyciqvsf3mwgk" path="res://Scripts/Combat/BattleManager.gd" id="2_p6jpk"]
+[ext_resource type="Script" uid="uid://c7cp2g5ftrdc4" path="res://Scripts/Combat/TurnManager.gd" id="3_2a143"]
 [ext_resource type="Script" uid="uid://dlec22tbrybl3" path="res://Scripts/Genes/GeneDatabase.gd" id="4_p6jpk"]
 [ext_resource type="Script" uid="uid://b7i2wjhann78x" path="res://Scenes/Main/gene_selection_ui.gd" id="5_2a143"]
 

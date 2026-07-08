@@ -32,32 +32,33 @@ func start_player_turn():
 	if current_state == TurnState.BATTLE_OVER:
 		return
 		
+	player.reset_turn_state()
 	current_state = TurnState.PLAYER_TURN
 	print("Player turn")
 	
-func start_enemy_turn():
-	if current_state == TurnState.BATTLE_OVER:
-		return
-	current_state = TurnState.ENEMY_TURN
-	print("Enemy turn")
-	
-	if enemies.size() > 0:
-		
-		var enemy = enemies[0]
-		var action = enemy.choose_action(player)
-		
-		match action:
-			"attack":
-				enemy.attack(player)
-			"protect":
-				print("Enemy protects")
-			
-	check_battle_end()
-	
-	if current_state != TurnState.BATTLE_OVER:
-		
-		start_player_turn()
-	
+#func start_enemy_turn():
+	#if current_state == TurnState.BATTLE_OVER:
+		#return
+	#current_state = TurnState.ENEMY_TURN
+	#print("Enemy turn")
+	#
+	#if enemies.size() > 0:
+		#
+		#var enemy = enemies[0]
+		#var action = enemy.choose_action(player)
+		#
+		#match action:
+			#"attack":
+				#enemy.attack(player)
+			#"protect":
+				#print("Enemy protects")
+			#
+	#check_battle_end()
+	#
+	#if current_state != TurnState.BATTLE_OVER:
+		#
+		#start_player_turn()
+	#
 	
 func _on_move_selected(move_index:int):
 	if current_state != TurnState.PLAYER_TURN:
@@ -67,17 +68,55 @@ func _on_move_selected(move_index:int):
 		return
 
 	var enemy = enemies[0]
-
-	print("Player selected move: ", move_index)
-
-	player.use_move(move_index, enemy)
-
-	check_battle_end()
-
-	if current_state != TurnState.BATTLE_OVER:
-
-		start_enemy_turn()
 	
+	var player_move = player.get_move(move_index)
+	var enemy_move = enemy.choose_action(player)
+	
+	print(
+		"Player selected:",
+		 player_move.move_name
+	)
+
+	print(
+		"Enemy selected:",
+		enemy_move.move_name
+	)
+	
+	resolve_turn(
+		player_move,
+		enemy_move,
+		enemy
+	)
+	
+func resolve_turn(player_move, enemy_move, enemy):
+	current_state = TurnState.ENEMY_TURN
+	
+	if player_move.priority >= enemy_move.priority:
+		print("Player moves first")
+		
+		player_move.execute(player,enemy)
+		
+		check_battle_end()
+		
+
+		if current_state != TurnState.BATTLE_OVER:
+			enemy_move.execute(enemy,player)
+			
+	else:
+		print("Enemy moves first")
+		
+		enemy_move.execute(enemy,player)
+		
+		check_battle_end()
+		
+		if current_state != TurnState.BATTLE_OVER:
+			player_move.execute(player,enemy)
+			
+	check_battle_end()
+	
+	if current_state != TurnState.BATTLE_OVER:
+		
+		start_player_turn()
 	
 #func player_attack():
 	#if current_state != TurnState.PLAYER_TURN:

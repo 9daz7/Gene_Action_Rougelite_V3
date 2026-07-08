@@ -65,11 +65,24 @@ func add_gene(gene: GeneResource) -> bool:
 
 	return true
 
+#
+# moves
+#
 func add_move(move:MoveResource):
 	if move == null:
 		return
 		
 	learned_moves.append(move)
+	
+func get_move(index:int) -> MoveResource:
+	if index < 0:
+		return null
+		
+	if index >= learned_moves.size():
+		return null
+		
+	return learned_moves[index]
+	
 
 #
 # STATS
@@ -121,29 +134,45 @@ func take_damage(amount:int):
 	print(name, " took ", amount, " damage. HP:", hp)
 	hp_changed.emit(hp)
 
-
-#
-# LEGENDARY MUTATIONS (placeholder)
-#
-
-func get_synergy_bonus(slot:GeneResource.SlotType) -> int:
-	var genes = gene_slots[slot]
-
-	if genes.size() >= 2:
-		return 1
-
-	return 0
+func reset_turn_state():
+	is_protected = false
 	
+#
+# combat
+#
+
+func use_move(index:int,target):
 	
-func use_move(index:int, target):
-	if index < 0:
+	var move = get_move(index)
+	
+	if move == null:
 		return
 		
-	if index >= learned_moves.size():
-		return
-		
-	var move = learned_moves[index]
-	move.execute(self, target)
+	move.execute(self,target)
+
+
+##
+## LEGENDARY MUTATIONS (placeholder)
+##
+#
+#func get_synergy_bonus(slot:GeneResource.SlotType) -> int:
+	#var genes = gene_slots[slot]
+#
+	#if genes.size() >= 2:
+		#return 1
+#
+	#return 0
+	#
+	#
+#func use_move(index:int, target):
+	#if index < 0:
+		#return
+		#
+	#if index >= learned_moves.size():
+		#return
+		#
+	#var move = learned_moves[index]
+	#move.execute(self, target)
 	
 
 func setup_basic_moves():
@@ -153,17 +182,19 @@ func setup_basic_moves():
 	
 	attack.move_name = "Attack"
 	attack.power = 1
-	attack.description = "A basic attack."
+	attack.priority = 0
 	
 	add_move(attack)
+	
 	
 	var protect = MoveResource.new()
 	
 	protect.move_name = "Protect"
 	protect.power = -1
-	protect.description = "Reduce incoming damage."
+	protect.priority = 2
 	
 	add_move(protect)
+	
 	
 	print(name, " learned basic moves")
 	

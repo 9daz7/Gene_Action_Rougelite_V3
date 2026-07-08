@@ -33,6 +33,18 @@ enum SlotType {
 
 @export var adaptation_cost := 1
 
+# Passive abilities
+@export var passive_effects: Array[PassiveEffect] = []
+
+# Moves this gene unlocks
+@export var move_pool: Array[MoveResource] = []
+
+# Tags for future synergies
+@export var tags: Array[String] = []
+
+# Legendary mutation this gene can participate in
+@export var legendary_links: Array[LegendaryMutation] = []
+
 #future implimentation 
 #@export var tags: Array[String] = []
 

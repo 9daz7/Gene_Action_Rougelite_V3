@@ -9,10 +9,7 @@ func start_battle():
 	setup_basic_moves()
 
 
-func choose_action(_player) -> String:
+func choose_action(_player) -> MoveResource:
 
-	return "attack"
+	return get_move(0)
 		
-func attack(player):
-	
-	use_move(0, player)
