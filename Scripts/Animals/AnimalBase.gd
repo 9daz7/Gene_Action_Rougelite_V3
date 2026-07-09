@@ -12,7 +12,7 @@ signal hp_changed(new_hp)
 var base_hp := 100
 var hp := 100
 
-var base_attack := 10
+var base_attack := 5
 var base_speed := 10
 
 
@@ -292,7 +292,7 @@ func setup_basic_moves():
 	var attack = MoveResource.new()
 
 	attack.move_name = "Attack"
-	attack.power = 1
+	attack.power = 5
 	attack.priority = 0
 
 	add_move(attack)

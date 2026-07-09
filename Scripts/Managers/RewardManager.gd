@@ -3,12 +3,12 @@ class_name RewardManager
 
 @export var all_mutagens : Array[MutagenResource] = []
 
-func generate_rewards(enemy) -> RewardResult:
+func generate_rewards(enemy: EnemyAnimal) -> RewardResult:
 	
 	var reward := RewardResult.new()
 	
 	#
-	# random mutagen
+	# mutagen rewards
 	#
 
 	var mutagens = all_mutagens.duplicate()
@@ -24,9 +24,13 @@ func generate_rewards(enemy) -> RewardResult:
 	# gene discovery
 	#
 
-	if enemy.has_method("get_drop_genes"):
-		
+	if enemy != null:
 		reward.discovered_gene = enemy.get_drop_genes()
+		
+		print(
+			"Discovered gene:",
+			reward.discovered_gene
+		)
 	
 	return reward
 	

@@ -1,6 +1,8 @@
 extends Node
 class_name TurnManager
 
+signal battle_won(enemy)
+signal battle_lost
 
 enum TurnState {
 	NONE,
@@ -178,6 +180,7 @@ func check_battle_end():
 		print("Player defeated")
 
 		current_state = TurnState.BATTLE_OVER
+		battle_lost.emit()
 
 		return
 
@@ -189,5 +192,6 @@ func check_battle_end():
 			print("Enemy defeated")
 
 			current_state = TurnState.BATTLE_OVER
+			battle_won.emit(enemy)
 
 			return

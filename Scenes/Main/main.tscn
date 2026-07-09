@@ -6,7 +6,7 @@
 [ext_resource type="Script" uid="uid://c7cp2g5ftrdc4" path="res://Scripts/Combat/TurnManager.gd" id="3_2a143"]
 [ext_resource type="Script" uid="uid://dlec22tbrybl3" path="res://Scripts/Genes/GeneDatabase.gd" id="4_p6jpk"]
 [ext_resource type="Script" uid="uid://b7i2wjhann78x" path="res://Scenes/Main/gene_selection_ui.gd" id="5_2a143"]
-[ext_resource type="Script" uid="uid://hlp51b3uy82k" path="res://Scripts/Rewards/RewardManager.gd" id="5_xlvfx"]
+[ext_resource type="Script" uid="uid://hlp51b3uy82k" path="res://Scripts/Managers/RewardManager.gd" id="5_xlvfx"]
 
 [node name="Main" type="Node" unique_id=1435261983]
 script = ExtResource("1_qw60k")

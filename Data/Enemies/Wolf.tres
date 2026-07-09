@@ -6,5 +6,4 @@
 [resource]
 script = ExtResource("2_wqhy1")
 enemy_name = "Wolf"
-base_hp = 90
 metadata/_custom_type_script = "uid://byxi3hsf2x8dx"

@@ -1,4 +1,8 @@
 extends Node
+class_name BattleManager
+
+signal  battle_won(enemy)
+signal battle_lost
 
 const BATTLE_SCENE = preload("res://Scenes/Battle/BattleScene.tscn")
 const PLAYER_SCENE = preload("res://Scenes/Animals/PlayerAnimal.tscn")
@@ -8,7 +12,7 @@ const ENEMY_SCENE = preload("res://Scenes/Animals/EnemyAnimal.tscn")
 
 var current_battle = null
 var player = null
-var enemies: Array = []
+var enemies:Array = []
 
 
 func start_battle():
@@ -57,7 +61,27 @@ func initialize_battle():
 		print("ERROR: TurnManager not found")
 		
 
-
+func Check_battle_result():
+	if player == null:
+		return
+		
+	if player.hp <= 0:
+		print("BattleManager: Player defeated")
+		
+		battle_lost.emit()
+		
+		end_battle()
+		return
+		
+	for enemy in enemies:
+		if enemy.hp <= 0:
+			print("Batt;eManager: Enemy defeated")
+			
+			battle_won.emit(enemy)
+			
+			end_battle()
+			return
+	
 func end_battle():
 	print("Cleaning battle")
 
