@@ -29,6 +29,11 @@ enum SlotType {
 @export var hp_bonus := 0
 @export var speed_bonus := 0
 @export var defense_bonus := 0
+
+# accuracy / evasion
+@export var accuracy_bonus: int = 0
+@export var evasion_bonus: int = 0
+
 #@export var instability := 0\
 
 @export var adaptation_cost := 1

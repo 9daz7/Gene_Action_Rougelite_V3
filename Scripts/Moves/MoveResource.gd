@@ -1,21 +1,20 @@
 extends Resource
 class_name MoveResource
 
-enum MoveCatagory {
+enum MoveCategory {
 	BIOLOGICAL,
 	GENETIC
 }
 
-@export var move_name:String = "Unamed Move"
+@export var move_name:String = "Unnamed Move"
 @export var power:int = 0
-@export var priority:int = 0
 @export var description:String = ""
 
-# type of move
-@export var catagory: MoveCatagory = MoveCatagory.BIOLOGICAL
-
-# Chance to hit (future use)
+@export var priority:int = 0
 @export var accuracy:int = 100
+
+# type of move
+@export var category: MoveCategory = MoveCategory.BIOLOGICAL
 
 # Future critical hit system
 @export var critical_chance:int = 0
@@ -37,10 +36,32 @@ func execute(user, target):
 		user.activate_protect()
 		return
 		
-	var damage = DamageCalculator.calculate_damage(
-		user,
-		target,
-		self
+	var hit_chance = user.calculate_hit_chance(target, accuracy)
+	
+	var roll = randi_range(1,100)
+	
+	print(
+		"Accuracy check:",
+		roll,
+		"/",
+		hit_chance
+	)
+	
+	if roll > hit_chance:
+		
+		print(
+			user.name,
+			" missed!"
+		)
+		
+		return
+		
+		
+	var damage = user.get_attack() + power
+	
+	print(
+		"Base damage:",
+		damage
 	)
 		
 	print(

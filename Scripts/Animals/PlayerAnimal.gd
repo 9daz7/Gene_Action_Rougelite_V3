@@ -8,6 +8,9 @@ func start_battle():
 	
 	setup_basic_moves()
 	
+	var chameleon = preload("res://Data/Genes/ChameleonSkin.tres")
+
+	add_gene(chameleon)
 	
 #func test_gene():
 	#

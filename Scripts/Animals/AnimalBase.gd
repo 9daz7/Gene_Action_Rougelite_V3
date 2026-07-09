@@ -15,6 +15,9 @@ var hp := 100
 var base_attack := 5
 var base_speed := 10
 
+var base_accuracy := 100
+var base_evasion := 0
+
 
 #
 # COMBAT STATES
@@ -191,6 +194,46 @@ func get_speed() -> int:
 	return value
 
 
+func get_accuracy() -> int:
+	
+	var value = 0
+	
+	for slot in gene_slots:
+		for gene in gene_slots[slot]:
+			if "accuracy_bonus" in gene:
+				value += gene.accuracy_bonus
+			
+	return value
+		
+func get_evasion() -> int:
+	
+	var value = base_evasion
+	
+	for slot in gene_slots:
+		for gene in gene_slots[slot]:
+			value += gene.evasion_bonus
+			
+	return clamp(value, 0, 90)
+
+func calculate_hit_chance(target, move_accuracy:int) -> int:
+	
+	var chance = move_accuracy + get_accuracy() - target.get_evasion()
+	
+	print(
+		name,
+		" move accuracy:",
+		move_accuracy,
+		" accuracy_bonus:",
+		get_accuracy(),
+		" target evasion:",
+		target.get_evasion(),
+		" final chance:",
+		chance
+	)
+
+	return clamp(chance, 10, 100)
+	
+	
 #
 # DAMAGE
 #

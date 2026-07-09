@@ -28,9 +28,7 @@ func generate_rewards(enemy: EnemyAnimal) -> RewardResult:
 		reward.discovered_gene = enemy.get_drop_genes()
 		
 		print(
-			"Discovered gene:",
-			reward.discovered_gene
-		)
+			"Discovered gene:", reward.discovered_gene)
 	
 	return reward
 	
