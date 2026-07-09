@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="EnemyResource" format=3 uid="uid://d13ledlcxlguc"]
+
+[ext_resource type="Script" uid="uid://cnlwwn0eoa0pn" path="res://Scripts/Genes/GeneResource.gd" id="1_qygnj"]
+[ext_resource type="Script" uid="uid://byxi3hsf2x8dx" path="res://Scripts/Enemies/EnemyResource.gd" id="2_jikd1"]
+
+[resource]
+script = ExtResource("2_jikd1")
+metadata/_custom_type_script = "uid://byxi3hsf2x8dx"

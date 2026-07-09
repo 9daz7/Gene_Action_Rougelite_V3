@@ -1,25 +1,37 @@
 extends AnimalBase
 class_name EnemyAnimal
 
-@export var drop_gene_pool : Array[GeneResource]
+@export var enemy_data : GeneResource
 
 func start_battle():
 
 	print("Enemy ready")
 	
-	setup_basic_moves()
+	# load stats from resource
+	if enemy_data != null:
 
-
-func choose_action(_player):
-
-	if learned_moves.size() > 0:
-		return learned_moves[0]
+		base_hp = enemy_data.max_hp
+		hp = base_hp
 		
-	return null
+		base_attack = enemy_data.attack
+		base_speed = enemy_data.speed
+		
+		# equip starting genes
+		for gene in enemy_data.starting_genes:
+			add_gene(gene)
+			
+	setup_basic_moves()
+		
+func choose_action(_player) -> MoveResource:
+	
+	return learned_moves[0]
 		
 func get_drop_genes() -> Array[GeneResource]:
 	
-	var pool = drop_gene_pool.duplicate()
+	if enemy_data == null:
+		return []
+		
+	var pool = enemy_data.gene_pool.duplicate()
 	
 	pool.shuffle()
 	
