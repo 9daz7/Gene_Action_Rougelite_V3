@@ -1,11 +1,13 @@
-extends Node
+extends Resource
+class_name MutagenResource 
 
+@export var mutagen_name : String
+@export_multiline var description : String
 
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass # Replace with function body.
+@export var attack_bonus := 0
+@export var hp_bonus := 0
+@export var speed_bonus := 0
+@export var armor_bonus := 0
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+#future
+#@export var passive_effects : Array[PassiveEffect] = []

@@ -1,6 +1,7 @@
 extends AnimalBase
 class_name EnemyAnimal
 
+@export var drop_gene_pool : Array[GeneResource]
 
 func start_battle():
 
@@ -16,3 +17,14 @@ func choose_action(_player):
 		
 	return null
 		
+func get_drop_genes() -> Array[GeneResource]:
+	
+	var pool = drop_gene_pool.duplicate()
+	
+	pool.shuffle()
+	
+	return pool.slice(
+		0,
+		min(2, pool.size())
+	)
+	
