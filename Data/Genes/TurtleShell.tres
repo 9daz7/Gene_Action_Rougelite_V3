@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="GeneResource" format=3 uid="uid://djvhx41gomy2n"]
+
+[ext_resource type="Script" uid="uid://btvgdy4ii0xbh" path="res://Scripts/Genes/Legendaries/LegendaryMutation.gd" id="1_fyd6f"]
+[ext_resource type="Script" uid="uid://bnmm0xqkm6atb" path="res://Scripts/Moves/MoveResource.gd" id="2_lby6w"]
+[ext_resource type="Script" uid="uid://cykpuveioj0q4" path="res://Scripts/Genes/Effects/PassiveEffects.gd" id="3_46b4n"]
+[ext_resource type="Script" uid="uid://cnlwwn0eoa0pn" path="res://Scripts/Genes/GeneResource.gd" id="4_ab6vp"]
+
+[resource]
+script = ExtResource("4_ab6vp")
+gene_name = "Turtle shell"
+slot_type = 1
+armor_bonus = 20
+metadata/_custom_type_script = "uid://cnlwwn0eoa0pn"

@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://b2w1y4rl1vr8e" path="res://Scripts/Animals/PlayerAnimal.gd" id="1_lbnkj"]
 
-[node name="PlayerAnimal" type="Node2D" unique_id=215963547]
+[node name="PlayerAnimal" type="CharacterBody2D" unique_id=692676620]
 script = ExtResource("1_lbnkj")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1971900039]

@@ -6,6 +6,8 @@ var active_genes: Array[GeneResource] = []
 # Genes unlocked permanently
 var gene_collection: Array[GeneResource] = []
 
+var player_genes:Array[GeneResource] = []
+
 var adaptation_limit := 6
 var used_adaptations := 0
 
@@ -13,8 +15,12 @@ var used_adaptations := 0
 
 func setup_run(starting_genes:Array[GeneResource]):
 	clear_run()
+	player_genes.clear()
+	
 	for gene in starting_genes:
 		equip_gene(gene)
+		player_genes.append(gene)
+		print("Starting gene:", gene.gene_name)
 
 
 

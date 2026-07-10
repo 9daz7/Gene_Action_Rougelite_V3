@@ -18,21 +18,46 @@ var battle_ui = null
 var player = null
 var enemies:Array = []
 
+#temp start battle
+func start_battle(player, enemies, battle_ui):
 
-func start_battle(player_ref, enemy_refs:Array, ui):
+	self.player = player
+	self.enemies = enemies
+	self.battle_ui = battle_ui
 
-	player = player_ref
-	enemies = enemy_refs
-	battle_ui = ui
-	
+
+	print("TurnManager received UI:", battle_ui)
+
+
+	battle_ui.move_selected.connect(
+		_on_move_selected
+	)
+
+
+	print(
+		"Signal connections:",
+		battle_ui.move_selected.get_connections()
+	)
+
+
 	print("Turn system started")
-	
-	if battle_ui:
-		if !battle_ui.move_selected.is_connected(_on_move_selected):
-			battle_ui.move_selected.connect(_on_move_selected)
-	
-	start_player_turn()
 
+	start_player_turn()
+#func start_battle(player, enemies, battle_ui):
+#
+	#self.player = player
+	#self.enemies = enemies
+	#self.battle_ui = battle_ui
+#
+#
+	#battle_ui.move_selected.connect(
+		#_on_move_selected
+	#)
+#
+#
+	#print("Turn system started")
+#
+	#start_player_turn()
 
 
 func start_player_turn():
@@ -64,9 +89,11 @@ func start_turn_effects():
 func _on_move_selected(move_index:int):
 
 	if current_state != TurnState.PLAYER_TURN:
+		print("Not player turn")
 		return
 
 	if enemies.size() == 0:
+		print("No enemies")
 		return
 
 	var enemy = enemies[0]
@@ -74,10 +101,15 @@ func _on_move_selected(move_index:int):
 	var player_move = player.get_move(move_index)
 	var enemy_move = enemy.choose_action(player)
 
+	print("Player move:", player_move)
+	print("Enemy move:", enemy_move)
+	
 	if player_move == null:
+		print("Invalid player move")
 		return
 
 	if enemy_move == null:
+		print("Enemy has no move")
 		return
 
 
@@ -166,6 +198,7 @@ func trigger_turn_end_effects():
 
 	if player:
 		player.trigger_passive_event("turn_end")
+		
 	for enemy in enemies:
 		enemy.trigger_passive_event("turn_end")
 

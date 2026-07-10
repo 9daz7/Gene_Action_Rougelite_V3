@@ -26,13 +26,10 @@ corner_radius_top_right = 7
 corner_radius_bottom_right = 7
 corner_radius_bottom_left = 7
 
-[node name="BattleUI" type="Control" unique_id=1277132647]
-layout_mode = 3
-anchors_preset = 0
+[node name="BattleUI" type="CanvasLayer" unique_id=1908710870]
 script = ExtResource("1_o21vf")
 
 [node name="PlayerHP" type="ProgressBar" parent="." unique_id=458044599]
-layout_mode = 1
 anchors_preset = -1
 offset_left = 8.01
 offset_top = 474.165
@@ -42,7 +39,6 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_2a143")
 script = ExtResource("2_31gad")
 
 [node name="EnemyHP" type="ProgressBar" parent="." unique_id=43262124]
-layout_mode = 1
 anchors_preset = -1
 offset_left = 8.0
 offset_top = 120.125
@@ -52,7 +48,6 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_xlvfx")
 script = ExtResource("3_tr5vc")
 
 [node name="MoveButtons" type="HBoxContainer" parent="." unique_id=270229014]
-layout_mode = 1
 anchors_preset = -1
 offset_left = 173.06
 offset_top = 538.52
@@ -74,3 +69,6 @@ text = "Temp 3"
 [node name="Move4Button" type="Button" parent="MoveButtons" unique_id=510207000]
 layout_mode = 2
 text = "Temp 4"
+
+[connection signal="pressed" from="MoveButtons/AttackButton" to="." method="_on_attack_button_pressed"]
+[connection signal="pressed" from="MoveButtons/ProtectButton" to="." method="_on_protect_button_pressed"]

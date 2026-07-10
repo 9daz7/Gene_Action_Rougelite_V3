@@ -1,10 +1,13 @@
 [gd_resource type="Resource" script_class="GeneResource" format=3 uid="uid://bkbgwk6wbwxuh"]
 
 [ext_resource type="Script" uid="uid://cnlwwn0eoa0pn" path="res://Scripts/Genes/GeneResource.gd" id="1_bfbuq"]
+[ext_resource type="Script" uid="uid://btvgdy4ii0xbh" path="res://Scripts/Genes/Legendaries/LegendaryMutation.gd" id="1_fgymr"]
+[ext_resource type="Script" uid="uid://bnmm0xqkm6atb" path="res://Scripts/Moves/MoveResource.gd" id="2_q13bo"]
+[ext_resource type="Script" uid="uid://cykpuveioj0q4" path="res://Scripts/Genes/Effects/PassiveEffects.gd" id="3_uqdhe"]
 
 [resource]
 script = ExtResource("1_bfbuq")
-gene_name = "Honey Badger"
+gene_name = "Honey Badger anger"
 slot_type = 1
 attack_bonus = 2
 hp_bonus = 1

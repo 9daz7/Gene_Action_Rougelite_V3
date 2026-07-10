@@ -1,10 +1,13 @@
 [gd_resource type="Resource" script_class="GeneResource" format=3 uid="uid://fkdeujyg7eca"]
 
+[ext_resource type="Script" uid="uid://btvgdy4ii0xbh" path="res://Scripts/Genes/Legendaries/LegendaryMutation.gd" id="1_awwbq"]
 [ext_resource type="Script" uid="uid://cnlwwn0eoa0pn" path="res://Scripts/Genes/GeneResource.gd" id="1_x756j"]
+[ext_resource type="Script" uid="uid://bnmm0xqkm6atb" path="res://Scripts/Moves/MoveResource.gd" id="2_ritsq"]
+[ext_resource type="Script" uid="uid://cykpuveioj0q4" path="res://Scripts/Genes/Effects/PassiveEffects.gd" id="3_3ano8"]
 
 [resource]
 script = ExtResource("1_x756j")
-gene_name = "Boar"
+gene_name = "Boar skin"
 slot_type = 1
 hp_bonus = 1
 defense_bonus = 3

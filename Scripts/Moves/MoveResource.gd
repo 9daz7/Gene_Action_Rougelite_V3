@@ -59,6 +59,8 @@ func execute(user, target):
 		
 	var damage = user.get_attack() + power
 	
+	damage = target.calculate_damage_taken(damage)
+	
 	print(
 		"Base damage:",
 		damage

@@ -17,6 +17,7 @@ var base_speed := 10
 
 var base_accuracy := 100
 var base_evasion := 0
+var base_armor := 0
 
 
 #
@@ -233,6 +234,25 @@ func calculate_hit_chance(target, move_accuracy:int) -> int:
 
 	return clamp(chance, 10, 100)
 	
+	
+func get_armor() -> int:
+	var value = base_armor
+	
+	for slot in gene_slots:
+		for gene in gene_slots[slot]:
+			value += gene.armor_bonus
+			
+	return value
+	
+func calculate_damage_taken(amount:int) -> int:
+	
+	var armor = get_armor()
+	
+	var reduction = armor * 0.01
+	
+	var final_damage = amount * (1.0 - reduction)
+	
+	return max(1, int(final_damage))
 	
 #
 # DAMAGE

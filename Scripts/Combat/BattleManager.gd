@@ -9,6 +9,8 @@ const PLAYER_SCENE = preload("res://Scenes/Animals/PlayerAnimal.tscn")
 const ENEMY_SCENE = preload("res://Scenes/Animals/EnemyAnimal.tscn")
 
 @onready var turn_manager = $"../TurnManager"
+@onready var run_manager = $"../RunManager"
+@onready var battle_root = $"../../World/BattleRoot"
 
 var current_battle = null
 var player = null
@@ -18,25 +20,24 @@ var enemies:Array = []
 func start_battle():
 	print("Starting battle")
 
-	# Create battle scene
 	current_battle = BATTLE_SCENE.instantiate()
-	print("BattleScene created")
 
-	get_tree().root.add_child(current_battle)
-	print("BattleScene added")
+	battle_root.add_child(current_battle)
+
+	await get_tree().process_frame
 
 	# Spawn player
 	player = current_battle.spawn_player(PLAYER_SCENE)
-	print("Player spawned: ", player)
 
-	# Spawn enemy
+	for gene in run_manager.player_genes:
+		player.add_gene(gene)
+
 	var enemy = current_battle.spawn_enemy(ENEMY_SCENE)
-	print("Enemy spawned: ", enemy)
 
 	enemies.append(enemy)
 
 	current_battle.setup_hp_bars(player, enemy)
-	
+
 	initialize_battle()
 
 
@@ -61,7 +62,7 @@ func initialize_battle():
 		print("ERROR: TurnManager not found")
 		
 
-func Check_battle_result():
+func check_battle_result():
 	if player == null:
 		return
 		

@@ -1,4 +1,4 @@
-extends Control
+extends CanvasLayer
 
 signal move_selected(move_index)
 
@@ -8,10 +8,13 @@ signal move_selected(move_index)
 @onready var move4_button = $MoveButtons/Move4Button
 
 func _ready():
+	print("BattleUI ready")
+	
 	attack_button.pressed.connect(
 		func():
 			print("Attack button pressed")
 			move_selected.emit(0)
+			print("Emit finished")
 	)
 	
 	protect_button.pressed.connect(

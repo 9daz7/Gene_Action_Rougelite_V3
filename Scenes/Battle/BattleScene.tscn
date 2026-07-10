@@ -18,13 +18,4 @@ position = Vector2(300, 300)
 [node name="EnemySpawn" type="Marker2D" parent="EnemyContainer" unique_id=1878053277]
 position = Vector2(600, 300)
 
-[node name="EffectContainer" type="Node2D" parent="." unique_id=1947693126]
-
-[node name="Camera2D" type="Camera2D" parent="." unique_id=1153670719]
-
 [node name="BattleUI" parent="." unique_id=1277132647 instance=ExtResource("2_jaxsk")]
-anchors_preset = -1
-offset_left = -575.735
-offset_top = -323.16
-offset_right = -575.735
-offset_bottom = -323.16
