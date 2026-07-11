@@ -1,6 +1,8 @@
 extends Control
 
+
 @onready var screen = $GeneSelectionScreen
+
 
 func open(database):
 	screen.open(database)

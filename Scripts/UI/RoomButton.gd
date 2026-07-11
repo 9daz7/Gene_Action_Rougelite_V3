@@ -2,24 +2,24 @@ extends Button
 class_name RoomButton
 
 
-var room_data:RoomData
-
 signal room_selected(room)
 
 
-func setup(room:RoomData):
+var room_data: RoomData
+
+
+func setup(room: RoomData):
 	room_data = room
+
 	text = get_room_text()
 	position = room.position
-	custom_minimum_size = Vector2(80,40)
+	custom_minimum_size = Vector2(80, 40)
+
 	pressed.connect(_on_pressed)
 
 
-
 func get_room_text():
-
 	match room_data.room_type:
-
 		RoomData.RoomType.ENEMY:
 			return "ENEMY"
 
@@ -48,7 +48,7 @@ func get_room_text():
 			return "?"
 
 
-
 func _on_pressed():
 	print("Selected room:", room_data.room_type)
+
 	room_selected.emit(room_data)

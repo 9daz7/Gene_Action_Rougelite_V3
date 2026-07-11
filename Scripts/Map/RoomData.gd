@@ -1,7 +1,8 @@
 extends Resource
 class_name RoomData
 
-enum RoomType{
+
+enum RoomType {
 	ENEMY,
 	GROUP_ENEMY,
 	ELITE,
@@ -12,15 +13,16 @@ enum RoomType{
 	UNKNOWN,
 	AMBUSH,
 	MERCHANT_TRAP,
-	BOSS		
+	BOSS
 }
 
-var row:int
-var lane:int
-var position:Vector2
 
-var room_id:int
+var row: int
+var lane: int
+var position: Vector2
 
-var room_type:RoomType
+var room_id: int
 
-var connections:Array[RoomData] = []
+var room_type: RoomType
+
+var connections: Array[RoomData] = []

@@ -1,7 +1,7 @@
 extends Node
 class_name BattleManager
 
-signal  battle_won(enemy)
+signal battle_won(enemy)
 signal battle_lost
 
 const BATTLE_SCENE = preload("res://Scenes/Battle/BattleScene.tscn")
@@ -14,7 +14,7 @@ const ENEMY_SCENE = preload("res://Scenes/Animals/EnemyAnimal.tscn")
 
 var current_battle = null
 var player = null
-var enemies:Array = []
+var enemies: Array = []
 
 
 func start_battle():
@@ -32,6 +32,7 @@ func start_battle():
 	for gene in run_manager.player_genes:
 		player.add_gene(gene)
 
+	# Spawn enemy
 	var enemy = current_battle.spawn_enemy(ENEMY_SCENE)
 
 	enemies.append(enemy)
@@ -52,7 +53,6 @@ func initialize_battle():
 			enemy.start_battle()
 
 	if turn_manager:
-
 		turn_manager.battle_won.connect(_on_turn_battle_won)
 		turn_manager.battle_lost.connect(_on_turn_battle_lost)
 
@@ -64,44 +64,46 @@ func initialize_battle():
 
 	else:
 		print("ERROR: TurnManager not found")
-		
 
-#func check_battle_result():
-	#if player == null:
-		#return
-		#
-	#if player.hp <= 0:
-		#print("BattleManager: Player defeated")
-		#
-		#battle_lost.emit()
-		#
-		#end_battle()
-		#return
-		#
-	#for enemy in enemies:
-		#if enemy.hp <= 0:
-			#print("Batt;eManager: Enemy defeated")
-			#
-			#battle_won.emit(enemy)
-			#
-			#end_battle()
-			#return
-	
+
+ #func check_battle_result():
+ 	#if player == null:
+ 		#return
+#
+ 	#if player.hp <= 0:
+ 		#print("BattleManager: Player defeated")
+#
+ 		#battle_lost.emit()
+#
+ 		#end_battle()
+ 		#return
+#
+ 	#for enemy in enemies:
+ 		#if enemy.hp <= 0:
+ 			#print("Batt;eManager: Enemy defeated")
+#
+ 			#battle_won.emit(enemy)
+#
+ 			#end_battle()
+ 			#return
+
+
 func _on_turn_battle_won(enemy):
 	print("BattleManager received victory")
-	battle_won.emit(enemy)
-	
-	end_battle()
 
+	battle_won.emit(enemy)
+
+	end_battle()
 
 
 func _on_turn_battle_lost():
 	print("BattleManager received defeat")
+
 	battle_lost.emit()
-	
+
 	end_battle()
-	
-	
+
+
 func end_battle():
 	print("Cleaning battle")
 

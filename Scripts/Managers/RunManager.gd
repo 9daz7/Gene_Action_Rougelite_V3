@@ -1,43 +1,48 @@
 extends Node
 
-# Genes equipped for THIS run
+
+# Genes equipped for this run
 var active_genes: Array[GeneResource] = []
+
 
 # Genes unlocked permanently
 var gene_collection: Array[GeneResource] = []
 
-var player_genes:Array[GeneResource] = []
+
+var player_genes: Array[GeneResource] = []
+
 
 var adaptation_limit := 6
 var used_adaptations := 0
 
+
 func _ready():
 	print("RUN MANAGER READY")
 
-func setup_run(starting_genes:Array[GeneResource]):
-	
+
+func setup_run(starting_genes: Array[GeneResource]):
 	print("=== RUN MANAGER START ===")
 	print("Genes received:", starting_genes.size())
-	
+
 	clear_run()
 	player_genes.clear()
-	
+
 	for gene in starting_genes:
 		equip_gene(gene)
 		player_genes.append(gene)
+
 		print("Starting gene:", gene.gene_name)
 
 
-
-func equip_gene(gene:GeneResource) -> bool:
+func equip_gene(gene: GeneResource) -> bool:
 	if used_adaptations + gene.adaptation_cost > adaptation_limit:
 		print("Not enough adaptation slots")
 		return false
 
 	active_genes.append(gene)
 	used_adaptations += gene.adaptation_cost
-	return true
 
+	return true
 
 
 func apply_genes_to_player(player):
@@ -45,12 +50,11 @@ func apply_genes_to_player(player):
 		player.add_gene(gene)
 
 
-
-func collect_gene(gene:GeneResource):
+func collect_gene(gene: GeneResource):
 	if not gene_collection.has(gene):
 		gene_collection.append(gene)
-	print("Unlocked gene:", gene.gene_name)
 
+	print("Unlocked gene:", gene.gene_name)
 
 
 func clear_run():

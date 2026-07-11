@@ -2,11 +2,10 @@ extends Node
 class_name GeneDatabase
 
 
-var all_genes:Array[GeneResource] = []
+var all_genes: Array[GeneResource] = []
 
 
 func load_genes():
-
 	all_genes.clear()
 
 	var folder = DirAccess.open("res://Data/Genes")
@@ -15,102 +14,72 @@ func load_genes():
 		print("Gene folder not found")
 		return
 
-
 	folder.list_dir_begin()
 
 	var file = folder.get_next()
 
-
 	while file != "":
-
 		if file.ends_with(".tres"):
-
 			var path = "res://Data/Genes/" + file
 
 			var gene = load(path)
 
 			if gene is GeneResource:
-
 				all_genes.append(gene)
 
 				print("Loaded gene:", gene.gene_name)
 
-
 		file = folder.get_next()
 
-
 	folder.list_dir_end()
-
 
 	print("Total genes:", all_genes.size())
 
 
-
-func get_random_genes(amount:int)->Array[GeneResource]:
-
-	var pool:Array[GeneResource] = all_genes.duplicate()
+func get_random_genes(amount: int) -> Array[GeneResource]:
+	var pool: Array[GeneResource] = all_genes.duplicate()
 
 	pool.shuffle()
 
 	return pool.slice(
 		0,
-		min(amount,pool.size())
+		min(amount, pool.size())
 	)
 
 
-
-func get_random_starting_genes(amount:int)->Array[GeneResource]:
-
+func get_random_starting_genes(amount: int) -> Array[GeneResource]:
 	return get_random_genes(amount)
 
 
-
-func get_random_gene_by_rarity(rarity)->GeneResource:
-
-	var pool:Array[GeneResource] = []
-
+func get_random_gene_by_rarity(rarity) -> GeneResource:
+	var pool: Array[GeneResource] = []
 
 	for gene in all_genes:
-
 		if gene.rarity == rarity:
-
 			pool.append(gene)
 
-
 	if pool.is_empty():
-
 		return null
-
 
 	return pool.pick_random()
 
 
-
 func get_random_gene_choices(
-	amount:int,
-	rarities:Array
-)->Array[GeneResource]:
+	amount: int,
+	rarities: Array
+) -> Array[GeneResource]:
 
-
-	var pool:Array[GeneResource] = []
-
+	var pool: Array[GeneResource] = []
 
 	for gene in all_genes:
-
 		if gene.rarity in rarities:
-
 			pool.append(gene)
-
 
 	pool.shuffle()
 
+	var result: Array[GeneResource] = []
 
-	var result:Array[GeneResource] = []
-
-
-	for i in range(min(amount,pool.size())):
-
+	for i in range(min(amount, pool.size())):
 		result.append(pool[i])
-
 
 	return result

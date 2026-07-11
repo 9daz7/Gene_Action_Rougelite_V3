@@ -5,9 +5,9 @@ class_name AnimalBase
 signal hp_changed(new_hp)
 
 
-#
+# -------------------------------------------------------------------
 # BASE STATS
-#
+# -------------------------------------------------------------------
 
 var base_hp := 100
 var hp := 100
@@ -20,9 +20,9 @@ var base_evasion := 0
 var base_armor := 0
 
 
-#
+# -------------------------------------------------------------------
 # COMBAT STATES
-#
+# -------------------------------------------------------------------
 
 
 var is_protecting := false
@@ -31,9 +31,9 @@ var is_protecting := false
 var protect_reduction := 0.8
 
 
-#
+# -------------------------------------------------------------------
 # GENES
-#
+# -------------------------------------------------------------------
 
 
 var equipped_genes: Array[GeneResource] = []
@@ -58,32 +58,32 @@ var slot_capacity := {
 }
 
 
-#
+# -------------------------------------------------------------------
 # MOVES
-#
+# -------------------------------------------------------------------
 
-var learned_moves:Array[MoveResource] = []
+var learned_moves: Array[MoveResource] = []
 
-#
+# -------------------------------------------------------------------
 # PASSIVES / STATUS EFFECTS
-#
+# -------------------------------------------------------------------
 
-var passive_effects:Array = []
-var status_effects:Array = []
+var passive_effects: Array = []
+var status_effects: Array = []
 
 
-#
+# -------------------------------------------------------------------
 # GENE MANAGEMENT
-#
+# -------------------------------------------------------------------
 
 
-func add_gene(gene:GeneResource) -> bool:
+func add_gene(gene: GeneResource) -> bool:
 
 	if gene == null:
 		return false
 
 	var slot = gene.slot_type
-	var current_list:Array = gene_slots[slot]
+	var current_list: Array = gene_slots[slot]
 
 	var used_cost := 0
 
@@ -121,12 +121,12 @@ func add_gene(gene:GeneResource) -> bool:
 	return true
 
 
-#
+# -------------------------------------------------------------------
 # MOVE SYSTEM
-#
+# -------------------------------------------------------------------
 
 
-func add_move(move:MoveResource):
+func add_move(move: MoveResource):
 
 	if move == null:
 		return
@@ -134,7 +134,7 @@ func add_move(move:MoveResource):
 	learned_moves.append(move)
 
 
-func get_move(index:int):
+func get_move(index: int):
 	if index < 0:
 		return null
 
@@ -144,7 +144,7 @@ func get_move(index:int):
 	return learned_moves[index]
 
 
-func use_move(index:int,target):
+func use_move(index: int,target):
 
 	var move = get_move(index)
 
@@ -157,9 +157,9 @@ func use_move(index:int,target):
 	)
 
 
-#
+# -------------------------------------------------------------------
 # STATS
-#
+# -------------------------------------------------------------------
 
 
 func get_attack() -> int:
@@ -216,7 +216,7 @@ func get_evasion() -> int:
 			
 	return clamp(value, 0, 90)
 
-func calculate_hit_chance(target, move_accuracy:int) -> int:
+func calculate_hit_chance(target, move_accuracy: int) -> int:
 	
 	var chance = move_accuracy + get_accuracy() - target.get_evasion()
 	
@@ -244,7 +244,7 @@ func get_armor() -> int:
 			
 	return value
 	
-func calculate_damage_taken(amount:int) -> int:
+func calculate_damage_taken(amount: int) -> int:
 	
 	var armor = get_armor()
 	
@@ -254,12 +254,12 @@ func calculate_damage_taken(amount:int) -> int:
 	
 	return max(1, int(final_damage))
 	
-#
+# -------------------------------------------------------------------
 # DAMAGE
-#
+# -------------------------------------------------------------------
 
 
-func take_damage(amount:int):
+func take_damage(amount: int):
 	if is_protecting:
 
 		amount = int(
@@ -291,9 +291,9 @@ func take_damage(amount:int):
 	hp_changed.emit(hp)
 
 
-#
+# -------------------------------------------------------------------
 # TURN MANAGEMENT
-#
+# -------------------------------------------------------------------
 
 
 func reset_turn_state():
@@ -317,12 +317,12 @@ func clear_protect():
 	is_protecting = false
 
 
-#
+# -------------------------------------------------------------------
 # PASSIVE EFFECT SYSTEM
-#
+# -------------------------------------------------------------------
 
 
-func trigger_passive_event(event_name:String):
+func trigger_passive_event(event_name: String):
 
 	for passive in passive_effects:
 
@@ -344,9 +344,9 @@ func trigger_passive_event(event_name:String):
 					passive.on_turn_end(self)
 
 
-#
+# -------------------------------------------------------------------
 # BASIC MOVES
-#
+# -------------------------------------------------------------------
 
 
 func setup_basic_moves():
@@ -375,12 +375,12 @@ func setup_basic_moves():
 	)
 
 
-#
+# -------------------------------------------------------------------
 # LEGENDARY MUTATION PLACEHOLDER
-#
+# -------------------------------------------------------------------
 
 
-func get_synergy_bonus(slot:GeneResource.SlotType) -> int:
+func get_synergy_bonus(slot: GeneResource.SlotType) -> int:
 	
 	var genes = gene_slots[slot]
 

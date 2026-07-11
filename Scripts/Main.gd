@@ -1,5 +1,6 @@
 extends Node
 
+
 @onready var managers = $Managers
 
 @onready var battle_manager = $Managers/BattleManager
@@ -9,13 +10,15 @@ extends Node
 @onready var gene_database = $Managers/GeneDatabase
 @onready var reward_manager = $Managers/RewardManager
 
+
 @onready var map_ui = $UI/MapUI
 @onready var gene_selection = $UI/GeneSelectionScreen
 
+
 var current_room: RoomData = null
 
-func _ready():
 
+func _ready():
 	print("THIS IS THE CURRENT MAIN SCRIPT")
 
 	gene_database.load_genes()
@@ -31,13 +34,13 @@ func _ready():
 	battle_manager.battle_lost.connect(_on_battle_lost)
 
 	start_new_run()
-	
+
 
 func start_new_run():
 	start_gene_selection()
 
-func start_gene_selection():
 
+func start_gene_selection():
 	var gene_choices = gene_database.get_random_genes(5)
 
 	print("Starting gene choices:")
@@ -50,14 +53,13 @@ func start_gene_selection():
 		)
 
 	gene_selection.open(gene_choices)
-	
-	
-func start_run(selected_genes:Array[GeneResource]):
 
+
+func start_run(selected_genes: Array[GeneResource]):
 	print("======================")
 	print("MAIN START_RUN CALLED")
 	print("======================")
-	
+
 	print("START RUN ENTERED")
 
 	print("Starting genes:")
@@ -101,18 +103,15 @@ func start_run(selected_genes:Array[GeneResource]):
 
 	print("Map displayed")
 	
-	
 func enter_room(room):
-	
 	current_room = room
-	
-	print("MAIN ENTERING ROOM:", room.room_type)
-	
-	# remove map from screen
-	map_ui.hide()
-	
-	match room.room_type:
 
+	print("MAIN ENTERING ROOM:", room.room_type)
+
+	# Remove map from screen
+	map_ui.hide()
+
+	match room.room_type:
 		RoomData.RoomType.ENEMY:
 			battle_manager.start_battle()
 
@@ -133,34 +132,27 @@ func enter_room(room):
 
 		RoomData.RoomType.BOSS:
 			battle_manager.start_boss_battle()
-	
-	
+
+
 func _on_battle_won(enemy):
-
 	print("Battle won!")
-
 
 	var rewards = reward_manager.generate_rewards(
 		current_room.room_type
 	)
-
 
 	print("Gold:", rewards.gold)
 
 	print("Resources:", rewards.resources)
 
 
-
 	if rewards.discovered_gene.size() > 0:
-
 		print("Gene choices:")
 
 		for gene in rewards.discovered_gene:
-
 			print(
 				gene.gene_name
 			)
-
 
 
 	print(
@@ -168,14 +160,15 @@ func _on_battle_won(enemy):
 		rewards.mutagen_choices
 	)
 
-
 	return_to_map()
-	
+
+
 func _on_battle_lost():
 	print("Run failed")
-	
+
 	return_to_map()
-	
+
+
 func return_to_map():
 	print("Returning to map")
 

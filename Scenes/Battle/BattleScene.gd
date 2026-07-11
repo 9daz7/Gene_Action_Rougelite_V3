@@ -1,6 +1,5 @@
 extends Node2D
 
-
 @onready var player_container = $PlayerContainer
 @onready var enemy_container = $EnemyContainer
 @onready var battle_ui = $BattleUI
@@ -8,29 +7,27 @@ extends Node2D
 @onready var player_hp = $BattleUI/PlayerHP
 @onready var enemy_hp = $BattleUI/EnemyHP
 
-func _ready():
 
+func _ready():
 	print("PlayerContainer =", player_container)
 	print("EnemyContainer =", enemy_container)
 	print("BattleUI =", battle_ui)
-	
-#
+
+
+# -------------------------------------------------------------------
 # HP UI
-#
+# -------------------------------------------------------------------
 
 func setup_hp_bars(player, enemy):
-	
 	player_hp.set_player(player)
 	enemy_hp.set_enemy(enemy)
-	
-	
-#
-# spawning
-#
 
+
+# -------------------------------------------------------------------
+# Spawning
+# -------------------------------------------------------------------
 
 func spawn_player(scene):
-
 	print("Spawning player")
 
 	if player_container == null:
@@ -39,7 +36,7 @@ func spawn_player(scene):
 
 	var player = scene.instantiate()
 	player_container.add_child(player)
-	
+
 	var spawn_point = player_container.get_node("PlayerSpawn")
 	player.position = spawn_point.position
 
@@ -48,9 +45,7 @@ func spawn_player(scene):
 	return player
 
 
-
 func spawn_enemy(scene):
-
 	print("Spawning enemy")
 
 	if enemy_container == null:

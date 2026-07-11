@@ -2,17 +2,14 @@ extends Node
 class_name RewardManager
 
 
-@export var all_mutagens:Array[MutagenResource] = []
+@export var all_mutagens: Array[MutagenResource] = []
 
 
 @onready var gene_database = $"../GeneDatabase"
 
 
-
-func generate_rewards(room_type:int)->RewardResult:
-
+func generate_rewards(room_type: int) -> RewardResult:
 	var reward := RewardResult.new()
-
 
 	reward.gold = generate_gold(room_type)
 
@@ -22,100 +19,65 @@ func generate_rewards(room_type:int)->RewardResult:
 
 	reward.mutagen_choices = generate_mutagens(room_type)
 
-
 	return reward
 
 
-
-
-func generate_gold(room_type:int)->int:
-
+func generate_gold(room_type: int) -> int:
 	match room_type:
-
 		RoomData.RoomType.ENEMY:
-			return randi_range(15,30)
-
+			return randi_range(15, 30)
 
 		RoomData.RoomType.GROUP_ENEMY:
-			return randi_range(25,45)
-
+			return randi_range(25, 45)
 
 		RoomData.RoomType.ELITE:
-			return randi_range(50,75)
-
+			return randi_range(50, 75)
 
 		RoomData.RoomType.BOSS:
-			return randi_range(100,150)
-
+			return randi_range(100, 150)
 
 		RoomData.RoomType.AMBUSH:
-			return randi_range(25,40)
-
+			return randi_range(25, 40)
 
 		RoomData.RoomType.MERCHANT_TRAP:
-			return randi_range(60,90)
-
+			return randi_range(60, 90)
 
 		_:
 			return 0
 
 
-
-
-func generate_resources(room_type:int)->Array:
-
-	var resources:Array = []
-
+func generate_resources(room_type: int) -> Array:
+	var resources: Array = []
 
 	match room_type:
-
 		RoomData.RoomType.ENEMY:
-
 			if randf() < 0.4:
-
 				resources.append("Small Heal")
 
-
 		RoomData.RoomType.ELITE:
-
 			resources.append("Medium Heal")
 			resources.append("Strength Potion")
 
-
 		RoomData.RoomType.BOSS:
-
 			resources.append("Large Heal")
-
 
 	return resources
 
 
-
-
-
-func generate_gene_rewards(room_type:int)->Array[GeneResource]:
-
-
+func generate_gene_rewards(room_type: int) -> Array[GeneResource]:
 	match room_type:
-
-
 		RoomData.RoomType.ENEMY:
-
 			if randf() < 0.2:
-
 				return [
 					gene_database.get_random_gene_by_rarity(
 						GeneResource.Rarity.COMMON
 					)
 				]
 
-
 			return []
 
 
-
 		RoomData.RoomType.GROUP_ENEMY:
-
 			return gene_database.get_random_gene_choices(
 				2,
 				[
@@ -125,9 +87,7 @@ func generate_gene_rewards(room_type:int)->Array[GeneResource]:
 			)
 
 
-
 		RoomData.RoomType.ELITE:
-
 			return gene_database.get_random_gene_choices(
 				3,
 				[
@@ -137,9 +97,7 @@ func generate_gene_rewards(room_type:int)->Array[GeneResource]:
 			)
 
 
-
 		RoomData.RoomType.BOSS:
-
 			return gene_database.get_random_gene_choices(
 				3,
 				[
@@ -147,11 +105,9 @@ func generate_gene_rewards(room_type:int)->Array[GeneResource]:
 					GeneResource.Rarity.EPIC
 				]
 			)
-
 
 
 		RoomData.RoomType.LAB:
-
 			return gene_database.get_random_gene_choices(
 				3,
 				[
@@ -161,19 +117,11 @@ func generate_gene_rewards(room_type:int)->Array[GeneResource]:
 			)
 
 
-
 		_:
-
 			return []
 
 
-
-
-
-
-func generate_mutagens(room_type:int)->Array[MutagenResource]:
-
-
+func generate_mutagens(room_type: int) -> Array[MutagenResource]:
 	if room_type != RoomData.RoomType.BOSS \
 	and room_type != RoomData.RoomType.ELITE \
 	and room_type != RoomData.RoomType.LAB:
@@ -185,8 +133,7 @@ func generate_mutagens(room_type:int)->Array[MutagenResource]:
 
 	choices.shuffle()
 
-
 	return choices.slice(
 		0,
-		min(3,choices.size())
+		min(3, choices.size())
 	)

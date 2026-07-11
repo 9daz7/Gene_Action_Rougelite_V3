@@ -1,12 +1,14 @@
 extends Resource
 class_name GeneResource
 
+
 enum Rarity {
 	COMMON,
 	UNCOMMON,
 	RARE,
 	EPIC
 }
+
 
 enum SlotType {
 	MOUTH,
@@ -17,47 +19,57 @@ enum SlotType {
 	GLANDS
 }
 
+
 @export var gene_name: String
 @export var rarity: Rarity
 @export var slot_type: SlotType
 
-# slot system
+
+# Slot system
 @export var slot_cost: int = 1
 
-# stats
+
+# Stats
 @export var attack_bonus: int = 0
 @export var hp_bonus := 0
 @export var speed_bonus := 0
 @export var defense_bonus := 0
 
-# accuracy / evasion
+
+# Accuracy / evasion
 @export var accuracy_bonus: int = 0
 @export var evasion_bonus: int = 0
 
-# defensive stats
-@export var armor_bonus:int = 0
 
-#@export var instability := 0\
+# Defensive stats
+@export var armor_bonus: int = 0
 
+
+# @export var instability := 0
+
+
+# Adaptation
 @export var adaptation_cost := 1
+
 
 # Passive abilities
 @export var passive_effects: Array[PassiveEffect] = []
 
+
 # Moves this gene unlocks
 @export var move_pool: Array[MoveResource] = []
 
+
 # Tags for future synergies
 @export var tags: Array[String] = []
+
 
 # Legendary mutation this gene can participate in
 @export var legendary_links: Array[LegendaryMutation] = []
 
 
 func get_rarity_name() -> String:
-
 	match rarity:
-
 		Rarity.COMMON:
 			return "Common"
 
@@ -72,14 +84,13 @@ func get_rarity_name() -> String:
 
 		_:
 			return "Unknown"
-			
-	
-#future implimentation 
-#@export var tags: Array[String] = []
 
 
+ #Future implementation
+ #@export var tags: Array[String] = []
 
-#@export_multiline var description : String = ""
-#@export var icon : Texture2D
 
-#@export var species := ""
+ #Future properties
+ #@export_multiline var description: String = ""
+ #@export var icon: Texture2D
+ #@export var species := ""
