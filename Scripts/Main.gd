@@ -12,6 +12,8 @@ extends Node
 @onready var map_ui = $UI/MapUI
 @onready var gene_selection = $UI/GeneSelectionScreen
 
+var current_room: RoomData = null
+
 func _ready():
 
 	print("THIS IS THE CURRENT MAIN SCRIPT")
@@ -35,12 +37,18 @@ func start_new_run():
 	start_gene_selection()
 
 func start_gene_selection():
+
 	var gene_choices = gene_database.get_random_genes(5)
-	print("Strating gene choices:")
-	
+
+	print("Starting gene choices:")
+
 	for gene in gene_choices:
-		print(gene.gene_name)
-		
+		print(
+			gene.gene_name,
+			" | ",
+			gene.get_rarity_name()
+		)
+
 	gene_selection.open(gene_choices)
 	
 	
@@ -95,7 +103,9 @@ func start_run(selected_genes:Array[GeneResource]):
 	
 	
 func enter_room(room):
-
+	
+	current_room = room
+	
 	print("MAIN ENTERING ROOM:", room.room_type)
 	
 	# remove map from screen
@@ -126,14 +136,38 @@ func enter_room(room):
 	
 	
 func _on_battle_won(enemy):
+
 	print("Battle won!")
-	
-	var rewards = reward_manager.generate_rewards(enemy)
-	
+
+
+	var rewards = reward_manager.generate_rewards(
+		current_room.room_type
+	)
+
+
+	print("Gold:", rewards.gold)
+
+	print("Resources:", rewards.resources)
+
+
+
 	if rewards.discovered_gene.size() > 0:
-		print("Gene discovered:", rewards.discovered_gene[0].gene_name)
-		
-	print("Mutagen choices:", rewards.mutagen_choices)
+
+		print("Gene choices:")
+
+		for gene in rewards.discovered_gene:
+
+			print(
+				gene.gene_name
+			)
+
+
+
+	print(
+		"Mutagen choices:",
+		rewards.mutagen_choices
+	)
+
 
 	return_to_map()
 	

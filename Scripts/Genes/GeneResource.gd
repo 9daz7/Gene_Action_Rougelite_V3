@@ -53,6 +53,27 @@ enum SlotType {
 # Legendary mutation this gene can participate in
 @export var legendary_links: Array[LegendaryMutation] = []
 
+
+func get_rarity_name() -> String:
+
+	match rarity:
+
+		Rarity.COMMON:
+			return "Common"
+
+		Rarity.UNCOMMON:
+			return "Uncommon"
+
+		Rarity.RARE:
+			return "Rare"
+
+		Rarity.EPIC:
+			return "Epic"
+
+		_:
+			return "Unknown"
+			
+	
 #future implimentation 
 #@export var tags: Array[String] = []
 

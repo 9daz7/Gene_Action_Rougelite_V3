@@ -1,6 +1,11 @@
 extends Resource
 class_name RewardResult
 
-var mutagen_choices : Array[MutagenResource] = []
 
-var discovered_gene : GeneResource
+var gold:int = 0
+
+var resources:Array = []
+
+var mutagen_choices:Array[MutagenResource] = []
+
+var discovered_gene:Array[GeneResource] = []
