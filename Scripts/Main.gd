@@ -9,22 +9,33 @@ extends Node
 @onready var gene_database = $Managers/GeneDatabase
 @onready var reward_manager = $Managers/RewardManager
 
+@onready var map_ui = $UI/MapUI
 @onready var gene_selection = $UI/GeneSelectionScreen
 
 func _ready():
+
+	print("THIS IS THE CURRENT MAIN SCRIPT")
+
 	gene_database.load_genes()
-	
+
 	gene_selection.genes_selected.connect(start_run)
+
+	map_ui.hide()
+	gene_selection.hide()
+
+	map_ui.room_entered.connect(enter_room)
+
+	battle_manager.battle_won.connect(_on_battle_won)
+	battle_manager.battle_lost.connect(_on_battle_lost)
+
+	start_new_run()
 	
-	var choices = gene_database.get_random_genes(5)
-	
+
+func start_new_run():
 	start_gene_selection()
 
-
 func start_gene_selection():
-	
 	var gene_choices = gene_database.get_random_genes(5)
-	
 	print("Strating gene choices:")
 	
 	for gene in gene_choices:
@@ -34,27 +45,104 @@ func start_gene_selection():
 	
 	
 func start_run(selected_genes:Array[GeneResource]):
-	print("Starting run with genes:")
+
+	print("======================")
+	print("MAIN START_RUN CALLED")
+	print("======================")
+	
+	print("START RUN ENTERED")
+
+	print("Starting genes:")
 
 	for gene in selected_genes:
 		print(gene.gene_name)
 
+
+	print("Checking RunManager")
+
+	if run_manager == null:
+		print("ERROR: RunManager is NULL")
+		return
+
+
+	print("RunManager found:", run_manager)
+
+
+	print("Calling setup_run")
+
 	run_manager.setup_run(selected_genes)
 
-	battle_manager.start_battle()
+
+	print("setup_run finished")
+
+
+	print("Calling map generation")
+
+	map_manager.generate_map()
+
+
+	print("Map generation finished")
+
+
+	map_ui.show()
+
+	map_ui.display_map(
+		map_manager.current_map
+	)
+
+
+	print("Map displayed")
+	
+	
+func enter_room(room):
+
+	print("MAIN ENTERING ROOM:", room.room_type)
+	
+	# remove map from screen
+	map_ui.hide()
+	
+	match room.room_type:
+
+		RoomData.RoomType.ENEMY:
+			battle_manager.start_battle()
+
+		RoomData.RoomType.ELITE:
+			battle_manager.start_elite_battle()
+
+		RoomData.RoomType.REST:
+			print("Open rest menu")
+
+		RoomData.RoomType.MERCHANT:
+			print("Open shop")
+
+		RoomData.RoomType.TREASURE:
+			print("Open treasure")
+
+		RoomData.RoomType.LAB:
+			print("Open laboratory")
+
+		RoomData.RoomType.BOSS:
+			battle_manager.start_boss_battle()
 	
 	
 func _on_battle_won(enemy):
 	print("Battle won!")
 	
 	var rewards = reward_manager.generate_rewards(enemy)
-
+	
 	if rewards.discovered_gene.size() > 0:
-
 		print("Gene discovered:", rewards.discovered_gene[0].gene_name)
 		
 	print("Mutagen choices:", rewards.mutagen_choices)
 
+	return_to_map()
+	
 func _on_battle_lost():
-
 	print("Run failed")
+	
+	return_to_map()
+	
+func return_to_map():
+	print("Returning to map")
+
+	map_ui.show()

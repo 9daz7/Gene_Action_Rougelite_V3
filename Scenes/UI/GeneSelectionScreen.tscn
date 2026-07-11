@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://3le5bg14c80l" path="res://Scripts/UI/GeneSelectionScreen.gd" id="1_14xqk"]
 
 [node name="GeneSelectionScreen" type="Control" unique_id=38721201]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

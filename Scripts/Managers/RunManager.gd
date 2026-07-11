@@ -11,9 +11,14 @@ var player_genes:Array[GeneResource] = []
 var adaptation_limit := 6
 var used_adaptations := 0
 
-
+func _ready():
+	print("RUN MANAGER READY")
 
 func setup_run(starting_genes:Array[GeneResource]):
+	
+	print("=== RUN MANAGER START ===")
+	print("Genes received:", starting_genes.size())
+	
 	clear_run()
 	player_genes.clear()
 	

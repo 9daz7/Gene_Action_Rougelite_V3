@@ -20,7 +20,8 @@ var enemies:Array = []
 
 #temp start battle
 func start_battle(player, enemies, battle_ui):
-
+	current_state = TurnState.NONE
+	
 	self.player = player
 	self.enemies = enemies
 	self.battle_ui = battle_ui
@@ -223,8 +224,11 @@ func check_battle_end():
 		if enemy.hp <= 0:
 
 			print("Enemy defeated")
-
+			
 			current_state = TurnState.BATTLE_OVER
 			battle_won.emit(enemy)
 
+			if battle_ui:
+				battle_ui.hide()
+	
 			return

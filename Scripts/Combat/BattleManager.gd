@@ -47,41 +47,60 @@ func initialize_battle():
 	if player.has_method("start_battle"):
 		player.start_battle()
 
-
 	for enemy in enemies:
 		if enemy.has_method("start_battle"):
 			enemy.start_battle()
 
 	if turn_manager:
+
+		turn_manager.battle_won.connect(_on_turn_battle_won)
+		turn_manager.battle_lost.connect(_on_turn_battle_lost)
+
 		turn_manager.start_battle(
-			player, 
+			player,
 			enemies,
 			current_battle.battle_ui
 		)
+
 	else:
 		print("ERROR: TurnManager not found")
 		
 
-func check_battle_result():
-	if player == null:
-		return
-		
-	if player.hp <= 0:
-		print("BattleManager: Player defeated")
-		
-		battle_lost.emit()
-		
-		end_battle()
-		return
-		
-	for enemy in enemies:
-		if enemy.hp <= 0:
-			print("Batt;eManager: Enemy defeated")
-			
-			battle_won.emit(enemy)
-			
-			end_battle()
-			return
+#func check_battle_result():
+	#if player == null:
+		#return
+		#
+	#if player.hp <= 0:
+		#print("BattleManager: Player defeated")
+		#
+		#battle_lost.emit()
+		#
+		#end_battle()
+		#return
+		#
+	#for enemy in enemies:
+		#if enemy.hp <= 0:
+			#print("Batt;eManager: Enemy defeated")
+			#
+			#battle_won.emit(enemy)
+			#
+			#end_battle()
+			#return
+	
+func _on_turn_battle_won(enemy):
+	print("BattleManager received victory")
+	battle_won.emit(enemy)
+	
+	end_battle()
+
+
+
+func _on_turn_battle_lost():
+	print("BattleManager received defeat")
+	battle_lost.emit()
+	
+	end_battle()
+	
 	
 func end_battle():
 	print("Cleaning battle")

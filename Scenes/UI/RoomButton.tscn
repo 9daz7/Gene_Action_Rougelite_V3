@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://bf003i8p0pbjh"]
+
+[ext_resource type="Script" uid="uid://mddmylirnk3a" path="res://Scripts/UI/RoomButton.gd" id="1_p8217"]
+
+[node name="RoomButton" type="Button" unique_id=1613219373]
+custom_minimum_size = Vector2(80, 40)
+offset_right = 80.0
+offset_bottom = 40.0
+script = ExtResource("1_p8217")
