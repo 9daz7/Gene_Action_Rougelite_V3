@@ -4,6 +4,11 @@ class_name RoomManager
 
 @onready var battle_manager = $"../BattleManager"
 
+const TREASURE_SCENE = preload("res://Scenes/Rooms/TreasureRoom.tscn")
+
+var treasure_room = null
+
+
 func enter_room(room:RoomData):
 	
 	print("ROOM MANAGER ENTERED:", room.room_type)
@@ -37,6 +42,11 @@ func enter_room(room:RoomData):
 		_:
 			print("Unknown room")
 			
+			
+# --------------------------------------------------
+# Battles
+# --------------------------------------------------
+
 func start_enemy(room):
 	print("Starting normal battle")
 	battle_manager.start_battle()
@@ -59,13 +69,26 @@ func start_boss(room):
 	battle_manager.start_boss_battle()
 
 
+# --------------------------------------------------
+# Special Rooms
+# --------------------------------------------------
+
 
 func open_shop(room):
 	print("SHOP OPEN")
 
 
 func open_treasure(room):
-	print("TREASURE OPEN")
+	
+	print("Opening treasure")
+
+	treasure_room = TREASURE_SCENE.instantiate()
+
+	get_tree().current_scene.add_child(treasure_room)
+
+	treasure_room.treasure_finished.connect(_on_treasure_finished)
+	
+	treasure_room.open()
 
 
 func open_rest(room):
@@ -74,3 +97,12 @@ func open_rest(room):
 
 func open_lab(room):
 	print("LAB OPEN")
+
+
+func _on_treasure_finished(reward):
+
+	print("Treasure complete", reward)
+
+	treasure_room = null
+
+	get_tree().current_scene.return_to_map()

@@ -8,6 +8,7 @@ signal room_entered(room)
 @onready var map_manager = $"../../Managers/MapManager"
 @onready var room_container = $RoomContainer
 @onready var connections = $Connections
+@onready var player_marker = $PlayerMarker
 
 
 const ROOM_BUTTON = preload("res://Scenes/UI/RoomButton.tscn")
@@ -41,7 +42,17 @@ func clear_map():
 		child.queue_free()
 
 
+func update_player_position():
 
+	if map_manager.current_room == null:
+		return
+
+	player_marker.position = (
+		map_manager.current_room.position 
+		+ Vector2(40,20)
+	)
+	
+	
 func create_room_button(room:RoomData):
 
 	var button = ROOM_BUTTON.instantiate()
@@ -50,7 +61,10 @@ func create_room_button(room:RoomData):
 
 	button.setup(room)
 
-	button.disabled = !room.available and room != map_manager.current_room
+	button.disabled = (
+		!room.available 
+		or room.completed
+	)
 
 	button.room_selected.connect(_on_room_selected)
 
@@ -68,6 +82,8 @@ func _on_room_selected(room):
 	print("Entered:", room.room_id)
 
 	print("EMITTING ROOM:", room.room_type)
+	
+	update_player_position()
 	
 	room_entered.emit(room)
 

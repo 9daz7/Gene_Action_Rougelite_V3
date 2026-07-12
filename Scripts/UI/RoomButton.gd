@@ -12,6 +12,10 @@ func setup(room: RoomData):
 	room_data = room
 
 	text = get_room_text()
+	
+	if room.completed:
+		text += "\n✓"
+		
 	position = room.position
 	custom_minimum_size = Vector2(80, 40)
 	

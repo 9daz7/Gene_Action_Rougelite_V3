@@ -14,7 +14,6 @@ grow_vertical = 2
 script = ExtResource("1_opaok")
 
 [node name="Connections" type="Node2D" parent="." unique_id=1882013845]
-visible = false
 z_index = -1
 script = ExtResource("2_j65kp")
 
@@ -32,3 +31,5 @@ mouse_filter = 2
 
 [node name="RoomButton" parent="RoomContainer" unique_id=1613219373 instance=ExtResource("2_wshxg")]
 layout_mode = 0
+
+[node name="PlayerMarker" type="Sprite2D" parent="." unique_id=844390375]
