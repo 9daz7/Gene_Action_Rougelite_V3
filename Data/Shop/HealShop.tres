@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ShopItem" format=3 uid="uid://2u072u41oexb"]
+
+[ext_resource type="Script" uid="uid://chgh87wop46dm" path="res://Scripts/ShopItem.gd" id="1_ivs25"]
+
+[resource]
+script = ExtResource("1_ivs25")
+item_name = "Heal 25 HP"
+cost = 30
+item_type = 1
+description = "Restores 25 HP"

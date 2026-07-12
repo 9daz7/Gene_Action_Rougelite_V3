@@ -5,8 +5,10 @@ class_name RoomManager
 @onready var battle_manager = $"../BattleManager"
 
 const TREASURE_SCENE = preload("res://Scenes/Rooms/TreasureRoom.tscn")
+const MERCHANT_SCENE = preload("res://Scenes/Rooms/MerchantRoom.tscn")
 
 var treasure_room = null
+var merchant_room = null
 
 
 func enter_room(room:RoomData):
@@ -75,7 +77,16 @@ func start_boss(room):
 
 
 func open_shop(room):
-	print("SHOP OPEN")
+
+	print("Opening merchant")
+
+	merchant_room = MERCHANT_SCENE.instantiate()
+
+	get_tree().current_scene.add_child(merchant_room)
+
+	merchant_room.open()
+
+	merchant_room.merchant_finished.connect(_on_merchant_finished)
 
 
 func open_treasure(room):
@@ -104,5 +115,17 @@ func _on_treasure_finished(reward):
 	print("Treasure complete", reward)
 
 	treasure_room = null
+
+	get_tree().current_scene.return_to_map()
+	
+	
+func _on_merchant_finished():
+
+	print("Merchant complete")
+
+	if is_instance_valid(merchant_room):
+		merchant_room.queue_free()
+
+	merchant_room = null
 
 	get_tree().current_scene.return_to_map()

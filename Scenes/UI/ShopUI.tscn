@@ -1,6 +1,19 @@
 [gd_scene format=3 uid="uid://bvx01e6o606mf"]
 
-[ext_resource type="Script" uid="uid://cxmpy6yllox80" path="res://Scenes/UI/ShopUI.gd" id="1_bpl7i"]
+[sub_resource type="GDScript" id="GDScript_pme0k"]
+script/source = "#extends Control
+#
+#
+#signal shop_closed
+#
+#func open():
+	#show()
+	#
+#func _on_button_pressed():
+	#hide()
+	#shop_closed.emit()
+	#
+"
 
 [node name="ShopUi" type="Control" unique_id=1110591622]
 layout_mode = 3
@@ -9,4 +22,4 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_bpl7i")
+script = SubResource("GDScript_pme0k")

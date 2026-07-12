@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ShopItem" format=3 uid="uid://dgl3ah6slqcu5"]
+
+[ext_resource type="Script" uid="uid://chgh87wop46dm" path="res://Scripts/ShopItem.gd" id="1_ntpn8"]
+
+[resource]
+script = ExtResource("1_ntpn8")
+item_name = "Mutagen"
+cost = 75
+item_type = 2
+description = "Used for genetic upgrades"

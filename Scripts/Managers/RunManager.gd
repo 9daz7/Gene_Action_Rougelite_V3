@@ -1,5 +1,8 @@
 extends Node
+class_name RunManager
 
+
+var gold: int = 0
 
 # Genes equipped for this run
 var active_genes: Array[GeneResource] = []
@@ -27,6 +30,10 @@ func setup_run(starting_genes: Array[GeneResource]):
 	clear_run()
 	player_genes.clear()
 
+	gold = 100
+	
+	print("Starting Gold:", gold)
+	
 	for gene in starting_genes:
 		equip_gene(gene)
 		player_genes.append(gene)
@@ -60,3 +67,16 @@ func collect_gene(gene: GeneResource):
 func clear_run():
 	active_genes.clear()
 	used_adaptations = 0
+	
+	
+func spend_gold(amount:int) -> bool:
+
+	if gold < amount:
+		print("Not enough gold")
+		return false
+
+	gold -= amount
+
+	print("Gold remaining:", gold)
+
+	return true
