@@ -15,6 +15,7 @@ const ROOM_BUTTON = preload("res://Scenes/UI/RoomButton.tscn")
 
 var map:Array[RoomData] = []
 
+var map_scale := 0.8
 
 func display_map(generated_map):
 
@@ -22,12 +23,16 @@ func display_map(generated_map):
 
 	clear_map()
 
+	room_container.scale = Vector2.ONE * map_scale
+	connections.scale = Vector2.ONE * map_scale
 
 	for room in map:
 		create_room_button(room)
 
 
 	connections.set_map(map)
+	
+	queue_redraw()
 
 
 func clear_map():
@@ -53,29 +58,18 @@ func create_room_button(room:RoomData):
 
 func _on_room_selected(room):
 
-	print(
-		"Clicked:",
-		room.room_id
-	)
+	print("Clicked:", room.room_id)
 
 	if !map_manager.move_to_room(room):
-
-		print(
-			"Invalid path"
-		)
-
+		print("Invalid path")
 		return
 
 
-	print(
-		"Entered:",
-		room.room_id
-	)
+	print("Entered:", room.room_id)
 
+	print("EMITTING ROOM:", room.room_type)
+	
 	room_entered.emit(room)
-
-	display_map(map_manager.current_map)
-
 
 
 	#match room.room_type:

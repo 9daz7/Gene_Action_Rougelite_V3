@@ -104,21 +104,15 @@ func start_run(selected_genes: Array[GeneResource]):
 	print("Map displayed")
 	
 func enter_room(room):
-	
-	if !map_manager.move_to_room(room):
-		return
-
 
 	current_room = room
-	
-	map_ui.hide()
 
 	print("MAIN ENTERING ROOM:", room.room_type)
 
-	# Remove map from screen
 	map_ui.hide()
 
 	match room.room_type:
+
 		RoomData.RoomType.ENEMY:
 			battle_manager.start_battle()
 
