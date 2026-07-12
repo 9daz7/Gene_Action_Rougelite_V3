@@ -31,4 +31,4 @@ var connections : Array[RoomData] = []
 
 var visited := false
 var completed := false
-var unlocked := false
+var available := false

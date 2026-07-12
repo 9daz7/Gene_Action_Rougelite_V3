@@ -13,57 +13,68 @@ signal room_entered(room)
 const ROOM_BUTTON = preload("res://Scenes/UI/RoomButton.tscn")
 
 
-var map: Array[RoomData] = []
-
-var map_scale := 0.8
+var map:Array[RoomData] = []
 
 
-func display_map(generated_map: Array):
+func display_map(generated_map):
+
 	map = generated_map
 
 	clear_map()
 
-	room_container.scale = Vector2.ONE * map_scale
-	connections.scale = Vector2.ONE * map_scale
 
 	for room in map:
 		create_room_button(room)
 
-	
+
 	connections.set_map(map)
 
 
 func clear_map():
+
 	for child in room_container.get_children():
 		child.queue_free()
 
 
-func create_room_button(room: RoomData):
+
+func create_room_button(room:RoomData):
+
 	var button = ROOM_BUTTON.instantiate()
 
 	room_container.add_child(button)
 
 	button.setup(room)
-	
-	button.disabled = !room.unlocked
+
+	button.disabled = !room.available and room != map_manager.current_room
 
 	button.room_selected.connect(_on_room_selected)
 
 
+
 func _on_room_selected(room):
 
-	print("Attempting room:", room.room_id)
-
+	print(
+		"Clicked:",
+		room.room_id
+	)
 
 	if !map_manager.move_to_room(room):
-		print("Invalid path")
+
+		print(
+			"Invalid path"
+		)
+
 		return
 
 
-	print("Moving into room:", room.room_id)
-
+	print(
+		"Entered:",
+		room.room_id
+	)
 
 	room_entered.emit(room)
+
+	display_map(map_manager.current_map)
 
 
 

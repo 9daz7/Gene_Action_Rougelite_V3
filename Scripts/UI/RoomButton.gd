@@ -14,12 +14,17 @@ func setup(room: RoomData):
 	text = get_room_text()
 	position = room.position
 	custom_minimum_size = Vector2(80, 40)
-
-	pressed.connect(_on_pressed)
+	
+	if not pressed.is_connected(_on_pressed):
+		pressed.connect(_on_pressed)
 
 
 func get_room_text():
 	match room_data.room_type:
+		
+		RoomData.RoomType.START:
+			return "START"
+		
 		RoomData.RoomType.ENEMY:
 			return "ENEMY"
 
@@ -49,9 +54,11 @@ func get_room_text():
 
 
 func _on_pressed():
-	print("Selected room:", room_data.room_type)
 	
 	if disabled:
 		return
+		
+	print("Selected room ID:", room_data.room_id)
+	
 
 	room_selected.emit(room_data)
