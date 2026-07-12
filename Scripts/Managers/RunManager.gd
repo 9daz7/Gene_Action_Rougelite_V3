@@ -4,6 +4,9 @@ class_name RunManager
 
 var gold: int = 0
 
+var player_hp:int = 100
+var max_hp:int = 100
+
 # Genes equipped for this run
 var active_genes: Array[GeneResource] = []
 
@@ -37,6 +40,10 @@ func setup_run(starting_genes: Array[GeneResource]):
 	for gene in starting_genes:
 		equip_gene(gene)
 		player_genes.append(gene)
+		
+		# Add starting genes to owned storage
+		if not gene_collection.has(gene):
+			gene_collection.append(gene)
 
 		print("Starting gene:", gene.gene_name)
 
@@ -64,6 +71,22 @@ func collect_gene(gene: GeneResource):
 	print("Unlocked gene:", gene.gene_name)
 
 
+func owns_gene(gene: GeneResource) -> bool:
+
+	return gene_collection.has(gene)
+	
+
+func store_gene(gene: GeneResource):
+
+	if not gene_collection.has(gene):
+		gene_collection.append(gene)
+
+		print("Stored gene:", gene.gene_name)
+
+	else:
+		print("Gene already owned:", gene.gene_name)
+		
+
 func clear_run():
 	active_genes.clear()
 	used_adaptations = 0
@@ -80,3 +103,19 @@ func spend_gold(amount:int) -> bool:
 	print("Gold remaining:", gold)
 
 	return true
+
+
+func heal_player(amount:int):
+
+	player_hp += amount
+
+	if player_hp > max_hp:
+		player_hp = max_hp
+
+	print(
+		"Player healed:",
+		player_hp,
+		"/",
+		max_hp
+	)
+	

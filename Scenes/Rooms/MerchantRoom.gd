@@ -55,14 +55,28 @@ func create_shop_items():
 	for item in items:
 
 		var button = SHOP_BUTTON.instantiate()
+		
+		if item.item_type == ShopItem.ItemType.GENE:
 
-		button.text = (
-			item.item_name 
-			+ " - "
-			+ str(item.cost)
-			+ " Gold"
-		)
+			if run_manager.owns_gene(item.gene):
 
+				button.text = item.item_name + " - OWNED"
+				button.disabled = true
+			else:
+				button.text = (
+					item.item_name 
+					+ " - "
+					+ str(item.cost)
+					+ " Gold"
+				)
+		else:
+			button.text = (
+				item.item_name
+				+ " - "
+				+ str(item.cost)
+				+ " Gold"
+			)
+		
 		button.custom_minimum_size = Vector2(
 			300,
 			60
@@ -74,10 +88,15 @@ func create_shop_items():
 		)
 
 		item_container.add_child(button)
-
-
-
+	
+	
 func buy_item(item: ShopItem, button: Button):
+
+	if item.item_type == ShopItem.ItemType.GENE:
+		
+		if run_manager.owns_gene(item.gene):
+			print("Already owned:", item.item_name)
+			return
 
 	print("Trying to buy:", item.item_name)
 	
@@ -85,15 +104,36 @@ func buy_item(item: ShopItem, button: Button):
 		print("Cannot afford:", item.item_name)
 		return
 
-
 	print("Bought:", item.item_name)
 
 	selected_item = item
+	
+	apply_item(item)
+	
+	if item.item_type == ShopItem.ItemType.GENE:
+		button.text = item.item_name + " - OWNED"
+		button.disabled = true
 
-	button.queue_free()
+	else:
+		button.queue_free()
 
 	update_gold()
 
+
+func apply_item(item:ShopItem):
+
+	match item.item_type:
+
+		ShopItem.ItemType.ITEM:
+			run_manager.heal_player(25)
+
+
+		ShopItem.ItemType.GENE:
+			run_manager.store_gene(item.gene)
+
+
+		ShopItem.ItemType.MUTAGEN:
+			print("Mutagen purchased")
 
 
 func _on_continue_pressed():

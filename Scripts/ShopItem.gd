@@ -15,3 +15,5 @@ enum ItemType
 @export var item_type:ItemType
 
 @export var description:String
+
+@export var gene: GeneResource
