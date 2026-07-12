@@ -1,7 +1,8 @@
 extends Control
+class_name GeneLoadoutScreen
 
 
-signal genes_selected(genes: Array[GeneResource])
+signal loadout_confirmed(genes: Array[GeneResource])
 
 
 # Genes currently displayed on screen
@@ -12,19 +13,27 @@ var options: Array[GeneResource] = []
 var selected_genes: Array[GeneResource] = []
 
 
-const MAX_SELECTED_GENES := 3
+const MAX_ADAPTATIONS := 6
+
+var current_adaptation := 0
 
 
 @onready var container = $VBoxContainer
 @onready var start_button = $StartButton
+@onready var adaptation_label = $AdaptationLabel
 
 
-func open(genes: Array[GeneResource]):
+func open(owned_genes: Array[GeneResource]):
 	show()
 
-	options = genes
+	options = owned_genes
+	
 	selected_genes.clear()
 
+	current_adaptation = 0
+	
+	update_adaptation()
+	
 	display_choices(options)
 
 
@@ -35,11 +44,17 @@ func display_choices(genes: Array[GeneResource]):
 		var btn = buttons[i]
 
 		if i < genes.size():
-			btn.text = genes[i].gene_name
+			btn.text = (
+				genes[i].gene_name
+				+ " ("
+				+ str(genes[i].adaptation_cost)
+				+ ")"
+			)
 			btn.show()
 
 			# Avoid duplicate connections
 			if not btn.pressed.is_connected(_on_button_pressed):
+				
 				btn.pressed.connect(
 					_on_button_pressed.bind(i)
 				)
@@ -51,31 +66,45 @@ func display_choices(genes: Array[GeneResource]):
 func _on_button_pressed(index: int):
 	var gene = options[index]
 
-
-	# Clicking again removes the gene
+	# Remove gene
 	if gene in selected_genes:
 		selected_genes.erase(gene)
-
+		current_adaptation -= gene.adaptation_cost
 		print("Removed:", gene.gene_name)
+		
+		update_adaptation()
 
 		return
 
 
 	# Maximum reached
-	if selected_genes.size() >= MAX_SELECTED_GENES:
-		print("Maximum genes selected")
+	if current_adaptation + gene.adaptation_cost > MAX_ADAPTATION:
+		print("Not enough adaptation slots")
 
 		return
 
 
 	selected_genes.append(gene)
-
+	current_adaptation += gene.adaptation_cost
 	print("Selected:", gene.gene_name)
+	
+	update_adaptation()
+	
+	
+func update_adaptation():
+	adaptation_label.text = (
+		"Adaptation: "
+		+ str(current_adaptation)
+		+ " / "
+		+ str(MAX_ADAPTATION)
+	)
 
-
+	start_button.disabled = selected_genes.is_empty()
+	
+	
 func _on_start_button_pressed():
-	if selected_genes.size() != MAX_SELECTED_GENES:
-		print("Select", MAX_SELECTED_GENES, "genes before starting")
+	if selected_genes.is_empty():
+		print("Choose at least one gene")
 
 		return
 
@@ -87,4 +116,4 @@ func _on_start_button_pressed():
 
 	hide()
 
-	genes_selected.emit(selected_genes)
+	loadout_confirmed.emit(selected_genes)

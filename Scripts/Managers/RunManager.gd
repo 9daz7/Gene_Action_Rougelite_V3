@@ -41,11 +41,48 @@ func setup_run(starting_genes: Array[GeneResource]):
 		equip_gene(gene)
 		player_genes.append(gene)
 		
-		# Add starting genes to owned storage
-		if not gene_collection.has(gene):
-			gene_collection.append(gene)
+		## Add starting genes to owned storage
+		#if not gene_collection.has(gene):
+			#gene_collection.append(gene)
 
 		print("Starting gene:", gene.gene_name)
+
+
+func initialize_starting_collection(gene_database):
+
+	if gene_collection.size() > 0:
+		return
+
+	var starter_genes = [
+		"Boar skin",
+		"Turtle shell",
+		"Honey Badger anger",
+		"Chameleon Skin",
+		"Cheetah speed",
+		"tiger stregth"
+	]
+
+	for gene in gene_database.all_genes:
+
+		if starter_genes.has(gene.gene_name):
+			gene_collection.append(gene)
+
+	print("Starting collection:")
+
+	for gene in gene_collection:
+		print(gene.gene_name)
+
+
+func get_random_owned_genes(count:int) -> Array[GeneResource]:
+
+	var available = gene_collection.duplicate()
+
+	available.shuffle()
+
+	if available.size() > count:
+		available.resize(count)
+
+	return available
 
 
 func equip_gene(gene: GeneResource) -> bool:

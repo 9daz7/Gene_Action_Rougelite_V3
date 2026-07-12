@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://duo7vnk5nhe3f"]
 
-[ext_resource type="Script" uid="uid://3le5bg14c80l" path="res://Scripts/UI/GeneSelectionScreen.gd" id="1_14xqk"]
+[ext_resource type="Script" uid="uid://3le5bg14c80l" path="res://Scripts/UI/GeneLoadoutScreen.gd" id="1_faunx"]
 
 [node name="GeneSelectionScreen" type="Control" unique_id=38721201]
 visible = false
@@ -10,7 +10,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_14xqk")
+script = ExtResource("1_faunx")
 
 [node name="Panel" type="Panel" parent="." unique_id=58930009]
 layout_mode = 0

@@ -12,7 +12,7 @@ extends Node
 
 
 @onready var map_ui = $UI/MapUI
-@onready var gene_selection = $UI/GeneSelectionScreen
+@onready var gene_loadout = $UI/GeneLoadoutScreen
 @onready var room_manager = $Managers/RoomManager
 
 
@@ -23,11 +23,13 @@ func _ready():
 	print("THIS IS THE CURRENT MAIN SCRIPT")
 
 	gene_database.load_genes()
+	
+	run_manager.initialize_starting_collection(gene_database)
 
-	gene_selection.genes_selected.connect(start_run)
+	gene_loadout.loadout_confirmed.connect(start_run)
 
 	map_ui.hide()
-	gene_selection.hide()
+	gene_loadout.hide()
 
 	map_ui.room_entered.connect(enter_room)
 
@@ -42,18 +44,20 @@ func start_new_run():
 
 
 func start_gene_selection():
-	var gene_choices = gene_database.get_random_genes(5)
+	#var gene_choices = run_manager.get_random_owned_genes(5)
 
-	print("Starting gene choices:")
+	print("Opening gene loadout")
+	
+	print("Owned genes:")
 
-	for gene in gene_choices:
+	for gene in run_manager.gene_collection:
 		print(
 			gene.gene_name,
 			" | ",
 			gene.get_rarity_name()
 		)
 
-	gene_selection.open(gene_choices)
+	gene_loadout.open(run_manager.gene_collection)
 
 
 func start_run(selected_genes: Array[GeneResource]):
