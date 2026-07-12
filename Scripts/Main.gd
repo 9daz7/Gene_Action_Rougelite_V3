@@ -13,6 +13,7 @@ extends Node
 
 @onready var map_ui = $UI/MapUI
 @onready var gene_selection = $UI/GeneSelectionScreen
+@onready var room_manager = $Managers/RoomManager
 
 
 var current_room: RoomData = null
@@ -111,28 +112,7 @@ func enter_room(room):
 
 	map_ui.hide()
 
-	match room.room_type:
-
-		RoomData.RoomType.ENEMY:
-			battle_manager.start_battle()
-
-		RoomData.RoomType.ELITE:
-			battle_manager.start_elite_battle()
-
-		RoomData.RoomType.REST:
-			print("Open rest menu")
-
-		RoomData.RoomType.MERCHANT:
-			print("Open shop")
-
-		RoomData.RoomType.TREASURE:
-			print("Open treasure")
-
-		RoomData.RoomType.LAB:
-			print("Open laboratory")
-
-		RoomData.RoomType.BOSS:
-			battle_manager.start_boss_battle()
+	room_manager.enter_room(room)
 
 
 func _on_battle_won(enemy):

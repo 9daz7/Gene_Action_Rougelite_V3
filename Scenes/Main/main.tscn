@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://dlec22tbrybl3" path="res://Scripts/Genes/GeneDatabase.gd" id="4_p6jpk"]
 [ext_resource type="Script" uid="uid://hlp51b3uy82k" path="res://Scripts/Managers/RewardManager.gd" id="5_xlvfx"]
 [ext_resource type="Script" uid="uid://cgn7bx0im6o1g" path="res://Scripts/Managers/MapManager.gd" id="6_hryqi"]
+[ext_resource type="Script" uid="uid://bbfr6ua0f4fu" path="res://Scenes/Main/RoomManager.gd" id="8_hfg1r"]
 [ext_resource type="PackedScene" uid="uid://duo7vnk5nhe3f" path="res://Scenes/UI/GeneSelectionScreen.tscn" id="8_imbg2"]
 [ext_resource type="PackedScene" uid="uid://c77fp71r8tcxd" path="res://Scenes/UI/MapUI.tscn" id="9_imbg2"]
 
@@ -34,6 +35,9 @@ script = ExtResource("6_hryqi")
 
 [node name="GeneDatabase" type="Node" parent="Managers" unique_id=1652956824]
 script = ExtResource("4_p6jpk")
+
+[node name="RoomManager" type="Node" parent="Managers" unique_id=1024188299]
+script = ExtResource("8_hfg1r")
 
 [node name="World" type="Node2D" parent="." unique_id=903047276]
 

@@ -296,20 +296,15 @@ func update_available_rooms():
 func move_to_room(room:RoomData):
 
 	if room not in current_room.connections:
-		print(
-			"Cannot move from",
-			current_room.room_id,
-			"to",
-			room.room_id
-		)
+		print("Cannot move there")
 		return false
 
 
 	current_room.completed = true
 
 	current_room = room
+
 	current_room.visited = true
-	current_room.available = true
 
 	update_available_rooms()
 
