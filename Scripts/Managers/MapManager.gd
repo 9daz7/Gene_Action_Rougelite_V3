@@ -5,7 +5,7 @@ class_name MapManager
 signal map_generated
 
 
-const ROWS = 7
+const ROWS = 8
 const ROOMS_PER_ROW = 3
 
 
@@ -34,7 +34,7 @@ func generate_map():
 			room_count = 1
 		
 		# boss node
-		if row == ROWS - 1:
+		elif row == ROWS - 1:
 			room_count = 1
 
 		for lane in range(room_count):
@@ -44,23 +44,25 @@ func generate_map():
 			room.row = row
 			room.lane = lane
 
-			var x_spacing = 250
-			var y_spacing = 110
+
+			var x_spacing: int = 250
+			var y_spacing: int = 110
+
+			var x: int
 
 			if room_count == 1:
-				
-				room.position = Vector2(
-					500,
-					700 - row * y_spacing
-				)
+				x = 500
 			else:
-				room.position = Vector2(
-					250 + lane * x_spacing,
-					700 - row * y_spacing
-				)
+				x = 250 + lane * x_spacing
 
-			# Boss room
-			if row == ROWS - 1:
+			room.position = Vector2(
+				x,
+				760 - row * y_spacing
+			)
+
+			if row == 0:
+				room.room_type = RoomData.RoomType.START
+			elif row == ROWS - 1:
 				room.room_type = RoomData.RoomType.BOSS
 			else:
 				room.room_type = generate_room_type(row)
@@ -74,7 +76,7 @@ func generate_map():
 	
 	print_map()
 	
-	set_starting_room()
+	#set_starting_room()
 	
 	map_generated.emit()
 
@@ -129,65 +131,6 @@ func find_closest_next_room(room, next_row):
 			distance = new_distance
 
 	return closest
-	
-	
-func set_starting_room():
-	
-	current_room = map_rows[0][0]
-	
-	current_room.visited = true
-	current_room.unlocked = true
-	
-	update_available_rooms()
-	
-	
-func get_available_rooms() -> Array[RoomData]:
-
-	var available:Array[RoomData] = []
-
-	if current_room == null:
-		return available
-
-
-	for room in current_room.connections:
-		available.append(room)
-
-
-	return available
-	
-	
-func update_available_rooms():
-
-	for room in current_map:
-		room.unlocked = false
-
-
-	if current_room == null:
-		return
-
-
-	for next_room in current_room.connections:
-		next_room.unlocked = true
-	
-
-func move_to_room(room:RoomData):
-
-	if current_room == null:
-		return false
-	
-	if room not in current_room.connections:
-		print("Cannot move there")
-		return false
-
-
-	current_room.completed = true
-	current_room.visited = true
-	
-	current_room = room
-
-	update_available_rooms()
-
-	return true
 
 
 # -------------------------------------------------------------------

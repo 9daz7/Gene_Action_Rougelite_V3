@@ -3,6 +3,7 @@ class_name RoomData
 
 
 enum RoomType {
+	START,
 	ENEMY,
 	GROUP_ENEMY,
 	ELITE,
@@ -17,15 +18,16 @@ enum RoomType {
 }
 
 
-var room_id: int
-var row: int
-var lane: int
+var room_id := 0
 
-var position: Vector2
+var row := 0
+var lane := 0
 
-var room_type: RoomType
+var position := Vector2.ZERO
 
-var connections: Array[RoomData] = []
+var room_type : RoomType
+
+var connections : Array[RoomData] = []
 
 var visited := false
 var completed := false
