@@ -4,6 +4,18 @@
 [ext_resource type="Script" uid="uid://d0ivxoxebykwh" path="res://Scenes/UI/MapConnections.gd" id="2_j65kp"]
 [ext_resource type="PackedScene" uid="uid://bf003i8p0pbjh" path="res://Scenes/UI/RoomButton.tscn" id="2_wshxg"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j65kp"]
+bg_color = Color(0.14767182, 0.14767179, 0.14767179, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.7529412, 0.48235294, 0.27058825, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
 [node name="MapUI" type="Control" unique_id=701148956]
 layout_mode = 3
 anchors_preset = 15
@@ -13,8 +25,17 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_opaok")
 
+[node name="MapBackground" type="ColorRect" parent="." unique_id=912399409]
+z_index = -10
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.24882713, 0.1971117, 0.09841613, 1)
+
 [node name="Connections" type="Node2D" parent="." unique_id=1882013845]
-z_index = -1
 script = ExtResource("2_j65kp")
 
 [node name="RoomContainer" type="Control" parent="." unique_id=2094703347]
@@ -31,5 +52,8 @@ mouse_filter = 2
 
 [node name="RoomButton" parent="RoomContainer" unique_id=1613219373 instance=ExtResource("2_wshxg")]
 layout_mode = 0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_j65kp")
 
-[node name="PlayerMarker" type="Sprite2D" parent="." unique_id=844390375]
+[node name="PlayerMarker" type="Sprite2D" parent="." unique_id=1957454287]
+z_index = 10

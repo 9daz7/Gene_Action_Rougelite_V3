@@ -18,6 +18,8 @@ var map:Array[RoomData] = []
 
 var map_scale := 0.8
 
+var map_offset := Vector2(500, 350)
+
 func display_map(generated_map):
 
 	map = generated_map
@@ -26,6 +28,9 @@ func display_map(generated_map):
 
 	room_container.scale = Vector2.ONE * map_scale
 	connections.scale = Vector2.ONE * map_scale
+	
+	room_container.position = map_offset
+	connections.position = map_offset
 
 	for room in map:
 		create_room_button(room)
@@ -42,14 +47,14 @@ func clear_map():
 		child.queue_free()
 
 
-func update_player_position():
+func update_player_position(room: RoomData):
 
 	if map_manager.current_room == null:
 		return
 
 	player_marker.position = (
 		map_manager.current_room.position 
-		+ Vector2(40,20)
+		+ Vector2(40,25)
 	)
 	
 	
@@ -83,7 +88,7 @@ func _on_room_selected(room):
 
 	print("EMITTING ROOM:", room.room_type)
 	
-	update_player_position()
+	update_player_position(room)
 	
 	room_entered.emit(room)
 

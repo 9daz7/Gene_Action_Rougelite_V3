@@ -2,8 +2,60 @@
 
 [ext_resource type="Script" uid="uid://mddmylirnk3a" path="res://Scripts/UI/RoomButton.gd" id="1_p8217"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j65kp"]
+bg_color = Color(0.14901961, 0.14901961, 0.14901961, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.7529412, 0.48235294, 0.27058825, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_p8217"]
+bg_color = Color(0.11489687, 0.1148968, 0.1148968, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.7529412, 0.48235294, 0.27058825, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_85dck"]
+bg_color = Color(0.2015267, 0.20152655, 0.20152658, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.7529412, 0.48235294, 0.27058825, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6extp"]
+bg_color = Color(0.14901961, 0.14901961, 0.14901961, 0.8980392)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.7529412, 0.48235294, 0.27058825, 0.8980392)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
 [node name="RoomButton" type="Button" unique_id=1613219373]
 custom_minimum_size = Vector2(80, 40)
 offset_right = 80.0
 offset_bottom = 40.0
+theme_override_styles/normal = SubResource("StyleBoxFlat_j65kp")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_p8217")
+theme_override_styles/hover = SubResource("StyleBoxFlat_85dck")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_6extp")
 script = ExtResource("1_p8217")

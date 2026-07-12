@@ -59,7 +59,7 @@ func generate_map():
 				x,
 				760 - row * y_spacing
 			)
-
+				
 			if row == 0:
 				room.room_type = RoomData.RoomType.START
 			elif row == ROWS - 1:
