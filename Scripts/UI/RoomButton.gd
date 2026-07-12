@@ -50,5 +50,8 @@ func get_room_text():
 
 func _on_pressed():
 	print("Selected room:", room_data.room_type)
+	
+	if disabled:
+		return
 
 	room_selected.emit(room_data)

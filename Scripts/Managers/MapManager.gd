@@ -28,7 +28,12 @@ func generate_map():
 
 		# Boss row only has one room
 		var room_count = ROOMS_PER_ROW
-
+		
+		# staring node
+		if row == 0:
+			room_count = 1
+		
+		# boss node
 		if row == ROWS - 1:
 			room_count = 1
 
@@ -42,10 +47,17 @@ func generate_map():
 			var x_spacing = 250
 			var y_spacing = 110
 
-			room.position = Vector2(
-				250 + lane * x_spacing,
-				700 - row * y_spacing
-			)
+			if room_count == 1:
+				
+				room.position = Vector2(
+					500,
+					700 - row * y_spacing
+				)
+			else:
+				room.position = Vector2(
+					250 + lane * x_spacing,
+					700 - row * y_spacing
+				)
 
 			# Boss room
 			if row == ROWS - 1:
@@ -60,9 +72,9 @@ func generate_map():
 
 	connect_paths()
 	
-	set_starting_room()
-	
 	print_map()
+	
+	set_starting_room()
 	
 	map_generated.emit()
 
@@ -87,8 +99,10 @@ func connect_paths():
 				room.connections.append(next_room)
 
 			# Chance to branch
-			if randf() < 0.40:
-				var extra = next_row.pick_random()
+			if randf() < 0.75:
+				var extra = next_row[
+					randi() % next_row.size()
+				]
 
 				if extra not in room.connections:
 					room.connections.append(extra)
@@ -119,9 +133,12 @@ func find_closest_next_room(room, next_row):
 	
 func set_starting_room():
 	
-	current_room = map_rows[0][1]
+	current_room = map_rows[0][0]
 	
 	current_room.visited = true
+	current_room.unlocked = true
+	
+	update_available_rooms()
 	
 	
 func get_available_rooms() -> Array[RoomData]:
@@ -139,6 +156,40 @@ func get_available_rooms() -> Array[RoomData]:
 	return available
 	
 	
+func update_available_rooms():
+
+	for room in current_map:
+		room.unlocked = false
+
+
+	if current_room == null:
+		return
+
+
+	for next_room in current_room.connections:
+		next_room.unlocked = true
+	
+
+func move_to_room(room:RoomData):
+
+	if current_room == null:
+		return false
+	
+	if room not in current_room.connections:
+		print("Cannot move there")
+		return false
+
+
+	current_room.completed = true
+	current_room.visited = true
+	
+	current_room = room
+
+	update_available_rooms()
+
+	return true
+
+
 # -------------------------------------------------------------------
 # Room generation
 # -------------------------------------------------------------------

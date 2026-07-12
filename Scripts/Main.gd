@@ -104,7 +104,14 @@ func start_run(selected_genes: Array[GeneResource]):
 	print("Map displayed")
 	
 func enter_room(room):
+	
+	if !map_manager.move_to_room(room):
+		return
+
+
 	current_room = room
+	
+	map_ui.hide()
 
 	print("MAIN ENTERING ROOM:", room.room_type)
 
@@ -172,4 +179,8 @@ func _on_battle_lost():
 func return_to_map():
 	print("Returning to map")
 
+	map_ui.display_map(
+		map_manager.current_map
+	)
+	
 	map_ui.show()

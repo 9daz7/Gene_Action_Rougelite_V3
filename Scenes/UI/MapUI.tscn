@@ -1,6 +1,8 @@
 [gd_scene format=3 uid="uid://c77fp71r8tcxd"]
 
 [ext_resource type="Script" uid="uid://de3kvrtdvt46h" path="res://Scripts/UI/MapUI.gd" id="1_opaok"]
+[ext_resource type="Script" uid="uid://d0ivxoxebykwh" path="res://Scenes/UI/MapConnections.gd" id="2_j65kp"]
+[ext_resource type="PackedScene" uid="uid://bf003i8p0pbjh" path="res://Scenes/UI/RoomButton.tscn" id="2_wshxg"]
 
 [node name="MapUI" type="Control" unique_id=701148956]
 layout_mode = 3
@@ -13,8 +15,10 @@ script = ExtResource("1_opaok")
 
 [node name="Connections" type="Node2D" parent="." unique_id=1882013845]
 visible = false
+script = ExtResource("2_j65kp")
 
 [node name="RoomContainer" type="Control" parent="." unique_id=2094703347]
+z_index = 1
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -24,3 +28,6 @@ offset_bottom = 432.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+
+[node name="RoomButton" parent="RoomContainer" unique_id=1613219373 instance=ExtResource("2_wshxg")]
+layout_mode = 0
