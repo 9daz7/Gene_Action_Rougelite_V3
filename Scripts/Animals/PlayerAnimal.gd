@@ -9,6 +9,9 @@ func start_battle():
 	
 	
 func setup_player_hp(run_manager):
+	
+	run_manager = manager
+	
 	max_hp = run_manager.max_hp
 	hp = run_manager.player_hp
 
@@ -18,3 +21,13 @@ func setup_player_hp(run_manager):
 		"/",
 		max_hp
 	)
+
+func take_damage(amount:int):
+	super.take_damage(amount)
+	if run_manager:
+		run_manager.player_hp = hp
+
+		print(
+			"Saved run HP:",
+			run_manager.player_hp
+		)

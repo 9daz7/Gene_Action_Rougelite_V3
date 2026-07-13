@@ -5,7 +5,7 @@ class_name AnimalBase
 signal hp_changed(new_hp)
 
 
-var run_manager = null
+var run_manager
 
 # -------------------------------------------------------------------
 # BASE STATS
@@ -306,12 +306,12 @@ func take_damage(amount: int):
 
 	hp_changed.emit(hp)
 
-	if self is PlayerAnimal:
-
-	var run_manager = get_node("../../RunManager")
-
-	if run_manager:
-		run_manager.player_hp = hp
+	#if self is PlayerAnimal:
+#
+		#var run_manager = get_node("../../RunManager")
+#
+		#if run_manager:
+			#run_manager.player_hp = hp
 
 # -------------------------------------------------------------------
 # TURN MANAGEMENT
