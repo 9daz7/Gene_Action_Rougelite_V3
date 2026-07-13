@@ -1,8 +1,8 @@
 extends Node
 class_name RunManager
 
+@onready var save_manager = $"../SaveManager"
 
-var gold: int = 0
 
 var player_hp:int = 100
 var max_hp:int = 100
@@ -32,10 +32,8 @@ func setup_run(starting_genes: Array[GeneResource]):
 
 	clear_run()
 	player_genes.clear()
-
-	gold = 100
 	
-	print("Starting Gold:", gold)
+	print("Starting Gold:", save_manager.gold)
 	
 	for gene in starting_genes:
 		equip_gene(gene)
@@ -131,13 +129,15 @@ func clear_run():
 	
 func spend_gold(amount:int) -> bool:
 
-	if gold < amount:
+	if save_manager.gold < amount:
 		print("Not enough gold")
 		return false
 
-	gold -= amount
+	save_manager.gold -= amount
 
-	print("Gold remaining:", gold)
+	print("Gold remaining:", save_manager.gold)
+	
+	save_manager.save_game(self)
 
 	return true
 

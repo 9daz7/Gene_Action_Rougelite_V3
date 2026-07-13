@@ -12,52 +12,38 @@ func generate_rewards(room_type):
 
 	var rewards = RewardData.new()
 
-	rewards.gold = randi_range(15,30)
-
+	rewards.gold = generate_gold(room_type)
 
 	rewards.gene_choices = generate_gene_rewards()
 
-
 	print("Rewards generated:")
+	print("Gold:", rewards.gold)
 
 	for gene in rewards.gene_choices:
 		print(gene.gene_name)
 
-
 	return rewards
-#func generate_rewards(room_type: int) -> RewardResult:
-	#var reward := RewardResult.new()
-#
-	#reward.gold = generate_gold(room_type)
-#
-	#reward.resources = generate_resources(room_type)
-#
-	#reward.discovered_gene = generate_gene_rewards(room_type)
-#
-	#reward.mutagen_choices = generate_mutagens(room_type)
-#
-	#return reward
 
 
 func generate_gold(room_type: int) -> int:
 	match room_type:
 		RoomData.RoomType.ENEMY:
-			return randi_range(15, 30)
+			return randi_range(5, 15)
 
 		RoomData.RoomType.GROUP_ENEMY:
-			return randi_range(25, 45)
+			return randi_range(8, 18)
 
 		RoomData.RoomType.ELITE:
-			return randi_range(50, 75)
+			return randi_range(15, 30)
 
 		RoomData.RoomType.BOSS:
-			return randi_range(100, 150)
+			return randi_range(32, 65)
 
 		RoomData.RoomType.AMBUSH:
-			return randi_range(25, 40)
+			return randi_range(16, 25)
 
 		RoomData.RoomType.MERCHANT_TRAP:
-			return randi_range(60, 90)
+			return randi_range(20, 40)
 
 		_:
 			return 0

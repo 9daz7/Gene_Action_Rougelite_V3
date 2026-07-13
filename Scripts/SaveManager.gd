@@ -4,11 +4,13 @@ class_name SaveManager
 
 const SAVE_PATH = "user://save.json"
 
+var gold := 0
 
 func save_game(run_manager):
 	
 	var data = {
-		"genes": []
+		"genes": [],
+		"gold": gold
 	}
 	
 	for gene in run_manager.gene_collection:
@@ -39,6 +41,11 @@ func load_game(run_manager, gene_database):
 	var data = JSON.parse_string(
 		file.get_as_text()
 	)
+	
+	if data.has("gold"):
+		gold = data.gold
+	else:
+		gold = 0
 
 	for gene_name in data.genes:
 		for gene in gene_database.all_genes:

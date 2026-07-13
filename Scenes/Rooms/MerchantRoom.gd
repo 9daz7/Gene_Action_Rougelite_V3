@@ -44,7 +44,7 @@ func open():
 func update_gold():
 
 	gold_label.text = "Gold: " + str(
-		run_manager.gold
+		save_manager.gold
 	)
 
 

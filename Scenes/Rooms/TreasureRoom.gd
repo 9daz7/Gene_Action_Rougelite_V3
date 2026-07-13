@@ -7,6 +7,7 @@ signal treasure_finished(reward)
 
 @onready var reward_container = $CenterContainer/VBoxContainer/RewardContainer
 @onready var continue_button = $CenterContainer/VBoxContainer/ContinueButton
+@onready var run_manager = $"../Managers/RunManager"
 
 
 const REWARD_BUTTON = preload("res://Scenes/UI/RewardButton.tscn")
@@ -79,6 +80,8 @@ func create_test_rewards():
 func _on_continue_pressed():
 
 	print("Treasure room completed")
+	
+	run_manager.gold += selected_reward.gold
 
 	treasure_finished.emit(selected_reward)
 

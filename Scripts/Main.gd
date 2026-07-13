@@ -131,9 +131,11 @@ func _on_battle_won(enemy):
 	var rewards = reward_manager.generate_rewards(
 		current_room.room_type
 	)
-
+	
+	save_manager.gold += rewards.gold
+	save_manager.save_game(run_manager)
+	
 	print("Gold:", rewards.gold)
-
 	print("Resources:", rewards.resources)
 
 	if rewards.gene_choices.size() > 0:
