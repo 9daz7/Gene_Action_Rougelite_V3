@@ -13,7 +13,7 @@ var options: Array[GeneResource] = []
 var selected_genes: Array[GeneResource] = []
 
 
-const MAX_ADAPTATIONS := 6
+const MAX_ADAPTATION := 6
 
 var current_adaptation := 0
 

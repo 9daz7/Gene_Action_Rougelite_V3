@@ -54,12 +54,9 @@ func initialize_starting_collection(gene_database):
 		return
 
 	var starter_genes = [
-		"Boar skin",
+		
 		"Turtle shell",
-		"Honey Badger anger",
-		"Chameleon Skin",
-		"Cheetah speed",
-		"tiger stregth"
+		
 	]
 
 	for gene in gene_database.all_genes:
@@ -118,10 +115,13 @@ func store_gene(gene: GeneResource):
 	if not gene_collection.has(gene):
 		gene_collection.append(gene)
 
-		print("Stored gene:", gene.gene_name)
+	print("Stored gene:", gene.gene_name)
+	
+	for owned_gene in gene_collection:
+		print(owned_gene.gene_name)
 
-	else:
-		print("Gene already owned:", gene.gene_name)
+	#else:
+		#print("Gene already owned:", gene.gene_name)
 		
 
 func clear_run():

@@ -4,7 +4,10 @@ class_name MerchantRoom
 
 signal merchant_finished
 
-@onready var run_manager = $"../Managers/RunManager"
+#@onready var run_manager = $"../Managers/RunManager"
+#@onready var save_manager = $"../Managers/SaveManager"
+@onready var run_manager = get_tree().current_scene.get_node("Managers/RunManager")
+@onready var save_manager = get_tree().current_scene.get_node("Managers/SaveManager")
 
 @onready var gold_label = $CenterContainer/VBoxContainer/GoldLabel
 @onready var item_container = $CenterContainer/VBoxContainer/ItemContainer
@@ -130,14 +133,17 @@ func apply_item(item:ShopItem):
 
 		ShopItem.ItemType.GENE:
 			run_manager.store_gene(item.gene)
-
+			
 
 		ShopItem.ItemType.MUTAGEN:
 			print("Mutagen purchased")
-
+			
+	save_manager.save_game(run_manager)
 
 func _on_continue_pressed():
 
-	hide()
+	print("Merchant complete")
 
 	merchant_finished.emit()
+	
+	queue_free()

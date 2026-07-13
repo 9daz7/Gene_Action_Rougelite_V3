@@ -84,9 +84,11 @@ func open_shop(room):
 
 	get_tree().current_scene.add_child(merchant_room)
 
-	merchant_room.open()
+	merchant_room.merchant_finished.connect(
+		_on_merchant_finished
+	)
 
-	merchant_room.merchant_finished.connect(_on_merchant_finished)
+	merchant_room.open()
 
 
 func open_treasure(room):

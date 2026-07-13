@@ -9,6 +9,7 @@ extends Node
 @onready var ui_manager = $Managers/UIManager
 @onready var gene_database = $Managers/GeneDatabase
 @onready var reward_manager = $Managers/RewardManager
+@onready var save_manager = $Managers/SaveManager
 
 
 @onready var map_ui = $UI/MapUI
@@ -23,6 +24,11 @@ func _ready():
 	print("THIS IS THE CURRENT MAIN SCRIPT")
 
 	gene_database.load_genes()
+	
+	save_manager.load_game(
+		run_manager,
+		gene_database
+	)
 	
 	run_manager.initialize_starting_collection(gene_database)
 
@@ -151,7 +157,9 @@ func _on_battle_won(enemy):
 func _on_battle_lost():
 	print("Run failed")
 
-	return_to_map()
+	run_manager.clear_run()
+	
+	start_new_run()
 
 
 func return_to_map():
