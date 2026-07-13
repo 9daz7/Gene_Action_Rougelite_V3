@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cnlwwn0eoa0pn" path="res://Scripts/Genes/GeneResource.gd" id="1_lcyaf"]
 [ext_resource type="Script" uid="uid://byxi3hsf2x8dx" path="res://Scripts/Enemies/EnemyResource.gd" id="2_ipeqg"]
+[ext_resource type="Resource" uid="uid://fkdeujyg7eca" path="res://Data/Genes/BoarSkinGene.tres" id="2_ipicw"]
 
 [resource]
 script = ExtResource("2_ipeqg")
@@ -9,4 +10,5 @@ enemy_name = "Boar"
 base_hp = 80
 base_attack = 6
 base_speed = 9
+drop_gene_pool = Array[ExtResource("1_lcyaf")]([ExtResource("2_ipicw")])
 metadata/_custom_type_script = "uid://byxi3hsf2x8dx"

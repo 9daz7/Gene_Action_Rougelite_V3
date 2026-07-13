@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cnlwwn0eoa0pn" path="res://Scripts/Genes/GeneResource.gd" id="1_dripw"]
 [ext_resource type="Script" uid="uid://byxi3hsf2x8dx" path="res://Scripts/Enemies/EnemyResource.gd" id="2_2u4da"]
+[ext_resource type="Resource" uid="uid://b63650onw8qfj" path="res://Data/Genes/MartensMentality.tres" id="2_rc0vg"]
 
 [resource]
 script = ExtResource("2_2u4da")
@@ -9,4 +10,5 @@ enemy_name = "Marten"
 base_hp = 45
 base_attack = 4
 base_speed = 15
+drop_gene_pool = Array[ExtResource("1_dripw")]([ExtResource("2_rc0vg")])
 metadata/_custom_type_script = "uid://byxi3hsf2x8dx"

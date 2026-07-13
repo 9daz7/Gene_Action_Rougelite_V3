@@ -10,6 +10,8 @@ enum EnemyType {
 @export var enemy_name: String = ""
 @export_multiline var description: String = ""
 
+@export var enemy_type: EnemyType = EnemyType.NORMAL
+
 # Base stats
 @export var base_hp: int = 100
 @export var base_attack: int = 5

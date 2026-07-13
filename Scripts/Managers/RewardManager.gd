@@ -8,36 +8,42 @@ class_name RewardManager
 @onready var gene_database = $"../GeneDatabase"
 
 
-func generate_rewards(room_type):
+func generate_rewards(enemy: EnemyAnimal):
 
 	var rewards = RewardData.new()
 
-	rewards.gold = generate_gold(room_type)
+	# gold reward
+	rewards.gold = generate_gold(
+		enemy.enemy_data.enemy_type
+	)
 
-	rewards.gene_choices = generate_gene_rewards()
+	# enemy specific gene
+	rewards.gene_choices = generate_enemy_genes(enemy)
+
+	# Other rewards
+	rewards.resources = generate_resources(enemy.enemy_data.enemy_type)
 
 	print("Rewards generated:")
-	print("Gold:", rewards.gold)
 
 	for gene in rewards.gene_choices:
-		print(gene.gene_name)
+		print("Gene:", gene.gene_name)
 
 	return rewards
 
 
-func generate_gold(room_type: int) -> int:
-	match room_type:
-		RoomData.RoomType.ENEMY:
-			return randi_range(5, 15)
+func generate_gold(enemy_type: EnemyResource.EnemyType) -> int:
+	match enemy_type:
+		EnemyResource.EnemyType.NORMAL:
+			return randi_range(5,15)
+
+		EnemyResource.EnemyType.ELITE:
+			return randi_range(15,30)
+
+		EnemyResource.EnemyType.BOSS:
+			return randi_range(32,65)
 
 		RoomData.RoomType.GROUP_ENEMY:
 			return randi_range(8, 18)
-
-		RoomData.RoomType.ELITE:
-			return randi_range(15, 30)
-
-		RoomData.RoomType.BOSS:
-			return randi_range(32, 65)
 
 		RoomData.RoomType.AMBUSH:
 			return randi_range(16, 25)
@@ -49,19 +55,60 @@ func generate_gold(room_type: int) -> int:
 			return 0
 
 
-func generate_resources(room_type: int) -> Array:
+func generate_enemy_genes(enemy: EnemyAnimal):
+	
+	var choices:Array[GeneResource] = []
+	
+	if enemy == null:
+		print("ERROR: No enemy")
+		return choices
+	
+	if enemy.enemy_data == null:
+		print("ERROR: Enemy has no data")
+		return choices
+
+	var amount := 1
+
+	match enemy.enemy_data.enemy_type:
+
+		EnemyResource.EnemyType.NORMAL:
+			amount = 1
+
+		EnemyResource.EnemyType.ELITE:
+			amount = randi_range(1, 2)
+
+		EnemyResource.EnemyType.BOSS:
+			amount = 2
+			
+	var pool = enemy.enemy_data.drop_gene_pool.duplicate()
+
+	#remove genes player owns
+	pool = pool.filter(
+		func(gene):
+			return not run_manager.owns_gene(gene)
+	)
+
+	pool.shuffle()
+
+	for i in range(min(amount, pool.size())):
+		choices.append(pool[i])
+
+	return choices
+	
+	
+func generate_resources(enemy_type: EnemyResource.EnemyType) -> Array:
 	var resources: Array = []
 
-	match room_type:
-		RoomData.RoomType.ENEMY:
+	match enemy_type:
+		EnemyResource.EnemyType.NORMAL:
 			if randf() < 0.4:
 				resources.append("Small Heal")
 
-		RoomData.RoomType.ELITE:
+		EnemyResource.EnemyType.ELITE:
 			resources.append("Medium Heal")
 			resources.append("Strength Potion")
 
-		RoomData.RoomType.BOSS:
+		EnemyResource.EnemyType.BOSS:
 			resources.append("Large Heal")
 
 	return resources

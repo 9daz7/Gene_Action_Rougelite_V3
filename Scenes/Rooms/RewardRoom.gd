@@ -21,13 +21,16 @@ func open(rewards):
 	
 	selected_reward = null
 	
-	create_rewards(rewards)
+	create_rewards(rewards.gene_choices)
 	
 	continue_button.disabled = false
-	
+
+func close():
+	hide()
 
 func create_rewards(rewards):
 	
+	print("Reward count:", rewards.size())
 	print("Rewards received:", rewards)
 	print("Reward type:", typeof(rewards))
 	
@@ -35,7 +38,6 @@ func create_rewards(rewards):
 		child.queue_free()
 		
 	for reward in rewards:
-		
 		var button = REWARD_BUTTON.instantiate()
 		
 		button.text = reward.gene_name

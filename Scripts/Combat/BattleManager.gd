@@ -23,6 +23,12 @@ var player = null
 var enemies: Array = []
 	
 
+func _ready():
+
+	turn_manager.battle_won.connect(_on_turn_battle_won)
+	turn_manager.battle_lost.connect(_on_turn_battle_lost)
+	
+	
 func start_battle():
 	print("Starting battle")
 
@@ -40,7 +46,7 @@ func start_battle():
 		
 	# load run HP
 	player.setup_player_hp(run_manager)
-
+	
 	# Spawn enemy
 	var enemy = current_battle.spawn_enemy(ENEMY_SCENE)
 	
@@ -53,9 +59,11 @@ func start_battle():
 
 	enemies.append(enemy)
 
-	current_battle.setup_hp_bars(player, enemy)
+	#current_battle.setup_hp_bars(player, enemy)
 
 	initialize_battle()
+
+	
 
 
 func get_random_enemy() -> EnemyResource:
@@ -80,19 +88,14 @@ func initialize_battle():
 	for enemy in enemies:
 		if enemy.has_method("start_battle"):
 			enemy.start_battle()
+			
+	current_battle.setup_hp_bars(player, enemies[0])
 
-	if turn_manager:
-		turn_manager.battle_won.connect(_on_turn_battle_won)
-		turn_manager.battle_lost.connect(_on_turn_battle_lost)
-
-		turn_manager.start_battle(
-			player,
-			enemies,
-			current_battle.battle_ui
-		)
-
-	else:
-		print("ERROR: TurnManager not found")
+	turn_manager.start_battle(
+		player,
+		enemies,
+		current_battle.battle_ui
+	)
 
 
  #func check_battle_result():

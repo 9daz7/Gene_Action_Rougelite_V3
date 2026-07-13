@@ -126,11 +126,9 @@ func enter_room(room):
 
 
 func _on_battle_won(enemy):
-	print("Battle won!")
+	print("Battle won against:", enemy.enemy_data.enemy_name)
 
-	var rewards = reward_manager.generate_rewards(
-		current_room.room_type
-	)
+	var rewards = reward_manager.generate_rewards(enemy)
 	
 	save_manager.gold += rewards.gold
 	save_manager.save_game(run_manager)

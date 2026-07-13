@@ -1,5 +1,6 @@
-class_name EnemyHP
 extends ProgressBar
+class_name EnemyHP
+
 
 
 var enemy: EnemyAnimal

@@ -121,30 +121,28 @@ func open_lab(room):
 func open_reward(rewards):
 	reward_room = REWARD_SCENE.instantiate()
 
-	get_tree().current_scene.add_child(
-		reward_room
-	)
+	get_tree().current_scene.add_child(reward_room)
 
-	reward_room.reward_finished.connect(
-		_on_reward_finished
-	)
+	reward_room.reward_finished.connect(_on_reward_finished)
 
-	reward_room.open(rewards.gene_choices)
+	reward_room.open(rewards)
 
 
 func _on_reward_finished(reward):
 
-	if reward == null:
-		print("No reward selected")
-	else:	
+	if reward:
 		print("Chosen:", reward.gene_name)
-
+	else:
+		print("Skipped reward")
+	
 	if is_instance_valid(reward_room):
+		reward_room.close()
 		reward_room.queue_free()
 
 	reward_room = null
-
-	apply_reward(reward)
+	
+	if reward:
+		apply_reward(reward)
 
 	get_tree().current_scene.return_to_map()
 
@@ -178,6 +176,7 @@ func _on_merchant_finished():
 	print("Merchant complete")
 
 	if is_instance_valid(merchant_room):
+		merchant_room.close()
 		merchant_room.queue_free()
 
 	merchant_room = null
