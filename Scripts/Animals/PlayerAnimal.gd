@@ -7,3 +7,14 @@ func start_battle():
 	
 	setup_basic_moves()
 	
+	
+func setup_player_hp(run_manager):
+	max_hp = run_manager.max_hp
+	hp = run_manager.player_hp
+
+	print(
+		"Loaded player HP:",
+		hp,
+		"/",
+		max_hp
+	)

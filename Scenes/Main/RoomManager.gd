@@ -8,6 +8,7 @@ class_name RoomManager
 
 const TREASURE_SCENE = preload("res://Scenes/Rooms/TreasureRoom.tscn")
 const MERCHANT_SCENE = preload("res://Scenes/Rooms/MerchantRoom.tscn")
+const REST_SCENE = preload("res://Scenes/Rooms/RestRoom.tscn")
 
 const REWARD_SCENE = preload("res://Scenes/Rooms/RewardRoom.tscn")
 
@@ -15,6 +16,7 @@ var reward_room = null
 
 var treasure_room = null
 var merchant_room = null
+var rest_room = null
 
 
 func enter_room(room:RoomData):
@@ -111,8 +113,15 @@ func open_treasure(room):
 
 
 func open_rest(room):
-	print("REST OPEN")
+	print("Opening rest room")
+	
+	rest_room = REST_SCENE.instantiate()
 
+	get_tree().current_scene.add_child(rest_room)
+
+	rest_room.rest_finished.connect(_on_rest_finished)
+
+	rest_room.open()
 
 func open_lab(room):
 	print("LAB OPEN")
@@ -180,6 +189,15 @@ func _on_merchant_finished():
 		merchant_room.queue_free()
 
 	merchant_room = null
+
+	get_tree().current_scene.return_to_map()
+	
+	
+func _on_rest_finished():
+
+	print("Rest complete")
+
+	rest_room = null
 
 	get_tree().current_scene.return_to_map()
 	

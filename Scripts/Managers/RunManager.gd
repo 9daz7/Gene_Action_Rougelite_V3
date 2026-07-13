@@ -156,3 +156,7 @@ func heal_player(amount:int):
 		max_hp
 	)
 	
+	
+func get_hp_percent() -> float:
+
+	return float(player_hp) / float(max_hp)

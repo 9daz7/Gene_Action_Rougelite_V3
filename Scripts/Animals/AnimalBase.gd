@@ -306,6 +306,10 @@ func take_damage(amount: int):
 
 	hp_changed.emit(hp)
 
+	if self is PlayerAnimal:
+
+	var run_manager = get_node("../../RunManager")
+
 	if run_manager:
 		run_manager.player_hp = hp
 
