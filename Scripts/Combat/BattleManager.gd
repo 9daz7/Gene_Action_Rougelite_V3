@@ -31,6 +31,9 @@ func start_battle():
 
 	for gene in run_manager.player_genes:
 		player.add_gene(gene)
+		
+	# load run HP
+	player.setup_player_hp(run_manager)
 
 	# Spawn enemy
 	var enemy = current_battle.spawn_enemy(ENEMY_SCENE)

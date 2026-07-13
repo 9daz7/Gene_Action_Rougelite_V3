@@ -156,7 +156,7 @@ func _on_battle_won(enemy):
 func _on_battle_lost():
 	print("Run failed")
 
-	run_manager.clear_run()
+	run_manager.player_hp = run_manager.max_hp
 	
 	start_new_run()
 

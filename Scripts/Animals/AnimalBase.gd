@@ -5,6 +5,8 @@ class_name AnimalBase
 signal hp_changed(new_hp)
 
 
+var run_manager = null
+
 # -------------------------------------------------------------------
 # BASE STATS
 # -------------------------------------------------------------------
@@ -254,6 +256,20 @@ func calculate_damage_taken(amount: int) -> int:
 	
 	return max(1, int(final_damage))
 	
+	
+func setup_player_hp(manager):
+
+	run_manager = manager
+
+	hp = manager.player_hp
+
+	print(
+		"Loaded player HP:",
+		hp,
+		"/",
+		manager.max_hp
+	)
+	
 # -------------------------------------------------------------------
 # DAMAGE
 # -------------------------------------------------------------------
@@ -290,6 +306,8 @@ func take_damage(amount: int):
 
 	hp_changed.emit(hp)
 
+	if run_manager:
+		run_manager.player_hp = hp
 
 # -------------------------------------------------------------------
 # TURN MANAGEMENT
