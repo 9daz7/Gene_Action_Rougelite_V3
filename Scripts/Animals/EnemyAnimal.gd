@@ -21,9 +21,27 @@ func start_battle():
 		for gene in enemy_data.starting_genes:
 			add_gene(gene)
 
-	setup_basic_moves()
+	setup_enemy_moves()
 
 
+func setup_enemy_moves():
+
+	learned_moves.clear()
+
+	var attack = MoveResource.new()
+
+	attack.move_name = "Attack"
+	attack.power = 0
+	attack.priority = 0
+
+	add_move(attack)
+
+	print(
+		name,
+		" learned enemy moves"
+	)
+	
+	
 func choose_action(_player) -> MoveResource:
 	return learned_moves[0]
 

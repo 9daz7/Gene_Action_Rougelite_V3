@@ -4,6 +4,12 @@ class_name BattleManager
 signal battle_won(enemy)
 signal battle_lost
 
+const ENEMY_POOL = [
+	preload("res://Data/Enemies/Wolf.tres"),
+	preload("res://Data/Enemies/Boar.tres"),
+	preload("res://Data/Enemies/Marten.tres")
+]
+
 const BATTLE_SCENE = preload("res://Scenes/Battle/BattleScene.tscn")
 const PLAYER_SCENE = preload("res://Scenes/Animals/PlayerAnimal.tscn")
 const ENEMY_SCENE = preload("res://Scenes/Animals/EnemyAnimal.tscn")
@@ -15,7 +21,7 @@ const ENEMY_SCENE = preload("res://Scenes/Animals/EnemyAnimal.tscn")
 var current_battle = null
 var player = null
 var enemies: Array = []
-
+	
 
 func start_battle():
 	print("Starting battle")
@@ -37,12 +43,32 @@ func start_battle():
 
 	# Spawn enemy
 	var enemy = current_battle.spawn_enemy(ENEMY_SCENE)
+	
+	enemy.enemy_data = get_random_enemy()
+
+	print(
+		"Enemy selected:",
+		enemy.enemy_data.enemy_name
+	)
 
 	enemies.append(enemy)
 
 	current_battle.setup_hp_bars(player, enemy)
 
 	initialize_battle()
+
+
+func get_random_enemy() -> EnemyResource:
+
+	var pool = ENEMY_POOL.duplicate()
+
+	if pool.is_empty():
+		print("ERROR: Enemy pool empty")
+		return null
+	
+	pool.shuffle()
+
+	return pool[0]
 
 
 func initialize_battle():

@@ -6,4 +6,7 @@
 [resource]
 script = ExtResource("2_ipeqg")
 enemy_name = "Boar"
+base_hp = 80
+base_attack = 6
+base_speed = 9
 metadata/_custom_type_script = "uid://byxi3hsf2x8dx"

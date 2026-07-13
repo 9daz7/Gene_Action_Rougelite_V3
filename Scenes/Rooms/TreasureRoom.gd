@@ -53,9 +53,18 @@ func create_test_rewards():
 		child.queue_free()
 
 	var rewards = [
-		"100 Gold",
-		"Random Gene",
-		"Heal 25 HP"
+		{
+			"text": "50 Gold",
+			"gold": 50,
+		},
+		{
+			"text": "Random Gene",
+			"gold": 0
+		},
+		{
+			"text": "Heal 25 HP",
+			"gold": 0
+		}
 	]
 
 	for reward in rewards:
@@ -64,7 +73,7 @@ func create_test_rewards():
 		
 		reward_container.add_child(button)
 
-		button.text = reward
+		button.text = reward.text
 
 		button.pressed.connect(
 			func():
@@ -81,7 +90,12 @@ func _on_continue_pressed():
 
 	print("Treasure room completed")
 	
-	run_manager.gold += selected_reward.gold
+	if selected_reward.has("gold"):
+		run_manager.save_manager.gold += selected_reward.gold
+			
+	print("Gold:", run_manager.save_manager.gold)
+	
+	run_manager.save_manager.save_game(run_manager)
 
 	treasure_finished.emit(selected_reward)
 

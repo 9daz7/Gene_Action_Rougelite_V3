@@ -5,4 +5,8 @@
 
 [resource]
 script = ExtResource("2_2u4da")
+enemy_name = "Marten"
+base_hp = 45
+base_attack = 4
+base_speed = 15
 metadata/_custom_type_script = "uid://byxi3hsf2x8dx"
