@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://bx2yylvu3vlia"]
+
+[ext_resource type="Script" uid="uid://ds86jbtitx1ir" path="res://Scenes/Rooms/RewardRoom.gd" id="1_25o4l"]
+
+[node name="RewardRoom" type="Control" unique_id=680329225]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_25o4l")
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1961029203]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=1432565514]
+layout_mode = 2
+
+[node name="RewardContainer" type="VBoxContainer" parent="CenterContainer/VBoxContainer" unique_id=1880826283]
+layout_mode = 2
+
+[node name="ContinueButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=714000022]
+layout_mode = 2
+text = "Continue"

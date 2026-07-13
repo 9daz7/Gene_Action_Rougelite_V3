@@ -3,9 +3,15 @@ class_name RoomManager
 
 
 @onready var battle_manager = $"../BattleManager"
+@onready var run_manager = $"../RunManager"
+@onready var save_manager = $"../SaveManager"
 
 const TREASURE_SCENE = preload("res://Scenes/Rooms/TreasureRoom.tscn")
 const MERCHANT_SCENE = preload("res://Scenes/Rooms/MerchantRoom.tscn")
+
+const REWARD_SCENE = preload("res://Scenes/Rooms/RewardRoom.tscn")
+
+var reward_room = null
 
 var treasure_room = null
 var merchant_room = null
@@ -112,6 +118,52 @@ func open_lab(room):
 	print("LAB OPEN")
 
 
+func open_reward(rewards):
+	reward_room = REWARD_SCENE.instantiate()
+
+	get_tree().current_scene.add_child(
+		reward_room
+	)
+
+	reward_room.reward_finished.connect(
+		_on_reward_finished
+	)
+
+	reward_room.open(rewards.gene_choices)
+
+
+func _on_reward_finished(reward):
+
+	if reward == null:
+		print("No reward selected")
+	else:	
+		print("Chosen:", reward.gene_name)
+
+	if is_instance_valid(reward_room):
+		reward_room.queue_free()
+
+	reward_room = null
+
+	apply_reward(reward)
+
+	get_tree().current_scene.return_to_map()
+
+func apply_reward(reward):
+	
+	if reward == null:
+		print("No reward selected")
+		return
+		
+	print("Applying reward:", reward.gene_name)
+
+	if reward is GeneResource:
+		run_manager.collect_gene(reward)
+		save_manager.save_game(run_manager)
+		
+	# Temporary
+	# Actual reward logic will go here later
+	
+	
 func _on_treasure_finished(reward):
 
 	print("Treasure complete", reward)
@@ -131,3 +183,5 @@ func _on_merchant_finished():
 	merchant_room = null
 
 	get_tree().current_scene.return_to_map()
+	
+	

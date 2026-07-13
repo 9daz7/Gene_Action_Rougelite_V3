@@ -136,22 +136,19 @@ func _on_battle_won(enemy):
 
 	print("Resources:", rewards.resources)
 
-
-	if rewards.discovered_gene.size() > 0:
+	if rewards.gene_choices.size() > 0:
 		print("Gene choices:")
 
-		for gene in rewards.discovered_gene:
-			print(
-				gene.gene_name
-			)
-
+		for gene in rewards.gene_choices:
+			print(gene.gene_name)
 
 	print(
 		"Mutagen choices:",
 		rewards.mutagen_choices
 	)
 
-	return_to_map()
+	room_manager.open_reward(rewards)
+	
 
 
 func _on_battle_lost():
