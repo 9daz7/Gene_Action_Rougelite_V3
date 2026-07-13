@@ -21,7 +21,8 @@ func open(rewards):
 	
 	selected_reward = null
 	
-	create_rewards(rewards.gene_choices)
+	if rewards!= null:
+		create_rewards(rewards.gene_choices)
 	
 	continue_button.disabled = false
 
@@ -35,7 +36,7 @@ func create_rewards(rewards):
 	print("Reward type:", typeof(rewards))
 	
 	for child in reward_container.get_children():
-		child.queue_free()
+		child.free()
 		
 	for reward in rewards:
 		var button = REWARD_BUTTON.instantiate()

@@ -136,7 +136,7 @@ func _on_reward_finished(reward):
 		print("Skipped reward")
 	
 	if is_instance_valid(reward_room):
-		reward_room.close()
+		#reward_room.close()
 		reward_room.queue_free()
 
 	reward_room = null
