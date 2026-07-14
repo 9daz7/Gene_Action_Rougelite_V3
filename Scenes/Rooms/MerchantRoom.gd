@@ -39,6 +39,10 @@ func open():
 	update_gold()
 
 	create_shop_items()
+	
+
+func close():
+	hide()
 
 
 func update_gold():

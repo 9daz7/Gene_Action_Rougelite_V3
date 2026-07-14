@@ -8,18 +8,18 @@ func start_battle():
 	setup_basic_moves()
 	
 	
-func setup_player_hp(run_manager):
+func setup_player_hp(manager):
 	
 	run_manager = manager
 	
-	max_hp = run_manager.max_hp
+	base_hp = run_manager.max_hp
 	hp = run_manager.player_hp
 
 	print(
 		"Loaded player HP:",
 		hp,
 		"/",
-		max_hp
+		base_hp
 	)
 
 func take_damage(amount:int):
