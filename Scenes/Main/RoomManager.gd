@@ -59,24 +59,20 @@ func enter_room(room:RoomData):
 
 func start_enemy(room):
 	print("Starting normal battle")
-	battle_manager.start_battle()
-
-
-
-func start_elite(room):
-	print("Starting elite battle")
-	battle_manager.start_elite_battle()
-
-
+	battle_manager.start_battle(RoomData.RoomType.ENEMY)
 
 func start_group_enemy(room):
 	print("Starting group battle")
 
+func start_elite(room):
+	print("Starting elite battle")
+	battle_manager.start_battle(RoomData.RoomType.ELITE)
 
 
 func start_boss(room):
 	print("Starting boss")
-	battle_manager.start_boss_battle()
+	battle_manager.start_battle(RoomData.RoomType.BOSS)
+
 
 
 # --------------------------------------------------

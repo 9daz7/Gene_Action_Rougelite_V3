@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="EnemyResource" format=3 uid="uid://dgdnawbfe4yqm"]
+
+[ext_resource type="Script" uid="uid://cnlwwn0eoa0pn" path="res://Scripts/Genes/GeneResource.gd" id="1_dglqv"]
+[ext_resource type="Script" uid="uid://byxi3hsf2x8dx" path="res://Scripts/Enemies/EnemyResource.gd" id="2_epcwc"]
+
+[resource]
+script = ExtResource("2_epcwc")
+enemy_name = "Alpha Boar"
+base_hp = 95
+base_attack = 7
+base_speed = 12

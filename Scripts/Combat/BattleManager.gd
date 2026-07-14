@@ -5,9 +5,19 @@ signal battle_won(enemy)
 signal battle_lost
 
 const ENEMY_POOL = [
-	preload("res://Data/Enemies/Wolf.tres"),
-	preload("res://Data/Enemies/Boar.tres"),
-	preload("res://Data/Enemies/Marten.tres")
+	preload("res://Data/Enemies/Normal/Wolf.tres"),
+	preload("res://Data/Enemies/Normal/Boar.tres"),
+	preload("res://Data/Enemies/Normal/Marten.tres")
+]
+
+const ELITE_POOL = [
+	preload("res://Data/Enemies/Elite/AlphaWolf.tres"),
+	preload("res://Data/Enemies/Elite/AlphaBoar.tres"),
+	preload("res://Data/Enemies/Elite/GiantMarten.tres")
+]
+
+const BOSS_POOL = [
+	
 ]
 
 const BATTLE_SCENE = preload("res://Scenes/Battle/BattleScene.tscn")
@@ -29,8 +39,8 @@ func _ready():
 	turn_manager.battle_lost.connect(_on_turn_battle_lost)
 	
 	
-func start_battle():
-	print("Starting battle")
+func start_battle(room_type = RoomData.RoomType.ENEMY):
+	print("Starting battle:", room_type)
 
 	current_battle = BATTLE_SCENE.instantiate()
 
@@ -50,7 +60,7 @@ func start_battle():
 	# Spawn enemy
 	var enemy = current_battle.spawn_enemy(ENEMY_SCENE)
 	
-	enemy.enemy_data = get_random_enemy()
+	enemy.enemy_data = get_enemy(room_type)
 
 	print(
 		"Enemy selected:",
@@ -63,17 +73,42 @@ func start_battle():
 
 	initialize_battle()
 
+
+func get_enemy(room_type) -> EnemyResource:
+
+	var pool = []
 	
+	match  room_type:
+		
+		RoomData.RoomType.ENEMY:
+			pool = ENEMY_POOL
+			
+		RoomData.RoomType.ELITE:
+			pool = ELITE_POOL
 
 
-func get_random_enemy() -> EnemyResource:
-
-	var pool = ENEMY_POOL.duplicate()
+		RoomData.RoomType.BOSS:
+			pool = BOSS_POOL
 
 	if pool.is_empty():
 		print("ERROR: Enemy pool empty")
 		return null
 	
+	var choices = pool.duplicate()
+
+	choices.shuffle()
+
+	return choices[0]
+	
+
+func get_random_elite() -> EnemyResource:
+
+	var pool = ELITE_POOL.duplicate()
+	
+	if pool.is_empty():
+		print("ERROR: Elite pool empty")
+		return null
+
 	pool.shuffle()
 
 	return pool[0]

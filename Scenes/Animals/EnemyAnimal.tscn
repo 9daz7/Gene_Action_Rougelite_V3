@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://b6josfwbrseox"]
 
 [ext_resource type="Script" uid="uid://lc5ro6m5rvqi" path="res://Scripts/Animals/EnemyAnimal.gd" id="1_fbirj"]
-[ext_resource type="Resource" uid="uid://cxemne4dnlwhj" path="res://Data/Enemies/Wolf.tres" id="2_nh118"]
+[ext_resource type="Resource" uid="uid://cxemne4dnlwhj" path="res://Data/Enemies/Normal/Wolf.tres" id="2_nh118"]
 
 [node name="EnemyAnimal" type="CharacterBody2D" unique_id=34476420]
 script = ExtResource("1_fbirj")

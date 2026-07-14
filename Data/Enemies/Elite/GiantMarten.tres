@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="EnemyResource" format=3 uid="uid://dy4ad2xrgeisp"]
+
+[ext_resource type="Script" uid="uid://cnlwwn0eoa0pn" path="res://Scripts/Genes/GeneResource.gd" id="1_wvkqo"]
+[ext_resource type="Script" uid="uid://byxi3hsf2x8dx" path="res://Scripts/Enemies/EnemyResource.gd" id="2_i4ky3"]
+
+[resource]
+script = ExtResource("2_i4ky3")
+enemy_name = "Giant Marten"
+base_hp = 60
+base_attack = 6
+base_speed = 17
