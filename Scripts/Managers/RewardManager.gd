@@ -193,7 +193,7 @@ func generate_gene_rewards(amount := 3):
 func generate_mutagens(room_type: int) -> Array[MutagenResource]:
 	if room_type != RoomData.RoomType.BOSS \
 	and room_type != RoomData.RoomType.ELITE \
-	and room_type != RoomData.RoomType.LAB:
+	and room_type != RoomData.RoomType.ABANDONED_LAB:
 
 		return []
 

@@ -190,7 +190,7 @@ func generate_room_type(row: int):
 				return RoomData.RoomType.MERCHANT
 
 			elif roll < 0.85:
-				return RoomData.RoomType.LAB
+				return RoomData.RoomType.ABANDONED_LAB
 
 			else:
 				return RoomData.RoomType.UNKNOWN
@@ -204,7 +204,7 @@ func generate_room_type(row: int):
 				return RoomData.RoomType.ENEMY
 
 			elif roll < 0.85:
-				return RoomData.RoomType.LAB
+				return RoomData.RoomType.ABANDONED_LAB
 
 			else:
 				return RoomData.RoomType.REST
@@ -234,7 +234,7 @@ func generate_room_type(row: int):
 				return RoomData.RoomType.ELITE
 
 			elif roll < 0.65:
-				return RoomData.RoomType.LAB
+				return RoomData.RoomType.ABANDONED_LAB
 
 			elif roll < 0.75:
 				return RoomData.RoomType.MERCHANT_TRAP

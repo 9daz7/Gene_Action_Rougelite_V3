@@ -47,7 +47,7 @@ func get_room_text():
 		RoomData.RoomType.MERCHANT_TRAP:
 			return "TRAP"
 
-		RoomData.RoomType.LAB:
+		RoomData.RoomType.ABANDONED_LAB:
 			return "LAB"
 
 		RoomData.RoomType.BOSS:

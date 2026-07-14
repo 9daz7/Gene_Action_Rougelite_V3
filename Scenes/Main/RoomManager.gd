@@ -46,7 +46,7 @@ func enter_room(room:RoomData):
 		RoomData.RoomType.REST:
 			open_rest(room)
 			
-		RoomData.RoomType.LAB:
+		RoomData.RoomType.ABANDONED_LAB:
 			open_lab(room)
 			
 		_:
