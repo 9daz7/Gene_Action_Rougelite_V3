@@ -1,0 +1,44 @@
+[gd_scene format=3 uid="uid://vcvodkd0sejl"]
+
+[ext_resource type="Script" uid="uid://bsviplmyt5raf" path="res://Scenes/Rooms/AbandonedLab.gd" id="1_k2oyl"]
+
+[node name="AbandonedLab" type="Control" unique_id=930259330]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_k2oyl")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1227400800]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="LabStatusLabel" type="Label" parent="VBoxContainer" unique_id=595213380]
+layout_mode = 2
+
+[node name="DescriptionLabel" type="Label" parent="VBoxContainer" unique_id=12475109]
+layout_mode = 2
+
+[node name="OperationContainer" type="Container" parent="VBoxContainer" unique_id=208416727]
+layout_mode = 2
+
+[node name="ExtractGeneButton" type="Button" parent="VBoxContainer/OperationContainer" unique_id=540481767]
+layout_mode = 2
+
+[node name="EditGeneButton" type="Button" parent="VBoxContainer/OperationContainer" unique_id=2119366448]
+layout_mode = 2
+
+[node name="UpgradeGeneButton" type="Button" parent="VBoxContainer/OperationContainer" unique_id=835760970]
+layout_mode = 2
+
+[node name="EditMutagenButton" type="Button" parent="VBoxContainer/OperationContainer" unique_id=1392999939]
+layout_mode = 2
+
+[node name="UpgradeMutagenButton" type="Button" parent="VBoxContainer/OperationContainer" unique_id=1882601244]
+layout_mode = 2
+
+[node name="ContinueButton" type="Button" parent="VBoxContainer" unique_id=2134840465]
+layout_mode = 2

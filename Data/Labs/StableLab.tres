@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="LabResource" format=3 uid="uid://llthls2sj18m"]
+
+[ext_resource type="Script" uid="uid://duoq1hq7kebtd" path="res://Scenes/Rooms/LabResource.gd" id="1_dal77"]
+
+[resource]
+script = ExtResource("1_dal77")
+lab_name = "Abandoned Research Laboratory"
+experiment_gene_rarity = 1

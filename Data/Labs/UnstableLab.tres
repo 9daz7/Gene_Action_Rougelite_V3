@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="LabResource" format=3 uid="uid://ct5ktvdreo354"]
+
+[ext_resource type="Script" uid="uid://duoq1hq7kebtd" path="res://Scenes/Rooms/LabResource.gd" id="1_borx2"]
+
+[resource]
+script = ExtResource("1_borx2")
+lab_name = "Abandoned Mutation Laboratory"
+lab_status = 1
+experiment_chance = 60.0
+hostile_experiment_chance = 60.0
+experiment_gene_rarity = 2
