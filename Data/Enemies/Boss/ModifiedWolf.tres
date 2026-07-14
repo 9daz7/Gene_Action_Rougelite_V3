@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="EnemyResource" format=3 uid="uid://dlqvwwehc6tdk"]
+
+[ext_resource type="Script" uid="uid://cnlwwn0eoa0pn" path="res://Scripts/Genes/GeneResource.gd" id="1_0tryu"]
+[ext_resource type="Script" uid="uid://byxi3hsf2x8dx" path="res://Scripts/Enemies/EnemyResource.gd" id="2_qy50x"]
+
+[resource]
+script = ExtResource("2_qy50x")
+enemy_name = "Modified Wolf"
+base_hp = 160
+base_attack = 10
+base_speed = 20

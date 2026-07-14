@@ -42,14 +42,14 @@ func generate_gold(enemy_type: EnemyResource.EnemyType) -> int:
 		EnemyResource.EnemyType.BOSS:
 			return randi_range(32,65)
 
-		RoomData.RoomType.GROUP_ENEMY:
-			return randi_range(8, 18)
-
-		RoomData.RoomType.AMBUSH:
-			return randi_range(16, 25)
-
-		RoomData.RoomType.MERCHANT_TRAP:
-			return randi_range(20, 40)
+		#RoomData.RoomType.GROUP_ENEMY:
+			#return randi_range(8, 18)
+#
+		#RoomData.RoomType.AMBUSH:
+			#return randi_range(16, 25)
+#
+		#RoomData.RoomType.MERCHANT_TRAP:
+			#return randi_range(20, 40)
 
 		_:
 			return 0
@@ -110,6 +110,7 @@ func generate_resources(enemy_type: EnemyResource.EnemyType) -> Array:
 
 		EnemyResource.EnemyType.BOSS:
 			resources.append("Large Heal")
+			resources.append("Rare Mutagen")
 
 	return resources
 

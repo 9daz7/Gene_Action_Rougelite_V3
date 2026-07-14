@@ -17,7 +17,7 @@ const ELITE_POOL = [
 ]
 
 const BOSS_POOL = [
-	
+	preload("res://Data/Enemies/Boss/ModifiedWolf.tres")
 ]
 
 const BATTLE_SCENE = preload("res://Scenes/Battle/BattleScene.tscn")
