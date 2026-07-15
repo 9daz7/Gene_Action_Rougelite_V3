@@ -31,12 +31,24 @@ const ENEMY_SCENE = preload("res://Scenes/Animals/EnemyAnimal.tscn")
 var current_battle = null
 var player = null
 var enemies: Array = []
+
+var current_battle_type = null
+var critical_experiment := false
 	
 
 func _ready():
 
 	turn_manager.battle_won.connect(_on_turn_battle_won)
 	turn_manager.battle_lost.connect(_on_turn_battle_lost)
+	
+	
+func start_critical_experiment():
+
+	print("Starting critical experiment battle")
+	
+	critical_experiment = true
+
+	start_battle(RoomData.RoomType.ELITE) # elite until criticalexperiment.tres is ready
 	
 	
 func start_battle(room_type = RoomData.RoomType.ENEMY):

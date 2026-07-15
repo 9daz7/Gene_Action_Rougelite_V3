@@ -22,23 +22,31 @@ layout_mode = 2
 [node name="DescriptionLabel" type="Label" parent="VBoxContainer" unique_id=12475109]
 layout_mode = 2
 
-[node name="OperationContainer" type="Container" parent="VBoxContainer" unique_id=208416727]
+[node name="OperationContainer" type="VBoxContainer" parent="VBoxContainer" unique_id=1955757844]
+custom_minimum_size = Vector2(123.3, 153.205)
 layout_mode = 2
+alignment = 1
 
 [node name="ExtractGeneButton" type="Button" parent="VBoxContainer/OperationContainer" unique_id=540481767]
 layout_mode = 2
+text = "Extract Gene"
 
 [node name="EditGeneButton" type="Button" parent="VBoxContainer/OperationContainer" unique_id=2119366448]
 layout_mode = 2
+text = "Edit an animal gene"
 
 [node name="UpgradeGeneButton" type="Button" parent="VBoxContainer/OperationContainer" unique_id=835760970]
 layout_mode = 2
+text = "Upgrade a gene"
 
 [node name="EditMutagenButton" type="Button" parent="VBoxContainer/OperationContainer" unique_id=1392999939]
 layout_mode = 2
+text = "Edit a mutagen"
 
 [node name="UpgradeMutagenButton" type="Button" parent="VBoxContainer/OperationContainer" unique_id=1882601244]
 layout_mode = 2
+text = "Upgrade a mutagen"
 
 [node name="ContinueButton" type="Button" parent="VBoxContainer" unique_id=2134840465]
 layout_mode = 2
+text = "Continue"

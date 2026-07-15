@@ -8,6 +8,10 @@ signal map_generated
 const ROWS = 8
 const ROOMS_PER_ROW = 3
 
+const STABLE_LAB = preload("res://Data/Labs/StableLab.tres")
+const UNSTABLE_LAB = preload("res://Data/Labs/UnstableLab.tres")
+const CRITICAL_LAB = preload("res://Data/Labs/CriticalLab.tres")
+
 
 var current_map: Array[RoomData] = []
 
@@ -66,6 +70,9 @@ func generate_map():
 				room.room_type = RoomData.RoomType.BOSS
 			else:
 				room.room_type = generate_room_type(row)
+				
+				if room.room_type == RoomData.RoomType.ABANDONED_LAB:
+					room.lab_data = generate_lab_type()
 
 			rooms.append(room)
 			current_map.append(room)
@@ -256,6 +263,8 @@ func print_map():
 				room.room_id,
 				" Type:",
 				room.room_type,
+				" Lab:",
+				room.lab_data.lab_name if room.lab_data != null else "None",
 				" Row:",
 				room.row,
 				" Connections:",
@@ -307,3 +316,15 @@ func move_to_room(room:RoomData):
 	update_available_rooms()
 
 	return true
+
+
+func generate_lab_type() -> LabResource:
+
+	var roll = randf()
+
+	if roll < 0.55:
+		return STABLE_LAB
+	elif roll < 0.90:
+		return UNSTABLE_LAB
+	else:
+		return CRITICAL_LAB

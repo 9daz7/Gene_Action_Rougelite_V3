@@ -9,6 +9,7 @@ class_name RoomManager
 const TREASURE_SCENE = preload("res://Scenes/Rooms/TreasureRoom.tscn")
 const MERCHANT_SCENE = preload("res://Scenes/Rooms/MerchantRoom.tscn")
 const REST_SCENE = preload("res://Scenes/Rooms/RestRoom.tscn")
+const ABANDONED_LAB_SCENE = preload("res://Scenes/Rooms/AbandonedLab.tscn")
 
 const REWARD_SCENE = preload("res://Scenes/Rooms/RewardRoom.tscn")
 
@@ -17,6 +18,7 @@ var reward_room = null
 var treasure_room = null
 var merchant_room = null
 var rest_room = null
+var abandoned_lab = null
 
 
 func enter_room(room:RoomData):
@@ -120,7 +122,22 @@ func open_rest(room):
 	rest_room.open()
 
 func open_lab(room):
-	print("LAB OPEN")
+	print("Opening abandoned lab")
+	
+	if room.lab_data == null:
+		print("ERROR: Lab room has no LabResource")
+		return
+
+	abandoned_lab = ABANDONED_LAB_SCENE.instantiate()
+	get_tree().current_scene.add_child(abandoned_lab)
+
+	abandoned_lab.lab_finished.connect(
+		_on_lab_finished
+	)
+
+	abandoned_lab.open(
+		room.lab_data
+	)
 
 
 func open_reward(rewards):
@@ -197,4 +214,16 @@ func _on_rest_finished():
 
 	get_tree().current_scene.return_to_map()
 	
+	
+func _on_lab_finished():
+
+	print("Lab complete")
+
+	if is_instance_valid(abandoned_lab):
+		abandoned_lab.close()
+		abandoned_lab.queue_free()
+
+	abandoned_lab = null
+
+	get_tree().current_scene.return_to_map()
 	

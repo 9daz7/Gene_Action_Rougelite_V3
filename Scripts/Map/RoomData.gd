@@ -27,6 +27,8 @@ var position := Vector2.ZERO
 
 var room_type : RoomType
 
+var lab_data: LabResource = null
+
 var connections : Array[RoomData] = []
 
 var visited := false

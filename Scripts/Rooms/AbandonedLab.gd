@@ -22,45 +22,64 @@ signal lab_finished
 var lab_action_used := false
 var experiment_available := false
 
+var critical_battle_complete := false
+
+var battle_manager
+
 
 # -------------------------------------------------------------------
 # Initialization
 # -------------------------------------------------------------------
 
+	
 func open(data:LabResource):
+
 	lab_data = data
 
 	show()
-
+	
 	lab_action_used = false
 	experiment_available = false
+	critical_battle_complete = false
+	
+	battle_manager = get_tree().current_scene.get_node("Managers/BattleManager")
+	
+	print(
+		"Opened lab:",
+		LabResource.LabStatus.keys()[lab_data.lab_status]
+	)
 
-	reset_buttons()
-	
 	setup_lab()
-	check_experiment()
+
+	match lab_data.lab_status:
+
+		LabResource.LabStatus.CRITICAL:
+			start_critical_lab()
+
+		_:
+			reset_buttons()
+			check_experiment()
 	
-	#
-	# for when critical lab is ready
-	#
-#func open(data:LabResource):
-#
-	#lab_data = data
-#
-	#show()
-#
-	#match lab_data.lab_status:
-#
-		#LabResource.LabStatus.CRITICAL:
-			#start_critical_battle()
-#
-		#_:
-			#setup_lab()
-			#check_experiment()
+
+func start_critical_lab():
+
+	print("Critical containment failure")
+
+	disable_operations()
+	
+	continue_button.disabled = true
+
+	battle_manager.start_critical_experiment()
 	
 	
 func _ready():
 
+	battle_manager = get_tree().current_scene.get_node("Managers/BattleManager")
+
+	battle_manager.battle_won.connect(
+		_on_experiment_won
+	)
+	
 	edit_gene_button.pressed.connect(
 		func():
 			use_lab_action("edit_gene")
@@ -85,8 +104,28 @@ func _ready():
 		func():
 			use_lab_action("upgrade_mutagen")
 	)
+	
+	continue_button.pressed.connect(
+		_on_continue_pressed
+	)
 
 
+func _on_experiment_won(enemy):
+
+	if lab_data.lab_status != LabResource.LabStatus.CRITICAL:
+		return
+
+	print("Critical experiment defeated")
+
+	critical_battle_won()
+	
+
+func _on_continue_pressed():
+	print("Leaving laboratory")
+
+	lab_finished.emit()
+	
+	
 # -------------------------------------------------------------------
 # Lab Setup
 # -------------------------------------------------------------------
@@ -118,6 +157,12 @@ func reset_buttons():
 	extract_gene_button.disabled = true
 	edit_mutagen_button.disabled = false
 	upgrade_mutagen_button.disabled = false
+	
+	print("LAB BUTTON RESET")
+	print("Edit Gene disabled:", edit_gene_button.disabled)
+	print("Upgrade Gene disabled:", upgrade_gene_button.disabled)
+	print("Edit Mutagen disabled:", edit_mutagen_button.disabled)
+	print("Upgrade Mutagen disabled:", upgrade_mutagen_button.disabled)
 			
 			
 func check_experiment():
@@ -132,6 +177,15 @@ func check_experiment():
 		extract_gene_button.disabled = true
 		
 		
+func critical_battle_won():
+	critical_battle_complete = true
+
+	print("Epic experiment gene recovered")
+
+	reset_buttons()
+	
+	continue_button.disabled = false
+		
 # -------------------------------------------------------------------
 # Lab Actions
 # -------------------------------------------------------------------
@@ -144,23 +198,23 @@ func use_lab_action(action:String):
 
 	match action:
 		"edit_gene":
-			print("Editing gene")
-			#edit_gene()
+			print("Gene modification complete")
+			#edit_gene() use these for post demo 
 
 		"upgrade_gene":
-			print("Upgrading gene")
+			print("Gene upgraded")
 			#upgrade_gene()
 
 		"extract_gene":
-			print("Extracting gene")
+			print("Experiment gene extracted.")
 			#extract_gene()
 
 		"edit_mutagen":
-			print("Editing mutagen")
+			print("Mutagen formula altered")
 			#edit_mutagen()
 
 		"upgrade_mutagen":
-			print("Upgrading mutagen")
+			print("Mutagen potency increased")
 			#upgrade_mutagen()
 
 
