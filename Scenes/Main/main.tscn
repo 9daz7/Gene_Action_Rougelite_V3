@@ -8,7 +8,7 @@
 [ext_resource type="Script" uid="uid://cwwpo4n5rbema" path="res://Scripts/SaveManager.gd" id="5_hfg1r"]
 [ext_resource type="Script" uid="uid://hlp51b3uy82k" path="res://Scripts/Managers/RewardManager.gd" id="5_xlvfx"]
 [ext_resource type="Script" uid="uid://cgn7bx0im6o1g" path="res://Scripts/Managers/MapManager.gd" id="6_hryqi"]
-[ext_resource type="Script" uid="uid://bbfr6ua0f4fu" path="res://Scenes/Main/RoomManager.gd" id="8_hfg1r"]
+[ext_resource type="Script" uid="uid://bbfr6ua0f4fu" path="res://Scripts/Managers/RoomManager.gd" id="8_hfg1r"]
 [ext_resource type="PackedScene" uid="uid://duo7vnk5nhe3f" path="res://Scenes/UI/GeneLoadoutScreen.tscn" id="8_imbg2"]
 [ext_resource type="PackedScene" uid="uid://c77fp71r8tcxd" path="res://Scenes/UI/MapUI.tscn" id="9_imbg2"]
 

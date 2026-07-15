@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://c77fp71r8tcxd"]
 
 [ext_resource type="Script" uid="uid://de3kvrtdvt46h" path="res://Scripts/UI/MapUI.gd" id="1_opaok"]
-[ext_resource type="Script" uid="uid://d0ivxoxebykwh" path="res://Scenes/UI/MapConnections.gd" id="2_j65kp"]
+[ext_resource type="Script" uid="uid://d0ivxoxebykwh" path="res://Scripts/UI/MapConnections.gd" id="2_j65kp"]
 [ext_resource type="PackedScene" uid="uid://bf003i8p0pbjh" path="res://Scenes/UI/RoomButton.tscn" id="2_wshxg"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j65kp"]

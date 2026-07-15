@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bxqpvprqimagl"]
 
-[ext_resource type="Script" uid="uid://1gv465q738tl" path="res://Scenes/Rooms/RestRoom.gd" id="1_6y63p"]
+[ext_resource type="Script" uid="uid://1gv465q738tl" path="res://Scripts/Rooms/RestRoom.gd" id="1_6y63p"]
 
 [node name="RestRoom" type="Control" unique_id=436275297]
 layout_mode = 3

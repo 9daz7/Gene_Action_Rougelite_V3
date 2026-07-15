@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bx2yylvu3vlia"]
 
-[ext_resource type="Script" uid="uid://ds86jbtitx1ir" path="res://Scenes/Rooms/RewardRoom.gd" id="1_25o4l"]
+[ext_resource type="Script" uid="uid://ds86jbtitx1ir" path="res://Scripts/Rooms/RewardRoom.gd" id="1_25o4l"]
 
 [node name="RewardRoom" type="Control" unique_id=680329225]
 layout_mode = 3

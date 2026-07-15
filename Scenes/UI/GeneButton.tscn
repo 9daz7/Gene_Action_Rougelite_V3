@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bgahj1ym30tht"]
 
-[ext_resource type="Script" uid="uid://cjak1hjv0fsam" path="res://Scenes/UI/GeneButton.gd" id="1_8a8y2"]
+[ext_resource type="Script" uid="uid://cjak1hjv0fsam" path="res://Scripts/UI/GeneButton.gd" id="1_8a8y2"]
 
 [node name="GeneButton" type="Button" unique_id=513547212]
 script = ExtResource("1_8a8y2")

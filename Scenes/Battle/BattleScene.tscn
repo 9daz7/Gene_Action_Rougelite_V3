@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://d0et5656fij0b"]
 
-[ext_resource type="Script" uid="uid://cjyluyrq21x3k" path="res://Scenes/Battle/BattleScene.gd" id="1_u2duk"]
+[ext_resource type="Script" uid="uid://cjyluyrq21x3k" path="res://Scripts/Battle/BattleScene.gd" id="1_u2duk"]
 [ext_resource type="PackedScene" uid="uid://cfbv4hu5i6pr2" path="res://Scenes/UI/BattleUI.tscn" id="2_jaxsk"]
 
 [node name="BattleScene" type="Node2D" unique_id=953255763]
