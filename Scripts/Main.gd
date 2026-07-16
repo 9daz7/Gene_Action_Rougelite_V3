@@ -126,7 +126,22 @@ func enter_room(room):
 
 
 func _on_battle_won(enemy):
-	print("Battle won against:", enemy.enemy_data.enemy_name)
+	#print("Battle won against:", enemy.enemy_data.enemy_name)
+	
+	# temp
+	if enemy == null:
+		print("No enemy supplied for reward")
+		return
+	
+	if enemy.enemy_data == null:
+		print("Enemy has no enemy_data")
+		return
+
+	print(
+		"Battle won against:",
+		enemy.enemy_data.enemy_name
+	)
+	#
 
 	var rewards = reward_manager.generate_rewards(enemy)
 	

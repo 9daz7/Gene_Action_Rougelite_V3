@@ -18,9 +18,13 @@ func _ready():
 # HP UI
 # -------------------------------------------------------------------
 
-func setup_hp_bars(player, enemy):
+func setup_hp_bars(player, enemies):
 	player_hp.set_player(player)
-	enemy_hp.set_enemy(enemy)
+
+	if enemies.size() > 0:
+		enemy_hp.set_enemy(
+			enemies[0]
+		)
 
 
 # -------------------------------------------------------------------
@@ -45,7 +49,7 @@ func spawn_player(scene):
 	return player
 
 
-func spawn_enemy(scene):
+func spawn_enemy(scene, spawn_index:int = 0):
 	print("Spawning enemy")
 
 	if enemy_container == null:
@@ -53,9 +57,17 @@ func spawn_enemy(scene):
 		return null
 
 	var enemy = scene.instantiate()
+	
 	enemy_container.add_child(enemy)
 
-	var spawn_point = enemy_container.get_node("EnemySpawn")
+	var spawn_point #= enemy_container.get_node("EnemySpawn1")
+	
+	match spawn_index:
+		0:
+			spawn_point = enemy_container.get_node("EnemySpawn1")
+		1:
+			spawn_point = enemy_container.get_node("EnemySpawn2")
+		
 	enemy.position = spawn_point.position
 
 	print("Enemy created:", enemy)

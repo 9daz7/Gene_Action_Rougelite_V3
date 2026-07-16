@@ -65,6 +65,7 @@ func start_enemy(room):
 
 func start_group_enemy(room):
 	print("Starting group battle")
+	battle_manager.start_group_battle()
 
 func start_elite(room):
 	print("Starting elite battle")
@@ -120,6 +121,7 @@ func open_rest(room):
 	rest_room.rest_finished.connect(_on_rest_finished)
 
 	rest_room.open()
+	
 
 func open_lab(room):
 	print("Opening abandoned lab")

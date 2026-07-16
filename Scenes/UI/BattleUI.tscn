@@ -31,28 +31,28 @@ script = ExtResource("1_o21vf")
 
 [node name="PlayerHP" type="ProgressBar" parent="." unique_id=458044599]
 anchors_preset = -1
-offset_left = 8.01
-offset_top = 474.165
-offset_right = 285.01
-offset_bottom = 501.16525
+offset_left = 25.0
+offset_top = 821.69
+offset_right = 375.0
+offset_bottom = 851.69
 theme_override_styles/fill = SubResource("StyleBoxFlat_2a143")
 script = ExtResource("2_31gad")
 
 [node name="EnemyHP" type="ProgressBar" parent="." unique_id=43262124]
 anchors_preset = -1
-offset_left = 8.0
-offset_top = 120.125
-offset_right = 285.0
-offset_bottom = 147.125
+offset_left = 1547.025
+offset_top = 59.36
+offset_right = 1897.025
+offset_bottom = 89.35997
 theme_override_styles/fill = SubResource("StyleBoxFlat_xlvfx")
 script = ExtResource("3_tr5vc")
 
 [node name="MoveButtons" type="HBoxContainer" parent="." unique_id=270229014]
 anchors_preset = -1
 offset_left = 173.06
-offset_top = 538.52
+offset_top = 931.865
 offset_right = 438.06
-offset_bottom = 578.51996
+offset_bottom = 971.8649
 
 [node name="AttackButton" type="Button" parent="MoveButtons" unique_id=1974191994]
 layout_mode = 2

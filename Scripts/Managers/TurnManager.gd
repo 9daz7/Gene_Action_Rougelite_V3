@@ -106,54 +106,59 @@ func start_turn_effects():
 # Move selection
 # -------------------------------------------------------------------
 
+func get_active_enemy():
+	for enemy in enemies:
+		if enemy.hp > 0:
+			return enemy
+
+	return null
+	
+	
 func _on_move_selected(move_index: int):
 	if current_state != TurnState.PLAYER_TURN:
 		print("Not player turn")
 		return
 
-
-	if enemies.size() == 0:
-		print("No enemies")
+	var target_enemy = get_active_enemy()
+	
+	if target_enemy == null:
+		print("No living enemies")
 		return
-
-
-	var enemy = enemies[0]
-
-
+		
 	var player_move = player.get_move(move_index)
-	var enemy_move = enemy.choose_action(player)
-
-
-	print("Player move:", player_move)
-	print("Enemy move:", enemy_move)
-
-
+	
 	if player_move == null:
 		print("Invalid player move")
 		return
-
-
-	if enemy_move == null:
-		print("Enemy has no move")
-		return
-
-
+	
 	print(
 		"Player selected:",
 		player_move.move_name
 	)
+	
+	var enemy_moves:Array = []
 
+	for enemy in enemies:
+		if enemy.hp > 0:
+			var move = enemy.choose_action(player)
 
+			if move:
+				enemy_moves.append(
+					{
+						"enemy":enemy,
+						"move":move
+					}
+				)
+				
 	print(
-		"Enemy selected:",
-		enemy_move.move_name
+		"Enemies attacking:",
+		enemy_moves.size()
 	)
-
-
-	resolve_turn(
+	
+	resolve_group_turn(
 		player_move,
-		enemy_move,
-		enemy
+		target_enemy,
+		enemy_moves
 	)
 
 
@@ -215,6 +220,46 @@ func resolve_turn(player_move, enemy_move, enemy):
 		end_turn()
 
 
+func resolve_group_turn(player_move, target_enemy, enemy_moves):
+	current_state = TurnState.ENEMY_TURN
+
+	print("Player attacks:", target_enemy)
+
+	player_move.execute(
+		player,
+		target_enemy
+	)
+
+	check_battle_end()
+
+	if current_state == TurnState.BATTLE_OVER:
+		return
+
+
+	for data in enemy_moves:
+
+		var enemy = data.enemy
+		var move = data.move
+
+		print(
+			enemy.name,
+			" uses ",
+			move.move_name
+		)
+
+		move.execute(
+			enemy,
+			player
+		)
+
+		check_battle_end()
+
+		if current_state == TurnState.BATTLE_OVER:
+			return
+
+	end_turn()
+	
+	
 # -------------------------------------------------------------------
 # Turn end
 # -------------------------------------------------------------------
@@ -248,25 +293,30 @@ func check_battle_end():
 	if player == null:
 		return
 
-
 	if player.hp <= 0:
 		print("Player defeated")
 
 		current_state = TurnState.BATTLE_OVER
 		battle_lost.emit()
-
 		return
-
-
+	
+	var all_dead = true
+	
 	for enemy in enemies:
-		if enemy.hp <= 0:
-			print("Enemy defeated")
+		if enemy.hp > 0:
+			all_dead = false
+			
+	if all_dead:
+		print("All enemies defeated")
 
-			current_state = TurnState.BATTLE_OVER
-			battle_won.emit(enemy)
+		current_state = TurnState.BATTLE_OVER
+			
+		var defeated_enemy = null
 
+		if enemies.size() > 0:
+			defeated_enemy = enemies[0]
 
-			if battle_ui:
-				battle_ui.hide()
+		battle_won.emit(defeated_enemy)
 
-			return
+		if battle_ui:
+			battle_ui.hide()
