@@ -47,11 +47,16 @@ func start_critical_experiment():
 	print("Starting critical experiment battle")
 	
 	critical_experiment = true
+	
+	current_battle_type = RoomData.RoomType.ELITE
+	
+	print("Critical flag set:", critical_experiment)
 
 	start_battle(RoomData.RoomType.ELITE) # elite until criticalexperiment.tres is ready
 	
 	
 func start_battle(room_type = RoomData.RoomType.ENEMY):
+	current_battle_type = room_type
 	print("Starting battle:", room_type)
 	
 	current_battle = BATTLE_SCENE.instantiate()
@@ -85,7 +90,7 @@ func start_battle(room_type = RoomData.RoomType.ENEMY):
 	enemies.append(enemy)
 
 	initialize_battle()
-		
+	
 		
 func start_group_battle():
 	print("Starting 1v2 battle")
@@ -240,9 +245,11 @@ func _on_turn_battle_won(enemy):
 			"Battle won against:",
 			enemy.enemy_data.enemy_name
 		)
-		
+	
 	battle_won.emit(enemy)
-
+	
+	await get_tree().process_frame
+	
 	end_battle()
 
 
@@ -254,17 +261,32 @@ func _on_turn_battle_lost():
 	end_battle()
 
 
+	
 func end_battle():
 	print("Cleaning battle")
 
+	# Remove battle scene
 	if is_instance_valid(current_battle):
 		current_battle.queue_free()
 
-	enemies.clear()
-
+	# Remove player
 	if is_instance_valid(player):
 		player.queue_free()
 
+	# Remove enemies
+	for enemy in enemies:
+		if is_instance_valid(enemy):
+			enemy.queue_free()
 
+	enemies.clear()
+	
 	current_battle = null
 	player = null
+	
+
+	print("Battle cleanup complete")
+	
+	
+func reset_battle_state():
+	current_battle_type = null
+	critical_experiment = false

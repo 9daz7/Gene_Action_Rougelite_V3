@@ -126,8 +126,18 @@ func enter_room(room):
 
 
 func _on_battle_won(enemy):
+	print("MAIN RECEIVED BATTLE WON")
+	print("Critical flag:", battle_manager.critical_experiment)
+	print("Battle type:", battle_manager.current_battle_type)
 	#print("Battle won against:", enemy.enemy_data.enemy_name)
+	if battle_manager.critical_experiment:
+		print("Skipping rewards: critical experiment")
+		return
 	
+	if battle_manager.current_battle_type == RoomData.RoomType.BOSS:
+		print("Skipping normal rewards for experiment")
+		return
+		
 	# temp
 	if enemy == null:
 		print("No enemy supplied for reward")

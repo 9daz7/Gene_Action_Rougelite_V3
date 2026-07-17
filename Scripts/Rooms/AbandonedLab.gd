@@ -24,6 +24,8 @@ var experiment_available := false
 
 var critical_battle_complete := false
 
+var connected_to_battle := false
+
 var battle_manager
 
 
@@ -40,9 +42,15 @@ func open(data:LabResource):
 	
 	lab_action_used = false
 	experiment_available = false
-	critical_battle_complete = false
+	if lab_data.lab_status != LabResource.LabStatus.CRITICAL:
+		critical_battle_complete = false
 	
 	battle_manager = get_tree().current_scene.get_node("Managers/BattleManager")
+	
+	if lab_data.lab_status == LabResource.LabStatus.CRITICAL:
+		if !battle_manager.battle_won.is_connected(_on_experiment_won):
+			battle_manager.battle_won.connect(_on_experiment_won)
+			connected_to_battle = true
 	
 	print(
 		"Opened lab:",
@@ -73,12 +81,6 @@ func start_critical_lab():
 	
 	
 func _ready():
-
-	battle_manager = get_tree().current_scene.get_node("Managers/BattleManager")
-
-	battle_manager.battle_won.connect(
-		_on_experiment_won
-	)
 	
 	edit_gene_button.pressed.connect(
 		func():
@@ -112,7 +114,10 @@ func _ready():
 
 func _on_experiment_won(enemy):
 
+	print("AbandonedLab received battle win")
+
 	if lab_data.lab_status != LabResource.LabStatus.CRITICAL:
+		print("Ignoring because lab is not critical")
 		return
 
 	print("Critical experiment defeated")
@@ -121,6 +126,10 @@ func _on_experiment_won(enemy):
 	
 
 func _on_continue_pressed():
+	if connected_to_battle:
+		battle_manager.battle_won.disconnect(_on_experiment_won)
+		connected_to_battle = false
+	
 	print("Leaving laboratory")
 
 	lab_finished.emit()

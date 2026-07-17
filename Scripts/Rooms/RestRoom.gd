@@ -9,7 +9,7 @@ signal rest_finished
 @onready var leave_button = $CenterContainer/VBoxContainer/LeaveButton
 
 
-@onready var run_manager = $"../../RunManager"
+@onready var run_manager = get_tree().current_scene.get_node("Managers/RunManager")
 
 
 var healed := false
@@ -27,14 +27,20 @@ func _ready():
 
 
 func open():
+	run_manager = get_tree().current_scene.get_node("Managers/RunManager")
 	show()
 	healed = false
+	heal_button.disabled = false
 
 
 func _heal_pressed():
 	if healed:
 		return
 
+	if run_manager == null:
+		print("ERROR: RunManager not found")
+		return
+	
 	var heal_amount = int(run_manager.max_hp * 0.35)
 
 	run_manager.heal_player(heal_amount)

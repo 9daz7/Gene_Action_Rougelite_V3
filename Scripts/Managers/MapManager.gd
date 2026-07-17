@@ -175,6 +175,9 @@ func generate_room_type(row: int):
 		if row < 2:
 			if roll < 0.55:
 				return RoomData.RoomType.ENEMY
+				
+			elif roll < 0.6:
+				return RoomData.RoomType.GROUP_ENEMY
 
 			elif roll < 0.75:
 				return RoomData.RoomType.TREASURE
@@ -321,10 +324,16 @@ func move_to_room(room:RoomData):
 func generate_lab_type() -> LabResource:
 
 	var roll = randf()
-
-	if roll < 0.55:
+	# test numbers
+	if roll < 0.33:
 		return STABLE_LAB
-	elif roll < 0.90:
+	elif roll < 0.66:
 		return UNSTABLE_LAB
 	else:
 		return CRITICAL_LAB
+	#if roll < 0.55:
+		#return STABLE_LAB
+	#elif roll < 0.90:
+		#return UNSTABLE_LAB
+	#else:
+		#return CRITICAL_LAB
