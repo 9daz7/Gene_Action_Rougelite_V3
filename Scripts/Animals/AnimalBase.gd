@@ -64,7 +64,9 @@ var slot_capacity := {
 # MOVES
 # -------------------------------------------------------------------
 
-var learned_moves: Array[MoveResource] = []
+var basic_moves:Array[MoveResource] = []
+var gene_moves:Array[MoveResource] = []
+var selected_moves:Array[MoveResource] = []
 
 # -------------------------------------------------------------------
 # PASSIVES / STATUS EFFECTS
@@ -73,6 +75,34 @@ var learned_moves: Array[MoveResource] = []
 var passive_effects: Array = []
 var status_effects: Array = []
 
+
+func process_status_effects():
+	for effect in status_effects:
+		match effect.type:
+			StatusEffect.Type.POISON:
+				
+				print(
+					name,
+					" takes poison damage"
+				)
+
+				take_damage(effect.power)
+				
+			StatusEffect.Type.BLEED:
+
+				print(
+					name,
+					" bleeds"
+				)
+
+				take_damage(effect.power)
+
+		effect.duration -= 1
+		
+	status_effects = status_effects.filter(
+		func(e):
+			return e.duration > 0
+	)
 
 # -------------------------------------------------------------------
 # GENE MANAGEMENT
@@ -112,7 +142,7 @@ func add_gene(gene: GeneResource) -> bool:
 	# Add gene moves
 	for move in gene.move_pool:
 		if move:
-			learned_moves.append(move)
+			gene_moves.append(move)
 
 	print(
 		name,
@@ -122,6 +152,15 @@ func add_gene(gene: GeneResource) -> bool:
 
 	return true
 
+
+func get_battle_moves():
+	var moves=[]
+	moves.append_array(basic_moves)
+
+	for move in selected_moves:
+		moves.append(move)
+
+	return moves
 
 # -------------------------------------------------------------------
 # MOVE SYSTEM
@@ -133,17 +172,23 @@ func add_move(move: MoveResource):
 	if move == null:
 		return
 
-	learned_moves.append(move)
+	selected_moves.append(move)
+
+	print(
+		name,
+		" learned move:",
+		move.move_name
+	)
 
 
 func get_move(index: int):
 	if index < 0:
 		return null
 
-	if index >= learned_moves.size():
+	if index >= gene_moves.size():
 		return null
 
-	return learned_moves[index]
+	return gene_moves[index]
 
 
 func use_move(index: int,target):
@@ -372,7 +417,7 @@ func trigger_passive_event(event_name: String):
 
 
 func setup_basic_moves():
-	learned_moves.clear()
+	gene_moves.clear()
 
 	var attack = MoveResource.new()
 
@@ -380,7 +425,7 @@ func setup_basic_moves():
 	attack.power = 5
 	attack.priority = 0
 
-	add_move(attack)
+	basic_moves.append(attack)
 
 
 	var protect = MoveResource.new()
@@ -389,7 +434,7 @@ func setup_basic_moves():
 	protect.power = -1
 	protect.priority = 2
 
-	add_move(protect)
+	basic_moves.append(protect)
 
 	print(
 		name,

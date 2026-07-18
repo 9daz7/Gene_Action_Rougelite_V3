@@ -32,20 +32,16 @@ func start_battle(player, enemies, battle_ui):
 	self.enemies = enemies
 	self.battle_ui = battle_ui
 
-
 	print("TurnManager received UI:", battle_ui)
-
 
 	battle_ui.move_selected.connect(
 		_on_move_selected
 	)
 
-
 	print(
 		"Signal connections:",
 		battle_ui.move_selected.get_connections()
 	)
-
 
 	print("Turn system started")
 
@@ -74,23 +70,24 @@ func start_battle(player, enemies, battle_ui):
 # -------------------------------------------------------------------
 
 func start_player_turn():
-	if current_state == TurnState.BATTLE_OVER:
-		return
-
+	#if current_state == TurnState.BATTLE_OVER:
+		#return
 
 	current_state = TurnState.PLAYER_TURN
-
-
-	# Reset temporary effects from previous turn
-	if player:
-		player.reset_turn_state()
-
-
-	# Trigger passive effects
-	start_turn_effects()
-
-
+	
 	print("Player turn")
+	
+	player.process_status_effects()
+	
+	# allow buttons
+	battle_ui.enable_moves()
+	
+	## Reset temporary effects from previous turn
+	#if player:
+		#player.reset_turn_state()
+#
+	## Trigger passive effects
+	#start_turn_effects()
 
 
 func start_turn_effects():
@@ -276,6 +273,19 @@ func end_turn():
 	start_player_turn()
 
 
+func start_enemy_turn():
+
+	current_state = TurnState.ENEMY_TURN
+	
+	print("Enemy turn")
+
+	for enemy in enemies:
+		enemy.process_status_effects()
+
+		if enemy.hp > 0:
+			enemy.choose_action(player)
+			
+			
 func trigger_turn_end_effects():
 	if player:
 		player.trigger_passive_event("turn_end")

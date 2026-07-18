@@ -26,7 +26,7 @@ func start_battle():
 
 func setup_enemy_moves():
 
-	learned_moves.clear()
+	gene_moves.clear()
 
 	var attack = MoveResource.new()
 
@@ -43,7 +43,7 @@ func setup_enemy_moves():
 	
 	
 func choose_action(_player) -> MoveResource:
-	return learned_moves[0]
+	return gene_moves[0]
 
 
 func get_drop_gene() -> GeneResource:

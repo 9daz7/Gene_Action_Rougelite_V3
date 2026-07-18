@@ -1,49 +1,68 @@
 extends Node
 class_name RunManager
 
+
 @onready var save_manager = $"../SaveManager"
 
+var gold:int = 0
 
 var player_hp:int = 100
 var max_hp:int = 100
 
-# Genes equipped for this run
-var active_genes: Array[GeneResource] = []
-
+# Current animal loaded from Lab Hub
+var current_animal_build:AnimalBuildResource = null
 
 # Genes unlocked permanently
 var gene_collection: Array[GeneResource] = []
 
 
-var player_genes: Array[GeneResource] = []
-
-
-var adaptation_limit := 6
-var used_adaptations := 0
-
-
 func _ready():
 	print("RUN MANAGER READY")
+	
+	
+func start_run():
+
+	if current_animal_build == null:
+		print("ERROR: No animal build selected")
+		return
+
+
+	print(
+		"Starting run with:",
+		current_animal_build.animal_name
+	)
+
+
+	player_hp = current_animal_build.base_hp
+	
+	
+func set_animal_build(build:AnimalBuildResource):
+	
+	current_animal_build = build
+	
+	current_animal_build.calculate_stats()
+	
+	print(
+		"Animal build saved:",
+		build.animal_name
+	)
 
 
 func setup_run(starting_genes: Array[GeneResource]):
-	print("=== RUN MANAGER START ===")
-	print("Genes received:", starting_genes.size())
-
-	clear_run()
-	player_genes.clear()
-	
-	print("Starting Gold:", save_manager.gold)
-	
-	for gene in starting_genes:
-		equip_gene(gene)
-		player_genes.append(gene)
+	if current_animal_build == null:
+		push_error("No animal build selected")
+		return
 		
-		## Add starting genes to owned storage
-		#if not gene_collection.has(gene):
-			#gene_collection.append(gene)
+	current_animal_build.calculate_stats()
+	
+	print("=== Run Start ===")
+	print("Animal:", current_animal_build.animal_name)
+	
+	for gene in current_animal_build.genes:
+		print("Gene:", gene.gene_name)
 
-		print("Starting gene:", gene.gene_name)
+	for move in current_animal_build.moves:
+		print("Move:", move.move_name)
 
 
 func initialize_starting_collection(gene_database):
@@ -80,22 +99,6 @@ func get_random_owned_genes(count:int) -> Array[GeneResource]:
 	return available
 
 
-func equip_gene(gene: GeneResource) -> bool:
-	if used_adaptations + gene.adaptation_cost > adaptation_limit:
-		print("Not enough adaptation slots")
-		return false
-
-	active_genes.append(gene)
-	used_adaptations += gene.adaptation_cost
-
-	return true
-
-
-func apply_genes_to_player(player):
-	for gene in active_genes:
-		player.add_gene(gene)
-
-
 func collect_gene(gene: GeneResource):
 	if not gene_collection.has(gene):
 		gene_collection.append(gene)
@@ -122,10 +125,6 @@ func store_gene(gene: GeneResource):
 		#print("Gene already owned:", gene.gene_name)
 		
 
-func clear_run():
-	active_genes.clear()
-	used_adaptations = 0
-	
 	
 func spend_gold(amount:int) -> bool:
 

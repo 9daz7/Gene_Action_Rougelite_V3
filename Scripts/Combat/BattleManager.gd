@@ -69,8 +69,13 @@ func start_battle(room_type = RoomData.RoomType.ENEMY):
 	# Spawn player
 	player = current_battle.spawn_player(PLAYER_SCENE)
 
-	for gene in run_manager.player_genes:
-		player.add_gene(gene)
+	var build = run_manager.current_animal_build
+	
+	if build == null:
+		push_error("Battle started with no animal build")
+		return
+		
+	player.load_build(build)
 
 	player.setup_player_hp(run_manager)
 		
@@ -104,8 +109,19 @@ func start_group_battle():
 	# Spawn player
 	player = current_battle.spawn_player(PLAYER_SCENE)
 
-	for gene in run_manager.player_genes:
+	var build = run_manager.current_animal_build
+
+	if build == null:
+		push_error("No animal build loaded!")
+		return
+
+	# Equip genes
+	for gene in build.genes:
 		player.add_gene(gene)
+
+	# Learn selected moves
+	for move in build.moves:
+		player.learn_move(move)
 
 	player.setup_player_hp(run_manager)
 

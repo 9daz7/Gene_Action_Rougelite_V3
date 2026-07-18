@@ -21,6 +21,36 @@ func setup_player_hp(manager):
 		"/",
 		base_hp
 	)
+	
+	
+func load_build(build:AnimalBuildResource):
+
+	if build == null:
+		print("No build")
+		return
+
+	name = build.animal_name
+
+	# Base animal stats
+	base_hp = build.base_hp
+	base_attack = build.base_attack
+	base_speed = build.base_speed
+
+	# Load genes
+	for gene in build.selected_genes:
+		add_gene(gene)
+
+	# Load selected gene moves
+	for move in build.selected_moves:
+		add_move(move)
+
+	print(
+		"Loaded build:",
+		name
+	)
+	
+	
+	
 
 func take_damage(amount:int):
 	super.take_damage(amount)

@@ -79,3 +79,6 @@ func execute(user, target):
 	)
 
 	target.take_damage(damage)
+	
+	for effect in effects:
+		effect.apply(target)
