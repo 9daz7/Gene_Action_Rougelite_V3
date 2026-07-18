@@ -10,6 +10,7 @@ const TREASURE_SCENE = preload("res://Scenes/Rooms/TreasureRoom.tscn")
 const MERCHANT_SCENE = preload("res://Scenes/Rooms/MerchantRoom.tscn")
 const REST_SCENE = preload("res://Scenes/Rooms/RestRoom.tscn")
 const ABANDONED_LAB_SCENE = preload("res://Scenes/Rooms/AbandonedLab.tscn")
+const MYSTERY_SCENE = preload("res://Scenes/Rooms/MysteryRoom.tscn")
 
 const REWARD_SCENE = preload("res://Scenes/Rooms/RewardRoom.tscn")
 
@@ -19,6 +20,7 @@ var treasure_room = null
 var merchant_room = null
 var rest_room = null
 var abandoned_lab = null
+var mystery_room = null
 
 
 func enter_room(room:RoomData):
@@ -50,6 +52,9 @@ func enter_room(room:RoomData):
 			
 		RoomData.RoomType.ABANDONED_LAB:
 			open_lab(room)
+			
+		RoomData.RoomType.MYSTERY_ROOM:
+			open_mystery(room)
 			
 		_:
 			print("Unknown room")
@@ -140,6 +145,19 @@ func open_lab(room):
 	abandoned_lab.open(
 		room.lab_data
 	)
+	
+	
+func open_mystery(room):
+	print("Opening a mystery room")
+	
+	mystery_room = MYSTERY_SCENE.instantiate()
+
+	get_tree().current_scene.add_child(mystery_room)
+
+	mystery_room.mystery_finished.connect(
+		_on_mystery_finished
+	)
+	
 
 
 func open_reward(rewards):
@@ -226,6 +244,18 @@ func _on_lab_finished():
 		abandoned_lab.queue_free()
 
 	abandoned_lab = null
+
+	get_tree().current_scene.return_to_map()
+	
+	
+func _on_mystery_finished():
+
+	if is_instance_valid(mystery_room):
+		mystery_room.queue_free()
+
+	mystery_room = null
+
+	print("Mystery complete")
 
 	get_tree().current_scene.return_to_map()
 	

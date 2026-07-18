@@ -186,7 +186,7 @@ func generate_room_type(row: int):
 				return RoomData.RoomType.REST
 
 			else:
-				return RoomData.RoomType.UNKNOWN
+				return RoomData.RoomType.MYSTERY_ROOM
 
 
 		elif row < 5:
@@ -203,7 +203,7 @@ func generate_room_type(row: int):
 				return RoomData.RoomType.ABANDONED_LAB
 
 			else:
-				return RoomData.RoomType.UNKNOWN
+				return RoomData.RoomType.MYSTERY_ROOM
 
 
 		else:
@@ -253,7 +253,7 @@ func generate_room_type(row: int):
 				return RoomData.RoomType.MERCHANT
 
 			else:
-				return RoomData.RoomType.UNKNOWN
+				return RoomData.RoomType.MYSTERY_ROOM
 
 
 func print_map():

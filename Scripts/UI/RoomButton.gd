@@ -54,7 +54,7 @@ func get_room_text():
 			return "BOSS"
 
 		_:
-			return "?"
+			return "MYSTERY"
 
 
 func _on_pressed():
