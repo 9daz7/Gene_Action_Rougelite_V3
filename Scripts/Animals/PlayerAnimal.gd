@@ -31,27 +31,75 @@ func load_build(build:AnimalBuildResource):
 
 	name = build.animal_name
 
-	# Base animal stats
-	base_hp = build.base_hp
-	base_attack = build.base_attack
-	base_speed = build.base_speed
+	print("==== LOADING BUILD ====")
+	print("Animal:", name)
+	print("HP:", base_hp)
+	print("Attack:", base_attack)
+	print("Speed:", base_speed)
+	
+	animal_resource = build.animal
+	
+# Load base animal stats
+	if animal_resource:
 
-	# Load genes
-	for gene in build.selected_genes:
+		base_hp = animal_resource.base_hp
+		base_attack = animal_resource.base_attack
+		base_speed = animal_resource.base_speed
+
+		print(
+			"Base animal:",
+			animal_resource.animal_name
+		)
+
+	else:
+		print("ERROR: No animal resource assigned")
+
+	print(
+		"Animal:",
+		name
+	)
+
+	print(
+		"HP:",
+		base_hp
+	)
+
+	print(
+		"Attack:",
+		base_attack
+	)
+
+	print(
+		"Speed:",
+		base_speed
+	)
+
+	# Reset old data
+	equipped_genes.clear()
+	learned_moves.clear()
+
+	# Setup universal moves
+	setup_basic_moves()
+
+	# Apply genes
+	for gene in build.genes:
 		add_gene(gene)
 
-	# Load selected gene moves
-	for move in build.selected_moves:
+	# Add chosen gene moves
+	for move in build.moves:
 		add_move(move)
 
 	print(
-		"Loaded build:",
-		name
+		"Loaded genes:",
+		equipped_genes.size()
+	)
+
+	print(
+		"Loaded moves:",
+		learned_moves.size()
 	)
 	
 	
-	
-
 func take_damage(amount:int):
 	super.take_damage(amount)
 	if run_manager:

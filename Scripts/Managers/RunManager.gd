@@ -10,7 +10,7 @@ var player_hp:int = 100
 var max_hp:int = 100
 
 # Current animal loaded from Lab Hub
-var current_animal_build:AnimalBuildResource = null
+var current_animal_build:AnimalBuildResource
 
 # Genes unlocked permanently
 var gene_collection: Array[GeneResource] = []
@@ -39,7 +39,6 @@ func start_run():
 func set_animal_build(build:AnimalBuildResource):
 	
 	current_animal_build = build
-	
 	current_animal_build.calculate_stats()
 	
 	print(
@@ -47,6 +46,16 @@ func set_animal_build(build:AnimalBuildResource):
 		build.animal_name
 	)
 
+
+func save_animal_build(build:AnimalBuildResource):
+
+	current_animal_build = build
+
+	print(
+		"Animal build saved:",
+		build.animal_name
+	)
+	
 
 func setup_run(starting_genes: Array[GeneResource]):
 	if current_animal_build == null:

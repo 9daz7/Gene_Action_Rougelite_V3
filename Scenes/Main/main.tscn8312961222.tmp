@@ -54,11 +54,12 @@ script = ExtResource("8_hfg1r")
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=1736721601]
 
+[node name="GeneLoadoutScreen" parent="UI" unique_id=38721201 instance=ExtResource("8_imbg2")]
+visible = true
+
 [node name="MapUI" parent="UI" unique_id=701148956 instance=ExtResource("9_imbg2")]
 
 [node name="LabHub" parent="UI" unique_id=219335493 instance=ExtResource("12_4e4y2")]
-
-[node name="GeneLoadoutScreen" parent="UI" unique_id=38721201 instance=ExtResource("8_imbg2")]
 
 [node name="GeneRewardUI" type="Control" parent="UI" unique_id=1805312372]
 visible = false

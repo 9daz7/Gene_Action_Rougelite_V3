@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="MoveResource" format=3 uid="uid://cfsalnn48dv3f"]
+
+[ext_resource type="Script" uid="uid://bnmm0xqkm6atb" path="res://Scripts/Moves/MoveResource.gd" id="1_2u6ie"]
+
+[resource]
+script = ExtResource("1_2u6ie")
+move_name = "Bite"
+power = 8
+description = "Reliable bite attack"
+critical_chance = 6

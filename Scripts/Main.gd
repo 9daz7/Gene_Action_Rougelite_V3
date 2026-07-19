@@ -13,7 +13,7 @@ extends Node
 
 
 @onready var map_ui = $UI/MapUI
-@onready var gene_loadout = $UI/GeneLoadoutScreen
+@onready var lab_hub = $UI/LabHub
 @onready var room_manager = $Managers/RoomManager
 
 
@@ -32,79 +32,77 @@ func _ready():
 	
 	run_manager.initialize_starting_collection(gene_database)
 
-	gene_loadout.loadout_confirmed.connect(start_run)
-
 	map_ui.hide()
-	gene_loadout.hide()
+	lab_hub.hide()
+	
+	lab_hub.start_run_requested.connect(start_run)
 
 	map_ui.room_entered.connect(enter_room)
 
 	battle_manager.battle_won.connect(_on_battle_won)
 	battle_manager.battle_lost.connect(_on_battle_lost)
 
-	start_new_run()
+	lab_hub.animal_creation.build_confirmed.connect(
+		_on_build_confirmed
+	)
+
+	open_lab_hub()
 
 
-func start_new_run():
-	start_gene_selection()
-
-
-func start_gene_selection():
-	#var gene_choices = run_manager.get_random_owned_genes(5)
-
-	print("Opening gene loadout")
+func open_lab_hub():
+	print("Opening Lab Hub")
 	
-	print("Owned genes:")
-
-	for gene in run_manager.gene_collection:
-		print(
-			gene.gene_name,
-			" | ",
-			gene.get_rarity_name()
-		)
-
-	gene_loadout.open(run_manager.gene_collection)
+	map_ui.hide()
+	
+	lab_hub.open()
+	
+	print("LabHub visible:", lab_hub.visible)
 
 
-func start_run(selected_genes: Array[GeneResource]):
+#func start_gene_selection():
+	##var gene_choices = run_manager.get_random_owned_genes(5)
+#
+	#print("Opening gene loadout")
+	#
+	#print("Owned genes:")
+#
+	#for gene in run_manager.gene_collection:
+		#print(
+			#gene.gene_name,
+			#" | ",
+			#gene.get_rarity_name()
+		#)
+#
+	#gene_loadout.open(run_manager.gene_collection)
+
+
+func _on_build_confirmed(build):
+
+	print(
+		"Build confirmed:",
+		build.animal_name
+	)
+
+	run_manager.save_animal_build(build)
+	
+
+func start_run():
 	print("======================")
 	print("MAIN START_RUN CALLED")
 	print("======================")
 
-	print("START RUN ENTERED")
-
-	print("Starting genes:")
-
-	for gene in selected_genes:
-		print(gene.gene_name)
-
-
-	print("Checking RunManager")
-
-	if run_manager == null:
-		print("ERROR: RunManager is NULL")
+	if run_manager.current_animal_build == null:
+		print("ERROR: No animal build exists")
 		return
 
-
-	print("RunManager found:", run_manager)
-
-
-	print("Calling setup_run")
-
-	run_manager.setup_run(selected_genes)
-
-
-	print("setup_run finished")
-
-
-	print("Calling map generation")
+	print(
+		"Starting animal:",
+		run_manager.current_animal_build.animal_name
+	)
 
 	map_manager.generate_map()
 
-
-	print("Map generation finished")
-
-
+	lab_hub.hide()
 	map_ui.show()
 
 	map_ui.display_map(
@@ -113,6 +111,7 @@ func start_run(selected_genes: Array[GeneResource]):
 
 
 	print("Map displayed")
+	
 	
 func enter_room(room):
 
@@ -181,7 +180,7 @@ func _on_battle_lost():
 
 	run_manager.player_hp = run_manager.max_hp
 	
-	start_new_run()
+	open_lab_hub()
 
 
 func return_to_map():

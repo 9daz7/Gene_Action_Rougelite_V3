@@ -71,9 +71,12 @@ func start_battle(room_type = RoomData.RoomType.ENEMY):
 
 	var build = run_manager.current_animal_build
 	
-	if build == null:
-		push_error("Battle started with no animal build")
-		return
+	print("CURRENT BUILD:", build)
+
+	if build:
+		print("BUILD NAME:", build.animal_name)
+		print("BUILD GENES:", build.genes.size())
+		print("BUILD MOVES:", build.moves.size())
 		
 	player.load_build(build)
 

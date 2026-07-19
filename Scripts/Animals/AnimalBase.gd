@@ -7,6 +7,8 @@ signal hp_changed(new_hp)
 
 var run_manager
 
+var animal_resource : AnimalResource
+
 # -------------------------------------------------------------------
 # BASE STATS
 # -------------------------------------------------------------------
@@ -64,6 +66,7 @@ var slot_capacity := {
 # MOVES
 # -------------------------------------------------------------------
 
+var learned_moves: Array[MoveResource] = []
 var basic_moves:Array[MoveResource] = []
 var gene_moves:Array[MoveResource] = []
 var selected_moves:Array[MoveResource] = []
@@ -154,11 +157,11 @@ func add_gene(gene: GeneResource) -> bool:
 
 
 func get_battle_moves():
-	var moves=[]
+	var moves:Array[MoveResource] = []
+	
 	moves.append_array(basic_moves)
 
-	for move in selected_moves:
-		moves.append(move)
+	moves.append_array(selected_moves)
 
 	return moves
 
@@ -172,23 +175,26 @@ func add_move(move: MoveResource):
 	if move == null:
 		return
 
-	selected_moves.append(move)
+	gene_moves.append(move)
 
 	print(
 		name,
-		" learned move:",
+		" learned gene move:",
 		move.move_name
 	)
 
 
 func get_move(index: int):
+	
+	var moves = get_battle_moves()
+	
 	if index < 0:
 		return null
 
-	if index >= gene_moves.size():
+	if index >= moves.size():
 		return null
 
-	return gene_moves[index]
+	return moves[index]
 
 
 func use_move(index: int,target):
@@ -417,29 +423,45 @@ func trigger_passive_event(event_name: String):
 
 
 func setup_basic_moves():
-	gene_moves.clear()
+	
+	basic_moves.clear()
 
-	var attack = MoveResource.new()
+	if animal_resource == null:
+		print("No animal resource")
+		return
 
-	attack.move_name = "Attack"
-	attack.power = 5
-	attack.priority = 0
-
-	basic_moves.append(attack)
-
-
-	var protect = MoveResource.new()
-
-	protect.move_name = "Protect"
-	protect.power = -1
-	protect.priority = 2
-
-	basic_moves.append(protect)
-
-	print(
-		name,
-		" learned basic moves"
-	)
+	for move in animal_resource.starter_moves:
+		basic_moves.append(move)
+		
+		print(
+			name,
+			" learned basic move:",
+			move.move_name
+		)
+		
+	#gene_moves.clear()
+#
+	#var attack = MoveResource.new()
+#
+	#attack.move_name = "Attack"
+	#attack.power = 5
+	#attack.priority = 0
+#
+	#basic_moves.append(attack)
+#
+#
+	#var protect = MoveResource.new()
+#
+	#protect.move_name = "Protect"
+	#protect.power = -1
+	#protect.priority = 2
+#
+	#basic_moves.append(protect)
+#
+	#print(
+		#name,
+		#" learned basic moves"
+	#)
 
 
 # -------------------------------------------------------------------

@@ -24,6 +24,11 @@ var current_adaptation := 0
 
 
 func open(owned_genes: Array[GeneResource]):
+	
+	print("!!! GENE LOADOUT OPENED !!!")
+	print("Called from:")
+	print(get_stack())
+	
 	show()
 
 	options = owned_genes

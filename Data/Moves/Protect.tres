@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="MoveResource" format=3 uid="uid://dssodq4lr1182"]
+
+[ext_resource type="Script" uid="uid://bnmm0xqkm6atb" path="res://Scripts/Moves/MoveResource.gd" id="1_btfc1"]
+
+[resource]
+script = ExtResource("1_btfc1")
+move_name = "Protect"
+power = -1
+priority = 2
+category = 1

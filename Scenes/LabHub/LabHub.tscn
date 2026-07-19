@@ -1,3 +1,133 @@
 [gd_scene format=3 uid="uid://behj6glwxh240"]
 
-[node name="LabHub" type="Node2D" unique_id=219335493]
+[ext_resource type="Script" uid="uid://bt88ti68bhrxf" path="res://Scenes/LabHub/LabHub.gd" id="1_n326t"]
+[ext_resource type="Script" uid="uid://c35qlyaynfr6s" path="res://Scenes/LabHub/StartRunButton.gd" id="2_3lbnj"]
+[ext_resource type="Script" uid="uid://bgvjsg4fcjj6y" path="res://Scenes/LabHub/AnimalCreationUI.gd" id="3_b8a4m"]
+
+[node name="LabHub" type="Control" unique_id=162651314]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_n326t")
+
+[node name="AnimalButton" type="Button" parent="." unique_id=7620566]
+custom_minimum_size = Vector2(150, 45)
+layout_mode = 0
+offset_left = 200.1
+offset_top = 1000.0
+offset_right = 350.10004
+offset_bottom = 1045.0
+text = "Animal button"
+
+[node name="StartRunButton" type="Button" parent="." unique_id=1008136979]
+custom_minimum_size = Vector2(150, 45)
+layout_mode = 0
+offset_left = 1600.0
+offset_top = 1000.0
+offset_right = 1750.0002
+offset_bottom = 1045.0001
+text = "Start Run"
+script = ExtResource("2_3lbnj")
+
+[node name="AnimalCreationUI" type="Control" parent="." unique_id=1094525652]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("3_b8a4m")
+
+[node name="Panel" type="Panel" parent="AnimalCreationUI" unique_id=483790985]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="AnimalName" type="LineEdit" parent="AnimalCreationUI" unique_id=349907153]
+custom_minimum_size = Vector2(400, 50)
+layout_mode = 0
+offset_left = 1286.13
+offset_top = 60.85
+offset_right = 1686.13
+offset_bottom = 110.85
+
+[node name="AnimalPreview" type="Control" parent="AnimalCreationUI" unique_id=1763062572]
+custom_minimum_size = Vector2(500, 800)
+anchors_preset = 0
+offset_left = 1250.0
+offset_top = 134.085
+offset_right = 1750.0
+offset_bottom = 934.085
+
+[node name="Sprite2D" type="Sprite2D" parent="AnimalCreationUI/AnimalPreview" unique_id=1976096219]
+
+[node name="Label" type="Label" parent="AnimalCreationUI/AnimalPreview" unique_id=365054302]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="GeneSelection" type="Control" parent="AnimalCreationUI" unique_id=2131818571]
+custom_minimum_size = Vector2(300, 400)
+anchors_preset = 0
+offset_left = 150.0
+offset_top = 300.0
+offset_right = 450.0
+offset_bottom = 700.00006
+
+[node name="RarityTabs" type="HBoxContainer" parent="AnimalCreationUI/GeneSelection" unique_id=970615012]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="GeneList" type="ScrollContainer" parent="AnimalCreationUI/GeneSelection" unique_id=512336167]
+custom_minimum_size = Vector2(300, 500)
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="GeneContainer" type="VBoxContainer" parent="AnimalCreationUI/GeneSelection/GeneList" unique_id=1670732218]
+custom_minimum_size = Vector2(300, 500)
+layout_mode = 2
+
+[node name="SelectedGenes" type="HBoxContainer" parent="AnimalCreationUI/GeneSelection" unique_id=1680196876]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="MoveSelection" type="Control" parent="AnimalCreationUI" unique_id=60119982]
+custom_minimum_size = Vector2(300, 400)
+anchors_preset = 0
+offset_left = 485.055
+offset_top = 300.0
+offset_right = 785.05505
+offset_bottom = 700.003
+
+[node name="AvailabelMoves" type="ScrollContainer" parent="AnimalCreationUI/MoveSelection" unique_id=2134931958]
+custom_minimum_size = Vector2(300, 500)
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="MoveContainer" type="VBoxContainer" parent="AnimalCreationUI/MoveSelection/AvailabelMoves" unique_id=1294086813]
+custom_minimum_size = Vector2(300, 500)
+layout_mode = 2
+
+[node name="SelectedMoves" type="HBoxContainer" parent="AnimalCreationUI/MoveSelection" unique_id=262138431]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ConfirmButton" type="Button" parent="AnimalCreationUI" unique_id=166928209]
+layout_mode = 0
+offset_left = 250.0
+offset_top = 850.0
+offset_right = 319.0
+offset_bottom = 881.0
+text = "confirm"
+
+[node name="CancelButton" type="Button" parent="AnimalCreationUI" unique_id=241583471]
+layout_mode = 0
+offset_left = 350.0
+offset_top = 850.0
+offset_right = 400.0
+offset_bottom = 881.0
+text = "cancel"
