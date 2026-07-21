@@ -26,6 +26,10 @@ const GENE_BUTTON = preload("res://Scenes/UI/GeneSelectButton.tscn")
 
 @onready var gene_container = ($GeneSelection/GeneList/GeneContainer)
 
+const MOVE_BUTTON = preload("res://Scenes/UI/MoveSelectButton.tscn")
+
+@onready var move_container = $MoveSelection/AvailabelMoves/MoveContainer
+
 
 func _ready():
 
@@ -48,10 +52,16 @@ func _ready():
 
 
 func open():
+	
+	selected_genes.clear()
+	selected_moves.clear()
+	available_moves.clear()
 
 	print("Animal creation opened")
+	
 	load_owned_genes()
 	load_gene_buttons()
+	
 	show()
 
 
@@ -124,6 +134,36 @@ func _on_gene_selected(gene:GeneResource):
 	update_moves()
 
 
+func load_move_buttons():
+
+	for child in move_container.get_children():
+		child.queue_free()
+
+	for move in available_moves:
+
+		var button = MOVE_BUTTON.instantiate()
+
+		move_container.add_child(button)
+
+		button.setup(move)
+
+		button.move_selected.connect(_on_move_selected)
+
+func _on_move_selected(move:MoveResource):
+	
+	if selected_moves.has(move):
+		print("Already selected")
+		return
+
+	if selected_moves.size() >= MAX_MOVES:
+		print("Maximum moves selected")
+		return
+
+	selected_moves.append(move)
+
+	print("Selected move:", move.move_name)
+	
+	
 func update_moves():
 	available_moves.clear()
 
@@ -136,6 +176,8 @@ func update_moves():
 
 	for move in available_moves:
 		print(move.move_name)
+		
+	load_move_buttons()
 
 
 func close():

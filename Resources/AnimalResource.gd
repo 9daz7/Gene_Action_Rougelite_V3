@@ -27,9 +27,9 @@ class_name AnimalResource
 # Starting Moves
 # ---------------------------------------
 
-#@export var starter_moves:Array[MoveResource] = []
+@export var starter_moves:Array[MoveResource] = []
 
 # Every animal starts with these
-
-@export var basic_attack:MoveResource
-@export var protect:MoveResource
+#
+#@export var basic_attack:MoveResource
+#@export var protect:MoveResource

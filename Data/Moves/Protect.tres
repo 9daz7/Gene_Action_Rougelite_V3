@@ -1,9 +1,11 @@
 [gd_resource type="Resource" script_class="MoveResource" format=3 uid="uid://dssodq4lr1182"]
 
 [ext_resource type="Script" uid="uid://bnmm0xqkm6atb" path="res://Scripts/Moves/MoveResource.gd" id="1_btfc1"]
+[ext_resource type="Script" uid="uid://cedh0hgwqddn4" path="res://Resources/StatusEffect.gd" id="1_gfcda"]
 
 [resource]
 script = ExtResource("1_btfc1")
+effect_type = 1
 move_name = "Protect"
 power = -1
 priority = 2

@@ -33,7 +33,9 @@ func start_battle(player, enemies, battle_ui):
 	self.battle_ui = battle_ui
 
 	print("TurnManager received UI:", battle_ui)
-
+	
+	battle_ui.setup_moves(player)
+	
 	battle_ui.move_selected.connect(
 		_on_move_selected
 	)
@@ -76,6 +78,8 @@ func start_player_turn():
 	current_state = TurnState.PLAYER_TURN
 	
 	print("Player turn")
+	
+	player.reset_turn_state()
 	
 	player.process_status_effects()
 	
@@ -270,6 +274,7 @@ func end_turn():
 
 	trigger_turn_end_effects()
 
+	battle_ui.setup_moves(player)
 	start_player_turn()
 
 

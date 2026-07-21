@@ -175,7 +175,7 @@ func add_move(move: MoveResource):
 	if move == null:
 		return
 
-	gene_moves.append(move)
+	selected_moves.append(move)
 
 	print(
 		name,
@@ -429,15 +429,21 @@ func setup_basic_moves():
 	if animal_resource == null:
 		print("No animal resource")
 		return
+		
+	if not "starter_moves" in animal_resource:
+		print("Animal has no starter moves")
+		return
 
 	for move in animal_resource.starter_moves:
-		basic_moves.append(move)
 		
-		print(
-			name,
-			" learned basic move:",
-			move.move_name
-		)
+		if move:
+			basic_moves.append(move)
+		
+			print(
+				name,
+				" learned:",
+				move.move_name
+			)
 		
 	#gene_moves.clear()
 #

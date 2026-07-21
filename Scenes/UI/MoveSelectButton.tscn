@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://dprchs71dwr0x"]
+
+[ext_resource type="Script" uid="uid://dwhu7hkntht1e" path="res://Scenes/UI/MoveSelectButton.gd" id="1_ppx44"]
+
+[node name="MoveSelectButton" type="Button" unique_id=685974736]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ppx44")

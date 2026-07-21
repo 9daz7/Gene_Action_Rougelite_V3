@@ -26,13 +26,14 @@ func start_battle():
 
 func setup_enemy_moves():
 
-	gene_moves.clear()
+	selected_moves.clear()
 
 	var attack = MoveResource.new()
 
 	attack.move_name = "Attack"
 	attack.power = 0
 	attack.priority = 0
+	attack.effect_type = MoveResource.MoveEffectType.DAMAGE
 
 	add_move(attack)
 
@@ -43,7 +44,14 @@ func setup_enemy_moves():
 	
 	
 func choose_action(_player) -> MoveResource:
-	return gene_moves[0]
+	
+	var moves = get_battle_moves()
+	
+	if moves.is_empty():
+		print("Enemy has no moves!")
+		return null
+	
+	return moves[0]
 
 
 func get_drop_gene() -> GeneResource:

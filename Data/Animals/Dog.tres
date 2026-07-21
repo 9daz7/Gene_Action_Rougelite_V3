@@ -1,10 +1,10 @@
 [gd_resource type="Resource" script_class="AnimalResource" format=3 uid="uid://fwjrpbdggnv7"]
 
 [ext_resource type="Resource" uid="uid://cfsalnn48dv3f" path="res://Data/Moves/Bite.tres" id="1_any26"]
+[ext_resource type="Script" uid="uid://bnmm0xqkm6atb" path="res://Scripts/Moves/MoveResource.gd" id="2_2d8k5"]
 [ext_resource type="Script" uid="uid://dk82xrxkcf6r8" path="res://Resources/AnimalResource.gd" id="2_any26"]
 [ext_resource type="Resource" uid="uid://dssodq4lr1182" path="res://Data/Moves/Protect.tres" id="2_hs14y"]
 
 [resource]
 script = ExtResource("2_any26")
-basic_attack = ExtResource("1_any26")
-protect = ExtResource("2_hs14y")
+starter_moves = Array[ExtResource("2_2d8k5")]([ExtResource("1_any26"), ExtResource("2_hs14y")])

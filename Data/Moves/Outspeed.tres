@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="MoveResource" format=3 uid="uid://73ylas6rloet"]
+
+[ext_resource type="Script" uid="uid://cedh0hgwqddn4" path="res://Resources/StatusEffect.gd" id="1_am6l7"]
+[ext_resource type="Script" uid="uid://bnmm0xqkm6atb" path="res://Scripts/Moves/MoveResource.gd" id="2_oyrbi"]
+
+[resource]
+script = ExtResource("2_oyrbi")
+move_name = "Outspeed"
+priority = 4
+category = 1
+metadata/_custom_type_script = "uid://bnmm0xqkm6atb"
