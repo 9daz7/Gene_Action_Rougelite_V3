@@ -29,7 +29,19 @@ corner_radius_bottom_left = 7
 [node name="BattleUI" type="CanvasLayer" unique_id=1908710870]
 script = ExtResource("1_o21vf")
 
-[node name="PlayerHP" type="ProgressBar" parent="." unique_id=458044599]
+[node name="PlayerPanel" type="Panel" parent="." unique_id=1121659238]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="PlayerNameLabel" type="Label" parent="PlayerPanel" unique_id=1838283543]
+layout_mode = 0
+offset_left = 42.885
+offset_top = 792.09
+offset_right = 82.885025
+offset_bottom = 815.0901
+
+[node name="PlayerHP" type="ProgressBar" parent="PlayerPanel" unique_id=458044599]
+layout_mode = 1
 anchors_preset = -1
 offset_left = 25.0
 offset_top = 821.69
@@ -38,7 +50,24 @@ offset_bottom = 851.69
 theme_override_styles/fill = SubResource("StyleBoxFlat_2a143")
 script = ExtResource("2_31gad")
 
-[node name="EnemyHP" type="ProgressBar" parent="." unique_id=43262124]
+[node name="PlayerStatusLabel" type="Label" parent="PlayerPanel" unique_id=1521418484]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="EnemyPanel" type="Panel" parent="." unique_id=169306677]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="EnemyNameLabel" type="Label" parent="EnemyPanel" unique_id=1679866753]
+layout_mode = 0
+offset_left = 1570.355
+offset_top = 26.915
+offset_right = 1610.3549
+offset_bottom = 49.91501
+
+[node name="EnemyHP" type="ProgressBar" parent="EnemyPanel" unique_id=43262124]
+layout_mode = 1
 anchors_preset = -1
 offset_left = 1547.025
 offset_top = 59.36
@@ -46,6 +75,11 @@ offset_right = 1897.025
 offset_bottom = 89.35997
 theme_override_styles/fill = SubResource("StyleBoxFlat_xlvfx")
 script = ExtResource("3_tr5vc")
+
+[node name="EnemyStatusLabel" type="Label" parent="EnemyPanel" unique_id=1684866720]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
 
 [node name="MoveButtons" type="HBoxContainer" parent="." unique_id=270229014]
 anchors_preset = -1

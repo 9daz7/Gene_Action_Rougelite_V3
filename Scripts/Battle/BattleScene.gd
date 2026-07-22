@@ -4,8 +4,8 @@ extends Node2D
 @onready var enemy_container = $EnemyContainer
 @onready var battle_ui = $BattleUI
 
-@onready var player_hp = $BattleUI/PlayerHP
-@onready var enemy_hp = $BattleUI/EnemyHP
+@onready var player_hp = $BattleUI/PlayerPanel/PlayerHP
+@onready var enemy_hp = $BattleUI/EnemyPanel/EnemyHP
 
 
 func _ready():

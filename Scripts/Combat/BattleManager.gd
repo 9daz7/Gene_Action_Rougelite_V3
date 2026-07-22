@@ -225,6 +225,10 @@ func initialize_battle():
 		enemies
 	)
 
+	current_battle.battle_ui.setup_names(
+		player,
+		enemies[0]
+	)
 
 	turn_manager.start_battle(
 		player,

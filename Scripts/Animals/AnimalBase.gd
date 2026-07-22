@@ -75,38 +75,86 @@ var selected_moves:Array[MoveResource] = []
 # PASSIVES / STATUS EFFECTS
 # -------------------------------------------------------------------
 
+# Temporary battle stat modifiers
+var speed_modifier:int = 0
+var attack_modifier:int = 0
+var defense_modifier:int = 0
+var accuracy_modifier:int = 0
+var evasion_modifier:int = 0
+var armor_modifier:int = 0
+
 var passive_effects: Array = []
 var status_effects: Array = []
 
 
 func process_status_effects():
 	for effect in status_effects:
+		
 		match effect.type:
+			
 			StatusEffect.Type.POISON:
-				
-				print(
-					name,
-					" takes poison damage"
-				)
-
+				print(name," takes poison damage")
 				take_damage(effect.power)
 				
 			StatusEffect.Type.BLEED:
-
-				print(
-					name,
-					" bleeds"
-				)
-
+				print(name," bleeds")
+				take_damage(effect.power)
+				
+			StatusEffect.Type.BURN:
+				print(name," burns")
 				take_damage(effect.power)
 
 		effect.duration -= 1
 		
-	status_effects = status_effects.filter(
-		func(e):
-			return e.duration > 0
-	)
+	for effect in status_effects.duplicate():
+		if effect.duration <= 0:
+			remove_status_effect(effect)
 
+
+func apply_status_effect(effect:StatusEffect):
+
+	if effect == null:
+		return
+
+	effect.apply(self)
+
+	print(
+		name,
+		" received ",
+		effect.effect_name
+	)
+	
+	
+func remove_status_effect(effect:StatusEffect):
+
+	match effect.type:
+		StatusEffect.Type.SPEED_UP:
+			speed_modifier -= effect.power
+
+		StatusEffect.Type.SPEED_DOWN:
+			speed_modifier += effect.power
+
+		StatusEffect.Type.ATTACK_UP:
+			attack_modifier -= effect.power
+
+		StatusEffect.Type.ATTACK_DOWN:
+			attack_modifier += effect.power
+
+		StatusEffect.Type.DEFENSE_UP:
+			defense_modifier -= effect.power
+
+		StatusEffect.Type.DEFENSE_DOWN:
+			defense_modifier += effect.power
+
+	status_effects.erase(effect)
+
+	print(
+		effect.effect_name,
+		" expired on ",
+		name
+	)
+	
+	
 # -------------------------------------------------------------------
 # GENE MANAGEMENT
 # -------------------------------------------------------------------
@@ -217,7 +265,7 @@ func use_move(index: int,target):
 
 func get_attack() -> int:
 
-	var value = base_attack
+	var value = base_attack + attack_modifier
 
 	for slot in gene_slots:
 		for gene in gene_slots[slot]:
@@ -239,7 +287,7 @@ func get_max_hp() -> int:
 
 func get_speed() -> int:
 
-	var value = base_speed
+	var value = base_speed + speed_modifier
 
 	for slot in gene_slots:
 		for gene in gene_slots[slot]:
@@ -289,7 +337,7 @@ func calculate_hit_chance(target, move_accuracy: int) -> int:
 	
 	
 func get_armor() -> int:
-	var value = base_armor
+	var value = base_armor + defense_modifier
 	
 	for slot in gene_slots:
 		for gene in gene_slots[slot]:
@@ -372,7 +420,6 @@ func take_damage(amount: int):
 func reset_turn_state():
 
 	# temporary effects expire here
-
 	is_protecting = false
 
 

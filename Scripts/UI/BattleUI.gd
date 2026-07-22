@@ -9,6 +9,12 @@ signal move_selected(move_index)
 @onready var move3_button = $MoveButtons/Move3Button
 @onready var move4_button = $MoveButtons/Move4Button
 
+@onready var player_name_label = $PlayerPanel/PlayerNameLabel
+@onready var enemy_name_label = $EnemyPanel/EnemyNameLabel
+
+@onready var player_status_label = $PlayerPanel/PlayerStatusLabel
+@onready var enemy_status_label = $EnemyPanel/EnemyStatusLabel
+
 var move_buttons:Array[Button]
 
 
@@ -44,6 +50,35 @@ func _ready():
 
 	move3_button.disabled = true
 	move4_button.disabled = true
+	
+
+func setup_names(player, enemy):
+
+	player_name_label.text = player.name
+	
+	enemy_name_label.text = enemy.name
+	
+	
+func update_status_labels(player:AnimalBase, enemy:AnimalBase):
+
+	player_status_label.text = get_status_text(player)
+	
+	if enemy != null:
+		enemy_status_label.text = get_status_text(enemy)
+	else:
+		enemy_status_label.text = ""
+	
+	
+func get_status_text(animal:AnimalBase) -> String:
+
+	var text := ""
+
+	for effect in animal.status_effects:
+
+		text += effect.effect_name
+		text += " (" + str(effect.duration) + ")\n"
+
+	return text
 	
 	
 func setup_moves(player):

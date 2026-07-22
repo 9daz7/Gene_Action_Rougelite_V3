@@ -5,7 +5,10 @@
 
 [resource]
 script = ExtResource("2_oyrbi")
+effect_type = 2
 move_name = "Outspeed"
-priority = 4
+power = 5
+description = "The user thinks about being faster."
 category = 1
+effect_target = 0
 metadata/_custom_type_script = "uid://bnmm0xqkm6atb"

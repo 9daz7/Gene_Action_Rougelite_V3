@@ -46,6 +46,8 @@ func start_battle(player, enemies, battle_ui):
 	)
 
 	print("Turn system started")
+	
+	battle_ui.update_status_labels(player, get_active_enemy())
 
 	start_player_turn()
 
@@ -82,6 +84,12 @@ func start_player_turn():
 	player.reset_turn_state()
 	
 	player.process_status_effects()
+	
+	for enemy in enemies:
+		if enemy.hp > 0:
+			enemy.process_status_effects()
+	
+	battle_ui.update_status_labels(player, get_active_enemy())
 	
 	# allow buttons
 	battle_ui.enable_moves()
@@ -230,6 +238,8 @@ func resolve_group_turn(player_move, target_enemy, enemy_moves):
 		player,
 		target_enemy
 	)
+	
+	battle_ui.update_status_labels(player, get_active_enemy())
 
 	check_battle_end()
 
@@ -252,6 +262,8 @@ func resolve_group_turn(player_move, target_enemy, enemy_moves):
 			enemy,
 			player
 		)
+		
+		battle_ui.update_status_labels(player, get_active_enemy())
 
 		check_battle_end()
 
