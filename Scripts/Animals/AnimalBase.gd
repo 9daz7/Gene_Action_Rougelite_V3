@@ -293,6 +293,12 @@ func get_speed() -> int:
 		for gene in gene_slots[slot]:
 			value += gene.speed_bonus
 
+	print(
+		name,
+		" current speed:",
+		value
+	)
+	
 	return value
 
 

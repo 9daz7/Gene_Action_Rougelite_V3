@@ -1,14 +1,16 @@
 [gd_resource type="Resource" script_class="MoveResource" format=3 uid="uid://73ylas6rloet"]
 
 [ext_resource type="Script" uid="uid://cedh0hgwqddn4" path="res://Resources/StatusEffect.gd" id="1_am6l7"]
+[ext_resource type="Resource" uid="uid://bw127iwrms8o0" path="res://Resources/StatusEffects/SpeedUp.tres" id="2_eocsn"]
 [ext_resource type="Script" uid="uid://bnmm0xqkm6atb" path="res://Scripts/Moves/MoveResource.gd" id="2_oyrbi"]
 
 [resource]
 script = ExtResource("2_oyrbi")
 effect_type = 2
 move_name = "Outspeed"
-power = 5
 description = "The user thinks about being faster."
 category = 1
+effects = Array[ExtResource("1_am6l7")]([ExtResource("2_eocsn")])
 effect_target = 0
+effect_target_self = true
 metadata/_custom_type_script = "uid://bnmm0xqkm6atb"

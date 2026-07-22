@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="StatusEffect" format=3 uid="uid://bw127iwrms8o0"]
+
+[ext_resource type="Script" uid="uid://cedh0hgwqddn4" path="res://Resources/StatusEffect.gd" id="1_8mvnv"]
+
+[resource]
+script = ExtResource("1_8mvnv")
+effect_name = "Speed boost"
+type = 3
