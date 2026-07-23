@@ -311,6 +311,10 @@ func _on_turn_battle_lost():
 func end_battle():
 	print("Cleaning battle")
 
+	# Reset turn manager references
+	if turn_manager:
+		turn_manager.reset()
+	
 	# Remove battle scene
 	if is_instance_valid(current_battle):
 		current_battle.queue_free()
@@ -323,13 +327,12 @@ func end_battle():
 	for enemy in enemies:
 		if is_instance_valid(enemy):
 			enemy.queue_free()
-
+	
 	enemies.clear()
 	
 	current_battle = null
 	player = null
 	
-
 	print("Battle cleanup complete")
 	
 	

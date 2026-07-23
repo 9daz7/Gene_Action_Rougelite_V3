@@ -198,8 +198,8 @@ func resolve_turn(
 
 	# Player action
 	print(
-		"Player attacks:",
-		target_enemy
+		"Player uses:",
+		player_move.move_name
 	)
 
 	player_move.execute(
@@ -307,3 +307,14 @@ func check_battle_end():
 			battle_ui.hide()
 			
 			
+# ==================================================
+# Cleanup
+# ==================================================
+
+func reset():
+
+	current_state = TurnState.NONE
+
+	player = null
+	enemies.clear()
+	battle_ui = null
