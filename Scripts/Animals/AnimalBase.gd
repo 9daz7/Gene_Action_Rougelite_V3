@@ -1,13 +1,35 @@
 extends Node2D
 class_name AnimalBase
 
+# ==================================================
+# Signals
+# ==================================================
 
-signal hp_changed(new_hp)
+
+signal hp_changed(current_hp)
+signal animal_died
 
 
-var run_manager
+# ==================================================
+# References
+# ==================================================
 
-var animal_resource : AnimalResource
+
+var run_manager: RunManager
+var animal_resource: AnimalResource
+
+
+# ==================================================
+# Initialization
+# ==================================================
+
+
+func initialize(resource: AnimalResource):
+	
+	animal_resource = resource
+	
+	setup_basic_moves()
+
 
 # -------------------------------------------------------------------
 # BASE STATS
@@ -304,7 +326,7 @@ func get_speed() -> int:
 
 func get_accuracy() -> int:
 	
-	var value = 0
+	var value = base_accuracy + accuracy_modifier
 	
 	for slot in gene_slots:
 		for gene in gene_slots[slot]:
@@ -375,11 +397,36 @@ func setup_player_hp(manager):
 		manager.max_hp
 	)
 	
+	
+func modify_attack(amount:int):
+	attack_modifier += amount
+
+
+func modify_speed(amount:int):
+	speed_modifier += amount
+
+
+func modify_defense(amount:int):
+	defense_modifier += amount
+
+
+func modify_accuracy(amount:int):
+	accuracy_modifier += amount
+
+
+func modify_evasion(amount:int):
+	evasion_modifier += amount
+	
+	
 # -------------------------------------------------------------------
 # DAMAGE
 # -------------------------------------------------------------------
 
 
+func get_current_hp() -> int:
+	return hp
+	
+	
 func take_damage(amount: int):
 	if is_protecting:
 
@@ -410,7 +457,38 @@ func take_damage(amount: int):
 	)
 
 	hp_changed.emit(hp)
+	
+	if hp <= 0:
+		die()
 
+
+func die():
+	hp = 0
+	
+	animal_died.emit()
+
+	print(
+		name,
+		" has been defeated"
+	)
+	
+
+func is_alive() -> bool:
+	return hp > 0
+	
+	
+func heal(amount:int):
+	hp += amount
+
+	hp = clamp(
+		hp,
+		0,
+		get_max_hp()
+	)
+
+	hp_changed.emit(hp)
+	
+	
 	#if self is PlayerAnimal:
 #
 		#var run_manager = get_node("../../RunManager")
