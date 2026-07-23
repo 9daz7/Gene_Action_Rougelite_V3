@@ -626,7 +626,28 @@ func setup_basic_moves():
 		#" learned basic moves"
 	#)
 
+# ==================================================
+# Resource Loading
+# ==================================================
 
+
+func load_animal_stats(resource):
+	if resource == null:
+		print("No animal resource")
+		return
+
+	base_hp = resource.base_hp
+	base_attack = resource.base_attack
+	base_speed = resource.base_speed
+
+
+func load_genes(genes:Array):
+	for gene in genes:
+
+		if gene:
+			add_gene(gene)
+			
+			
 # -------------------------------------------------------------------
 # LEGENDARY MUTATION PLACEHOLDER
 # -------------------------------------------------------------------
