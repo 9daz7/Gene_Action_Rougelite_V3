@@ -13,6 +13,10 @@ func _ready():
 	print("EnemyContainer =", enemy_container)
 	print("BattleUI =", battle_ui)
 
+	print("Enemy children:")
+
+	for child in enemy_container.get_children():
+		print("Enemy child", child.name)
 
 # -------------------------------------------------------------------
 # HP UI
@@ -50,6 +54,7 @@ func spawn_player(scene):
 
 
 func spawn_enemy(scene, spawn_index:int = 0):
+	
 	print("Spawning enemy")
 
 	if enemy_container == null:
@@ -60,16 +65,35 @@ func spawn_enemy(scene, spawn_index:int = 0):
 	
 	enemy_container.add_child(enemy)
 
-	var spawn_point #= enemy_container.get_node("EnemySpawn1")
+	var spawn_point = null #= enemy_container.get_node("EnemySpawn1")
 	
 	match spawn_index:
 		0:
-			spawn_point = enemy_container.get_node("EnemySpawn1")
+			spawn_point = enemy_container.get_node_or_null(
+				"EnemySpawn1"
+			)
 		1:
-			spawn_point = enemy_container.get_node("EnemySpawn2")
+			spawn_point = enemy_container.get_node_or_null(
+				"EnemySpawn2"
+			)
+		2:
+			spawn_point = enemy_container.get_node_or_null(
+				"EnemySpawn3"
+			)
+			
+	if spawn_point == null:
+		push_error(
+			"Enemy spawn point missing for index: ",
+			spawn_index
+		)
+		enemy.queue_free()
+		return null
 		
 	enemy.position = spawn_point.position
 
-	print("Enemy created:", enemy)
+	print(
+		"Enemy created:",
+		enemy
+	)
 
 	return enemy

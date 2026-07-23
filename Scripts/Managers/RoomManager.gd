@@ -173,7 +173,7 @@ func open_reward(rewards):
 func _on_reward_finished(reward):
 
 	if reward:
-		print("Chosen:", reward.gene_name)
+		print("Chosen:", reward)
 	else:
 		print("Skipped reward")
 	
@@ -188,17 +188,24 @@ func _on_reward_finished(reward):
 
 	get_tree().current_scene.return_to_map()
 
+
 func apply_reward(reward):
 	
 	if reward == null:
 		print("No reward selected")
 		return
 		
-	print("Applying reward:", reward.gene_name)
+	print(
+		"Applying reward:",
+		reward
+	)
 
 	if reward is GeneResource:
-		run_manager.collect_gene(reward)
+		run_manager.unlock_gene(reward)
 		save_manager.save_game(run_manager)
+		
+	else:
+		print("Unknown reward type")
 		
 	# Temporary
 	# Actual reward logic will go here later

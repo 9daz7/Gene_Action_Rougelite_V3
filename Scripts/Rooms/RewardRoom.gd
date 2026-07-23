@@ -57,9 +57,16 @@ func create_rewards(rewards):
 	
 		
 func select_reward(reward):
+	
+	if selected_reward != null:
+		return
+		
 	selected_reward = reward
 	
 	print("Selected reward:", reward.gene_name)
+	
+	for button in reward_container.get_children():
+		button.disabled = true
 	
 	continue_button.disabled = false
 	

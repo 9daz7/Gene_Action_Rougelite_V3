@@ -239,5 +239,28 @@ func disable_operations():
 	upgrade_mutagen_button.disabled = true
 	
 	
+func _exit_tree():
+
+	if connected_to_battle:
+
+		if battle_manager.battle_won.is_connected(
+			_on_experiment_won
+		):
+			battle_manager.battle_won.disconnect(
+				_on_experiment_won)
+				
+				
 func close():
+	
+	if connected_to_battle:
+		
+		if battle_manager.battle_won.is_connected(
+			_on_experiment_won
+		):
+			battle_manager.battle_won.disconnect(
+				_on_experiment_won
+			)
+
+		connected_to_battle = false
+		
 	hide()

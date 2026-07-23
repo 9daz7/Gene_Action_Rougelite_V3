@@ -252,6 +252,13 @@ func resolve_turn(
 # ==================================================
 
 func end_turn():
+	
+	if current_state == TurnState.BATTLE_OVER:
+		return
+
+	if battle_ui == null:
+		return
+
 
 	trigger_turn_end_effects()
 
@@ -312,9 +319,11 @@ func check_battle_end():
 # ==================================================
 
 func reset():
-
+	
 	current_state = TurnState.NONE
 
 	player = null
 	enemies.clear()
 	battle_ui = null
+	
+	print("TurnManager reset")

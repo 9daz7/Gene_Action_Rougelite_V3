@@ -120,6 +120,9 @@ func start_critical_experiment():
 
 func start_battle(room_type = RoomData.RoomType.ENEMY):
 	
+	if room_type != RoomData.RoomType.ELITE:
+		critical_experiment = false
+		
 	if spawner == null:
 		push_error("BattleSpawner missing")
 		return
@@ -179,16 +182,9 @@ func start_group_battle():
 
 	player = spawner.spawn_player()
 
-	var resources:Array = []
+	var resources:Array[EnemyResource] = []
 
 	for i in range(2):
-		
-		var enemy = get_enemy(
-			RoomData.RoomType.GROUP_ENEMY
-		)
-
-		if enemy:
-			resources.append(enemy)
 		
 		resources.append(
 			get_enemy(
@@ -256,6 +252,11 @@ func initialize_battle():
 		player.start_battle()
 
 	for enemy in enemies:
+		
+		if enemy == null:
+			push_error("Enemy list contains null enemy")
+			continue
+		
 		if enemy.has_method("start_battle"):
 			enemy.start_battle()
 
@@ -294,6 +295,10 @@ func _on_turn_battle_won(enemy):
 	
 	battle_won.emit(enemy)
 	
+	#if critical_experiment:
+		#print("Resetting critical experiment flag")
+		#critical_experiment = false
+	
 	await get_tree().process_frame
 	
 	end_battle()
@@ -310,6 +315,8 @@ func _on_turn_battle_lost():
 	
 func end_battle():
 	print("Cleaning battle")
+	
+	critical_experiment = false
 
 	# Reset turn manager references
 	if turn_manager:

@@ -21,4 +21,6 @@ position = Vector2(563, 256)
 [node name="EnemySpawn2" type="Marker2D" parent="EnemyContainer" unique_id=955968079]
 position = Vector2(1301, 256)
 
+[node name="EnemySpawn3" type="Marker2D" parent="EnemyContainer" unique_id=1411174731]
+
 [node name="BattleUI" parent="." unique_id=1277132647 instance=ExtResource("2_jaxsk")]

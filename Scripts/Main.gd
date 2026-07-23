@@ -97,7 +97,7 @@ func _on_build_confirmed(build):
 		build.animal_name
 	)
 
-	run_manager.save_animal_build(build)
+	run_manager.set_animal_build(build)
 	
 
 func start_run():
@@ -143,15 +143,20 @@ func _on_battle_won(enemy):
 	print("Critical flag:", battle_manager.critical_experiment)
 	print("Battle type:", battle_manager.current_battle_type)
 	#print("Battle won against:", enemy.enemy_data.enemy_name)
+	
+	# boss victory
+	if battle_manager.current_battle_type == RoomData.RoomType.BOSS:
+		print("BOSS DEFEATED")
+		await get_tree().process_frame
+		open_victory_screen()
+		return
+	
+	# critical experiment
 	if battle_manager.critical_experiment:
 		print("Skipping rewards: critical experiment")
 		return
-	
-	if battle_manager.current_battle_type == RoomData.RoomType.BOSS:
-		print("Skipping normal rewards for experiment")
-		return
 		
-	# temp
+	# normal rewards
 	if enemy == null:
 		print("No enemy supplied for reward")
 		return
@@ -174,31 +179,53 @@ func _on_battle_won(enemy):
 	print("Gold:", rewards.gold)
 	print("Resources:", rewards.resources)
 
-	if rewards.gene_choices.size() > 0:
-		print("Gene choices:")
-
-		for gene in rewards.gene_choices:
-			print(gene.gene_name)
-
-	print(
-		"Mutagen choices:",
-		rewards.mutagen_choices
-	)
+	#if rewards.gene_choices.size() > 0:
+		#print("Gene choices:")
+#
+		#for gene in rewards.gene_choices:
+			#print(gene.gene_name)
+#
+	#print(
+		#"Mutagen choices:",
+		#rewards.mutagen_choices
+	#)
 
 	room_manager.open_reward(rewards)
 	
 
+func open_victory_screen():
+
+	print("===================")
+	print("GAME COMPLETE")
+	print("===================")
+
+	await get_tree().create_timer(3.0).timeout
+
+	current_room = null
+	
+	run_manager.reset_run()
+	
+	map_ui.hide()
+	
+	open_lab_hub()
+	
 
 func _on_battle_lost():
 	print("Run failed")
+	
+	current_room = null
 
-	run_manager.player_hp = run_manager.max_hp
+	run_manager.reset_run()
+	
+	map_ui.hide()
 	
 	open_lab_hub()
 
 
 func return_to_map():
 	print("Returning to map")
+	
+	lab_hub.hide()
 
 	map_ui.display_map(
 		map_manager.current_map

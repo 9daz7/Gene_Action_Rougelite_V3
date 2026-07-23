@@ -136,7 +136,7 @@ func apply_item(item:ShopItem):
 
 
 		ShopItem.ItemType.GENE:
-			run_manager.store_gene(item.gene)
+			run_manager.unlock_gene(item.gene)
 			
 
 		ShopItem.ItemType.MUTAGEN:

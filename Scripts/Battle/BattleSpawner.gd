@@ -71,10 +71,12 @@ func spawn_player() -> PlayerAnimal:
 func spawn_enemy(
 	enemy_resource: EnemyResource,
 	index:int
-	) -> EnemyAnimal:
+) -> EnemyAnimal:
 	
 	if enemy_resource == null:
-		push_error("Cannot spawn enemy. Resource missing.")
+		push_error(
+			"Cannot spawn enemy. Resource missing."
+		)
 		return null
 	
 	var enemy = current_battle.spawn_enemy(
@@ -82,7 +84,11 @@ func spawn_enemy(
 		index
 	)
 	
-	enemy.position = get_enemy_position(index)
+	if enemy == null:
+		push_error(
+			"BattleScene failed to spawn enemy"
+		)
+		return null
 	
 	enemy.enemy_data = enemy_resource
 	
@@ -91,9 +97,14 @@ func spawn_enemy(
 	
 func spawn_enemies(resources:Array):
 
-	var enemies:Array = []
+	var enemies:Array[EnemyAnimal] = []
 	
-	for i in range(resources.size()):
+	var max_enemies = min(
+		resources.size(),
+		3
+	)
+	
+	for i in range(max_enemies):
 		
 		var enemy = spawn_enemy(
 			resources[i],

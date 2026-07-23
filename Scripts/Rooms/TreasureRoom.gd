@@ -40,9 +40,16 @@ func open():
 
 func choose_reward(reward):
 	
+	if selected_reward != null:
+		return
+	
 	selected_reward = reward
 	
 	print("Selected reward:", reward)
+	
+	for button in reward_container.get_children():
+		button.disabled = true
+
 	
 	continue_button.disabled = false
 	
