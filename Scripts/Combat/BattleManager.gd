@@ -57,8 +57,8 @@ var spawner:BattleSpawner
 # ==================================================
 
 
-var current_battle = null
-var player = null
+var current_battle: Node = null
+var player: CharacterBody2D = null
 var enemies: Array = []
 
 var current_battle_type = null
@@ -79,13 +79,19 @@ func initialize(
 	
 	if turn_manager:
 		
-		turn_manager.battle_won.connect(
+		if not turn_manager.battle_won.is_connected(
 			_on_turn_battle_won
-		)
-
-		turn_manager.battle_lost.connect(
+		):
+			turn_manager.battle_won.connect(
+				_on_turn_battle_won
+			)
+		
+		if not turn_manager.battle_lost.is_connected(
 			_on_turn_battle_lost
-		)
+		):
+			turn_manager.battle_lost.connect(
+				_on_turn_battle_lost
+			)
 		
 	else:
 		
@@ -144,6 +150,10 @@ func start_battle(room_type = RoomData.RoomType.ENEMY):
 		
 func create_battle_scene():
 	
+	if battle_root == null:
+		push_error("Battle root missing")
+		return
+		
 	if is_instance_valid(current_battle):
 		current_battle.queue_free()
 		
@@ -172,7 +182,14 @@ func start_group_battle():
 	var resources:Array = []
 
 	for i in range(2):
+		
+		var enemy = get_enemy(
+			RoomData.RoomType.GROUP_ENEMY
+		)
 
+		if enemy:
+			resources.append(enemy)
+		
 		resources.append(
 			get_enemy(
 				RoomData.RoomType.GROUP_ENEMY
@@ -218,19 +235,6 @@ func get_enemy(room_type) -> EnemyResource:
 	choices.shuffle()
 
 	return choices[0]
-	
-
-#func get_random_elite() -> EnemyResource:
-#
-	#var pool = ELITE_POOL.duplicate()
-	#
-	#if pool.is_empty():
-		#print("ERROR: Elite pool empty")
-		#return null
-#
-	#pool.shuffle()
-#
-	#return pool[0]
 
 
 func initialize_battle():
