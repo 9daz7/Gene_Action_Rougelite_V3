@@ -280,6 +280,32 @@ func use_move(index: int,target):
 	)
 
 
+func load_build(build: AnimalBuildResource):
+	if build == null:
+		print("No build")
+		return
+
+	name = build.animal_name
+
+	animal_resource = build.animal
+
+	if animal_resource:
+		base_hp = animal_resource.base_hp
+		base_attack = animal_resource.base_attack
+		base_speed = animal_resource.base_speed
+
+	equipped_genes.clear()
+	learned_moves.clear()
+
+	setup_basic_moves()
+
+	for gene in build.genes:
+		add_gene(gene)
+
+	for move in build.moves:
+		add_move(move)
+
+
 # -------------------------------------------------------------------
 # STATS
 # -------------------------------------------------------------------
