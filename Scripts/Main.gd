@@ -3,8 +3,14 @@ extends Node
 
 @onready var managers = $Managers
 
-@onready var battle_manager = $Managers/BattleManager
-@onready var run_manager = $Managers/RunManager
+@onready var battle_manager: BattleManager = $Managers/BattleManager
+@onready var turn_manager: TurnManager = $Managers/TurnManager
+@onready var run_manager: RunManager = $Managers/RunManager
+
+@onready var battle_root: Node = $World/BattleRoot
+
+#@onready var battle_manager = $Managers/BattleManager
+#@onready var run_manager = $Managers/RunManager
 @onready var map_manager = $Managers/MapManager
 @onready var ui_manager = $Managers/UIManager
 @onready var gene_database = $Managers/GeneDatabase
@@ -22,6 +28,12 @@ var current_room: RoomData = null
 
 func _ready():
 	print("THIS IS THE CURRENT MAIN SCRIPT")
+
+	battle_manager.initialize(
+	run_manager,
+	turn_manager,
+	battle_root
+)
 
 	gene_database.load_genes()
 	

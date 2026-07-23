@@ -27,7 +27,7 @@ func setup_enemy_moves():
 
 	selected_moves.clear()
 
-	var attack = MoveResource.new()
+	var attack := MoveResource.new()
 
 	attack.move_name = "Attack"
 	attack.power = 0
