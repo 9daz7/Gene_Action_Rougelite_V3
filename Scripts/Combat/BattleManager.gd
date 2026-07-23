@@ -39,8 +39,6 @@ const BOSS_POOL = [
 
 
 const BATTLE_SCENE = preload("res://Scenes/Battle/BattleScene.tscn")
-const PLAYER_SCENE = preload("res://Scenes/Animals/PlayerAnimal.tscn")
-const ENEMY_SCENE = preload("res://Scenes/Animals/EnemyAnimal.tscn")
 
 
 # ==================================================
@@ -51,6 +49,7 @@ const ENEMY_SCENE = preload("res://Scenes/Animals/EnemyAnimal.tscn")
 var turn_manager: TurnManager
 var run_manager: RunManager
 var battle_root: Node
+var spawner:BattleSpawner
 
 
 # ==================================================
@@ -69,12 +68,14 @@ var critical_experiment := false
 func initialize(
 	manager: RunManager,
 	turns: TurnManager,
-	root: Node
+	root: Node,
+	spawn: BattleSpawner
 ):
 
 	run_manager = manager
 	turn_manager = turns
 	battle_root = root
+	spawner = spawn
 	
 	if turn_manager:
 		
@@ -113,58 +114,80 @@ func start_critical_experiment():
 
 func start_battle(room_type = RoomData.RoomType.ENEMY):
 	
+	if spawner == null:
+		push_error("BattleSpawner missing")
+		return
+		
 	current_battle_type = room_type
 	
 	enemies.clear()
 
-	create_battle_scene()
+	await create_battle_scene()
 
-	spawn_player()
+	player = spawner.spawn_player()
 
-	spawn_enemy(room_type)
+	var enemy_resource = get_enemy(room_type)
+	
+	if enemy_resource == null:
+		push_error("No enemy resource selected")
+		return
+
+	var enemy = spawner.spawn_enemy(
+		enemy_resource,
+		0
+	)
+
+	enemies.append(enemy)
 	
 	initialize_battle()
 	
 		
 func create_battle_scene():
-
+	
+	if is_instance_valid(current_battle):
+		current_battle.queue_free()
+		
 	current_battle = BATTLE_SCENE.instantiate()
 
 	battle_root.add_child(current_battle)
 
 	await get_tree().process_frame
-		
-
-func spawn_player():
-
-	player = current_battle.spawn_player(
-		PLAYER_SCENE
-	)
-
-	var build = run_manager.current_animal_build
-
-	if build:
-		player.load_build(build)
-
-	player.setup_player_hp(
+	
+	spawner.initialize(
+		current_battle,
 		run_manager
 	)
+
+#func spawn_player():
+#
+	#player = current_battle.spawn_player(
+		#PLAYER_SCENE
+	#)
+#
+	#var build = run_manager.current_animal_build
+#
+	#if build:
+		#player.load_build(build)
+#
+	#player.setup_player_hp(
+		#run_manager
+	#)
 	
 
-func spawn_enemy(room_type):
-
-	var enemy = current_battle.spawn_enemy(
-		ENEMY_SCENE,
-		0
-	)
-
-	enemy.enemy_data = get_enemy(room_type)
-	
-	if enemy.enemy_data == null:
-		push_error("No enemy resource found")
-		return
-
-	enemies.append(enemy)
+#func spawn_enemy(room_type):
+#
+	#var enemy = current_battle.spawn_enemy(
+		#ENEMY_SCENE,
+		#0
+	#)
+#
+	#enemy.enemy_data = get_enemy(room_type)
+	#
+	#if enemy.enemy_data == null:
+		#push_error("No enemy resource found")
+		#return
+#
+	#enemies.append(enemy)
 	
 		
 func start_group_battle():
@@ -173,29 +196,41 @@ func start_group_battle():
 
 	enemies.clear()
 
-	create_battle_scene()
+	await create_battle_scene()
 
-	spawn_player()
+	player = spawner.spawn_player()
 
-	spawn_multiple_enemies(2)
+	var resources:Array = []
+
+	for i in range(2):
+
+		resources.append(
+			get_enemy(
+				RoomData.RoomType.GROUP_ENEMY
+			)
+		)
+
+	enemies = spawner.spawn_enemies(
+		resources
+	)
 
 	initialize_battle()
 	
 
-func spawn_multiple_enemies(amount:int):
-
-	for i in range(amount):
-
-		var enemy = current_battle.spawn_enemy(
-			ENEMY_SCENE,
-			i
-		)
-
-		enemy.enemy_data = get_enemy(
-			RoomData.RoomType.GROUP_ENEMY
-		)
-
-		enemies.append(enemy)
+#func spawn_multiple_enemies(amount:int):
+#
+	#for i in range(amount):
+#
+		#var enemy = current_battle.spawn_enemy(
+			#ENEMY_SCENE,
+			#i
+		#)
+#
+		#enemy.enemy_data = get_enemy(
+			#RoomData.RoomType.GROUP_ENEMY
+		#)
+#
+		#enemies.append(enemy)
 		
 		
 # ==================================================
@@ -232,17 +267,17 @@ func get_enemy(room_type) -> EnemyResource:
 	return choices[0]
 	
 
-func get_random_elite() -> EnemyResource:
-
-	var pool = ELITE_POOL.duplicate()
-	
-	if pool.is_empty():
-		print("ERROR: Elite pool empty")
-		return null
-
-	pool.shuffle()
-
-	return pool[0]
+#func get_random_elite() -> EnemyResource:
+#
+	#var pool = ELITE_POOL.duplicate()
+	#
+	#if pool.is_empty():
+		#print("ERROR: Elite pool empty")
+		#return null
+#
+	#pool.shuffle()
+#
+	#return pool[0]
 
 
 func initialize_battle():
@@ -250,6 +285,10 @@ func initialize_battle():
 
 	if player == null:
 		push_error("Battle initialized without player")
+		return
+		
+	if current_battle == null:
+		push_error("Battle initialized without scene")
 		return
 
 	if enemies.is_empty():

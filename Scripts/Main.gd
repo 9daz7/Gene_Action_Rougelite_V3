@@ -6,6 +6,7 @@ extends Node
 @onready var battle_manager: BattleManager = $Managers/BattleManager
 @onready var turn_manager: TurnManager = $Managers/TurnManager
 @onready var run_manager: RunManager = $Managers/RunManager
+@onready var battle_spawner = $Managers/BattleSpawner
 
 @onready var battle_root: Node = $World/BattleRoot
 
@@ -32,7 +33,8 @@ func _ready():
 	battle_manager.initialize(
 	run_manager,
 	turn_manager,
-	battle_root
+	battle_root,
+	battle_spawner
 )
 
 	gene_database.load_genes()
