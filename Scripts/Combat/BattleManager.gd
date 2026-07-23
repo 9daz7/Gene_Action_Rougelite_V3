@@ -106,6 +106,11 @@ func start_critical_experiment():
 	start_battle(RoomData.RoomType.ELITE) # elite until criticalexperiment.tres is ready
 	
 	
+# ==================================================
+# Battle Creation
+# ==================================================
+
+
 func start_battle(room_type = RoomData.RoomType.ENEMY):
 	
 	current_battle_type = room_type
@@ -193,6 +198,11 @@ func spawn_multiple_enemies(amount:int):
 		enemies.append(enemy)
 		
 		
+# ==================================================
+# Enemy Selection
+# ==================================================
+
+
 func get_enemy(room_type) -> EnemyResource:
 
 	var pool = []
@@ -238,6 +248,14 @@ func get_random_elite() -> EnemyResource:
 func initialize_battle():
 	print("Battle initialized")
 
+	if player == null:
+		push_error("Battle initialized without player")
+		return
+
+	if enemies.is_empty():
+		push_error("Battle initialized without enemies")
+		return
+		
 	if player.has_method("start_battle"):
 		player.start_battle()
 
@@ -261,6 +279,11 @@ func initialize_battle():
 		enemies,
 		current_battle.battle_ui
 	)
+
+
+# ==================================================
+# Battle Results
+# ==================================================
 
 
 func _on_turn_battle_won(enemy):
