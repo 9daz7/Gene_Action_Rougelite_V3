@@ -2,8 +2,18 @@ extends Node
 class_name TurnManager
 
 
+# ==================================================
+# Signals
+# ==================================================
+
+
 signal battle_won(enemy)
 signal battle_lost
+
+
+# ==================================================
+# Enums
+# ==================================================
 
 
 enum TurnState {
@@ -14,68 +24,81 @@ enum TurnState {
 }
 
 
+# ==================================================
+# Member Variables
+# ==================================================
+
+
 var current_state := TurnState.NONE
 
-var battle_ui = null
-var player = null
-var enemies: Array = []
+var battle_ui: BattleUI
+var player: PlayerAnimal
+var enemies:Array[EnemyAnimal] = []
 
 
-# -------------------------------------------------------------------
-# Battle setup
-# -------------------------------------------------------------------
+# ==================================================
+# Initialization
+# ==================================================
 
-func start_battle(player, enemies, battle_ui):
+
+func initialize(
+	player_ref:PlayerAnimal,
+	enemy_refs:Array[EnemyAnimal],
+	ui:BattleUI
+):
+	
+	player = player_ref
+	enemies = enemy_refs
+	battle_ui = ui
+	
+	_connect_ui()
+		
+	start_battle()
+	
+	
+# ==================================================
+# Battle Setup
+# ==================================================
+
+func start_battle():
+	
 	current_state = TurnState.NONE
-
-	self.player = player
-	self.enemies = enemies
-	self.battle_ui = battle_ui
-
-	print("TurnManager received UI:", battle_ui)
-	
-	battle_ui.setup_moves(player)
-	
-	battle_ui.move_selected.connect(
-		_on_move_selected
-	)
-
-	print(
-		"Signal connections:",
-		battle_ui.move_selected.get_connections()
-	)
 
 	print("Turn system started")
 	
-	battle_ui.update_status_labels(player, get_active_enemy())
-
+	battle_ui.setup_moves(player)
+	
+	battle_ui.update_status_labels(
+		player,
+		get_active_enemy()
+	)
+	
 	start_player_turn()
 
+	
+func _connect_ui():
 
-# func start_battle(player, enemies, battle_ui):
-#
-# 	self.player = player
-# 	self.enemies = enemies
-# 	self.battle_ui = battle_ui
-#
-#
-# 	battle_ui.move_selected.connect(
-# 		_on_move_selected
-# 	)
-#
-#
-# 	print("Turn system started")
-#
-# 	start_player_turn()
+	if battle_ui == null:
+		push_error("TurnManager missing BattleUI")
+		return
+
+	if not battle_ui.move_selected.is_connected(
+		_on_move_selected
+	):
+
+		battle_ui.move_selected.connect(
+			_on_move_selected
+		)
 
 
-# -------------------------------------------------------------------
-# Player turn
-# -------------------------------------------------------------------
+# ==================================================
+# Player Turn
+# ==================================================
 
 func start_player_turn():
-	#if current_state == TurnState.BATTLE_OVER:
-		#return
+	
+	if current_state == TurnState.BATTLE_OVER:
+		return
 
 	current_state = TurnState.PLAYER_TURN
 	
@@ -86,6 +109,7 @@ func start_player_turn():
 	player.process_status_effects()
 	
 	for enemy in enemies:
+		
 		if enemy.hp > 0:
 			enemy.process_status_effects()
 	
@@ -93,29 +117,16 @@ func start_player_turn():
 	
 	# allow buttons
 	battle_ui.enable_moves()
+
+
+# ==================================================
+# Move Selection
+# ==================================================
+
+
+
+func get_active_enemy() -> EnemyAnimal:
 	
-	## Reset temporary effects from previous turn
-	#if player:
-		#player.reset_turn_state()
-#
-	## Trigger passive effects
-	#start_turn_effects()
-
-
-func start_turn_effects():
-	if player:
-		player.trigger_passive_event("turn_start")
-
-
-	for enemy in enemies:
-		enemy.trigger_passive_event("turn_start")
-
-
-# -------------------------------------------------------------------
-# Move selection
-# -------------------------------------------------------------------
-
-func get_active_enemy():
 	for enemy in enemies:
 		if enemy.hp > 0:
 			return enemy
@@ -124,6 +135,7 @@ func get_active_enemy():
 	
 	
 func _on_move_selected(move_index: int):
+	
 	if current_state != TurnState.PLAYER_TURN:
 		print("Not player turn")
 		return
@@ -164,89 +176,48 @@ func _on_move_selected(move_index: int):
 		enemy_moves.size()
 	)
 	
-	resolve_group_turn(
+	resolve_turn(
 		player_move,
 		target_enemy,
 		enemy_moves
 	)
 
 
-# -------------------------------------------------------------------
-# Turn resolution
-# -------------------------------------------------------------------
+# ==================================================
+# Turn Resolution
+# ==================================================
 
-func resolve_turn(player_move, enemy_move, enemy):
+
+func resolve_turn(
+	player_move: MoveResource,
+	target_enemy: EnemyAnimal,
+	enemy_moves:Array
+):
+	
 	current_state = TurnState.ENEMY_TURN
 
-
-	# Higher priority acts first
-	if player_move.priority >= enemy_move.priority:
-		print("Player moves first")
-
-		player_move.execute(
-			player,
-			enemy
-		)
-
-
-		check_battle_end()
-
-		if current_state == TurnState.BATTLE_OVER:
-			return
-
-
-		enemy_move.execute(
-			enemy,
-			player
-		)
-
-
-	else:
-		print("Enemy moves first")
-
-		enemy_move.execute(
-			enemy,
-			player
-		)
-
-
-		check_battle_end()
-
-		if current_state == TurnState.BATTLE_OVER:
-			return
-
-
-		player_move.execute(
-			player,
-			enemy
-		)
-
-
-	check_battle_end()
-
-
-	if current_state != TurnState.BATTLE_OVER:
-		end_turn()
-
-
-func resolve_group_turn(player_move, target_enemy, enemy_moves):
-	current_state = TurnState.ENEMY_TURN
-
-	print("Player attacks:", target_enemy)
+	# Player action
+	print(
+		"Player attacks:",
+		target_enemy
+	)
 
 	player_move.execute(
 		player,
 		target_enemy
 	)
-	
-	battle_ui.update_status_labels(player, get_active_enemy())
+
+	battle_ui.update_status_labels(
+		player,
+		get_active_enemy()
+	)
 
 	check_battle_end()
 
 	if current_state == TurnState.BATTLE_OVER:
 		return
 
-
+	# Enemy actions
 	for data in enemy_moves:
 
 		var enemy = data.enemy
@@ -262,8 +233,11 @@ func resolve_group_turn(player_move, target_enemy, enemy_moves):
 			enemy,
 			player
 		)
-		
-		battle_ui.update_status_labels(player, get_active_enemy())
+
+		battle_ui.update_status_labels(
+			player,
+			get_active_enemy()
+		)
 
 		check_battle_end()
 
@@ -271,79 +245,65 @@ func resolve_group_turn(player_move, target_enemy, enemy_moves):
 			return
 
 	end_turn()
-	
-	
-# -------------------------------------------------------------------
-# Turn end
-# -------------------------------------------------------------------
+
+
+# ==================================================
+# Turn End
+# ==================================================
 
 func end_turn():
-	# Future:
-	# poison damage
-	# regeneration
-	# parasite healing
-	# damage over time
 
 	trigger_turn_end_effects()
 
 	battle_ui.setup_moves(player)
+
 	start_player_turn()
 
 
-func start_enemy_turn():
-
-	current_state = TurnState.ENEMY_TURN
-	
-	print("Enemy turn")
-
-	for enemy in enemies:
-		enemy.process_status_effects()
-
-		if enemy.hp > 0:
-			enemy.choose_action(player)
-			
-			
 func trigger_turn_end_effects():
-	if player:
-		player.trigger_passive_event("turn_end")
 
+	if player:
+		player.trigger_passive_event(
+			"turn_end"
+		)
 
 	for enemy in enemies:
-		enemy.trigger_passive_event("turn_end")
+
+		enemy.trigger_passive_event(
+			"turn_end"
+		)
 
 
-# -------------------------------------------------------------------
-# Battle checks
-# -------------------------------------------------------------------
+# ==================================================
+# Battle Checks
+# ==================================================
+
 
 func check_battle_end():
+
 	if player == null:
 		return
 
 	if player.hp <= 0:
 		print("Player defeated")
-
 		current_state = TurnState.BATTLE_OVER
 		battle_lost.emit()
 		return
-	
-	var all_dead = true
-	
+
 	for enemy in enemies:
 		if enemy.hp > 0:
-			all_dead = false
-			
-	if all_dead:
+			return
+	
 		print("All enemies defeated")
-
 		current_state = TurnState.BATTLE_OVER
-			
-		var defeated_enemy = null
 
-		if enemies.size() > 0:
-			defeated_enemy = enemies[0]
+		var defeated_enemy := enemies[0] if enemies.size() > 0 else null
 
-		battle_won.emit(defeated_enemy)
+		battle_won.emit(
+			defeated_enemy
+		)
 
 		if battle_ui:
 			battle_ui.hide()
+			
+			

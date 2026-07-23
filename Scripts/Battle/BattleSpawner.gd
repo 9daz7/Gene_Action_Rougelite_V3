@@ -38,7 +38,7 @@ func initialize(
 # Player
 # ==================================================
 
-func spawn_player():
+func spawn_player() -> PlayerAnimal:
 	
 	if current_battle == null:
 		push_error("Cannot spawn player. No battle scene.")
@@ -68,7 +68,10 @@ func spawn_player():
 # Enemies
 # ==================================================
 
-func spawn_enemy(enemy_resource:EnemyResource,index:int):
+func spawn_enemy(
+	enemy_resource: EnemyResource,
+	index:int
+	) -> EnemyAnimal:
 	
 	if enemy_resource == null:
 		push_error("Cannot spawn enemy. Resource missing.")

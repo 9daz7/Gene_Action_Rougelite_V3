@@ -58,8 +58,8 @@ var spawner:BattleSpawner
 
 
 var current_battle: Node = null
-var player: CharacterBody2D = null
-var enemies: Array = []
+var player: PlayerAnimal
+var enemies: Array[EnemyAnimal] = []
 
 var current_battle_type = null
 var critical_experiment := false
@@ -270,12 +270,11 @@ func initialize_battle():
 		enemies[0]
 	)
 
-	turn_manager.start_battle(
-		player,
-		enemies,
-		current_battle.battle_ui
-	)
-
+	turn_manager.initialize(
+	player,
+	enemies,
+	current_battle.battle_ui
+)
 
 # ==================================================
 # Battle Results

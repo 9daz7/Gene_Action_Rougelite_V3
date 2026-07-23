@@ -1,4 +1,5 @@
 extends CanvasLayer
+class_name BattleUI
 
 
 signal move_selected(move_index)
