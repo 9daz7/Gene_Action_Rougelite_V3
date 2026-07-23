@@ -157,37 +157,6 @@ func create_battle_scene():
 		current_battle,
 		run_manager
 	)
-
-#func spawn_player():
-#
-	#player = current_battle.spawn_player(
-		#PLAYER_SCENE
-	#)
-#
-	#var build = run_manager.current_animal_build
-#
-	#if build:
-		#player.load_build(build)
-#
-	#player.setup_player_hp(
-		#run_manager
-	#)
-	
-
-#func spawn_enemy(room_type):
-#
-	#var enemy = current_battle.spawn_enemy(
-		#ENEMY_SCENE,
-		#0
-	#)
-#
-	#enemy.enemy_data = get_enemy(room_type)
-	#
-	#if enemy.enemy_data == null:
-		#push_error("No enemy resource found")
-		#return
-#
-	#enemies.append(enemy)
 	
 		
 func start_group_battle():
@@ -217,22 +186,6 @@ func start_group_battle():
 	initialize_battle()
 	
 
-#func spawn_multiple_enemies(amount:int):
-#
-	#for i in range(amount):
-#
-		#var enemy = current_battle.spawn_enemy(
-			#ENEMY_SCENE,
-			#i
-		#)
-#
-		#enemy.enemy_data = get_enemy(
-			#RoomData.RoomType.GROUP_ENEMY
-		#)
-#
-		#enemies.append(enemy)
-		
-		
 # ==================================================
 # Enemy Selection
 # ==================================================
