@@ -44,8 +44,11 @@ var gene_collection: Array[GeneResource] = []
 
 func _ready():
 	print("RUN MANAGER READY")
-	
-	
+
+	#GameEvents.gene_unlocked.connect(
+		#_on_gene_unlocked
+	#)
+
 # ==================================================
 # Run Control
 # ==================================================
@@ -77,7 +80,8 @@ func start_run():
 
 	current_animal_build.calculate_stats()
 
-	player_hp = current_animal_build.base_hp
+	player_hp = current_animal_build.final_hp
+	max_hp = current_animal_build.final_hp
 
 	GameEvents.hp_changed.emit(
 		player_hp,
@@ -98,17 +102,17 @@ func start_run():
 		current_animal_build.animal_name
 	)
 
-	for gene in current_animal_build.genes:
-		print(
-			"Gene:",
-			gene.gene_name
-		)
-
-	for move in current_animal_build.moves:
-		print(
-			"Move:",
-			move.move_name
-		)
+	#for gene in current_animal_build.genes:
+		#print(
+			#"Gene:",
+			#gene.gene_name
+		#)
+#
+	#for move in current_animal_build.moves:
+		#print(
+			#"Move:",
+			#move.move_name
+		#)
 
 
 func reset_run():
@@ -151,33 +155,6 @@ func set_animal_build(
 # ==================================================
 # Run Setup
 # ==================================================
-
-
-#func setup_run():
-	#
-	#if current_animal_build == null:
-		#push_error("No animal build selected")
-		#return
-		#
-	#current_animal_build.calculate_stats()
-	#
-	#print("=== Run Start ===")
-	#print(
-		#"Animal:",
-		#current_animal_build.animal_name
-	#)
-	#
-	#for gene in current_animal_build.genes:
-		#print(
-			#"Gene:",
-			#gene.gene_name
-		#)
-#
-	#for move in current_animal_build.moves:
-		#print(
-			#"Move:",
-			#move.move_name
-		#)
 
 
 func initialize_starting_collection(gene_database):
@@ -225,7 +202,9 @@ func unlock_gene(gene:GeneResource):
 		"Unlocked gene:",
 		gene.gene_name
 	)
-	
+
+	GameEvents.gene_unlocked.emit(gene)
+
 	save_manager.save_game(self)
 
 
@@ -273,7 +252,10 @@ func heal_player(amount:int):
 	if player_hp > max_hp:
 		player_hp = max_hp
 
-	GameEvents.hp_changed.emit(self)
+	GameEvents.hp_changed.emit(
+		player_hp,
+		max_hp
+	)
 
 	GameEvents.player_healed.emit(amount)
 
@@ -308,3 +290,8 @@ func damage_player(amount:int):
 		"/",
 		max_hp
 	)
+
+
+#func _on_gene_unlocked(gene: GeneResource):
+#
+	#unlock_gene(gene)

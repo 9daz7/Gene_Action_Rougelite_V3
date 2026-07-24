@@ -236,10 +236,9 @@ func apply_reward(reward):
 
 	if reward is GeneResource:
 		run_manager.unlock_gene(reward)
-		save_manager.save_game(run_manager)
 
-	else:
-		print("Unknown reward type")
+	#else:
+		#print("Unknown reward type")
 
 	# Temporary
 	# Actual reward logic will go here later
