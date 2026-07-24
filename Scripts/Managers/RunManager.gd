@@ -261,8 +261,6 @@ func heal_player(amount:int):
 		max_hp
 	)
 
-	save_manager.save_game(self)
-
 
 func get_hp_percent() -> float:
 

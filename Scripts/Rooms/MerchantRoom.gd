@@ -36,7 +36,6 @@ const SHOP_ITEMS = [
 # ==================================================
 
 var run_manager: RunManager
-var save_manager: SaveManager
 
 var selected_item: ShopItem = null
 
@@ -52,6 +51,10 @@ func _ready():
 		_on_continue_pressed
 	)
 
+	GameEvents.gold_changed.connect(
+		_update_gold_from_event
+	)
+
 
 # ==================================================
 # Public Functions
@@ -61,7 +64,6 @@ func _ready():
 func open(manager:RunManager):
 
 	run_manager = manager
-	save_manager = manager.save_manager
 
 	show()
 
@@ -174,27 +176,20 @@ func buy_item(item:ShopItem, button:Button):
 		
 		button.queue_free()
 
-	update_gold()
-
 
 func apply_item(item:ShopItem):
 
 	match item.item_type:
 
 		ShopItem.ItemType.ITEM:
-
 			run_manager.heal_player(25)
 
 		ShopItem.ItemType.GENE:
-
-			GameEvents.gene_unlocked.emit(item.gene)
-
+			run_manager.unlock_gene(item.gene)
+			#GameEvents.gene_unlocked.emit(item.gene)
 
 		ShopItem.ItemType.MUTAGEN:
-
 			print("Mutagen purchased")
-
-	save_manager.save_game(run_manager)
 
 
 # ==================================================
@@ -204,8 +199,22 @@ func apply_item(item:ShopItem):
 
 func _on_continue_pressed():
 
-	print("Merchant complete")
-
 	merchant_finished.emit()
 	
 	queue_free()
+
+
+func _update_gold_from_event(amount:int):
+
+	gold_label.text = "Gold: " + str(amount)
+
+
+func _exit_tree():
+
+	if GameEvents.gold_changed.is_connected(
+		_update_gold_from_event
+	):
+
+		GameEvents.gold_changed.disconnect(
+			_update_gold_from_event
+		)
