@@ -50,44 +50,37 @@ func initialize(
 
 	start_battle()
 
+func _ready():
+
+	if not GameEvents.move_selected.is_connected(
+		_on_move_selected
+	):
+
+		GameEvents.move_selected.connect(
+			_on_move_selected
+		)
+
 
 # ==================================================
 # Battle Setup
 # ==================================================
 
 func start_battle():
-	
+
 	current_state = TurnState.NONE
 
 	print("Turn system started")
-	
-	
-	#battle_ui.setup_moves(player)
+
+	##battle_ui.setup_moves(player)
 	GameEvents.turn_changed.emit(
 		current_state
 	)
 
-	battle_ui.update_status_labels(
-		player,
-		get_active_enemy()
+	GameEvents.moves_updated.emit(
+		player
 	)
-	
+
 	start_player_turn()
-
-	
-func _connect_ui():
-
-	if battle_ui == null:
-		push_error("TurnManager missing BattleUI")
-		return
-
-	if not battle_ui.move_selected.is_connected(
-		_on_move_selected
-	):
-
-		battle_ui.move_selected.connect(
-			_on_move_selected
-		)
 
 
 # ==================================================
@@ -95,27 +88,33 @@ func _connect_ui():
 # ==================================================
 
 func start_player_turn():
-	
+
 	if current_state == TurnState.BATTLE_OVER:
 		return
 
 	current_state = TurnState.PLAYER_TURN
-	
+
 	print("Player turn")
-	
+
 	player.reset_turn_state()
-	
+
 	player.process_status_effects()
-	
+
 	for enemy in enemies:
-		
+
 		if enemy.hp > 0:
 			enemy.process_status_effects()
-	
-	battle_ui.update_status_labels(player, get_active_enemy())
-	
+
+	#battle_ui.update_status_labels(player, get_active_enemy())
+
 	# allow buttons
-	battle_ui.enable_moves()
+	GameEvents.turn_changed.emit(
+		current_state
+	)
+
+	GameEvents.moves_updated.emit(
+		player
+	)
 
 
 # ==================================================
@@ -194,11 +193,20 @@ func resolve_turn(
 ):
 	
 	current_state = TurnState.ENEMY_TURN
-
+	
+	GameEvents.turn_changed.emit(
+		current_state
+	)
+	
 	# Player action
 	print(
 		"Player uses:",
 		player_move.move_name
+	)
+
+	GameEvents.move_used.emit(
+		player,
+		player_move
 	)
 
 	player_move.execute(
@@ -206,10 +214,10 @@ func resolve_turn(
 		target_enemy
 	)
 
-	battle_ui.update_status_labels(
-		player,
-		get_active_enemy()
-	)
+	#battle_ui.update_status_labels(
+		#player,
+		#get_active_enemy()
+	#)
 
 	check_battle_end()
 
@@ -228,15 +236,20 @@ func resolve_turn(
 			move.move_name
 		)
 
+		GameEvents.move_used.emit(
+			enemy,
+			move
+		)
+
 		move.execute(
 			enemy,
 			player
 		)
 
-		battle_ui.update_status_labels(
-			player,
-			get_active_enemy()
-		)
+		#battle_ui.update_status_labels(
+			#player,
+			#get_active_enemy()
+		#)
 
 		check_battle_end()
 
@@ -254,14 +267,9 @@ func end_turn():
 	
 	if current_state == TurnState.BATTLE_OVER:
 		return
-
-	if battle_ui == null:
-		return
-
+		
 
 	trigger_turn_end_effects()
-
-	battle_ui.setup_moves(player)
 
 	start_player_turn()
 
@@ -292,8 +300,15 @@ func check_battle_end():
 
 	if player.hp <= 0:
 		print("Player defeated")
+		
 		current_state = TurnState.BATTLE_OVER
+		
+		GameEvents.battle_finished.emit(
+			"lose"
+		)
+
 		battle_lost.emit()
+		
 		return
 
 	for enemy in enemies:
@@ -305,12 +320,16 @@ func check_battle_end():
 
 		var defeated_enemy := enemies[0] if enemies.size() > 0 else null
 
+		GameEvents.battle_finished.emit(
+			"win"
+		)
+
 		battle_won.emit(
 			defeated_enemy
 		)
 
-		if battle_ui:
-			battle_ui.hide()
+		#if battle_ui:
+			#battle_ui.hide()
 			
 			
 # ==================================================
@@ -323,6 +342,5 @@ func reset():
 
 	player = null
 	enemies.clear()
-	battle_ui = null
-	
+
 	print("TurnManager reset")

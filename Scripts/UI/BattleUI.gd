@@ -6,8 +6,6 @@ class_name BattleUI
 # Signals
 # ==================================================
 
-signal move_selected(move_index)
-
 
 # ==================================================
 # Onready Variables
@@ -49,6 +47,12 @@ func _ready():
 			update_player_hp
 		)
 
+	if not GameEvents.moves_updated.is_connected(setup_moves):
+
+		GameEvents.moves_updated.connect(
+			setup_moves
+		)
+
 
 # ==================================================
 # Public Functions
@@ -63,17 +67,24 @@ func setup_names(player, enemy):
 	
 func setup_moves(player):
 
+	print("Updating battle moves")
+
 	var moves = player.get_battle_moves()
 
-	_clear_optional_moves()
+	for move in moves:
+		print("MOVE:", move.move_name)
 
-	for i in range(moves.size()):
+	for i in range(move_buttons.size()):
 
-		if i >= move_buttons.size():
-			break
+		if i < moves.size():
 
-		move_buttons[i].text = moves[i].move_name
-		move_buttons[i].disabled = false
+			move_buttons[i].text = moves[i].move_name
+			move_buttons[i].disabled = false
+
+		else:
+
+			move_buttons[i].text = "Empty"
+			move_buttons[i].disabled = true
 
 
 func enable_moves():
@@ -139,25 +150,25 @@ func _setup_buttons():
 
 	attack_button.pressed.connect(
 		func():
-			move_selected.emit(0)
+			GameEvents.move_selected.emit(0)
 	)
 
 
 	protect_button.pressed.connect(
 		func():
-			move_selected.emit(1)
+			GameEvents.move_selected.emit(1)
 	)
 
 
 	move3_button.pressed.connect(
 		func():
-			move_selected.emit(2)
+			GameEvents.move_selected.emit(2)
 	)
 
 
 	move4_button.pressed.connect(
 		func():
-			move_selected.emit(3)
+			GameEvents.move_selected.emit(3)
 	)
 
 

@@ -265,12 +265,11 @@ func initialize_battle():
 		player,
 		enemies
 	)
-
-	current_battle.battle_ui.setup_names(
-		player,
-		enemies[0]
-	)
-
+	
+	#current_battle.battle_ui.move_selected.connect(
+		#turn_manager._on_move_selected
+	#)
+	
 	turn_manager.initialize(
 		player,
 		enemies,
@@ -279,6 +278,7 @@ func initialize_battle():
 	GameEvents.battle_started.emit(
 		enemies[0]
 	)
+
 
 # ==================================================
 # Battle Results
