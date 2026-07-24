@@ -56,29 +56,30 @@ func open():
 	selected_genes.clear()
 	selected_moves.clear()
 	available_moves.clear()
-
-	print("Animal creation opened")
 	
+	for child in move_container.get_children():
+		child.queue_free()
+		
+	print("AnimalCreationUI OPEN CALLED")
+
 	load_owned_genes()
 	load_gene_buttons()
 	
 	show()
-
-
+		
+		
 func load_owned_genes():
+
 	owned_genes.clear()
-	owned_genes = run_manager.gene_collection
 
-	print("Owned genes:")
-
-	for gene in owned_genes:
+	for gene in run_manager.gene_collection:
+		owned_genes.append(gene)
 
 		print(
-			gene.gene_name,
-			"|",
-			gene.get_rarity_name()
+			"Owned genes loaded",
+			owned_genes.size()
 		)
-		
+
 
 func load_gene_buttons():
 

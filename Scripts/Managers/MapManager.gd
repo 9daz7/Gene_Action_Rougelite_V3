@@ -2,15 +2,35 @@ extends Node
 class_name MapManager
 
 
+# ==================================================
+# Signals
+# ==================================================
+
+
 signal map_generated
+
+
+# ==================================================
+# Constants
+# ==================================================
 
 
 const ROWS = 8
 const ROOMS_PER_ROW = 3
 
+const X_SPACING := 250
+const Y_SPACING := 110
+const DEFAULT_X := 500
+
 const STABLE_LAB = preload("res://Data/Labs/StableLab.tres")
 const UNSTABLE_LAB = preload("res://Data/Labs/UnstableLab.tres")
 const CRITICAL_LAB = preload("res://Data/Labs/CriticalLab.tres")
+
+
+# ==================================================
+# Member Variables
+# ==================================================
+
 
 
 var current_map: Array[RoomData] = []
@@ -22,15 +42,29 @@ var current_world := 1
 var current_room: RoomData = null
 
 
-func generate_map():
+# ==================================================
+# Initialization
+# ==================================================
+
+func _ready():
+	pass
+
+
+# ==================================================
+# Public Functions
+# ==================================================
+
+
+func generate_map() -> void:
+	
 	current_map.clear()
 	map_rows.clear()
 
 	# Create rows
 	for row in range(ROWS):
+		
 		var rooms: Array[RoomData] = []
 
-		# Boss row only has one room
 		var room_count = ROOMS_PER_ROW
 		
 		# staring node
@@ -42,6 +76,7 @@ func generate_map():
 			room_count = 1
 
 		for lane in range(room_count):
+			
 			var room = RoomData.new()
 
 			room.room_id = current_map.size()
@@ -49,19 +84,14 @@ func generate_map():
 			room.lane = lane
 
 
-			var x_spacing: int = 250
-			var y_spacing: int = 110
+			var x := DEFAULT_X
 
-			var x: int
-
-			if room_count == 1:
-				x = 500
-			else:
-				x = 250 + lane * x_spacing
+			if room_count > 1:
+				x = 250 + lane * X_SPACING
 
 			room.position = Vector2(
 				x,
-				760 - row * y_spacing
+				760 - row * Y_SPACING
 			)
 				
 			if row == 0:
@@ -88,16 +118,54 @@ func generate_map():
 	map_generated.emit()
 
 
-# -------------------------------------------------------------------
-# Connect rooms together
-# -------------------------------------------------------------------
+func move_to_room(room: RoomData) -> bool:
+	
+	if room not in current_room.connections:
+		
+		print(
+			"Cannot move from",
+			current_room.room_id,
+			"to",
+			room.room_id
+		)
+		
+		return false
+		
+	current_room.completed = true
 
-func connect_paths():
+	current_room = room
+
+	update_available_rooms()
+
+	return true
+	
+	
+func generate_lab_type() -> LabResource:
+
+	var roll := randf()
+
+	if roll < 0.33:
+		return STABLE_LAB
+
+	elif roll < 0.66:
+		return UNSTABLE_LAB
+
+	else:
+		return CRITICAL_LAB
+		
+		
+# ==================================================
+# Private Functions
+# ==================================================
+
+
+func connect_paths() -> void:
 	
 	# connect START to first row
 	var start_room = map_rows[0][0]
 
 	for room in map_rows[1]:
+		
 		start_room.connections.append(room)
 
 
@@ -140,37 +208,11 @@ func connect_paths():
 			room.connections.append(boss)
 
 
-# -------------------------------------------------------------------
-# Keep paths naturally merging
-# -------------------------------------------------------------------
-
-func find_closest_next_room(room, next_row):
-	var closest = next_row[0]
-
-	var distance = abs(
-		room.lane - closest.lane
-	)
-
-	for possible in next_row:
-		var new_distance = abs(
-			room.lane - possible.lane
-		)
-
-		if new_distance < distance:
-			closest = possible
-			distance = new_distance
-
-	return closest
-
-
-# -------------------------------------------------------------------
-# Room generation
-# -------------------------------------------------------------------
-
 func generate_room_type(row: int):
-	var roll = randf()
 
-	# World 1
+	var roll := randf()
+
+# World 1
 	if current_world == 1:
 		if row < 2:
 			if roll < 0.55:
@@ -254,13 +296,43 @@ func generate_room_type(row: int):
 
 			else:
 				return RoomData.RoomType.MYSTERY_ROOM
+	
+
+# ==================================================
+# Helpers
+# ==================================================
 
 
-func print_map():
+func find_closest_next_room(room, next_row):
+	
+	var closest = next_row[0]
+
+	var distance = abs(
+		room.lane - closest.lane
+	)
+
+	for possible in next_row:
+		
+		var new_distance = abs(
+			room.lane - possible.lane
+		)
+
+		if new_distance < distance:
+			
+			closest = possible
+			distance = new_distance
+
+	return closest
+
+
+func print_map() -> void:
+	
 	print("=========== MAP ==========")
 
 	for row in map_rows:
+		
 		for room in row:
+			
 			print(
 				"Room:",
 				room.room_id,
@@ -277,7 +349,7 @@ func print_map():
 	print("===========================")
 	
 	
-func set_starting_room():
+func set_starting_room() -> void:
 
 	current_room = map_rows[0][0]
 
@@ -291,9 +363,10 @@ func set_starting_room():
 	update_available_rooms()
 	
 	
-func update_available_rooms():
+func update_available_rooms() -> void:
 
 	for room in current_map:
+		
 		room.available = false
 
 
@@ -302,38 +375,5 @@ func update_available_rooms():
 
 
 	for next_room in current_room.connections:
+		
 		next_room.available = true
-
-
-func move_to_room(room:RoomData):
-
-	if room not in current_room.connections:
-		print("Cannot move from", current_room.room_id,"to",room.room_id)
-		return false
-
-
-	current_room.completed = true
-
-	current_room = room
-
-	update_available_rooms()
-
-	return true
-
-
-func generate_lab_type() -> LabResource:
-
-	var roll = randf()
-	# test numbers
-	if roll < 0.33:
-		return STABLE_LAB
-	elif roll < 0.66:
-		return UNSTABLE_LAB
-	else:
-		return CRITICAL_LAB
-	#if roll < 0.55:
-		#return STABLE_LAB
-	#elif roll < 0.90:
-		#return UNSTABLE_LAB
-	#else:
-		#return CRITICAL_LAB
