@@ -454,6 +454,7 @@ func get_current_hp() -> int:
 	
 	
 func take_damage(amount: int):
+	
 	if is_protecting:
 
 		amount = int(
@@ -482,7 +483,10 @@ func take_damage(amount: int):
 		hp
 	)
 
-	GameEvents.hp_changed.emit(self)
+	GameEvents.hp_changed.emit(
+		hp,
+		get_max_hp()
+	)
 
 	hp_changed.emit(hp)
 	
@@ -506,11 +510,17 @@ func is_alive() -> bool:
 	
 	
 func heal(amount:int):
+	
 	hp += amount
 
 	hp = clamp(
 		hp,
 		0,
+		get_max_hp()
+	)
+
+	GameEvents.hp_changed.emit(
+		hp,
 		get_max_hp()
 	)
 

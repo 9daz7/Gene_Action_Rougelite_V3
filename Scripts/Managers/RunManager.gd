@@ -80,8 +80,16 @@ func start_run():
 
 	current_animal_build.calculate_stats()
 
-	player_hp = current_animal_build.final_hp
-	max_hp = current_animal_build.final_hp
+	max_hp = (
+		current_animal_build.animal.base_hp
+		+
+		current_animal_build.hp_bonus
+	)
+
+	player_hp = max_hp
+
+	#player_hp = current_animal_build.final_hp
+	#max_hp = current_animal_build.final_hp
 
 	GameEvents.hp_changed.emit(
 		player_hp,

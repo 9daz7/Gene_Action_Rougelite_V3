@@ -272,10 +272,13 @@ func initialize_battle():
 	)
 
 	turn_manager.initialize(
-	player,
-	enemies,
-	current_battle.battle_ui
-)
+		player,
+		enemies,
+	)
+
+	GameEvents.battle_started.emit(
+		enemies[0]
+	)
 
 # ==================================================
 # Battle Results
@@ -284,7 +287,7 @@ func initialize_battle():
 
 func _on_turn_battle_won(enemy):
 	print("BattleManager received victory")
-	
+
 	if enemy == null:
 		print("WARNING: Victory received with no enemy")
 	else:
@@ -292,9 +295,13 @@ func _on_turn_battle_won(enemy):
 			"Battle won against:",
 			enemy.enemy_data.enemy_name
 		)
-	
+
+	GameEvents.battle_finished.emit(
+		"win"
+	)
+
 	battle_won.emit(enemy)
-	
+
 	#if critical_experiment:
 		#print("Resetting critical experiment flag")
 		#critical_experiment = false
@@ -306,6 +313,10 @@ func _on_turn_battle_won(enemy):
 
 func _on_turn_battle_lost():
 	print("BattleManager received defeat")
+
+	GameEvents.battle_finished.emit(
+		"lose"
+	)
 
 	battle_lost.emit()
 

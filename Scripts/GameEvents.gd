@@ -13,8 +13,13 @@ signal run_ended
 # Battle Events
 # ==================================================
 
-signal battle_started
+signal battle_started(enemy)
 signal battle_finished(enemy)
+
+signal turn_changed(state)
+signal move_used(attacker, move)
+signal damage_dealt(target, amount)
+
 signal battle_won(enemy)
 signal battle_lost
 

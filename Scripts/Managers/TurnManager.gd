@@ -31,7 +31,6 @@ enum TurnState {
 
 var current_state := TurnState.NONE
 
-var battle_ui: BattleUI
 var player: PlayerAnimal
 var enemies:Array[EnemyAnimal] = []
 
@@ -44,18 +43,14 @@ var enemies:Array[EnemyAnimal] = []
 func initialize(
 	player_ref:PlayerAnimal,
 	enemy_refs:Array[EnemyAnimal],
-	ui:BattleUI
 ):
-	
+
 	player = player_ref
 	enemies = enemy_refs
-	battle_ui = ui
-	
-	_connect_ui()
-		
+
 	start_battle()
-	
-	
+
+
 # ==================================================
 # Battle Setup
 # ==================================================
@@ -66,8 +61,12 @@ func start_battle():
 
 	print("Turn system started")
 	
-	battle_ui.setup_moves(player)
 	
+	#battle_ui.setup_moves(player)
+	GameEvents.turn_changed.emit(
+		current_state
+	)
+
 	battle_ui.update_status_labels(
 		player,
 		get_active_enemy()

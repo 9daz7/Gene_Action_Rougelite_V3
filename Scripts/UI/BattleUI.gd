@@ -43,45 +43,11 @@ func _ready():
 
 	_setup_buttons()
 
-	GameEvents.hp_changed.connect(
-		_on_hp_changed
-	)
+	if not GameEvents.hp_changed.is_connected(update_player_hp):
 
-	#move_buttons = [
-		#attack_button,
-		#protect_button,
-		#move3_button,
-		#move4_button
-		#]
-#
-	#attack_button.pressed.connect(
-		#func():
-			#move_selected.emit(0)
-	#)
-#
-	#protect_button.pressed.connect(
-		#func():
-			#move_selected.emit(1)
-	#)
-	#
-	#move3_button.pressed.connect(
-		#func():
-			#move_selected.emit(2)
-	#)
-#
-	#move4_button.pressed.connect(
-		#func():
-			#move_selected.emit(3)
-	#)
-#
-	#move3_button.disabled = true
-	#move4_button.disabled = true
-	
-func _on_hp_changed(animal):
-
-	print("HP updated:", animal.name)
-
-	# later update progress bars here
+		GameEvents.hp_changed.connect(
+			update_player_hp
+		)
 
 
 # ==================================================
@@ -142,6 +108,19 @@ func get_status_text(animal:AnimalBase) -> String:
 		text += " (" + str(effect.duration) + ")\n"
 
 	return text
+
+
+func update_player_hp(current_hp:int, max_hp:int):
+
+	print(
+		"BattleUI HP UPDATE:",
+		current_hp,
+		"/",
+		max_hp
+	)
+
+	# player_hp_bar.value = current_hp
+	# player_hp_label.text = str(current_hp) + "/" + str(max_hp)
 	
 	
 # ==================================================
@@ -196,3 +175,10 @@ func _clear_optional_moves():
 
 	move3_button.disabled = true
 	move4_button.disabled = true
+
+
+func _exit_tree():
+
+	if GameEvents.hp_changed.is_connected(update_player_hp):
+
+		GameEvents.hp_changed.disconnect(update_player_hp)
