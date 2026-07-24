@@ -135,7 +135,7 @@ func open_shop(room):
 		_on_merchant_finished
 	)
 
-	merchant_room.open()
+	merchant_room.open(run_manager)
 
 
 func open_treasure(room):
@@ -180,11 +180,13 @@ func open_lab(room):
 	)
 
 	abandoned_lab.open(
-		room.lab_data
+		room.lab_data,
+		battle_manager
 	)
 
 
 func open_mystery(room):
+	
 	print("Opening a mystery room")
 
 	mystery_room = MYSTERY_SCENE.instantiate()
@@ -194,6 +196,8 @@ func open_mystery(room):
 	mystery_room.mystery_finished.connect(
 		_on_mystery_finished
 	)
+
+	mystery_room.open()
 
 
 # ==================================================
