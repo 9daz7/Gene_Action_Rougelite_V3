@@ -52,7 +52,7 @@ func _ready():
 
 
 func start_run():
-	
+
 	gold = 0
 	player_hp = max_hp
 
@@ -62,7 +62,7 @@ func start_run():
 		"HP:",
 		player_hp
 	)
-	
+
 	run_active = true
 
 	if current_animal_build == null:
@@ -70,19 +70,17 @@ func start_run():
 			"No animal build selected"
 		)
 		return
-		
-	gold = 0
 
 	current_animal_build.calculate_stats()
 
 	player_hp = current_animal_build.base_hp
-	
+
 	print("=== Run Start ===")
 	print(
 		"Animal:",
 		current_animal_build.animal_name
 	)
-	
+
 	for gene in current_animal_build.genes:
 		print(
 			"Gene:",
@@ -94,12 +92,13 @@ func start_run():
 			"Move:",
 			move.move_name
 		)
-	
-	
+
+
 func reset_run():
-	
+
 	run_active = false
 
+	gold = 0
 	player_hp = max_hp
 
 	current_animal_build = null
@@ -224,6 +223,8 @@ func spend_gold(amount:int) -> bool:
 
 	gold -= amount
 
+	GameEvents.gold_changed.emit(gold)
+
 	print(
 		"Gold remaining:",
 		gold
@@ -236,6 +237,8 @@ func add_gold(amount:int):
 
 	gold += amount
 
+	GameEvents.gold_changed.emit(gold)
+
 	print(
 		"Gold gained:",
 		amount,
@@ -243,26 +246,24 @@ func add_gold(amount:int):
 		gold
 	)
 
-	save_manager.save_game(self)
-	
-	
+
 func heal_player(amount:int):
 
 	player_hp += amount
 
 	if player_hp > max_hp:
 		player_hp = max_hp
-		
+
 	print(
 		"Player healed:",
 		player_hp,
 		"/",
 		max_hp
 	)
-	
+
 	save_manager.save_game(self)
-	
-	
+
+
 func get_hp_percent() -> float:
 
 	return float(player_hp) / float(max_hp)

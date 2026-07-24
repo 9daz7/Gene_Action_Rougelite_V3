@@ -28,6 +28,11 @@ var current_room: RoomData = null
 
 
 func _ready():
+	
+	GameEvents.battle_won.connect(
+		_on_battle_won
+	)
+	
 	print("THIS IS THE CURRENT MAIN SCRIPT")
 
 	battle_manager.initialize(
@@ -84,9 +89,12 @@ func _on_build_confirmed(build):
 
 
 func start_run():
+	
 	print("======================")
 	print("MAIN START_RUN CALLED")
 	print("======================")
+
+	GameEvents.run_started.emit()
 
 	if run_manager.current_animal_build == null:
 		print("ERROR: No animal build exists")
@@ -156,10 +164,8 @@ func _on_battle_won(enemy):
 
 	var rewards = reward_manager.generate_rewards(enemy)
 
-	run_manager.gold += rewards.gold
+	run_manager.add_gold(rewards.gold)
 
-	print("Gold gained:", rewards.gold)
-	print("Total gold:", run_manager.gold)
 	print("Resources:", rewards.resources)
 
 	room_manager.open_reward(rewards)

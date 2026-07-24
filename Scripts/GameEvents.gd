@@ -1,10 +1,42 @@
 extends Node
 
 
-signal gold_changed(amount)
-signal gene_unlocked(gene)
-signal battle_started
-signal battle_finished
-signal room_entered(room)
+# ==================================================
+# Run Events
+# ==================================================
+
 signal run_started
 signal run_ended
+
+
+# ==================================================
+# Battle Events
+# ==================================================
+
+signal battle_started
+signal battle_finished(enemy)
+signal battle_won(enemy)
+signal battle_lost
+
+
+# ==================================================
+# Room Events
+# ==================================================
+
+
+signal room_entered(room)
+signal room_completed(room)
+
+
+# ==================================================
+# Economy Events
+# ==================================================
+
+signal gold_changed(amount)
+
+
+# ==================================================
+# Gene Events
+# ==================================================
+
+signal gene_unlocked(gene)
