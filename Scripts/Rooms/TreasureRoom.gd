@@ -140,9 +140,10 @@ func _apply_reward():
 		return
 
 	if selected_reward.has("gold"):
-		run_manager.save_manager.gold += selected_reward.gold
+		
+		run_manager.gold += selected_reward.gold
 
 	print(
 		"Gold:",
-		run_manager.save_manager.gold
+		run_manager.gold
 	)

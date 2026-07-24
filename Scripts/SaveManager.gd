@@ -10,13 +10,6 @@ const SAVE_PATH = "user://save.json"
 
 
 # ==================================================
-# Member Variables
-# ==================================================
-
-var gold := 0
-
-
-# ==================================================
 # Initialization
 # ==================================================
 
@@ -35,7 +28,6 @@ func save_game(run_manager):
 
 	var data = {
 		"genes": [],
-		"gold": gold
 	}
 
 	for gene in run_manager.gene_collection:
@@ -76,19 +68,12 @@ func load_game(run_manager:RunManager, gene_database:GeneDatabase):
 		print("Save filecorrupted")
 		return
 
-	if data.has("gold"):
-
-		gold = data.gold
-
-	else:
-		gold = 0
-
 	run_manager.gene_collection.clear()
 
 	if data.has("genes"):
-		
+
 		for gene_name in data.genes:
-			
+
 			var gene = _find_gene(
 				gene_name,
 				gene_database

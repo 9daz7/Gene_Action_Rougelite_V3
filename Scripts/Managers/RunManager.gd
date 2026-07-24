@@ -53,6 +53,16 @@ func _ready():
 
 func start_run():
 	
+	gold = 0
+	player_hp = max_hp
+
+	print(
+		"Run started. Gold:",
+		gold,
+		"HP:",
+		player_hp
+	)
+	
 	run_active = true
 
 	if current_animal_build == null:
@@ -205,7 +215,7 @@ func owns_gene(gene: GeneResource) -> bool:
 
 	return gene_collection.has(gene)
 
-	
+
 func spend_gold(amount:int) -> bool:
 
 	if gold < amount:
@@ -218,8 +228,6 @@ func spend_gold(amount:int) -> bool:
 		"Gold remaining:",
 		gold
 	)
-	
-	save_manager.save_game(self)
 
 	return true
 

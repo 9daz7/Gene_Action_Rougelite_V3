@@ -83,7 +83,7 @@ func close():
 func update_gold():
 
 	gold_label.text = "Gold: " + str(
-		save_manager.gold
+		run_manager.gold
 	)
 
 

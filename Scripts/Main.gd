@@ -38,12 +38,12 @@ func _ready():
 )
 
 	gene_database.load_genes()
-	
+
 	save_manager.load_game(
 		run_manager,
 		gene_database
 	)
-	
+
 	run_manager.initialize_starting_collection(gene_database)
 
 	map_ui.hide()
@@ -65,29 +65,12 @@ func _ready():
 
 func open_lab_hub():
 	print("Opening Lab Hub")
-	
+
 	map_ui.hide()
-	
+
 	lab_hub.open()
-	
+
 	print("LabHub visible:", lab_hub.visible)
-
-
-#func start_gene_selection():
-	##var gene_choices = run_manager.get_random_owned_genes(5)
-#
-	#print("Opening gene loadout")
-	#
-	#print("Owned genes:")
-#
-	#for gene in run_manager.gene_collection:
-		#print(
-			#gene.gene_name,
-			#" | ",
-			#gene.get_rarity_name()
-		#)
-#
-	#gene_loadout.open(run_manager.gene_collection)
 
 
 func _on_build_confirmed(build):
@@ -98,7 +81,7 @@ func _on_build_confirmed(build):
 	)
 
 	run_manager.set_animal_build(build)
-	
+
 
 func start_run():
 	print("======================")
@@ -125,8 +108,8 @@ func start_run():
 
 
 	print("Map displayed")
-	
-	
+
+
 func enter_room(room):
 
 	current_room = room
@@ -143,24 +126,24 @@ func _on_battle_won(enemy):
 	print("Critical flag:", battle_manager.critical_experiment)
 	print("Battle type:", battle_manager.current_battle_type)
 	#print("Battle won against:", enemy.enemy_data.enemy_name)
-	
+
 	# boss victory
 	if battle_manager.current_battle_type == RoomData.RoomType.BOSS:
 		print("BOSS DEFEATED")
 		await get_tree().process_frame
 		open_victory_screen()
 		return
-	
+
 	# critical experiment
 	if battle_manager.critical_experiment:
 		print("Skipping rewards: critical experiment")
 		return
-		
+
 	# normal rewards
 	if enemy == null:
 		print("No enemy supplied for reward")
 		return
-	
+
 	if enemy.enemy_data == null:
 		print("Enemy has no enemy_data")
 		return
@@ -169,29 +152,18 @@ func _on_battle_won(enemy):
 		"Battle won against:",
 		enemy.enemy_data.enemy_name
 	)
-	#
+
 
 	var rewards = reward_manager.generate_rewards(enemy)
-	
-	save_manager.gold += rewards.gold
-	save_manager.save_game(run_manager)
-	
-	print("Gold:", rewards.gold)
+
+	run_manager.gold += rewards.gold
+
+	print("Gold gained:", rewards.gold)
+	print("Total gold:", run_manager.gold)
 	print("Resources:", rewards.resources)
 
-	#if rewards.gene_choices.size() > 0:
-		#print("Gene choices:")
-#
-		#for gene in rewards.gene_choices:
-			#print(gene.gene_name)
-#
-	#print(
-		#"Mutagen choices:",
-		#rewards.mutagen_choices
-	#)
-
 	room_manager.open_reward(rewards)
-	
+
 
 func open_victory_screen():
 
@@ -202,33 +174,33 @@ func open_victory_screen():
 	await get_tree().create_timer(0.0).timeout
 
 	current_room = null
-	
+
 	run_manager.reset_run()
-	
+
 	map_ui.hide()
-	
+
 	open_lab_hub()
-	
+
 
 func _on_battle_lost():
 	print("Run failed")
-	
+
 	current_room = null
 
 	run_manager.reset_run()
-	
+
 	map_ui.hide()
-	
+
 	open_lab_hub()
 
 
 func return_to_map():
 	print("Returning to map")
-	
+
 	lab_hub.hide()
 
 	map_ui.display_map(
 		map_manager.current_map
 	)
-	
+
 	map_ui.show()
