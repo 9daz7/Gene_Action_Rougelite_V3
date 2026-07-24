@@ -199,7 +199,7 @@ func open_victory_screen():
 	print("GAME COMPLETE")
 	print("===================")
 
-	await get_tree().create_timer(3.0).timeout
+	await get_tree().create_timer(0.0).timeout
 
 	current_room = null
 	
