@@ -78,7 +78,11 @@ func start_run():
 	current_animal_build.calculate_stats()
 
 	player_hp = current_animal_build.base_hp
-	
+
+	GameEvents.hp_changed.emit(
+		player_hp,
+		max_hp
+	)
 
 	print(
 		"Run started. Gold:",
@@ -269,6 +273,10 @@ func heal_player(amount:int):
 	if player_hp > max_hp:
 		player_hp = max_hp
 
+	GameEvents.hp_changed.emit(self)
+
+	GameEvents.player_healed.emit(amount)
+
 	print(
 		"Player healed:",
 		player_hp,
@@ -280,3 +288,23 @@ func heal_player(amount:int):
 func get_hp_percent() -> float:
 
 	return float(player_hp) / float(max_hp)
+
+
+func damage_player(amount:int):
+
+	player_hp -= amount
+
+	if player_hp < 0:
+		player_hp = 0
+
+	GameEvents.hp_changed.emit(
+		player_hp,
+		max_hp
+	)
+
+	print(
+		"Player damaged:",
+		player_hp,
+		"/",
+		max_hp
+	)

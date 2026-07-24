@@ -482,6 +482,8 @@ func take_damage(amount: int):
 		hp
 	)
 
+	GameEvents.hp_changed.emit(self)
+
 	hp_changed.emit(hp)
 	
 	if hp <= 0:

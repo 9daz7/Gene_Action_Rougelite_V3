@@ -40,9 +40,13 @@ var move_buttons:Array[Button] = []
 
 func _ready():
 	print("BattleUI ready")
-	
+
 	_setup_buttons()
-	
+
+	GameEvents.hp_changed.connect(
+		_on_hp_changed
+	)
+
 	#move_buttons = [
 		#attack_button,
 		#protect_button,
@@ -73,6 +77,13 @@ func _ready():
 	#move3_button.disabled = true
 	#move4_button.disabled = true
 	
+func _on_hp_changed(animal):
+
+	print("HP updated:", animal.name)
+
+	# later update progress bars here
+
+
 # ==================================================
 # Public Functions
 # ==================================================
@@ -90,14 +101,13 @@ func setup_moves(player):
 
 	_clear_optional_moves()
 
-	if moves.size() > 2:
-		move3_button.text = moves[2].move_name
-		move3_button.disabled = false
+	for i in range(moves.size()):
 
+		if i >= move_buttons.size():
+			break
 
-	if moves.size() > 3:
-		move4_button.text = moves[3].move_name
-		move4_button.disabled = false
+		move_buttons[i].text = moves[i].move_name
+		move_buttons[i].disabled = false
 
 
 func enable_moves():

@@ -40,3 +40,12 @@ signal gold_changed(amount)
 # ==================================================
 
 signal gene_unlocked(gene)
+
+
+# ==================================================
+# Player Events
+# ==================================================
+
+signal hp_changed(animal)
+signal player_healed(amount)
+signal player_damaged(amount)
