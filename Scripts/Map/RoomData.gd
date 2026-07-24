@@ -2,6 +2,11 @@ extends Resource
 class_name RoomData
 
 
+# ==================================================
+# Enums
+# ==================================================
+
+
 enum RoomType {
 	START,
 	ENEMY,
@@ -18,19 +23,28 @@ enum RoomType {
 }
 
 
+# ==================================================
+# Member Variables
+# ==================================================
+
+
+# Map identification
 var room_id := 0
 
+# Map position data
 var row := 0
 var lane := 0
-
 var position := Vector2.ZERO
 
+# Room properties
 var room_type : RoomType
 
 var lab_data: LabResource = null
 
+# Connections
 var connections : Array[RoomData] = []
 
+# State tracking
 var visited := false
 var completed := false
 var available := false
