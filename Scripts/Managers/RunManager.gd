@@ -53,8 +53,32 @@ func _ready():
 
 func start_run():
 
+	if current_animal_build == null:
+		
+		push_error(
+			"No animal build selected"
+		)
+		
+		return
+
+# ----------------------------------------------
+# Start Run
+# ----------------------------------------------
+
+	run_active = true
+	
 	gold = 0
-	player_hp = max_hp
+
+	GameEvents.gold_changed.emit(gold)
+
+# ----------------------------------------------
+# Setup Animal
+# ----------------------------------------------
+
+	current_animal_build.calculate_stats()
+
+	player_hp = current_animal_build.base_hp
+	
 
 	print(
 		"Run started. Gold:",
@@ -63,19 +87,8 @@ func start_run():
 		player_hp
 	)
 
-	run_active = true
-
-	if current_animal_build == null:
-		push_error(
-			"No animal build selected"
-		)
-		return
-
-	current_animal_build.calculate_stats()
-
-	player_hp = current_animal_build.base_hp
-
 	print("=== Run Start ===")
+	
 	print(
 		"Animal:",
 		current_animal_build.animal_name
@@ -100,6 +113,8 @@ func reset_run():
 
 	gold = 0
 	player_hp = max_hp
+
+	GameEvents.gold_changed.emit(gold)
 
 	current_animal_build = null
 	

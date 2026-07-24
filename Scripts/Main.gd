@@ -105,6 +105,8 @@ func start_run():
 		run_manager.current_animal_build.animal_name
 	)
 
+	run_manager.start_run()
+
 	map_manager.generate_map()
 
 	lab_hub.hide()
