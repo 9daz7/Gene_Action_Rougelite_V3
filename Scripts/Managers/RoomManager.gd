@@ -80,7 +80,7 @@ func enter_room(room:RoomData):
 			
 		_:
 			print("Unknown room")
-			
+
 
 func open_reward(rewards):
 
@@ -147,27 +147,27 @@ func open_treasure(room):
 	get_tree().current_scene.add_child(treasure_room)
 
 	treasure_room.treasure_finished.connect(_on_treasure_finished)
-	
-	treasure_room.open()
+
+	treasure_room.open(run_manager)
 
 
 func open_rest(room):
-	
+
 	print("Opening rest room")
-	
+
 	rest_room = REST_SCENE.instantiate()
 
 	get_tree().current_scene.add_child(rest_room)
 
 	rest_room.rest_finished.connect(_on_rest_finished)
 
-	rest_room.open()
-	
+	rest_room.open(run_manager)
+
 
 func open_lab(room):
-	
+
 	print("Opening abandoned lab")
-	
+
 	if room.lab_data == null:
 		print("ERROR: Lab room has no LabResource")
 		return
@@ -182,11 +182,11 @@ func open_lab(room):
 	abandoned_lab.open(
 		room.lab_data
 	)
-	
-	
+
+
 func open_mystery(room):
 	print("Opening a mystery room")
-	
+
 	mystery_room = MYSTERY_SCENE.instantiate()
 
 	get_tree().current_scene.add_child(mystery_room)
@@ -194,7 +194,7 @@ func open_mystery(room):
 	mystery_room.mystery_finished.connect(
 		_on_mystery_finished
 	)
-	
+
 
 # ==================================================
 # Reward Handling
@@ -207,12 +207,12 @@ func _on_reward_finished(reward):
 		print("Chosen:", reward)
 	else:
 		print("Skipped reward")
-	
+
 	if is_instance_valid(reward_room):
 		reward_room.queue_free()
 
 	reward_room = null
-	
+
 	if reward:
 		apply_reward(reward)
 
@@ -220,11 +220,11 @@ func _on_reward_finished(reward):
 
 
 func apply_reward(reward):
-	
+
 	if reward == null:
 		print("No reward selected")
 		return
-		
+
 	print(
 		"Applying reward:",
 		reward
@@ -233,14 +233,14 @@ func apply_reward(reward):
 	if reward is GeneResource:
 		run_manager.unlock_gene(reward)
 		save_manager.save_game(run_manager)
-		
+
 	else:
 		print("Unknown reward type")
-		
+
 	# Temporary
 	# Actual reward logic will go here later
-	
-	
+
+
 # ==================================================
 # Room Completion
 # ==================================================
@@ -253,8 +253,8 @@ func _on_treasure_finished(reward):
 	treasure_room = null
 
 	get_tree().current_scene.return_to_map()
-	
-	
+
+
 func _on_merchant_finished():
 
 	print("Merchant complete")
@@ -266,8 +266,8 @@ func _on_merchant_finished():
 	merchant_room = null
 
 	get_tree().current_scene.return_to_map()
-	
-	
+
+
 func _on_rest_finished():
 
 	print("Rest complete")
@@ -275,8 +275,8 @@ func _on_rest_finished():
 	rest_room = null
 
 	get_tree().current_scene.return_to_map()
-	
-	
+
+
 func _on_lab_finished():
 
 	print("Lab complete")
@@ -288,8 +288,8 @@ func _on_lab_finished():
 	abandoned_lab = null
 
 	get_tree().current_scene.return_to_map()
-	
-	
+
+
 func _on_mystery_finished():
 
 	if is_instance_valid(mystery_room):
@@ -300,4 +300,3 @@ func _on_mystery_finished():
 	print("Mystery complete")
 
 	get_tree().current_scene.return_to_map()
-	

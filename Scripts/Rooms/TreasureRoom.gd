@@ -2,59 +2,75 @@ extends Control
 class_name TreasureRoom
 
 
+# ==================================================
+# Signals
+# ==================================================
+
 signal treasure_finished(reward)
 
+
+# ==================================================
+# Constants
+# ==================================================
+
+const REWARD_BUTTON = preload("res://Scenes/UI/RewardButton.tscn")
+
+
+# ==================================================
+# Onready Variables
+# ==================================================
 
 @onready var reward_container = $CenterContainer/VBoxContainer/RewardContainer
 @onready var continue_button = $CenterContainer/VBoxContainer/ContinueButton
 @onready var run_manager = $"../Managers/RunManager"
 
 
-const REWARD_BUTTON = preload("res://Scenes/UI/RewardButton.tscn")
+# ==================================================
+# Member Variables
+# ==================================================
 
 var selected_reward = null
 
-# -------------------------------------------------------------------
-# Setup
-# -------------------------------------------------------------------
+# ==================================================
+# Initialization
+# ==================================================
 
 
 func _ready():
 
 	continue_button.pressed.connect(_on_continue_pressed)
-	
-	
-func open():
-	
+
+
+# ==================================================
+# Public Functions
+# ==================================================
+
+
+func open(manager:RunManager):
+
+	run_manager = manager
 	show()
-	
+
 	selected_reward = null
-	
+
 	continue_button.disabled = true
-	
-	create_test_rewards()
-	
-# -------------------------------------------------------------------
-# Reward Selection
-# -------------------------------------------------------------------
 
-func choose_reward(reward):
-	
-	if selected_reward != null:
-		return
-	
-	selected_reward = reward
-	
-	print("Selected reward:", reward)
-	
-	for button in reward_container.get_children():
-		button.disabled = true
+	_create_test_rewards()
 
-	
-	continue_button.disabled = false
-	
 
-func create_test_rewards():
+func close():
+
+	hide()
+
+
+# ==================================================
+# Private Functions
+# ==================================================
+
+
+func _create_test_rewards():
+
+	# eventually replace with generated treasure rewards.
 
 	for child in reward_container.get_children():
 		child.queue_free()
@@ -66,45 +82,67 @@ func create_test_rewards():
 		},
 		{
 			"text": "Random Gene",
-			"gold": 0
+			"gold": 0,
 		},
 		{
 			"text": "Heal 25 HP",
-			"gold": 0
-		}
+			"gold": 0,
+		},
 	]
 
 	for reward in rewards:
-
 		var button = REWARD_BUTTON.instantiate()
-		
-		reward_container.add_child(button)
-
 		button.text = reward.text
-
 		button.pressed.connect(
 			func():
-				choose_reward(reward)
+				_select_reward(reward)
 		)
 
-		
-		
-# -------------------------------------------------------------------
-# Continue
-# -------------------------------------------------------------------
+		reward_container.add_child(button)
+
+
+func _select_reward(reward):
+
+	if selected_reward != null:
+		return
+
+	selected_reward = reward
+
+	print("Selected reward:", reward)
+
+	for button in reward_container.get_children():
+		button.disabled = true
+
+	continue_button.disabled = false
+
 
 func _on_continue_pressed():
 
 	print("Treasure room completed")
-	
-	if selected_reward.has("gold"):
-		run_manager.save_manager.gold += selected_reward.gold
-			
-	print("Gold:", run_manager.save_manager.gold)
-	
+
+	_apply_reward()
+
 	run_manager.save_manager.save_game(run_manager)
 
 	treasure_finished.emit(selected_reward)
 
 	queue_free()
-	
+
+
+# ==================================================
+# Helpers
+# ==================================================
+
+
+func _apply_reward():
+
+	if selected_reward == null:
+		return
+
+	if selected_reward.has("gold"):
+		run_manager.save_manager.gold += selected_reward.gold
+
+	print(
+		"Gold:",
+		run_manager.save_manager.gold
+	)

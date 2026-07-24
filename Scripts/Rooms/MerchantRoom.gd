@@ -32,8 +32,10 @@ func _ready():
 	)
 
 
-func open():
+func open(manager:RunManager):
 
+	run_manager = manager
+	
 	show()
 
 	update_gold()
