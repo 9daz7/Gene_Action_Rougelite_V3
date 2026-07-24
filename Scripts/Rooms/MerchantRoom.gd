@@ -187,7 +187,7 @@ func apply_item(item:ShopItem):
 
 		ShopItem.ItemType.GENE:
 
-			run_manager.unlock_gene(item.gene)
+			GameEvents.gene_unlocked.emit(item.gene)
 
 
 		ShopItem.ItemType.MUTAGEN:
