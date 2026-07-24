@@ -2,9 +2,20 @@ extends Node
 class_name RoomManager
 
 
+# ==================================================
+# Onready Variables
+# ==================================================
+
+
 @onready var battle_manager = $"../BattleManager"
 @onready var run_manager = $"../RunManager"
 @onready var save_manager = $"../SaveManager"
+
+
+# ==================================================
+# Constants
+# ==================================================
+
 
 const TREASURE_SCENE = preload("res://Scenes/Rooms/TreasureRoom.tscn")
 const MERCHANT_SCENE = preload("res://Scenes/Rooms/MerchantRoom.tscn")
@@ -14,13 +25,24 @@ const MYSTERY_SCENE = preload("res://Scenes/Rooms/MysteryRoom.tscn")
 
 const REWARD_SCENE = preload("res://Scenes/Rooms/RewardRoom.tscn")
 
-var reward_room = null
+
+# ==================================================
+# Member Variables
+# ==================================================
+
+
+var reward_room: RewardRoom = null
 
 var treasure_room = null
 var merchant_room = null
 var rest_room = null
 var abandoned_lab = null
 var mystery_room = null
+
+
+# ==================================================
+# Public Functions
+# ==================================================
 
 
 func enter_room(room:RoomData):
@@ -59,10 +81,24 @@ func enter_room(room:RoomData):
 		_:
 			print("Unknown room")
 			
-			
-# --------------------------------------------------
-# Battles
-# --------------------------------------------------
+
+func open_reward(rewards):
+
+	reward_room = REWARD_SCENE.instantiate()
+
+	get_tree().current_scene.add_child(reward_room)
+
+	reward_room.reward_finished.connect(
+		_on_reward_finished
+	)
+
+	reward_room.open(rewards)
+
+
+# ==================================================
+# Battle Rooms
+# ==================================================
+
 
 func start_enemy(room):
 	print("Starting normal battle")
@@ -82,10 +118,9 @@ func start_boss(room):
 	battle_manager.start_battle(RoomData.RoomType.BOSS)
 
 
-
-# --------------------------------------------------
+# ==================================================
 # Special Rooms
-# --------------------------------------------------
+# ==================================================
 
 
 func open_shop(room):
@@ -117,6 +152,7 @@ func open_treasure(room):
 
 
 func open_rest(room):
+	
 	print("Opening rest room")
 	
 	rest_room = REST_SCENE.instantiate()
@@ -129,6 +165,7 @@ func open_rest(room):
 	
 
 func open_lab(room):
+	
 	print("Opening abandoned lab")
 	
 	if room.lab_data == null:
@@ -159,15 +196,9 @@ func open_mystery(room):
 	)
 	
 
-
-func open_reward(rewards):
-	reward_room = REWARD_SCENE.instantiate()
-
-	get_tree().current_scene.add_child(reward_room)
-
-	reward_room.reward_finished.connect(_on_reward_finished)
-
-	reward_room.open(rewards)
+# ==================================================
+# Reward Handling
+# ==================================================
 
 
 func _on_reward_finished(reward):
@@ -178,7 +209,6 @@ func _on_reward_finished(reward):
 		print("Skipped reward")
 	
 	if is_instance_valid(reward_room):
-		#reward_room.close()
 		reward_room.queue_free()
 
 	reward_room = null
@@ -211,6 +241,11 @@ func apply_reward(reward):
 	# Actual reward logic will go here later
 	
 	
+# ==================================================
+# Room Completion
+# ==================================================
+
+
 func _on_treasure_finished(reward):
 
 	print("Treasure complete", reward)
