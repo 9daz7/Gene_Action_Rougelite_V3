@@ -13,9 +13,9 @@ enum EnemyType {
 @export var enemy_type: EnemyType = EnemyType.NORMAL
 
 # Base stats
-@export var base_hp: int = 100
-@export var base_attack: int = 5
-@export var base_speed: int = 10
+@export var base_hp := 100
+@export var base_attack := 5
+@export var base_speed := 10
 
 # Genes enemies start with
 @export var starting_genes: Array[GeneResource] = []

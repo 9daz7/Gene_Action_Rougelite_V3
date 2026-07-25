@@ -21,21 +21,21 @@ enum MoveEffectType {
 # --------------------------------------------------
 
 @export var move_name: String = "Unnamed Move"
-@export var power: int = 0
+@export var power := 0
 @export var description: String = ""
 
 # --------------------------------------------------
 # Combat
 # --------------------------------------------------
 
-@export var priority: int = 0
-@export var accuracy: int = 100
+@export var priority := 0
+@export var accuracy := 100
 
 # Type of move
 @export var category: MoveCategory = MoveCategory.BIOLOGICAL
 
 # Future critical hit system
-@export var critical_chance: int = 0
+@export var critical_chance := 0
 
 # --------------------------------------------------
 # Status Effects

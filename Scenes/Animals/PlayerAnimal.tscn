@@ -1,12 +1,14 @@
 [gd_scene format=3 uid="uid://bsonjjepgyjye"]
 
 [ext_resource type="Script" uid="uid://b2w1y4rl1vr8e" path="res://Scripts/Animals/PlayerAnimal.gd" id="1_lbnkj"]
+[ext_resource type="Texture2D" uid="uid://fpq2epnm86qd" path="res://Assets/Sprites/Animals/deebo_asset_test_battle.png" id="2_ccafr"]
 
 [node name="PlayerAnimal" type="CharacterBody2D" unique_id=692676620]
 script = ExtResource("1_lbnkj")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1971900039]
+texture = ExtResource("2_ccafr")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1706417400]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=653483851]
+[node name="Marker2D" type="Marker2D" parent="." unique_id=437128838]

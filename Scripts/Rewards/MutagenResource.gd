@@ -17,12 +17,12 @@ enum Rarity {
 
 
 # Run-only bonuses
-@export var attack_bonus: int = 0
-@export var hp_bonus: int = 0
-@export var speed_bonus: int = 0
-@export var armor_bonus: int = 0
-@export var dodge_bonus: int = 0
-@export var lifesteal: int = 0
+@export var attack_bonus := 0
+@export var hp_bonus := 0
+@export var speed_bonus := 0
+@export var armor_bonus := 0
+@export var dodge_bonus := 0
+@export var lifesteal := 0
 
 
  #Future
