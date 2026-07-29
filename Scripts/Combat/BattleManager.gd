@@ -284,6 +284,9 @@ func initialize_battle():
 		enemies[0]
 	)
 
+func show_battle_start(enemy):
+
+	print("Battle started against ", enemy.get_display_name())
 
 # ==================================================
 # Battle Results

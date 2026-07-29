@@ -62,6 +62,15 @@ func _ready():
 			setup_names
 		)
 
+	if not GameEvents.status_changed.is_connected(
+		update_status_labels
+	):
+
+		GameEvents.status_changed.connect(
+			update_status_labels
+		)
+
+
 # ==================================================
 # Public Functions
 # ==================================================

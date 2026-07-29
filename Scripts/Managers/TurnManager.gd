@@ -105,6 +105,11 @@ func start_player_turn():
 		if enemy.hp > 0:
 			enemy.process_status_effects()
 
+	GameEvents.status_changed.emit(
+		player,
+		get_active_enemy()
+	)
+	
 	#battle_ui.update_status_labels(player, get_active_enemy())
 
 	# allow buttons

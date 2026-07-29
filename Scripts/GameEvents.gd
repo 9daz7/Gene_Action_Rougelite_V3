@@ -31,6 +31,8 @@ signal damage_dealt(target, amount)
 
 signal enemy_updated(enemy)
 
+signal status_changed(player, enemy)
+
 signal battle_names_updated(player, enemy)
 
 # ==================================================
