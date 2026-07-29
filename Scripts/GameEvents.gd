@@ -31,6 +31,7 @@ signal damage_dealt(target, amount)
 
 signal enemy_updated(enemy)
 
+signal battle_names_updated(player, enemy)
 
 # ==================================================
 # Room Events

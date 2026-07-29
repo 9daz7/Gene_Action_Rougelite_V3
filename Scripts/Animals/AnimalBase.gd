@@ -31,6 +31,9 @@ func initialize(resource: AnimalResource):
 	setup_basic_moves()
 
 
+func get_display_name() -> String:
+	return name
+
 # -------------------------------------------------------------------
 # BASE STATS
 # -------------------------------------------------------------------

@@ -41,6 +41,7 @@ func _ready():
 
 	_setup_buttons()
 
+	
 	if not GameEvents.hp_changed.is_connected(update_player_hp):
 
 		GameEvents.hp_changed.connect(
@@ -53,18 +54,31 @@ func _ready():
 			setup_moves
 		)
 
+	if not GameEvents.battle_names_updated.is_connected(
+		setup_names
+	):
+
+		GameEvents.battle_names_updated.connect(
+			setup_names
+		)
 
 # ==================================================
 # Public Functions
 # ==================================================
 
 
-func setup_names(player, enemy):
+func setup_names(
+		player: PlayerAnimal,
+		enemy: EnemyAnimal
+	):
 
-	player_name_label.text = player.name
-	enemy_name_label.text = enemy.name
-	
-	
+	if player:
+		player_name_label.text = player.get_display_name()
+
+	if enemy:
+		enemy_name_label.text = enemy.get_display_name()
+
+
 func setup_moves(player):
 
 	print("Updating battle moves")
@@ -193,3 +207,11 @@ func _exit_tree():
 	if GameEvents.hp_changed.is_connected(update_player_hp):
 
 		GameEvents.hp_changed.disconnect(update_player_hp)
+
+	if GameEvents.battle_names_updated.is_connected(
+		setup_names
+	):
+
+		GameEvents.battle_names_updated.disconnect(
+			setup_names
+		)

@@ -266,6 +266,11 @@ func initialize_battle():
 		enemies
 	)
 	
+	GameEvents.battle_names_updated.emit(
+		player,
+		enemies[0]
+	)
+
 	#current_battle.battle_ui.move_selected.connect(
 		#turn_manager._on_move_selected
 	#)

@@ -23,6 +23,14 @@ func start_battle():
 	setup_enemy_moves()
 
 
+func get_display_name() -> String:
+
+	if enemy_data:
+		return enemy_data.enemy_name
+
+	return name
+
+
 func setup_enemy_moves():
 
 	selected_moves.clear()
