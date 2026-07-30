@@ -40,9 +40,9 @@ func get_display_name() -> String:
 	return name
 
 
-# -------------------------------------------------------------------
+# ==================================================
 # BASE STATS/MODIFIERS
-# -------------------------------------------------------------------
+# ==================================================
 
 var base_hp := 100
 var hp := 100
@@ -63,24 +63,10 @@ var accuracy_modifier:int = 0
 var evasion_modifier:int = 0
 var armor_modifier:int = 0
 
-var passive_effects: Array = []
-var status_effects: Array = []
 
-
-# -------------------------------------------------------------------
-# COMBAT STATES
-# -------------------------------------------------------------------
-
-
-var is_protecting := false
-
-# 80% damage reduction
-var protect_reduction := 0.8
-
-
-# -------------------------------------------------------------------
+# ==================================================
 # GENES
-# -------------------------------------------------------------------
+# ==================================================
 
 
 var equipped_genes: Array[GeneResource] = []
@@ -105,18 +91,158 @@ var slot_capacity := {
 }
 
 
-# -------------------------------------------------------------------
+func add_gene(gene: GeneResource) -> bool:
+
+	if gene == null:
+		return false
+
+	var slot = gene.slot_type
+	var current_list: Array = gene_slots[slot]
+
+	var used_cost := 0
+
+	for g in current_list:
+		used_cost += g.slot_cost
+
+	if used_cost + gene.slot_cost > slot_capacity[slot]:
+		print("No space for gene:", gene.gene_name)
+		return false
+
+	current_list.append(gene)
+
+	gene_slots[slot] = current_list
+
+	equipped_genes.append(gene)
+
+
+	# Add gene passive effects
+	for passive in gene.passive_effects:
+		if passive:
+			passive_effects.append(passive)
+
+
+	# Add gene moves
+	for move in gene.move_pool:
+		if move:
+			gene_moves.append(move)
+
+	print(
+		name,
+		" equipped gene:",
+		gene.gene_name
+	)
+
+	return true
+
+
+func load_genes(genes:Array):
+	for gene in genes:
+
+		if gene:
+			add_gene(gene)
+
+
+
+func get_synergy_bonus(slot: GeneResource.SlotType) -> int:
+	
+	var genes = gene_slots[slot]
+
+	if genes.size() >= 2:
+		return 1
+
+	return 0
+
+
+# ==================================================
 # MOVES
-# -------------------------------------------------------------------
+# ==================================================
 
 var learned_moves: Array[MoveResource] = []
 var basic_moves:Array[MoveResource] = []
 var gene_moves:Array[MoveResource] = []
 var selected_moves:Array[MoveResource] = []
 
-# -------------------------------------------------------------------
+
+func setup_basic_moves():
+	
+	basic_moves.clear()
+
+	if animal_resource == null:
+		print("No animal resource")
+		return
+		
+	if not "starter_moves" in animal_resource:
+		print("Animal has no starter moves")
+		return
+
+	for move in animal_resource.starter_moves:
+		
+		if move:
+			basic_moves.append(move)
+		
+			print(
+				name,
+				" learned:",
+				move.move_name
+			)
+
+
+func add_move(move: MoveResource):
+
+	if move == null:
+		return
+
+	selected_moves.append(move)
+
+	print(
+		name,
+		" learned gene move:",
+		move.move_name
+	)
+
+
+func get_move(index: int):
+	
+	var moves = get_battle_moves()
+	
+	if index < 0:
+		return null
+
+	if index >= moves.size():
+		return null
+
+	return moves[index]
+
+
+func get_battle_moves():
+	var moves:Array[MoveResource] = []
+	
+	moves.append_array(basic_moves)
+
+	moves.append_array(selected_moves)
+
+	return moves
+
+
+func use_move(index: int,target):
+
+	var move = get_move(index)
+
+	if move == null:
+		return
+
+	move.execute(
+		self,
+		target
+	)
+
+
+# ==================================================
 # PASSIVES / STATUS EFFECTS
-# -------------------------------------------------------------------
+# ==================================================
+
+var passive_effects: Array = []
+var status_effects: Array = []
 
 
 func process_status_effects():
@@ -185,144 +311,11 @@ func remove_status_effect(effect:StatusEffect):
 		" expired on ",
 		name
 	)
-	
-	
-# -------------------------------------------------------------------
-# GENE MANAGEMENT
-# -------------------------------------------------------------------
 
 
-func add_gene(gene: GeneResource) -> bool:
-
-	if gene == null:
-		return false
-
-	var slot = gene.slot_type
-	var current_list: Array = gene_slots[slot]
-
-	var used_cost := 0
-
-	for g in current_list:
-		used_cost += g.slot_cost
-
-	if used_cost + gene.slot_cost > slot_capacity[slot]:
-		print("No space for gene:", gene.gene_name)
-		return false
-
-	current_list.append(gene)
-
-	gene_slots[slot] = current_list
-
-	equipped_genes.append(gene)
-
-
-	# Add gene passive effects
-	for passive in gene.passive_effects:
-		if passive:
-			passive_effects.append(passive)
-
-
-	# Add gene moves
-	for move in gene.move_pool:
-		if move:
-			gene_moves.append(move)
-
-	print(
-		name,
-		" equipped gene:",
-		gene.gene_name
-	)
-
-	return true
-
-
-func get_battle_moves():
-	var moves:Array[MoveResource] = []
-	
-	moves.append_array(basic_moves)
-
-	moves.append_array(selected_moves)
-
-	return moves
-
-# -------------------------------------------------------------------
-# MOVE SYSTEM
-# -------------------------------------------------------------------
-
-
-func add_move(move: MoveResource):
-
-	if move == null:
-		return
-
-	selected_moves.append(move)
-
-	print(
-		name,
-		" learned gene move:",
-		move.move_name
-	)
-
-
-func get_move(index: int):
-	
-	var moves = get_battle_moves()
-	
-	if index < 0:
-		return null
-
-	if index >= moves.size():
-		return null
-
-	return moves[index]
-
-
-func use_move(index: int,target):
-
-	var move = get_move(index)
-
-	if move == null:
-		return
-
-	move.execute(
-		self,
-		target
-	)
-
-
-func load_build(build: AnimalBuildResource):
-	if build == null:
-		print("No build")
-		return
-
-	name = build.animal_name
-
-	animal_resource = build.animal
-
-	if animal_resource:
-		base_hp = animal_resource.base_hp
-		base_attack = animal_resource.base_attack
-		base_speed = animal_resource.base_speed
-
-	equipped_genes.clear()
-	
-	learned_moves.clear()
-	basic_moves.clear()
-	gene_moves.clear()
-	selected_moves.clear()
-
-	setup_basic_moves()
-
-	for gene in build.genes:
-		add_gene(gene)
-
-	for move in build.moves:
-		add_move(move)
-
-
-# -------------------------------------------------------------------
+# ==================================================
 # STATS
-# -------------------------------------------------------------------
+# ==================================================
 
 
 func get_attack() -> int:
@@ -385,25 +378,7 @@ func get_evasion() -> int:
 			
 	return clamp(value, 0, 90)
 
-func calculate_hit_chance(target, move_accuracy: int) -> int:
-	
-	var chance = move_accuracy + get_accuracy() - target.get_evasion()
-	
-	print(
-		name,
-		" move accuracy:",
-		move_accuracy,
-		" accuracy_bonus:",
-		get_accuracy(),
-		" target evasion:",
-		target.get_evasion(),
-		" final chance:",
-		chance
-	)
 
-	return clamp(chance, 10, 100)
-	
-	
 func get_armor() -> int:
 	var value = base_armor + defense_modifier
 	
@@ -412,32 +387,8 @@ func get_armor() -> int:
 			value += gene.armor_bonus
 			
 	return value
-	
-func calculate_damage_taken(amount: int) -> int:
-	
-	var armor = get_armor()
-	
-	var reduction = armor * 0.01
-	
-	var final_damage = amount * (1.0 - reduction)
-	
-	return max(1, int(final_damage))
-	
-	
-func setup_player_hp(manager):
 
-	run_manager = manager
 
-	hp = manager.player_hp
-
-	print(
-		"Loaded player HP:",
-		hp,
-		"/",
-		manager.max_hp
-	)
-	
-	
 func modify_attack(amount:int):
 	attack_modifier += amount
 
@@ -458,15 +409,49 @@ func modify_evasion(amount:int):
 	evasion_modifier += amount
 	
 	
-# -------------------------------------------------------------------
+func calculate_hit_chance(target, move_accuracy: int) -> int:
+	
+	var chance = move_accuracy + get_accuracy() - target.get_evasion()
+	
+	print(
+		name,
+		" move accuracy:",
+		move_accuracy,
+		" accuracy_bonus:",
+		get_accuracy(),
+		" target evasion:",
+		target.get_evasion(),
+		" final chance:",
+		chance
+	)
+
+	return clamp(chance, 10, 100)
+
+
+func setup_player_hp(manager):
+
+	run_manager = manager
+
+	hp = manager.player_hp
+
+	print(
+		"Loaded player HP:",
+		hp,
+		"/",
+		manager.max_hp
+	)
+
+
+# ==================================================
 # Combat Functions
-# -------------------------------------------------------------------
+# ==================================================
+
+var is_protecting := false
+
+# 80% damage reduction
+var protect_reduction := 0.8
 
 
-func get_current_hp() -> int:
-	return hp
-	
-	
 func take_damage(amount: int):
 	
 	if is_protecting:
@@ -541,18 +526,26 @@ func heal(amount:int):
 	)
 
 	hp_changed.emit(hp)
-	
-	
-	#if self is PlayerAnimal:
-#
-		#var run_manager = get_node("../../RunManager")
-#
-		#if run_manager:
-			#run_manager.player_hp = hp
 
-# -------------------------------------------------------------------
+
+func calculate_damage_taken(amount: int) -> int:
+	
+	var armor = get_armor()
+	
+	var reduction = armor * 0.01
+	
+	var final_damage = amount * (1.0 - reduction)
+	
+	return max(1, int(final_damage))
+
+
+func get_current_hp() -> int:
+	return hp
+
+
+# ==================================================
 # TURN MANAGEMENT
-# -------------------------------------------------------------------
+# ==================================================
 
 
 func reset_turn_state():
@@ -575,9 +568,9 @@ func clear_protect():
 	is_protecting = false
 
 
-# -------------------------------------------------------------------
-# PASSIVE EFFECT SYSTEM
-# -------------------------------------------------------------------
+# ==================================================
+# PASSIVE EFFECTS
+# ==================================================
 
 
 func trigger_passive_event(event_name: String):
@@ -602,58 +595,6 @@ func trigger_passive_event(event_name: String):
 					passive.on_turn_end(self)
 
 
-# -------------------------------------------------------------------
-# BASIC MOVES
-# -------------------------------------------------------------------
-
-
-func setup_basic_moves():
-	
-	basic_moves.clear()
-
-	if animal_resource == null:
-		print("No animal resource")
-		return
-		
-	if not "starter_moves" in animal_resource:
-		print("Animal has no starter moves")
-		return
-
-	for move in animal_resource.starter_moves:
-		
-		if move:
-			basic_moves.append(move)
-		
-			print(
-				name,
-				" learned:",
-				move.move_name
-			)
-		
-	#gene_moves.clear()
-#
-	#var attack = MoveResource.new()
-#
-	#attack.move_name = "Attack"
-	#attack.power = 5
-	#attack.priority = 0
-#
-	#basic_moves.append(attack)
-#
-#
-	#var protect = MoveResource.new()
-#
-	#protect.move_name = "Protect"
-	#protect.power = -1
-	#protect.priority = 2
-#
-	#basic_moves.append(protect)
-#
-	#print(
-		#name,
-		#" learned basic moves"
-	#)
-
 # ==================================================
 # Resource Loading
 # ==================================================
@@ -669,23 +610,31 @@ func load_animal_stats(resource):
 	base_speed = resource.base_speed
 
 
-func load_genes(genes:Array):
-	for gene in genes:
+func load_build(build: AnimalBuildResource):
+	if build == null:
+		print("No build")
+		return
 
-		if gene:
-			add_gene(gene)
-			
-			
-# -------------------------------------------------------------------
-# LEGENDARY MUTATION PLACEHOLDER
-# -------------------------------------------------------------------
+	name = build.animal_name
 
+	animal_resource = build.animal
 
-func get_synergy_bonus(slot: GeneResource.SlotType) -> int:
+	if animal_resource:
+		base_hp = animal_resource.base_hp
+		base_attack = animal_resource.base_attack
+		base_speed = animal_resource.base_speed
+
+	equipped_genes.clear()
 	
-	var genes = gene_slots[slot]
+	learned_moves.clear()
+	basic_moves.clear()
+	gene_moves.clear()
+	selected_moves.clear()
 
-	if genes.size() >= 2:
-		return 1
+	setup_basic_moves()
 
-	return 0
+	for gene in build.genes:
+		add_gene(gene)
+
+	for move in build.moves:
+		add_move(move)
