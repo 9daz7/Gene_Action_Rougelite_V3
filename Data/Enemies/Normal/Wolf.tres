@@ -4,7 +4,7 @@
 [ext_resource type="Resource" uid="uid://bjcqdkaq6oa1o" path="res://Data/Genes/WolfFangs.tres" id="2_s7tfn"]
 [ext_resource type="Script" uid="uid://byxi3hsf2x8dx" path="res://Scripts/Enemies/EnemyResource.gd" id="2_wqhy1"]
 [ext_resource type="Script" uid="uid://bnmm0xqkm6atb" path="res://Scripts/Moves/MoveResource.gd" id="4_aj0t2"]
-[ext_resource type="Resource" uid="uid://cfsalnn48dv3f" path="res://Data/Moves/Bite.tres" id="5_g602d"]
+[ext_resource type="Resource" uid="uid://8fymemyaaa2m" path="res://Data/Moves/attack.tres" id="4_g602d"]
 [ext_resource type="Resource" uid="uid://dssodq4lr1182" path="res://Data/Moves/Protect.tres" id="6_ws7t8"]
 
 [resource]
@@ -12,6 +12,7 @@ script = ExtResource("2_wqhy1")
 enemy_name = "Wolf"
 base_hp = 60
 base_speed = 13
-starting_moves = Array[ExtResource("4_aj0t2")]([ExtResource("5_g602d"), ExtResource("6_ws7t8")])
+starting_genes = Array[ExtResource("1_jem7e")]([ExtResource("2_s7tfn")])
+moves = Array[ExtResource("4_aj0t2")]([ExtResource("4_g602d"), ExtResource("6_ws7t8")])
 drop_gene_pool = Array[ExtResource("1_jem7e")]([ExtResource("2_s7tfn")])
 metadata/_custom_type_script = "uid://byxi3hsf2x8dx"

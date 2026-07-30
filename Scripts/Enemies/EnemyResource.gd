@@ -32,7 +32,7 @@ enum EnemyType {
 # ==================================================
 
 # Moves enemies start with
-@export var starting_moves: Array[MoveResource] = []
+@export var moves: Array[MoveResource] = []
 
 # ==================================================
 # Rewards
