@@ -7,10 +7,26 @@ enum EnemyType {
 	BOSS
 }
 
+
 @export var enemy_name: String = ""
 @export_multiline var description: String = ""
 
 @export var enemy_type: EnemyType = EnemyType.NORMAL
+
+
+# ==================================================
+# AI
+# ==================================================
+
+enum AIType {
+	BASIC,
+	AGGRESSIVE,
+	DEFENSIVE,
+	TACTICAL
+}
+
+@export var ai_type: AIType = AIType.BASIC
+
 
 # ==================================================
 # Base Stats

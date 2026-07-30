@@ -2,8 +2,10 @@
 
 [ext_resource type="Script" uid="uid://cnlwwn0eoa0pn" path="res://Scripts/Genes/GeneResource.gd" id="1_j88pe"]
 [ext_resource type="Script" uid="uid://byxi3hsf2x8dx" path="res://Scripts/Enemies/EnemyResource.gd" id="2_7vbna"]
+[ext_resource type="Script" uid="uid://bnmm0xqkm6atb" path="res://Scripts/Moves/MoveResource.gd" id="2_qr4im"]
 
 [resource]
 script = ExtResource("2_7vbna")
 enemy_name = "Tiger"
+ai_type = 1
 metadata/_custom_type_script = "uid://byxi3hsf2x8dx"

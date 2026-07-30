@@ -5,4 +5,7 @@
 
 [resource]
 script = ExtResource("2_b05ts")
+effect_type = 2
+move_name = "Camoflage"
+description = "USer camoflages itself toraises evasivness "
 metadata/_custom_type_script = "uid://bnmm0xqkm6atb"

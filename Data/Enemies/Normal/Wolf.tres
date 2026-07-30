@@ -10,6 +10,7 @@
 [resource]
 script = ExtResource("2_wqhy1")
 enemy_name = "Wolf"
+ai_type = 3
 base_hp = 60
 base_speed = 13
 starting_genes = Array[ExtResource("1_jem7e")]([ExtResource("2_s7tfn")])
