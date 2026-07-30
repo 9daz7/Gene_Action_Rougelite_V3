@@ -31,11 +31,17 @@ func initialize(resource: AnimalResource):
 	setup_basic_moves()
 
 
+# ==================================================
+# Identity
+# ==================================================
+
+
 func get_display_name() -> String:
 	return name
 
+
 # -------------------------------------------------------------------
-# BASE STATS
+# BASE STATS/MODIFIERS
 # -------------------------------------------------------------------
 
 var base_hp := 100
@@ -47,6 +53,18 @@ var base_speed := 10
 var base_accuracy := 100
 var base_evasion := 0
 var base_armor := 0
+
+
+# Temporary battle stat modifiers
+var speed_modifier:int = 0
+var attack_modifier:int = 0
+var defense_modifier:int = 0
+var accuracy_modifier:int = 0
+var evasion_modifier:int = 0
+var armor_modifier:int = 0
+
+var passive_effects: Array = []
+var status_effects: Array = []
 
 
 # -------------------------------------------------------------------
@@ -99,17 +117,6 @@ var selected_moves:Array[MoveResource] = []
 # -------------------------------------------------------------------
 # PASSIVES / STATUS EFFECTS
 # -------------------------------------------------------------------
-
-# Temporary battle stat modifiers
-var speed_modifier:int = 0
-var attack_modifier:int = 0
-var defense_modifier:int = 0
-var accuracy_modifier:int = 0
-var evasion_modifier:int = 0
-var armor_modifier:int = 0
-
-var passive_effects: Array = []
-var status_effects: Array = []
 
 
 func process_status_effects():
@@ -298,7 +305,11 @@ func load_build(build: AnimalBuildResource):
 		base_speed = animal_resource.base_speed
 
 	equipped_genes.clear()
+	
 	learned_moves.clear()
+	basic_moves.clear()
+	gene_moves.clear()
+	selected_moves.clear()
 
 	setup_basic_moves()
 
@@ -448,7 +459,7 @@ func modify_evasion(amount:int):
 	
 	
 # -------------------------------------------------------------------
-# DAMAGE
+# Combat Functions
 # -------------------------------------------------------------------
 
 

@@ -252,20 +252,19 @@ func initialize_battle():
 		player.start_battle()
 
 	for enemy in enemies:
-		
+
 		if enemy == null:
 			push_error("Enemy list contains null enemy")
 			continue
-		
+
 		if enemy.has_method("start_battle"):
 			enemy.start_battle()
 
-
-	current_battle.setup_hp_bars(
+	GameEvents.battle_initialized.emit(
 		player,
 		enemies
 	)
-	
+
 	GameEvents.battle_names_updated.emit(
 		player,
 		enemies[0]
@@ -274,7 +273,7 @@ func initialize_battle():
 	#current_battle.battle_ui.move_selected.connect(
 		#turn_manager._on_move_selected
 	#)
-	
+
 	turn_manager.initialize(
 		player,
 		enemies,

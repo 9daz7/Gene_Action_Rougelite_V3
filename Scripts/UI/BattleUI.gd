@@ -70,6 +70,13 @@ func _ready():
 			update_status_labels
 		)
 
+	if not GameEvents.battle_initialized.is_connected(
+		setup_battle_ui
+	):
+		GameEvents.battle_initialized.connect(
+			setup_battle_ui
+		)
+
 
 # ==================================================
 # Public Functions
@@ -130,8 +137,8 @@ func update_status_labels(player:AnimalBase, enemy:AnimalBase):
 		enemy_status_label.text = get_status_text(enemy)
 	else:
 		enemy_status_label.text = ""
-	
-	
+
+
 func get_status_text(animal:AnimalBase) -> String:
 
 	var text := ""
@@ -142,6 +149,18 @@ func get_status_text(animal:AnimalBase) -> String:
 		text += " (" + str(effect.duration) + ")\n"
 
 	return text
+
+
+func setup_battle_ui(player, enemies):
+
+	var enemy = enemies[0]
+
+	setup_names(
+		player,
+		enemy
+	)
+
+	print("Battle UI initialized")
 
 
 func update_player_hp(current_hp:int, max_hp:int):

@@ -33,6 +33,8 @@ signal enemy_updated(enemy)
 
 signal status_changed(player, enemy)
 
+signal battle_initialized(player, enemies)
+
 signal battle_names_updated(player, enemy)
 
 # ==================================================
