@@ -74,14 +74,9 @@ func execute(user, target):
 			move_name
 		)
 
-		for effect in effects:
-			if effect_target == EffectTarget.SELF:
-				effect.apply(user)
-			else:
-				effect.apply(target)
-
+		apply_effects(user, target)
+		
 		return
-	
 	
 	# -----------------------------
 	# PROTECT
@@ -95,6 +90,7 @@ func execute(user, target):
 		)
 
 		user.activate_protect()
+		
 		return
 
 
@@ -133,6 +129,19 @@ func execute(user, target):
 	target.take_damage(damage)
 
 
-	# Apply extra effects after damage
+	# Apply effects after damage
+	apply_effects(user, target)
+
+
+func apply_effects(user, target):
+
 	for effect in effects:
-		effect.apply(target)
+
+		if effect == null:
+			continue
+
+		if effect_target == EffectTarget.SELF:
+			effect.apply(user)
+
+		else:
+			effect.apply(target)
