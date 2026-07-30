@@ -92,6 +92,10 @@ func start_player_turn():
 	if current_state == TurnState.BATTLE_OVER:
 		return
 
+	if player == null:
+		print("Cannot start player turn. Player is missing.")
+		return
+
 	current_state = TurnState.PLAYER_TURN
 
 	print("Player turn")
@@ -109,8 +113,6 @@ func start_player_turn():
 		player,
 		get_active_enemy()
 	)
-	
-	#battle_ui.update_status_labels(player, get_active_enemy())
 
 	# allow buttons
 	GameEvents.turn_changed.emit(
@@ -272,7 +274,9 @@ func end_turn():
 	
 	if current_state == TurnState.BATTLE_OVER:
 		return
-		
+
+	if player == null:
+		return
 
 	trigger_turn_end_effects()
 
@@ -305,29 +309,21 @@ func check_battle_end():
 
 	if player.hp <= 0:
 		print("Player defeated")
-		
+
 		current_state = TurnState.BATTLE_OVER
-		
-		GameEvents.battle_finished.emit(
-			"lose"
-		)
 
 		battle_lost.emit()
-		
+
 		return
 
 	for enemy in enemies:
 		if enemy.hp > 0:
 			return
-	
+
 		print("All enemies defeated")
 		current_state = TurnState.BATTLE_OVER
 
 		var defeated_enemy := enemies[0] if enemies.size() > 0 else null
-
-		GameEvents.battle_finished.emit(
-			"win"
-		)
 
 		battle_won.emit(
 			defeated_enemy
@@ -335,17 +331,18 @@ func check_battle_end():
 
 		#if battle_ui:
 			#battle_ui.hide()
-			
-			
+
+
 # ==================================================
 # Cleanup
 # ==================================================
 
 func reset():
-	
+
 	current_state = TurnState.NONE
 
 	player = null
+
 	enemies.clear()
 
 	print("TurnManager reset")

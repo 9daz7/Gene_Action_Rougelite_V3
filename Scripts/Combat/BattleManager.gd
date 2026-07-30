@@ -76,59 +76,59 @@ func initialize(
 	turn_manager = turns
 	battle_root = root
 	spawner = spawn
-	
+
 	if turn_manager:
-		
+
 		if not turn_manager.battle_won.is_connected(
 			_on_turn_battle_won
 		):
 			turn_manager.battle_won.connect(
 				_on_turn_battle_won
 			)
-		
+
 		if not turn_manager.battle_lost.is_connected(
 			_on_turn_battle_lost
 		):
 			turn_manager.battle_lost.connect(
 				_on_turn_battle_lost
 			)
-		
+
 	else:
-		
+
 		push_error(
 			"BattleManager initialized without TurnManager"
 		)
-	
+
 
 func start_critical_experiment():
 
 	print("Starting critical experiment battle")
-	
+
 	critical_experiment = true
-	
+
 	current_battle_type = RoomData.RoomType.ELITE
-	
+
 	print("Critical flag set:", critical_experiment)
 
 	start_battle(RoomData.RoomType.ELITE) # elite until criticalexperiment.tres is ready
-	
-	
+
+
 # ==================================================
 # Battle Creation
 # ==================================================
 
 
 func start_battle(room_type = RoomData.RoomType.ENEMY):
-	
+
 	if room_type != RoomData.RoomType.ELITE:
 		critical_experiment = false
-		
+
 	if spawner == null:
 		push_error("BattleSpawner missing")
 		return
-		
+
 	current_battle_type = room_type
-	
+
 	enemies.clear()
 
 	await create_battle_scene()
@@ -136,7 +136,7 @@ func start_battle(room_type = RoomData.RoomType.ENEMY):
 	player = spawner.spawn_player()
 
 	var enemy_resource = get_enemy(room_type)
-	
+
 	if enemy_resource == null:
 		push_error("No enemy resource selected")
 		return
@@ -147,33 +147,33 @@ func start_battle(room_type = RoomData.RoomType.ENEMY):
 	)
 
 	enemies.append(enemy)
-	
+
 	initialize_battle()
-	
-		
+
+
 func create_battle_scene():
-	
+
 	if battle_root == null:
 		push_error("Battle root missing")
 		return
-		
+
 	if is_instance_valid(current_battle):
 		current_battle.queue_free()
-		
+
 	current_battle = BATTLE_SCENE.instantiate()
 
 	battle_root.add_child(current_battle)
 
 	await get_tree().process_frame
-	
+
 	spawner.initialize(
 		current_battle,
 		run_manager
 	)
-	
-		
+
+
 func start_group_battle():
-	
+
 	current_battle_type = RoomData.RoomType.GROUP_ENEMY
 
 	enemies.clear()
@@ -185,7 +185,7 @@ func start_group_battle():
 	var resources:Array[EnemyResource] = []
 
 	for i in range(2):
-		
+
 		resources.append(
 			get_enemy(
 				RoomData.RoomType.GROUP_ENEMY
@@ -197,7 +197,7 @@ func start_group_battle():
 	)
 
 	initialize_battle()
-	
+
 
 # ==================================================
 # Enemy Selection
@@ -207,15 +207,15 @@ func start_group_battle():
 func get_enemy(room_type) -> EnemyResource:
 
 	var pool = []
-	
+
 	match  room_type:
-		
+
 		RoomData.RoomType.ENEMY:
 			pool = ENEMY_POOL
-			
+
 		RoomData.RoomType.GROUP_ENEMY:
 			pool = ENEMY_POOL
-			
+
 		RoomData.RoomType.ELITE:
 			pool = ELITE_POOL
 
@@ -239,7 +239,7 @@ func initialize_battle():
 	if player == null:
 		push_error("Battle initialized without player")
 		return
-		
+
 	if current_battle == null:
 		push_error("Battle initialized without scene")
 		return
@@ -247,7 +247,7 @@ func initialize_battle():
 	if enemies.is_empty():
 		push_error("Battle initialized without enemies")
 		return
-		
+
 	if player.has_method("start_battle"):
 		player.start_battle()
 
@@ -323,14 +323,19 @@ func _on_turn_battle_won(enemy):
 	#if critical_experiment:
 		#print("Resetting critical experiment flag")
 		#critical_experiment = false
-	
+
 	await get_tree().process_frame
-	
+
 	end_battle()
 
 
 func _on_turn_battle_lost():
+
 	print("BattleManager received defeat")
+
+	if turn_manager:
+		turn_manager.current_state = TurnManager.TurnState.BATTLE_OVER
+
 
 	GameEvents.battle_finished.emit(
 		"lose"
@@ -338,19 +343,22 @@ func _on_turn_battle_lost():
 
 	battle_lost.emit()
 
+	await get_tree().process_frame
+
 	end_battle()
 
 
-	
 func end_battle():
+
 	print("Cleaning battle")
-	
+
 	critical_experiment = false
 
 	# Reset turn manager references
 	if turn_manager:
-		turn_manager.reset()
-	
+		
+		turn_manager.current_state = TurnManager.TurnState.BATTLE_OVER
+
 	# Remove battle scene
 	if is_instance_valid(current_battle):
 		current_battle.queue_free()
@@ -363,15 +371,18 @@ func end_battle():
 	for enemy in enemies:
 		if is_instance_valid(enemy):
 			enemy.queue_free()
-	
+
 	enemies.clear()
-	
+
 	current_battle = null
 	player = null
-	
+
+	if turn_manager:
+		turn_manager.reset()
+
 	print("Battle cleanup complete")
-	
-	
+
+
 func reset_battle_state():
 	current_battle_type = null
 	critical_experiment = false
