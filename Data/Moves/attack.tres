@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="MoveResource" format=3 uid="uid://8fymemyaaa2m"]
+
+[ext_resource type="Script" uid="uid://cedh0hgwqddn4" path="res://Resources/StatusEffect.gd" id="1_ybul5"]
+[ext_resource type="Script" uid="uid://bnmm0xqkm6atb" path="res://Scripts/Moves/MoveResource.gd" id="2_bv4qk"]
+
+[resource]
+script = ExtResource("2_bv4qk")
+move_name = "attack"
+power = 6
+description = "a basic attack"
+critical_chance = 2
+metadata/_custom_type_script = "uid://bnmm0xqkm6atb"

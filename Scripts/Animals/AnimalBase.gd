@@ -498,6 +498,7 @@ func take_damage(amount: int):
 	)
 
 	GameEvents.hp_changed.emit(
+		self,
 		hp,
 		get_max_hp()
 	)
@@ -534,6 +535,7 @@ func heal(amount:int):
 	)
 
 	GameEvents.hp_changed.emit(
+		self,
 		hp,
 		get_max_hp()
 	)

@@ -64,6 +64,6 @@ signal gene_unlocked(gene)
 # Player Events
 # ==================================================
 
-signal hp_changed(current_hp, max_hp)
+signal hp_changed(animal, current_hp, max_hp)
 signal player_healed(amount)
 signal player_damaged(amount)

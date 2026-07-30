@@ -2,6 +2,9 @@
 
 [ext_resource type="Script" uid="uid://cnlwwn0eoa0pn" path="res://Scripts/Genes/GeneResource.gd" id="1_06xb4"]
 [ext_resource type="Script" uid="uid://byxi3hsf2x8dx" path="res://Scripts/Enemies/EnemyResource.gd" id="2_yk136"]
+[ext_resource type="Script" uid="uid://bnmm0xqkm6atb" path="res://Scripts/Moves/MoveResource.gd" id="3_0sn7n"]
+[ext_resource type="Resource" uid="uid://drakyvl6jwh0f" path="res://Data/Moves/Ferocious bite.tres" id="4_oq5mc"]
+[ext_resource type="Resource" uid="uid://dssodq4lr1182" path="res://Data/Moves/Protect.tres" id="5_5werd"]
 
 [resource]
 script = ExtResource("2_yk136")
@@ -9,3 +12,4 @@ enemy_name = "Alpha Wolf"
 base_hp = 75
 base_attack = 7
 base_speed = 16
+starting_moves = Array[ExtResource("3_0sn7n")]([ExtResource("4_oq5mc"), ExtResource("5_5werd")])

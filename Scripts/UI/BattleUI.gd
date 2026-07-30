@@ -19,6 +19,9 @@ class_name BattleUI
 @onready var player_name_label = $PlayerPanel/PlayerNameLabel
 @onready var enemy_name_label = $EnemyPanel/EnemyNameLabel
 
+@onready var player_hp_bar = $PlayerPanel/PlayerHP
+@onready var enemy_hp_bar = $EnemyPanel/EnemyHP
+
 @onready var player_status_label = $PlayerPanel/PlayerStatusLabel
 @onready var enemy_status_label = $EnemyPanel/EnemyStatusLabel
 
@@ -163,7 +166,11 @@ func setup_battle_ui(player, enemies):
 	print("Battle UI initialized")
 
 
-func update_player_hp(current_hp:int, max_hp:int):
+func update_player_hp(
+	animal:AnimalBase,
+	current_hp:int,
+	max_hp:int
+):
 
 	print(
 		"BattleUI HP UPDATE:",
@@ -172,8 +179,16 @@ func update_player_hp(current_hp:int, max_hp:int):
 		max_hp
 	)
 
-	# player_hp_bar.value = current_hp
-	# player_hp_label.text = str(current_hp) + "/" + str(max_hp)
+	if animal is PlayerAnimal:
+
+		player_hp_bar.max_value = max_hp
+		player_hp_bar.value = current_hp
+
+
+	elif animal is EnemyAnimal:
+
+		enemy_hp_bar.max_value = max_hp
+		enemy_hp_bar.value = current_hp
 	
 	
 # ==================================================

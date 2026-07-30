@@ -8,7 +8,9 @@ class_name EnemyAnimal
 func start_battle():
 	
 	print("Enemy ready")
-
+	
+	name = enemy_data.enemy_name
+	
 	# Load stats from resource
 	if enemy_data:
 		
@@ -35,14 +37,13 @@ func setup_enemy_moves():
 
 	selected_moves.clear()
 
-	var attack := MoveResource.new()
+	if enemy_data == null:
+		return
 
-	attack.move_name = "Attack"
-	attack.power = 0
-	attack.priority = 0
-	attack.effect_type = MoveResource.MoveEffectType.DAMAGE
+	for move in enemy_data.starting_moves:
 
-	add_move(attack)
+		if move:
+			add_move(move)
 
 	
 func choose_action(player:AnimalBase) -> MoveResource:

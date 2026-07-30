@@ -270,9 +270,20 @@ func initialize_battle():
 		enemies[0]
 	)
 
-	#current_battle.battle_ui.move_selected.connect(
-		#turn_manager._on_move_selected
-	#)
+	GameEvents.hp_changed.emit(
+	player,
+	player.hp,
+	player.get_max_hp()
+)
+
+
+	for enemy in enemies:
+
+		GameEvents.hp_changed.emit(
+			enemy,
+			enemy.hp,
+			enemy.get_max_hp()
+		)
 
 	turn_manager.initialize(
 		player,

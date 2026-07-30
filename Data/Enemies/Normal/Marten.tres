@@ -3,6 +3,10 @@
 [ext_resource type="Script" uid="uid://cnlwwn0eoa0pn" path="res://Scripts/Genes/GeneResource.gd" id="1_dripw"]
 [ext_resource type="Script" uid="uid://byxi3hsf2x8dx" path="res://Scripts/Enemies/EnemyResource.gd" id="2_2u4da"]
 [ext_resource type="Resource" uid="uid://b63650onw8qfj" path="res://Data/Genes/MartensMentality.tres" id="2_rc0vg"]
+[ext_resource type="Script" uid="uid://bnmm0xqkm6atb" path="res://Scripts/Moves/MoveResource.gd" id="4_hcwok"]
+[ext_resource type="Resource" uid="uid://8fymemyaaa2m" path="res://Data/Moves/attack.tres" id="5_rj8qa"]
+[ext_resource type="Resource" uid="uid://dssodq4lr1182" path="res://Data/Moves/Protect.tres" id="6_qxp71"]
+[ext_resource type="Resource" uid="uid://deobyt5he5kb8" path="res://Data/Moves/Quick strike.tres" id="7_ja0m5"]
 
 [resource]
 script = ExtResource("2_2u4da")
@@ -10,5 +14,6 @@ enemy_name = "Marten"
 base_hp = 45
 base_attack = 4
 base_speed = 15
+starting_moves = Array[ExtResource("4_hcwok")]([ExtResource("5_rj8qa"), ExtResource("6_qxp71"), ExtResource("7_ja0m5")])
 drop_gene_pool = Array[ExtResource("1_dripw")]([ExtResource("2_rc0vg")])
 metadata/_custom_type_script = "uid://byxi3hsf2x8dx"
