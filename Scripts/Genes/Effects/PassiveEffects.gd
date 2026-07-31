@@ -54,7 +54,7 @@ func on_before_damage(owner, amount):
 
 
 # After taking damage
-func on_after_damage(owner, attacker, amount):
+func on_after_damage(owner, amount, attacker):
 	pass
 
 

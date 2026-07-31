@@ -10,9 +10,16 @@ func initialize_player(manager:RunManager):
 	run_manager = manager
 
 
-func take_damage(amount:int):
-	super.take_damage(amount)
-	
+func take_damage(
+	amount:int,
+	attacker:AnimalBase = null
+):
+
+	super.take_damage(
+		amount,
+		attacker
+	)
+
 	if run_manager:
 		run_manager.player_hp = hp
 

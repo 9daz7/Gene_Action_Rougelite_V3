@@ -493,7 +493,14 @@ func take_damage(
 		0,
 		get_max_hp()
 	)
-
+	
+	trigger_passive_event(
+		"after_damage",
+		{
+			"amount": amount,
+			"attacker": attacker
+		}
+	)
 
 	print(
 		name,
@@ -512,11 +519,6 @@ func take_damage(
 	hp_changed.emit(hp)
 
 	damage_data.amount = amount
-
-	trigger_passive_event(
-		"after_damage",
-		damage_data
-	)
 
 	if hp <= 0:
 		die()
@@ -650,10 +652,11 @@ func trigger_passive_event(
 				if passive.has_method("on_turn_end"):
 					passive.on_turn_end(self)
 
-				passive.on_after_damage(
-					self,
-					data
-				)
+				#passive.on_after_damage(
+					#self,
+					#data.amount,
+					#data.attacker
+				#)
 
 			"before_attack":
 
@@ -667,14 +670,22 @@ func trigger_passive_event(
 
 			"after_attack":
 
-				passive.on_after_attack(
-					self,
-					data.target,
-					data.damage
-				)
+				if data == null:
+					continue
+
+				if passive.has_method("on_after_attack"):
+
+					passive.on_after_attack(
+						self,
+						data.target,
+						data.damage
+					)
 
 			"before_damage":
 
+				if data == null:
+					continue
+					
 				if passive.has_method("on_before_damage"):
 
 					data.amount = passive.on_before_damage(
@@ -684,11 +695,15 @@ func trigger_passive_event(
 
 			"after_damage":
 
+				if data == null:
+					continue
+					
 				if passive.has_method("on_after_damage"):
 
 					passive.on_after_damage(
 						self,
-						data.amount
+						data.amount,
+						data.attacker
 					)
 
 # ==================================================
