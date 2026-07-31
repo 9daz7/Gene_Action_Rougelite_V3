@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="ThickSkinPassive" format=3 uid="uid://cpskj84b1hwg2"]
+
+[ext_resource type="Script" uid="uid://thlnrf4bde3b" path="res://Scripts/Passives/ThickSkinPassive.gd" id="1_gkn1h"]
+
+[resource]
+script = ExtResource("1_gkn1h")
+metadata/_custom_type_script = "uid://thlnrf4bde3b"

@@ -11,5 +11,4 @@ script = ExtResource("4_poi5u")
 gene_name = "Wolf fangs"
 attack_bonus = 2
 accuracy_bonus = 2
-passive_effects = Array[ExtResource("3_5jcc0")]([null])
 move_pool = Array[ExtResource("2_a835o")]([ExtResource("3_a835o")])

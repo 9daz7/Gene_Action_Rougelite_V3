@@ -230,7 +230,13 @@ func use_move(index: int,target):
 
 	if move == null:
 		return
-
+		
+	for passive in passive_effects:
+		passive.on_before_attack(
+			self,
+			target
+		)
+	
 	move.execute(
 		self,
 		target
@@ -452,8 +458,23 @@ var is_protecting := false
 var protect_reduction := 0.8
 
 
-func take_damage(amount: int):
-	
+func take_damage(
+	amount:int,
+	attacker:AnimalBase = null
+):
+
+	var damage_data = {
+		"amount": amount,
+		"attacker": attacker
+	}
+
+	trigger_passive_event(
+		"before_damage",
+		damage_data
+	)
+
+	amount = damage_data.amount
+
 	if is_protecting:
 
 		amount = int(
@@ -489,7 +510,14 @@ func take_damage(amount: int):
 	)
 
 	hp_changed.emit(hp)
-	
+
+	damage_data.amount = amount
+
+	trigger_passive_event(
+		"after_damage",
+		damage_data
+	)
+
 	if hp <= 0:
 		die()
 
@@ -595,9 +623,15 @@ func clear_protect():
 # ==================================================
 
 
-func trigger_passive_event(event_name: String):
+func trigger_passive_event(
+	event_name: String,
+	data = null
+):
 
 	for passive in passive_effects:
+		
+		if passive == null:
+			continue
 
 		match event_name:
 
@@ -616,6 +650,46 @@ func trigger_passive_event(event_name: String):
 				if passive.has_method("on_turn_end"):
 					passive.on_turn_end(self)
 
+				passive.on_after_damage(
+					self,
+					data
+				)
+
+			"before_attack":
+
+				if passive.has_method("on_before_attack"):
+
+					passive.on_before_attack(
+						self,
+						data.target
+					)
+
+
+			"after_attack":
+
+				passive.on_after_attack(
+					self,
+					data.target,
+					data.damage
+				)
+
+			"before_damage":
+
+				if passive.has_method("on_before_damage"):
+
+					data.amount = passive.on_before_damage(
+						self,
+						data.amount
+					)
+
+			"after_damage":
+
+				if passive.has_method("on_after_damage"):
+
+					passive.on_after_damage(
+						self,
+						data.amount
+					)
 
 # ==================================================
 # Resource Loading

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="MoveResource" format=3 uid="uid://cjejbsnlmqsc3"]
+
+[ext_resource type="Script" uid="uid://cedh0hgwqddn4" path="res://Resources/StatusEffect.gd" id="1_i0fhp"]
+[ext_resource type="Script" uid="uid://bnmm0xqkm6atb" path="res://Scripts/Moves/MoveResource.gd" id="2_yvtcb"]
+
+[resource]
+script = ExtResource("2_yvtcb")
+move_name = "Howl"
+description = "the animal howls and raises its attack"
+effect_type = 2
+damage_type = 2
+priority = 5
+metadata/_custom_type_script = "uid://bnmm0xqkm6atb"

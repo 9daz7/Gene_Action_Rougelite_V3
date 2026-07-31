@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="QuickReflexPassive" format=3 uid="uid://ce4kbkh4px7vm"]
+
+[ext_resource type="Script" uid="uid://bm2lcc0honrqc" path="res://Scripts/Passives/QuickReflexPassive.gd" id="1_s4dch"]
+
+[resource]
+script = ExtResource("1_s4dch")
+metadata/_custom_type_script = "uid://bm2lcc0honrqc"

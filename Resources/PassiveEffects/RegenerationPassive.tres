@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="RegenerationPassive" format=3 uid="uid://ctswx4vc1w6mq"]
+
+[ext_resource type="Script" uid="uid://ch62ly6pbh6md" path="res://Scripts/Passives/RegenerationPassive.gd" id="1_kvndr"]
+
+[resource]
+script = ExtResource("1_kvndr")
+effect_name = "Regeneration"
+metadata/_custom_type_script = "uid://cykpuveioj0q4"

@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="PredatorPassive" format=3 uid="uid://dqffr7h26lxi0"]
+
+[ext_resource type="Script" uid="uid://jotqumu61ftg" path="res://Scripts/Passives/PredatorPassive.gd" id="1_w6b6q"]
+
+[resource]
+script = ExtResource("1_w6b6q")
+metadata/_custom_type_script = "uid://cykpuveioj0q4"

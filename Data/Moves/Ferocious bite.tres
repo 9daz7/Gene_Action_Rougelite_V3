@@ -6,7 +6,6 @@
 [resource]
 script = ExtResource("2_6h4wc")
 move_name = "Ferocious bite"
-power = 10
 description = "The user lunges forward and deals damage through a ferocious bite."
-critical_chance = 4
+power = 10
 metadata/_custom_type_script = "uid://bnmm0xqkm6atb"

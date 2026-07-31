@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="ThornsPassive" format=3 uid="uid://dabjleyuikh67"]
+
+[ext_resource type="Script" uid="uid://bx53nd4q4cs1" path="res://Scripts/Passives/ThornsPassive.gd" id="1_dyekj"]
+
+[resource]
+script = ExtResource("1_dyekj")
+metadata/_custom_type_script = "uid://bx53nd4q4cs1"

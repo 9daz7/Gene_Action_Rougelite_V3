@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="RagePassive" format=3 uid="uid://81y60wcx8k4w"]
+
+[ext_resource type="Script" uid="uid://c1qwax3ai08f1" path="res://Scripts/Passives/RagePassive.gd" id="1_v6or1"]
+
+[resource]
+script = ExtResource("1_v6or1")
+metadata/_custom_type_script = "uid://c1qwax3ai08f1"

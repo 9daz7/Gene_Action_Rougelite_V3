@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="AdrenalinePassive" format=3 uid="uid://diyjb27q3k8k7"]
+
+[ext_resource type="Script" uid="uid://dlktknutdmnm8" path="res://Scripts/Passives/AdrenalinePassive.gd" id="1_fw4jx"]
+
+[resource]
+script = ExtResource("1_fw4jx")
+metadata/_custom_type_script = "uid://dlktknutdmnm8"

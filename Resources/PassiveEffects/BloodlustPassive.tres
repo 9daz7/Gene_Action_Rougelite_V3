@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="BloodlustPassive" format=3 uid="uid://civunfd67r2ud"]
+
+[ext_resource type="Script" uid="uid://bmtc6fkx3cnax" path="res://Scripts/Passives/BloodlustPassive.gd" id="1_tjn8o"]
+
+[resource]
+script = ExtResource("1_tjn8o")
+metadata/_custom_type_script = "uid://bmtc6fkx3cnax"

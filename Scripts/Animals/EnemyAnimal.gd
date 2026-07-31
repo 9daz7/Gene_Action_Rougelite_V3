@@ -4,6 +4,8 @@ class_name EnemyAnimal
 
 @export var enemy_data: EnemyResource
 
+var last_move: MoveResource = null
+var protect_count := 0
 
 func start_battle():
 
@@ -38,24 +40,126 @@ func choose_action(player:AnimalBase) -> MoveResource:
 	if moves.is_empty():
 		return null
 
+
+	var chosen_move: MoveResource
+	
 	match enemy_data.ai_type:
-		
+
 		EnemyResource.AIType.BASIC:
-			return choose_basic_move(moves)
+			choose_basic_move(moves)
+
 
 		EnemyResource.AIType.AGGRESSIVE:
-			return choose_aggressive_move(moves)
+			choose_aggressive_move(moves)
 
 
 		EnemyResource.AIType.DEFENSIVE:
-			return choose_defensive_move(moves)
+			choose_defensive_move(moves)
 
 
 		EnemyResource.AIType.TACTICAL:
-			return choose_tactical_move(moves, player)
+			choose_tactical_move(moves, player)
 
 
-	return moves[0]
+		_:
+			get_best_move(player,moves)
+
+
+	last_move = chosen_move
+
+	return chosen_move
+
+
+func get_best_move(
+	player:AnimalBase,
+	moves:Array
+) -> MoveResource:
+
+	var best_move:MoveResource = null
+	var best_score := -999
+
+	for move in moves:
+
+		var score = evaluate_move(
+			move,
+			player
+		)
+
+		print(
+			name,
+			" evaluated ",
+			move.move_name,
+			" score:",
+			score
+		)
+
+		if score > best_score:
+			best_score = score
+			best_move = move
+
+	return best_move
+
+
+func evaluate_move(
+	move:MoveResource,
+	player:AnimalBase
+) -> int:
+
+	var score := 0
+
+	score += move.priority * 5
+
+	# -----------------------------
+	# Damage moves
+	# -----------------------------
+
+	if move.effect_type == MoveResource.MoveEffectType.DAMAGE:
+		score += move.power
+
+	# -----------------------------
+	# Hybrid moves
+	# -----------------------------
+
+	if move.effect_type == MoveResource.MoveEffectType.HYBRID:
+		score += move.power + 10
+
+	# -----------------------------
+	# Protect
+	# -----------------------------
+
+	if move.effect_type == MoveResource.MoveEffectType.PROTECT:
+
+		var hp_percent = float(hp) / float(get_max_hp())
+
+		# Protect becomes valuable when hurt
+		if hp_percent < 0.3:
+			score += 60
+		elif hp_percent < 0.5:
+			score += 30
+		else:
+			score -= 30
+
+		# prevent repeated protect
+		if last_move == move:
+			score -= 50
+
+
+	# -----------------------------
+	# Status moves
+	# -----------------------------
+
+	if move.effect_type == MoveResource.MoveEffectType.STATUS:
+		score += 25
+
+
+	# -----------------------------
+	# Finishing move bonus
+	# -----------------------------
+
+	if player.hp <= move.power:
+		score += 50
+
+	return score
 
 
 func choose_basic_move(moves):

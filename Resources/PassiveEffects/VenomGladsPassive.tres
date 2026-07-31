@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="VenomGlandsPassive" format=3 uid="uid://vtk6mofqp0h3"]
+
+[ext_resource type="Script" uid="uid://bhqhr5pgv8kir" path="res://Scripts/Passives/VenomGlandsPassive.gd" id="1_o8hfo"]
+
+[resource]
+script = ExtResource("1_o8hfo")
+metadata/_custom_type_script = "uid://bhqhr5pgv8kir"

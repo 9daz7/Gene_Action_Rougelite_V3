@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://cnlwwn0eoa0pn" path="res://Scripts/Genes/GeneResource.gd" id="1_x756j"]
 [ext_resource type="Script" uid="uid://bnmm0xqkm6atb" path="res://Scripts/Moves/MoveResource.gd" id="2_ritsq"]
 [ext_resource type="Script" uid="uid://cykpuveioj0q4" path="res://Scripts/Genes/Effects/PassiveEffects.gd" id="3_3ano8"]
+[ext_resource type="Resource" uid="uid://cpskj84b1hwg2" path="res://Resources/PassiveEffects/ThickSkinPassive.tres" id="4_ritsq"]
 
 [resource]
 script = ExtResource("1_x756j")
@@ -11,4 +12,5 @@ gene_name = "Boar skin"
 slot_type = 1
 hp_bonus = 1
 defense_bonus = 3
+passive_effects = Array[ExtResource("3_3ano8")]([ExtResource("4_ritsq")])
 metadata/_custom_type_script = "uid://cnlwwn0eoa0pn"

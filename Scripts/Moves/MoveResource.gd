@@ -184,7 +184,10 @@ func execute_damage(
 		" damage"
 	)
 
-	target.take_damage(damage)
+	target.take_damage(
+		damage,
+		user
+	)
 
 	if apply_status:
 		apply_effects(user, target)
