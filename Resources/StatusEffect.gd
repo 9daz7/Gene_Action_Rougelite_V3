@@ -7,6 +7,7 @@ enum Type
 	POISON,
 	BLEED,
 	BURN,
+	HEAL,
 	SPEED_UP,
 	SPEED_DOWN,
 	ATTACK_UP,
@@ -21,15 +22,20 @@ enum Type
 @export var duration:int = 3
 
 
-func get_display_text():
+func get_display_text() -> String:
 
 	return effect_name + " (" + str(duration) + ")"
-	
-	
+
+
 func apply(target):
-	
+
+	if type == Type.HEAL:
+
+		target.heal(power)
+		return
+
 	var new_effect = duplicate()
-	
+
 	target.status_effects.append(new_effect)
 
 	print(
@@ -41,7 +47,7 @@ func apply(target):
 	match type:
 
 		Type.SPEED_UP:
-			target.speed_modifier += power
+			target.modify_speed(power)
 
 			print(
 				target.name,
@@ -50,48 +56,72 @@ func apply(target):
 			)
 
 		Type.SPEED_DOWN:
-			target.speed_modifier -= power
-			
+			target.modify_speed(-power)
+
 			print(
 				target.name,
-				" speed -",
+				" speed decreased by ",
 				power
 			)
 
 		Type.ATTACK_UP:
-			target.attack_modifier += power
+			target.modify_attack(power)
+
+			print(
+				target.name,
+				" attack increased by ",
+				power
+			)
 
 		Type.ATTACK_DOWN:
-			target.attack_modifier -= power
+			target.modify_attack(-power)
+
+			print(
+				target.name,
+				" sttack decreased by ",
+				power
+			)
 
 		Type.DEFENSE_UP:
-			target.defense_modifier += power
+			target.modify_defense(power)
+
+			print(
+				target.name,
+				" defense increased by ",
+				power
+			)
 
 		Type.DEFENSE_DOWN:
-			target.defense_modifier -= power
-			
-			
+			target.modify_defense(-power)
+
+			print(
+				target.name,
+				" defense decreased by ",
+				power
+			)
+
+
 func remove(target):
 
 	match type:
 
 		Type.SPEED_UP:
-			target.speed_modifier -= power
+			target.modify_speed(-power)
 
 		Type.SPEED_DOWN:
-			target.speed_modifier += power
+			target.modify_speed(power)
 
 		Type.ATTACK_UP:
-			target.attack_modifier -= power
+			target.modify_attack(-power)
 
 		Type.ATTACK_DOWN:
-			target.attack_modifier += power
+			target.modify_attack(power)
 
 		Type.DEFENSE_UP:
-			target.defense_modifier -= power
+			target.modify_defense(-power)
 
 		Type.DEFENSE_DOWN:
-			target.defense_modifier += power
+			target.modify_defense(power)
 
 
 	print(

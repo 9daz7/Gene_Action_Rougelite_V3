@@ -3,8 +3,15 @@
 [ext_resource type="Script" uid="uid://cnlwwn0eoa0pn" path="res://Scripts/Genes/GeneResource.gd" id="1_yr8o3"]
 [ext_resource type="Script" uid="uid://byxi3hsf2x8dx" path="res://Scripts/Enemies/EnemyResource.gd" id="2_dshtd"]
 [ext_resource type="Script" uid="uid://bnmm0xqkm6atb" path="res://Scripts/Moves/MoveResource.gd" id="3_hxtar"]
+[ext_resource type="Resource" uid="uid://8fymemyaaa2m" path="res://Data/Moves/attack.tres" id="3_uddjj"]
+[ext_resource type="Resource" uid="uid://dssodq4lr1182" path="res://Data/Moves/Protect.tres" id="4_0nwxa"]
+[ext_resource type="Resource" uid="uid://b1eti45dqkuo7" path="res://Data/Moves/Rage.tres" id="5_b6xhm"]
+[ext_resource type="Resource" uid="uid://bkbgwk6wbwxuh" path="res://Data/Genes/HoneyBadgerPoisonDef.tres" id="7_uddjj"]
 
 [resource]
 script = ExtResource("2_dshtd")
 ai_type = 1
+starting_genes = Array[ExtResource("1_yr8o3")]([ExtResource("7_uddjj")])
+moves = Array[ExtResource("3_hxtar")]([ExtResource("3_uddjj"), ExtResource("4_0nwxa"), ExtResource("5_b6xhm")])
+drop_gene_pool = Array[ExtResource("1_yr8o3")]([ExtResource("7_uddjj")])
 metadata/_custom_type_script = "uid://byxi3hsf2x8dx"

@@ -1,7 +1,13 @@
 [gd_resource type="Resource" script_class="EnemyResource" format=3 uid="uid://dlqvwwehc6tdk"]
 
 [ext_resource type="Script" uid="uid://cnlwwn0eoa0pn" path="res://Scripts/Genes/GeneResource.gd" id="1_0tryu"]
+[ext_resource type="Script" uid="uid://bnmm0xqkm6atb" path="res://Scripts/Moves/MoveResource.gd" id="2_58ojf"]
 [ext_resource type="Script" uid="uid://byxi3hsf2x8dx" path="res://Scripts/Enemies/EnemyResource.gd" id="2_qy50x"]
+[ext_resource type="Resource" uid="uid://cfsalnn48dv3f" path="res://Data/Moves/Bite.tres" id="3_a7s3f"]
+[ext_resource type="Resource" uid="uid://bjcqdkaq6oa1o" path="res://Data/Genes/WolfFangs.tres" id="4_0edjg"]
+[ext_resource type="Resource" uid="uid://dssodq4lr1182" path="res://Data/Moves/Protect.tres" id="4_c0gng"]
+[ext_resource type="Resource" uid="uid://drakyvl6jwh0f" path="res://Data/Moves/Ferocious bite.tres" id="5_kd3m8"]
+[ext_resource type="Resource" uid="uid://73ylas6rloet" path="res://Data/Moves/Outspeed.tres" id="6_pko1q"]
 
 [resource]
 script = ExtResource("2_qy50x")
@@ -9,3 +15,5 @@ enemy_name = "Modified Wolf"
 base_hp = 160
 base_attack = 10
 base_speed = 20
+starting_genes = Array[ExtResource("1_0tryu")]([ExtResource("4_0edjg")])
+moves = Array[ExtResource("2_58ojf")]([ExtResource("3_a7s3f"), ExtResource("4_c0gng"), ExtResource("5_kd3m8"), ExtResource("6_pko1q")])

@@ -2,10 +2,17 @@
 
 [ext_resource type="Script" uid="uid://cnlwwn0eoa0pn" path="res://Scripts/Genes/GeneResource.gd" id="1_j88pe"]
 [ext_resource type="Script" uid="uid://byxi3hsf2x8dx" path="res://Scripts/Enemies/EnemyResource.gd" id="2_7vbna"]
+[ext_resource type="Resource" uid="uid://kv67nouryndk" path="res://Data/Genes/TigerStrenghtGene.tres" id="2_l0ws3"]
 [ext_resource type="Script" uid="uid://bnmm0xqkm6atb" path="res://Scripts/Moves/MoveResource.gd" id="2_qr4im"]
+[ext_resource type="Resource" uid="uid://cfsalnn48dv3f" path="res://Data/Moves/Bite.tres" id="3_aadt6"]
+[ext_resource type="Resource" uid="uid://dssodq4lr1182" path="res://Data/Moves/Protect.tres" id="4_l0ws3"]
+[ext_resource type="Resource" uid="uid://deobyt5he5kb8" path="res://Data/Moves/Quick strike.tres" id="5_syoiu"]
 
 [resource]
 script = ExtResource("2_7vbna")
 enemy_name = "Tiger"
 ai_type = 1
+starting_genes = Array[ExtResource("1_j88pe")]([ExtResource("2_l0ws3")])
+moves = Array[ExtResource("2_qr4im")]([ExtResource("3_aadt6"), ExtResource("4_l0ws3"), ExtResource("5_syoiu")])
+drop_gene_pool = Array[ExtResource("1_j88pe")]([ExtResource("2_l0ws3")])
 metadata/_custom_type_script = "uid://byxi3hsf2x8dx"

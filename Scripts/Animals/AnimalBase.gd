@@ -528,6 +528,28 @@ func heal(amount:int):
 	hp_changed.emit(hp)
 
 
+func calculate_move_damage(move:MoveResource) -> int:
+
+	var damage := 0
+
+	match move.damage_type:
+
+		MoveResource.DamageType.PHYSICAL:
+			damage = get_attack()
+
+		MoveResource.DamageType.SPECIAL:
+			damage = get_attack()
+
+		MoveResource.DamageType.TRUE:
+			damage = 0
+
+	damage += move.power
+	
+	damage *= move.damage_multiplier
+
+	return int(damage)
+
+
 func calculate_damage_taken(amount: int) -> int:
 	
 	var armor = get_armor()

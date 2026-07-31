@@ -3,11 +3,14 @@
 [ext_resource type="Script" uid="uid://cnlwwn0eoa0pn" path="res://Scripts/Genes/GeneResource.gd" id="1_qygnj"]
 [ext_resource type="Script" uid="uid://byxi3hsf2x8dx" path="res://Scripts/Enemies/EnemyResource.gd" id="2_jikd1"]
 [ext_resource type="Script" uid="uid://bnmm0xqkm6atb" path="res://Scripts/Moves/MoveResource.gd" id="3_njxbk"]
-[ext_resource type="Resource" uid="uid://8fymemyaaa2m" path="res://Data/Moves/attack.tres" id="4_5lqpm"]
+[ext_resource type="Resource" uid="uid://mlgg5l341ho" path="res://Data/Genes/CheetahSpeedGene.tres" id="4_dkwka"]
+[ext_resource type="Resource" uid="uid://73ylas6rloet" path="res://Data/Moves/Outspeed.tres" id="5_5lqpm"]
 [ext_resource type="Resource" uid="uid://dssodq4lr1182" path="res://Data/Moves/Protect.tres" id="5_qvu7r"]
 [ext_resource type="Resource" uid="uid://deobyt5he5kb8" path="res://Data/Moves/Quick strike.tres" id="6_5bc27"]
 
 [resource]
 script = ExtResource("2_jikd1")
-starting_moves = Array[ExtResource("3_njxbk")]([ExtResource("4_5lqpm"), ExtResource("5_qvu7r"), ExtResource("6_5bc27")])
+starting_genes = Array[ExtResource("1_qygnj")]([ExtResource("4_dkwka")])
+moves = Array[ExtResource("3_njxbk")]([ExtResource("6_5bc27"), ExtResource("5_qvu7r"), ExtResource("5_5lqpm")])
+drop_gene_pool = Array[ExtResource("1_qygnj")]([ExtResource("4_dkwka")])
 metadata/_custom_type_script = "uid://byxi3hsf2x8dx"
