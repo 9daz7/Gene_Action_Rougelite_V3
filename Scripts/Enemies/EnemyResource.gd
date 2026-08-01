@@ -27,6 +27,21 @@ enum AIType {
 
 @export var ai_type: AIType = AIType.BASIC
 
+# ==================================================
+# AI Personality
+# ==================================================
+
+@export_range(0.0, 3.0)
+var aggression: float = 1.0
+
+
+@export_range(0.0, 3.0)
+var defense: float = 1.0
+
+
+@export_range(0.0, 3.0)
+var status_preference: float = 1.0
+
 
 # ==================================================
 # Base Stats

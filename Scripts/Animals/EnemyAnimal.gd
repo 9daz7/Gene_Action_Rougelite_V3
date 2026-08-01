@@ -5,7 +5,7 @@ class_name EnemyAnimal
 @export var enemy_data: EnemyResource
 
 var last_move: MoveResource = null
-var protect_count := 0
+#var protect_count := 0
 
 func start_battle():
 
@@ -142,8 +142,10 @@ func evaluate_move(
 	if move.effect_type == MoveResource.MoveEffectType.DAMAGE:
 		score += move.power
 		
-		# prefer attacking
-		score += 20
+		score += (
+			10 
+			* enemy_data.aggression
+		)
 
 	# ==================================
 	# Hybrid moves
@@ -151,7 +153,15 @@ func evaluate_move(
 
 	if move.effect_type == MoveResource.MoveEffectType.HYBRID:
 		score += move.power
-		score += 20
+		score += (
+			15
+			* enemy_data.aggression
+		)
+
+		score += (
+			10
+			* enemy_data.status_preference
+		)
 
 	# ==================================
 	# Protect
@@ -161,17 +171,69 @@ func evaluate_move(
 
 		var hp_percent = float(hp) / float(get_max_hp())
 
-		# Protect becomes valuable when hurt
-		if hp_percent < 0.25:
-			score += 15
-		elif hp_percent < 0.4:
-			score += 5
-		else:
-			score -= 50
+		# Base defensive preference
+		score += (
+			10 
+			* enemy_data.defense
+		)
 
-		# prevent repeated protect
+
+		# Protect is better when damaged
+
+		if hp_percent < 0.25:
+
+			score += 25
+
+		elif hp_percent < 0.4:
+
+			score += 10
+
+		else:
+
+			score -= 40
+
+
+		# Prevent Protect spam
+
 		if last_move == move:
-			score -= 90
+
+			score -= 100
+		
+		## Protect becomes valuable when hurt
+		#if hp_percent < 0.25:
+			#score += 15
+		#elif hp_percent < 0.4:
+			#score += 5
+		#else:
+			#score -= 50
+#
+		## prevent repeated protect
+		#if last_move == move:
+			#score -= 90
+
+
+# ==================================
+# Battle Advantage
+# ==================================
+
+	var enemy_hp_percent = float(hp) / float(get_max_hp())
+	var player_hp_percent = float(player.hp) / float(player.get_max_hp())
+
+
+	# If winning, attack more
+
+	if enemy_hp_percent > player_hp_percent:
+
+		if move.effect_type == MoveResource.MoveEffectType.DAMAGE:
+			score += 15
+
+
+	# If losing, consider survival
+
+	if enemy_hp_percent < player_hp_percent:
+
+		if move.effect_type == MoveResource.MoveEffectType.PROTECT:
+			score += 10
 
 
 	# ==================================
@@ -179,15 +241,21 @@ func evaluate_move(
 	# ==================================
 
 	if move.effect_type == MoveResource.MoveEffectType.STATUS:
-		score += 25
+		
+		score += (
+			25
+			* enemy_data.status_preference
+		)
 
 
 	# ==================================
 	# Finishing move
 	# ==================================
 
-	if player.hp <= move.power:
-		score += 50
+	if move.effect_type == MoveResource.MoveEffectType.DAMAGE:
+
+		if player.hp <= move.power:
+			score += 50
 
 	return score
 
