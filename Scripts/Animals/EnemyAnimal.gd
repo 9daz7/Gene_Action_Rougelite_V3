@@ -46,23 +46,23 @@ func choose_action(player:AnimalBase) -> MoveResource:
 	match enemy_data.ai_type:
 
 		EnemyResource.AIType.BASIC:
-			choose_basic_move(moves)
+			chosen_move = choose_basic_move(moves)
 
 
 		EnemyResource.AIType.AGGRESSIVE:
-			choose_aggressive_move(moves)
+			chosen_move = choose_aggressive_move(moves)
 
 
 		EnemyResource.AIType.DEFENSIVE:
-			choose_defensive_move(moves)
+			chosen_move = choose_defensive_move(moves)
 
 
 		EnemyResource.AIType.TACTICAL:
-			choose_tactical_move(moves, player)
+			chosen_move = choose_tactical_move(moves, player)
 
 
 		_:
-			get_best_move(player,moves)
+			chosen_move = get_best_move(player,moves)
 
 
 	last_move = chosen_move
