@@ -64,6 +64,11 @@ func choose_action(player:AnimalBase) -> MoveResource:
 		_:
 			chosen_move = get_best_move(player,moves)
 
+	print(
+		name,
+		" chose ",
+		chosen_move.move_name
+	)
 
 	last_move = chosen_move
 
