@@ -41,38 +41,55 @@ func choose_action(player:AnimalBase) -> MoveResource:
 		return null
 
 
-	var chosen_move: MoveResource
-	
-	match enemy_data.ai_type:
+	var chosen_move = get_best_move(player, moves)
 
-		EnemyResource.AIType.BASIC:
-			chosen_move = choose_basic_move(moves)
+	if chosen_move == null:
 
+		print(
+			name,
+			" has no valid move"
+		)
 
-		EnemyResource.AIType.AGGRESSIVE:
-			chosen_move = choose_aggressive_move(moves)
+		return null
 
-
-		EnemyResource.AIType.DEFENSIVE:
-			chosen_move = choose_defensive_move(moves)
-
-
-		EnemyResource.AIType.TACTICAL:
-			chosen_move = choose_tactical_move(moves, player)
-
-
-		_:
-			chosen_move = get_best_move(player,moves)
-
-	print(
-		name,
-		" chose ",
-		chosen_move.move_name
-	)
+	print(name, " chose ", chosen_move.move_name)
 
 	last_move = chosen_move
 
 	return chosen_move
+
+	#var chosen_move: MoveResource
+	#
+	#match enemy_data.ai_type:
+#
+		#EnemyResource.AIType.BASIC:
+			#chosen_move = choose_basic_move(moves)
+#
+#
+		#EnemyResource.AIType.AGGRESSIVE:
+			#chosen_move = choose_aggressive_move(moves)
+#
+#
+		#EnemyResource.AIType.DEFENSIVE:
+			#chosen_move = choose_defensive_move(moves)
+#
+#
+		#EnemyResource.AIType.TACTICAL:
+			#chosen_move = choose_tactical_move(moves, player)
+#
+#
+		#_:
+			#chosen_move = get_best_move(player,moves)
+#
+	#print(
+		#name,
+		#" chose ",
+		#chosen_move.move_name
+	#)
+#
+	#last_move = chosen_move
+#
+	#return chosen_move
 
 
 func get_best_move(
@@ -112,54 +129,62 @@ func evaluate_move(
 
 	var score := 0
 
+	# ==================================
+	# Priority
+	# ==================================
+
 	score += move.priority * 5
 
-	# -----------------------------
+	# ==================================
 	# Damage moves
-	# -----------------------------
+	# ==================================
 
 	if move.effect_type == MoveResource.MoveEffectType.DAMAGE:
 		score += move.power
+		
+		# prefer attacking
+		score += 20
 
-	# -----------------------------
+	# ==================================
 	# Hybrid moves
-	# -----------------------------
+	# ==================================
 
 	if move.effect_type == MoveResource.MoveEffectType.HYBRID:
-		score += move.power + 10
+		score += move.power
+		score += 20
 
-	# -----------------------------
+	# ==================================
 	# Protect
-	# -----------------------------
+	# ==================================
 
 	if move.effect_type == MoveResource.MoveEffectType.PROTECT:
 
 		var hp_percent = float(hp) / float(get_max_hp())
 
 		# Protect becomes valuable when hurt
-		if hp_percent < 0.3:
-			score += 60
-		elif hp_percent < 0.5:
-			score += 30
+		if hp_percent < 0.25:
+			score += 15
+		elif hp_percent < 0.4:
+			score += 5
 		else:
-			score -= 30
+			score -= 50
 
 		# prevent repeated protect
 		if last_move == move:
-			score -= 50
+			score -= 90
 
 
-	# -----------------------------
-	# Status moves
-	# -----------------------------
+	# ==================================
+	# Status effects
+	# ==================================
 
 	if move.effect_type == MoveResource.MoveEffectType.STATUS:
 		score += 25
 
 
-	# -----------------------------
-	# Finishing move bonus
-	# -----------------------------
+	# ==================================
+	# Finishing move
+	# ==================================
 
 	if player.hp <= move.power:
 		score += 50
@@ -167,58 +192,58 @@ func evaluate_move(
 	return score
 
 
-func choose_basic_move(moves):
-
-	return moves.pick_random()
-
-
-func choose_aggressive_move(moves):
-
-	var best_move = moves[0]
-
-
-	for move in moves:
-
-		if move.power > best_move.power:
-			best_move = move
-
-
-	return best_move
-
-
-func choose_defensive_move(moves):
-
-	if hp <= get_max_hp() * 0.4:
-
-		for move in moves:
-
-			if move.effect_type == MoveResource.MoveEffectType.PROTECT:
-				return move
-
-
-	return moves.pick_random()
-
-
-func choose_tactical_move(
-	moves,
-	player
-):
-
-	if hp <= get_max_hp() * 0.3:
-
-		for move in moves:
-
-			if move.effect_type == MoveResource.MoveEffectType.PROTECT:
-				return move
-
-
-	for move in moves:
-
-		if move.effect_type == MoveResource.MoveEffectType.STATUS:
-			return move
-
-
-	return choose_aggressive_move(moves)
+#func choose_basic_move(moves):
+#
+	#return moves.pick_random()
+#
+#
+#func choose_aggressive_move(moves):
+#
+	#var best_move = moves[0]
+#
+#
+	#for move in moves:
+#
+		#if move.power > best_move.power:
+			#best_move = move
+#
+#
+	#return best_move
+#
+#
+#func choose_defensive_move(moves):
+#
+	#if hp <= get_max_hp() * 0.4:
+#
+		#for move in moves:
+#
+			#if move.effect_type == MoveResource.MoveEffectType.PROTECT:
+				#return move
+#
+#
+	#return moves.pick_random()
+#
+#
+#func choose_tactical_move(
+	#moves,
+	#player
+#):
+#
+	#if hp <= get_max_hp() * 0.3:
+#
+		#for move in moves:
+#
+			#if move.effect_type == MoveResource.MoveEffectType.PROTECT:
+				#return move
+#
+#
+	#for move in moves:
+#
+		#if move.effect_type == MoveResource.MoveEffectType.STATUS:
+			#return move
+#
+#
+	#return choose_aggressive_move(moves)
 
 
 func get_drop_gene() -> GeneResource:
