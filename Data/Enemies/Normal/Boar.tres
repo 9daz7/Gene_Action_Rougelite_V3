@@ -11,6 +11,8 @@
 script = ExtResource("2_ipeqg")
 enemy_name = "Boar"
 ai_type = 1
+aggression = 1.5
+status_preference = 0.5
 base_hp = 80
 base_attack = 6
 base_speed = 9

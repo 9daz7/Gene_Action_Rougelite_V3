@@ -10,6 +10,8 @@
 
 [resource]
 script = ExtResource("2_jikd1")
+defense = 0.5
+status_preference = 1.5
 starting_genes = Array[ExtResource("1_qygnj")]([ExtResource("4_dkwka")])
 moves = Array[ExtResource("3_njxbk")]([ExtResource("6_5bc27"), ExtResource("5_qvu7r"), ExtResource("5_5lqpm")])
 drop_gene_pool = Array[ExtResource("1_qygnj")]([ExtResource("4_dkwka")])

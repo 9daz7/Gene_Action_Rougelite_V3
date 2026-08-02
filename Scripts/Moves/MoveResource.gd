@@ -105,14 +105,31 @@ func execute(
 
 			apply_effects(user, target)
 
-
 		MoveEffectType.DAMAGE:
-			execute_damage(user, target, false)
 
-		
+			user.trigger_passive_event(
+				"before_attack",
+				{
+					"target":target
+				}
+			)
+
+			execute_damage(
+				user,
+				target,
+				false
+			)
+
+
 		MoveEffectType.HYBRID:
-			execute_damage(user, target, true)
-			
+
+			user.trigger_passive_event(
+				"before_attack",
+				{
+					"target":target
+				}
+			)
+
 			var hit_chance = user.calculate_hit_chance(
 				target,
 				accuracy
@@ -140,10 +157,23 @@ func execute(
 				" damage"
 			)
 
-			target.take_damage(damage)
+			target.take_damage(
+				damage,
+				user
+			)
 
-			if effect_type == MoveEffectType.HYBRID:
-				apply_effects(user, target)
+			user.trigger_passive_event(
+				"after_attack",
+				{
+					"target":target,
+					"damage":damage
+				}
+			)
+
+			apply_effects(
+				user,
+				target
+			)
 
 
 # ==================================================
@@ -172,6 +202,13 @@ func execute_damage(
 		)
 
 		return
+
+		user.trigger_passive_event(
+			"before_attack",
+			{
+			"target": target
+			}
+		)
 
 	var damage = user.calculate_move_damage(self)
 

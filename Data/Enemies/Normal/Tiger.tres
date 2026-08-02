@@ -12,6 +12,9 @@
 script = ExtResource("2_7vbna")
 enemy_name = "Tiger"
 ai_type = 1
+aggression = 2.0
+defense = 0.8
+status_preference = 0.5
 starting_genes = Array[ExtResource("1_j88pe")]([ExtResource("2_l0ws3")])
 moves = Array[ExtResource("2_qr4im")]([ExtResource("3_aadt6"), ExtResource("4_l0ws3"), ExtResource("5_syoiu")])
 drop_gene_pool = Array[ExtResource("1_j88pe")]([ExtResource("2_l0ws3")])

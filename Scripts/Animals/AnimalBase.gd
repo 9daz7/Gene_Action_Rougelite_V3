@@ -136,6 +136,12 @@ func add_gene(gene: GeneResource) -> bool:
 
 
 func load_genes(genes:Array):
+
+	passive_effects.clear()
+	equipped_genes.clear()
+	gene_moves.clear()
+
+
 	for gene in genes:
 
 		if gene:
@@ -247,7 +253,7 @@ func use_move(index: int,target):
 # PASSIVES / STATUS EFFECTS
 # ==================================================
 
-var passive_effects: Array = []
+var passive_effects: Array[PassiveEffect] = []
 var status_effects: Array = []
 
 
@@ -493,14 +499,6 @@ func take_damage(
 		0,
 		get_max_hp()
 	)
-	
-	trigger_passive_event(
-		"after_damage",
-		{
-			"amount": amount,
-			"attacker": attacker
-		}
-	)
 
 	print(
 		name,
@@ -508,6 +506,14 @@ func take_damage(
 		amount,
 		" damage. HP:",
 		hp
+	)
+
+	trigger_passive_event(
+		"after_damage",
+		{
+			"amount": amount,
+			"attacker": attacker
+		}
 	)
 
 	GameEvents.hp_changed.emit(
@@ -631,7 +637,7 @@ func trigger_passive_event(
 ):
 
 	for passive in passive_effects:
-		
+
 		if passive == null:
 			continue
 
@@ -639,17 +645,17 @@ func trigger_passive_event(
 
 			"battle_start":
 
-				if passive.has_method("on_battle_start"):
+				#if passive.has_method("on_battle_start"):
 					passive.on_battle_start(self)
 
 			"turn_start":
 
-				if passive.has_method("on_turn_start"):
+				#if passive.has_method("on_turn_start"):
 					passive.on_turn_start(self)
 
 			"turn_end":
 
-				if passive.has_method("on_turn_end"):
+				#if passive.has_method("on_turn_end"):
 					passive.on_turn_end(self)
 
 				#passive.on_after_damage(
@@ -660,7 +666,7 @@ func trigger_passive_event(
 
 			"before_attack":
 
-				if passive.has_method("on_before_attack"):
+				#if passive.has_method("on_before_attack"):
 
 					passive.on_before_attack(
 						self,
@@ -670,10 +676,9 @@ func trigger_passive_event(
 
 			"after_attack":
 
-				if data == null:
-					continue
+				if data != null:
 
-				if passive.has_method("on_after_attack"):
+				#if passive.has_method("on_after_attack"):
 
 					passive.on_after_attack(
 						self,
@@ -683,10 +688,9 @@ func trigger_passive_event(
 
 			"before_damage":
 
-				if data == null:
-					continue
-					
-				if passive.has_method("on_before_damage"):
+				if data != null:
+
+				#if passive.has_method("on_before_damage"):
 
 					data.amount = passive.on_before_damage(
 						self,
@@ -695,16 +699,20 @@ func trigger_passive_event(
 
 			"after_damage":
 
-				if data == null:
-					continue
-					
-				if passive.has_method("on_after_damage"):
+				if data != null:
+
+				#if passive.has_method("on_after_damage"):
 
 					passive.on_after_damage(
 						self,
 						data.amount,
 						data.attacker
 					)
+
+			"battle_end":
+
+				passive.on_battle_end(self)
+
 
 # ==================================================
 # Resource Loading
@@ -736,6 +744,7 @@ func load_build(build: AnimalBuildResource):
 		base_speed = animal_resource.base_speed
 
 	equipped_genes.clear()
+	passive_effects.clear()
 	
 	learned_moves.clear()
 	basic_moves.clear()

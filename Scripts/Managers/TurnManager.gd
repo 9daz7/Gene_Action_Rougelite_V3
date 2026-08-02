@@ -71,6 +71,16 @@ func start_battle():
 
 	print("Turn system started")
 
+	player.trigger_passive_event(
+		"battle_start"
+	)
+
+	for enemy in enemies:
+
+		enemy.trigger_passive_event(
+			"battle_start"
+		)
+
 	##battle_ui.setup_moves(player)
 	GameEvents.turn_changed.emit(
 		current_state
@@ -99,15 +109,28 @@ func start_player_turn():
 	current_state = TurnState.PLAYER_TURN
 
 	print("Player turn")
-
+	
 	player.reset_turn_state()
 
 	player.process_status_effects()
+
 
 	for enemy in enemies:
 
 		if enemy.hp > 0:
 			enemy.process_status_effects()
+
+	player.trigger_passive_event(
+		"turn_start"
+	)
+
+	for enemy in enemies:
+
+		if enemy.hp > 0:
+			enemy.trigger_passive_event(
+				"turn_start"
+			)
+
 
 	GameEvents.status_changed.emit(
 		player,
@@ -312,16 +335,36 @@ func check_battle_end():
 
 		current_state = TurnState.BATTLE_OVER
 
+		player.trigger_passive_event(
+			"battle_end"
+		)
+
+		for defeated_enemy in enemies:
+
+			defeated_enemy.trigger_passive_event(
+				"battle_end"
+			)
+
 		battle_lost.emit()
 
 		return
 
-	for enemy in enemies:
-		if enemy.hp > 0:
+	for active_enemy in enemies:
+		if active_enemy.hp > 0:
 			return
 
 		print("All enemies defeated")
 		current_state = TurnState.BATTLE_OVER
+
+		player.trigger_passive_event(
+			"battle_end"
+		)
+
+		for defeated_enemy in enemies:
+
+			defeated_enemy.trigger_passive_event(
+				"battle_end"
+			)
 
 		var defeated_enemy := enemies[0] if enemies.size() > 0 else null
 

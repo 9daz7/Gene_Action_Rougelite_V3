@@ -11,6 +11,8 @@
 [resource]
 script = ExtResource("2_dshtd")
 ai_type = 1
+aggression = 1.5
+defense = 0.5
 starting_genes = Array[ExtResource("1_yr8o3")]([ExtResource("7_uddjj")])
 moves = Array[ExtResource("3_hxtar")]([ExtResource("3_uddjj"), ExtResource("4_0nwxa"), ExtResource("5_b6xhm")])
 drop_gene_pool = Array[ExtResource("1_yr8o3")]([ExtResource("7_uddjj")])

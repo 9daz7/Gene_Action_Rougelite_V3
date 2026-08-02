@@ -140,6 +140,7 @@ func evaluate_move(
 	# ==================================
 
 	if move.effect_type == MoveResource.MoveEffectType.DAMAGE:
+		
 		score += move.power
 		
 		score += (
@@ -152,7 +153,9 @@ func evaluate_move(
 	# ==================================
 
 	if move.effect_type == MoveResource.MoveEffectType.HYBRID:
+		
 		score += move.power
+		
 		score += (
 			15
 			* enemy_data.aggression

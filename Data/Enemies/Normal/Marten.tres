@@ -10,6 +10,9 @@
 [resource]
 script = ExtResource("2_2u4da")
 enemy_name = "Marten"
+aggression = 1.5
+defense = 0.5
+status_preference = 0.8
 base_hp = 45
 base_attack = 4
 base_speed = 15

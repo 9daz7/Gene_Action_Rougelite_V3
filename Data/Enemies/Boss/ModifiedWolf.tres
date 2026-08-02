@@ -12,6 +12,9 @@
 [resource]
 script = ExtResource("2_qy50x")
 enemy_name = "Modified Wolf"
+aggression = 3.0
+defense = 1.8
+status_preference = 1.8
 base_hp = 160
 base_attack = 10
 base_speed = 20
