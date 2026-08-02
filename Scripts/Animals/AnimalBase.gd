@@ -118,6 +118,8 @@ func add_gene(gene: GeneResource) -> bool:
 	# Add gene passive effects
 	for passive in gene.passive_effects:
 		if passive:
+
+			passive.initialize(gene)
 			passive_effects.append(passive)
 
 
@@ -141,6 +143,8 @@ func load_genes(genes:Array):
 	equipped_genes.clear()
 	gene_moves.clear()
 
+	for slot in gene_slots:
+		gene_slots[slot].clear()
 
 	for gene in genes:
 
@@ -237,12 +241,12 @@ func use_move(index: int,target):
 	if move == null:
 		return
 		
-	for passive in passive_effects:
-		passive.on_before_attack(
-			self,
-			target
-		)
-	
+	#for passive in passive_effects:
+		#passive.on_before_attack(
+			#self,
+			#target
+		#)
+
 	move.execute(
 		self,
 		target
@@ -334,6 +338,13 @@ func get_attack() -> int:
 
 	var value = base_attack + attack_modifier
 
+	for passive in passive_effects:
+
+		value = passive.modify_attack(
+			self,
+			value
+		)
+
 	for slot in gene_slots:
 		for gene in gene_slots[slot]:
 			value += gene.attack_bonus
@@ -359,6 +370,13 @@ func get_speed() -> int:
 	for slot in gene_slots:
 		for gene in gene_slots[slot]:
 			value += gene.speed_bonus
+
+	for passive in passive_effects:
+
+		value = passive.modify_speed(
+			self,
+			value
+		)
 
 	print(
 		name,
@@ -531,28 +549,51 @@ func take_damage(
 
 
 func die():
+
 	hp = 0
-	
+
+	trigger_passive_event(
+		"death"
+	)
+
 	animal_died.emit()
 
 	print(
 		name,
 		" has been defeated"
 	)
-	
+
 
 func is_alive() -> bool:
 	return hp > 0
 	
 	
 func heal(amount:int):
-	
+
+	var heal_data = {
+		"amount": amount
+	}
+
+	trigger_passive_event(
+		"before_heal",
+		heal_data
+	)
+
+	amount = heal_data.amount
+
 	hp += amount
 
 	hp = clamp(
 		hp,
 		0,
 		get_max_hp()
+	)
+
+	trigger_passive_event(
+		"after_heal",
+		{
+			"amount": amount
+		}
 	)
 
 	GameEvents.hp_changed.emit(
@@ -582,6 +623,13 @@ func calculate_move_damage(move:MoveResource) -> int:
 	damage += move.power
 	
 	damage *= move.damage_multiplier
+
+	for passive in passive_effects:
+
+		damage = passive.modify_damage(
+			self,
+			damage
+		)
 
 	return int(damage)
 
@@ -645,17 +693,17 @@ func trigger_passive_event(
 
 			"battle_start":
 
-				#if passive.has_method("on_battle_start"):
+				if passive.has_method("on_battle_start"):
 					passive.on_battle_start(self)
 
 			"turn_start":
 
-				#if passive.has_method("on_turn_start"):
+				if passive.has_method("on_turn_start"):
 					passive.on_turn_start(self)
 
 			"turn_end":
 
-				#if passive.has_method("on_turn_end"):
+				if passive.has_method("on_turn_end"):
 					passive.on_turn_end(self)
 
 				#passive.on_after_damage(
@@ -666,7 +714,7 @@ func trigger_passive_event(
 
 			"before_attack":
 
-				#if passive.has_method("on_before_attack"):
+				if passive.has_method("on_before_attack"):
 
 					passive.on_before_attack(
 						self,
@@ -678,40 +726,46 @@ func trigger_passive_event(
 
 				if data != null:
 
-				#if passive.has_method("on_after_attack"):
+					if passive.has_method("on_after_attack"):
 
-					passive.on_after_attack(
-						self,
-						data.target,
-						data.damage
-					)
+						passive.on_after_attack(
+							self,
+							data.target,
+							data.damage
+						)
 
 			"before_damage":
 
 				if data != null:
 
-				#if passive.has_method("on_before_damage"):
+					if passive.has_method("on_before_damage"):
 
-					data.amount = passive.on_before_damage(
-						self,
-						data.amount
-					)
+						data.amount = passive.on_before_damage(
+							self,
+							data.amount
+						)
 
 			"after_damage":
 
 				if data != null:
 
-				#if passive.has_method("on_after_damage"):
+					if passive.has_method("on_after_damage"):
 
-					passive.on_after_damage(
-						self,
-						data.amount,
-						data.attacker
-					)
+						passive.on_after_damage(
+							self,
+							data.amount,
+							data.attacker
+						)
+
+			"death":
+
+				if passive.has_method("on_death"):
+					passive.on_death(self)
 
 			"battle_end":
 
-				passive.on_battle_end(self)
+				if passive.has_method("on_battle_end"):
+					passive.on_battle_end(self)
 
 
 # ==================================================

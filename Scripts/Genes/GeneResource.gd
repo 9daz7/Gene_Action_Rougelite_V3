@@ -21,11 +21,18 @@ enum SlotType {
 
 
 @export var gene_name: String
+@export_multiline var description: String = ""
+
 @export var rarity: Rarity
 @export var slot_type: SlotType
 
+@export var icon: Texture2D
 
-# Slot system
+
+# ==================================================
+# Slot System
+# ==================================================
+
 @export var slot_cost := 1
 
 
@@ -86,11 +93,87 @@ func get_rarity_name() -> String:
 			return "Unknown"
 
 
- #Future implementation
- #@export var tags: Array[String] = []
+func get_passive_names() -> Array[String]:
+
+	var names:Array[String] = []
+
+
+	for passive in passive_effects:
+
+		if passive:
+
+			names.append(
+				passive.effect_name
+			)
+
+
+	return names
+
+
+func has_passive(passive_name:String) -> bool:
+
+	for passive in passive_effects:
+
+		if passive.effect_name == passive_name:
+
+			return true
+
+
+	return false
+
+
+func get_move_names() -> Array[String]:
+
+	var names:Array[String] = []
+
+
+	for move in move_pool:
+
+		if move:
+
+			names.append(
+				move.move_name
+			)
+
+
+	return names
+
+
+func has_tag(tag:String) -> bool:
+
+	return tag in tags
+
+
+func print_summary():
+
+	print("======================")
+	print("GENE:", gene_name)
+	print("RARITY:", get_rarity_name())
+	print("SLOT:", SlotType.keys()[slot_type])
+
+	print("STATS:")
+	print(
+		"HP:",
+		hp_bonus,
+		" ATK:",
+		attack_bonus,
+		" SPD:",
+		speed_bonus
+	)
+
+	print(
+		"PASSIVES:",
+		get_passive_names()
+	)
+
+	print(
+		"MOVES:",
+		get_move_names()
+	)
+
+	print("======================")
 
 
  #Future properties
- #@export_multiline var description: String = ""
- #@export var icon: Texture2D
+
  #@export var species := ""

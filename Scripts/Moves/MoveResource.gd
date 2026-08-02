@@ -90,7 +90,10 @@ func execute(
 				move_name
 			)
 
-			apply_effects(user, target)
+			apply_effects(
+				user,
+				target
+			)
 
 
 		MoveEffectType.PROTECT:
@@ -103,7 +106,11 @@ func execute(
 
 			user.activate_protect()
 
-			apply_effects(user, target)
+			apply_effects(
+				user,
+				target
+			)
+
 
 		MoveEffectType.DAMAGE:
 
@@ -130,49 +137,10 @@ func execute(
 				}
 			)
 
-			var hit_chance = user.calculate_hit_chance(
-				target,
-				accuracy
-			)
-
-			var roll = randi_range(1, 100)
-
-			if roll > hit_chance:
-
-				print(
-					user.name,
-					" missed"
-				)
-
-				return
-
-			var damage = user.calculate_move_damage(self)
-
-			damage = target.calculate_damage_taken(damage)
-
-			print(
-				user.name,
-				" deals ",
-				damage,
-				" damage"
-			)
-
-			target.take_damage(
-				damage,
-				user
-			)
-
-			user.trigger_passive_event(
-				"after_attack",
-				{
-					"target":target,
-					"damage":damage
-				}
-			)
-
-			apply_effects(
+			execute_damage(
 				user,
-				target
+				target,
+				true
 			)
 
 
@@ -201,18 +169,29 @@ func execute_damage(
 			" missed"
 		)
 
-		return
-
 		user.trigger_passive_event(
-			"before_attack",
+			"attack_missed",
 			{
-			"target": target
+				"target":target
 			}
 		)
 
+		return
+
 	var damage = user.calculate_move_damage(self)
 
-	damage = target.calculate_damage_taken(damage)
+	if randi_range(1,100) <= critical_chance:
+
+		damage *= 2
+
+		print(
+			user.name,
+			" landed a critical hit!"
+		)
+	
+	damage = target.calculate_damage_taken(
+		damage
+	)
 
 	print(
 		user.name,
@@ -224,6 +203,14 @@ func execute_damage(
 	target.take_damage(
 		damage,
 		user
+	)
+
+	user.trigger_passive_event(
+		"after_attack",
+		{
+			"target": target,
+			"damage": damage
+		}
 	)
 
 	if apply_status:
@@ -243,7 +230,19 @@ func apply_effects(
 		match effect_target:
 
 			EffectTarget.SELF:
+
 				effect.apply(user)
 
+				user.trigger_passive_event(
+					"status_applied",
+					effect
+				)
+
 			EffectTarget.TARGET:
+
 				effect.apply(target)
+
+				target.trigger_passive_event(
+					"status_received",
+					effect
+				)

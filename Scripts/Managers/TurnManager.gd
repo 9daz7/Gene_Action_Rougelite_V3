@@ -81,6 +81,8 @@ func start_battle():
 			"battle_start"
 		)
 
+	GameEvents.battle_started.emit()
+
 	##battle_ui.setup_moves(player)
 	GameEvents.turn_changed.emit(
 		current_state
@@ -112,13 +114,21 @@ func start_player_turn():
 	
 	player.reset_turn_state()
 
-	player.process_status_effects()
+	# -----------------------------------
+	# Status damage first
+	# -----------------------------------
 
+	player.process_status_effects()
 
 	for enemy in enemies:
 
 		if enemy.hp > 0:
+
 			enemy.process_status_effects()
+
+	# -----------------------------------
+	# Passive turn start effects
+	# -----------------------------------
 
 	player.trigger_passive_event(
 		"turn_start"
@@ -127,24 +137,50 @@ func start_player_turn():
 	for enemy in enemies:
 
 		if enemy.hp > 0:
+			
 			enemy.trigger_passive_event(
 				"turn_start"
 			)
 
+	# -----------------------------------
+	# Update UI
+	# -----------------------------------
 
 	GameEvents.status_changed.emit(
 		player,
 		get_active_enemy()
 	)
 
-	# allow buttons
+
 	GameEvents.turn_changed.emit(
 		current_state
 	)
 
+
 	GameEvents.moves_updated.emit(
 		player
 	)
+
+	#player.process_status_effects()
+#
+	#for enemy in enemies:
+#
+		#if enemy.hp > 0:
+			#enemy.process_status_effects()
+#
+	#GameEvents.status_changed.emit(
+		#player,
+		#get_active_enemy()
+	#)
+#
+	## allow buttons
+	#GameEvents.turn_changed.emit(
+		#current_state
+	#)
+#
+	#GameEvents.moves_updated.emit(
+		#player
+	#)
 
 
 # ==================================================
@@ -315,9 +351,11 @@ func trigger_turn_end_effects():
 
 	for enemy in enemies:
 
-		enemy.trigger_passive_event(
-			"turn_end"
-		)
+		if enemy.hp > 0:
+
+			enemy.trigger_passive_event(
+				"turn_end"
+			)
 
 
 # ==================================================
@@ -349,11 +387,13 @@ func check_battle_end():
 
 		return
 
-	for active_enemy in enemies:
-		if active_enemy.hp > 0:
+	for enemy in enemies:
+
+		if enemy.hp > 0:
 			return
 
 		print("All enemies defeated")
+
 		current_state = TurnState.BATTLE_OVER
 
 		player.trigger_passive_event(
