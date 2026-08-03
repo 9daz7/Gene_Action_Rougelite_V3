@@ -62,6 +62,7 @@ var defense_modifier:int = 0
 var accuracy_modifier:int = 0
 var evasion_modifier:int = 0
 var armor_modifier:int = 0
+var critical_modifier := 0
 
 
 # ==================================================
@@ -117,10 +118,14 @@ func add_gene(gene: GeneResource) -> bool:
 
 	# Add gene passive effects
 	for passive in gene.passive_effects:
-		if passive:
+		
+		if passive == null:
+			continue
 
+		if passive.has_method("Initialize"):
 			passive.initialize(gene)
-			passive_effects.append(passive)
+			
+		passive_effects.append(passive)
 
 
 	# Add gene moves
@@ -167,7 +172,7 @@ func get_synergy_bonus(slot: GeneResource.SlotType) -> int:
 # MOVES
 # ==================================================
 
-var learned_moves: Array[MoveResource] = []
+#var learned_moves: Array[MoveResource] = []
 var basic_moves:Array[MoveResource] = []
 var gene_moves:Array[MoveResource] = []
 var selected_moves:Array[MoveResource] = []
@@ -225,6 +230,7 @@ func get_move(index: int):
 
 
 func get_battle_moves():
+	
 	var moves:Array[MoveResource] = []
 	
 	moves.append_array(basic_moves)
@@ -292,13 +298,22 @@ func apply_status_effect(effect:StatusEffect):
 
 	effect.apply(self)
 
+	status_effects.append(effect)
+
+	trigger_passive_event(
+		"status_applied",
+		{
+			"status":effect
+		}
+	)
+
 	print(
 		name,
 		" received ",
 		effect.effect_name
 	)
-	
-	
+
+
 func remove_status_effect(effect:StatusEffect):
 
 	match effect.type:
@@ -320,6 +335,13 @@ func remove_status_effect(effect:StatusEffect):
 		StatusEffect.Type.DEFENSE_DOWN:
 			defense_modifier += effect.power
 
+	trigger_passive_event(
+		"status_removed",
+		{
+			"status": effect
+		}
+	)
+
 	status_effects.erase(effect)
 
 	print(
@@ -337,6 +359,12 @@ func remove_status_effect(effect:StatusEffect):
 func get_attack() -> int:
 
 	var value = base_attack + attack_modifier
+	
+	for slot in gene_slots:
+
+		for gene in gene_slots[slot]:
+
+			value += gene.attack_bonus
 
 	for passive in passive_effects:
 
@@ -345,9 +373,6 @@ func get_attack() -> int:
 			value
 		)
 
-	for slot in gene_slots:
-		for gene in gene_slots[slot]:
-			value += gene.attack_bonus
 
 	return value
 
@@ -357,8 +382,19 @@ func get_max_hp() -> int:
 	var value = base_hp
 
 	for slot in gene_slots:
+
 		for gene in gene_slots[slot]:
+
 			value += gene.hp_bonus
+
+	for passive in passive_effects:
+
+		if passive.has_method("modify_max_hp"):
+
+			value = passive.modify_max_hp(
+				self,
+				value
+			)
 
 	return value
 
@@ -388,24 +424,41 @@ func get_speed() -> int:
 
 
 func get_accuracy() -> int:
-	
+
 	var value = base_accuracy + accuracy_modifier
-	
+
 	for slot in gene_slots:
-		for gene in gene_slots[slot]:
-			if "accuracy_bonus" in gene:
-				value += gene.accuracy_bonus
-			
-	return value
 		
+		for gene in gene_slots[slot]:
+
+			value += gene.accuracy_bonus
+
+	for passive in passive_effects:
+
+		value = passive.modify_accuracy(
+			self,
+			value
+		)
+
+
+	return value
+
+
 func get_evasion() -> int:
 	
-	var value = base_evasion
+	var value = base_evasion + evasion_modifier
 	
 	for slot in gene_slots:
 		for gene in gene_slots[slot]:
 			value += gene.evasion_bonus
-			
+
+	for passive in passive_effects:
+
+		value = passive.modify_evasion(
+			self,
+			value
+		)
+
 	return clamp(value, 0, 90)
 
 
@@ -417,6 +470,20 @@ func get_armor() -> int:
 			value += gene.armor_bonus
 			
 	return value
+
+
+func get_critical_chance():
+
+	var chance = 0
+
+	for passive in passive_effects:
+
+		chance = passive.modify_critical_chance(
+			self,
+			chance
+		)
+
+	return chance
 
 
 func modify_attack(amount:int):
@@ -622,11 +689,13 @@ func calculate_move_damage(move:MoveResource) -> int:
 
 	damage += move.power
 	
-	damage *= move.damage_multiplier
+	damage = int(
+		damage * move.damage_multiplier
+	)
 
 	for passive in passive_effects:
 
-		damage = passive.modify_damage(
+		damage = passive.modify_damage_dealt(
 			self,
 			damage
 		)
@@ -635,14 +704,24 @@ func calculate_move_damage(move:MoveResource) -> int:
 
 
 func calculate_damage_taken(amount: int) -> int:
-	
+
+	for passive in passive_effects:
+
+		amount = passive.modify_damage_taken(
+			self,
+			amount
+		)
+
 	var armor = get_armor()
-	
+
 	var reduction = armor * 0.01
-	
+
 	var final_damage = amount * (1.0 - reduction)
-	
-	return max(1, int(final_damage))
+
+	return max(
+		1,
+		int(final_damage)
+	)
 
 
 func get_current_hp() -> int:
@@ -693,79 +772,109 @@ func trigger_passive_event(
 
 			"battle_start":
 
-				if passive.has_method("on_battle_start"):
-					passive.on_battle_start(self)
+				passive.on_battle_start(self)
+
+			"battle_end":
+
+				passive.on_battle_end(self)
 
 			"turn_start":
 
-				if passive.has_method("on_turn_start"):
-					passive.on_turn_start(self)
+				passive.on_turn_start(self)
 
 			"turn_end":
 
-				if passive.has_method("on_turn_end"):
-					passive.on_turn_end(self)
-
-				#passive.on_after_damage(
-					#self,
-					#data.amount,
-					#data.attacker
-				#)
+				passive.on_turn_end(self)
 
 			"before_attack":
-
-				if passive.has_method("on_before_attack"):
 
 					passive.on_before_attack(
 						self,
 						data.target
 					)
 
-
 			"after_attack":
 
-				if data != null:
+				#if data:
 
-					if passive.has_method("on_after_attack"):
-
-						passive.on_after_attack(
-							self,
-							data.target,
-							data.damage
-						)
+					passive.on_after_attack(
+						self,
+						data.target,
+						data.damage
+					)
 
 			"before_damage":
 
-				if data != null:
+				#if data:
 
-					if passive.has_method("on_before_damage"):
-
-						data.amount = passive.on_before_damage(
-							self,
-							data.amount
-						)
+					data.amount = passive.on_before_damage(
+						self,
+						data.amount
+					)
 
 			"after_damage":
 
-				if data != null:
+				#if data:
 
-					if passive.has_method("on_after_damage"):
+					passive.on_after_damage(
+						self,
+						data.amount,
+						data.attacker
+					)
 
-						passive.on_after_damage(
-							self,
-							data.amount,
-							data.attacker
-						)
+			"before_heal":
+
+				#if data:
+
+					data.amount = passive.on_before_heal(
+						self,
+						data.amount
+					)
+
+			"after_heal":
+
+				#if data:
+
+					passive.on_after_heal(
+						self,
+						data.amount
+					)
+
+			"status_applied":
+
+				if data:
+
+					passive.on_apply_status(
+						self,
+						data.status
+					)
+
+			"status_removed":
+
+				if data:
+
+					passive.on_remove_status(
+						self,
+						data.status
+					)
 
 			"death":
 
-				if passive.has_method("on_death"):
-					passive.on_death(self)
+				passive.on_death(self)
 
-			"battle_end":
+			"kill":
 
-				if passive.has_method("on_battle_end"):
-					passive.on_battle_end(self)
+				#if data:
+
+					passive.on_kill(
+						self,
+						data.target
+					)
+				
+			#"battle_end":
+
+				##if passive.has_method("on_battle_end"):
+				#passive.on_battle_end(self)
 
 
 # ==================================================
@@ -800,10 +909,27 @@ func load_build(build: AnimalBuildResource):
 	equipped_genes.clear()
 	passive_effects.clear()
 	
-	learned_moves.clear()
+	#learned_moves.clear()
 	basic_moves.clear()
 	gene_moves.clear()
 	selected_moves.clear()
+
+	status_effects.clear()
+	
+	for slot in gene_slots:
+		gene_slots[slot].clear()
+		
+	speed_modifier = 0
+	attack_modifier = 0
+	defense_modifier = 0
+	accuracy_modifier = 0
+	evasion_modifier = 0
+	armor_modifier = 0
+	critical_modifier = 0
+
+	is_protecting = false
+
+	hp = base_hp
 
 	setup_basic_moves()
 

@@ -1,15 +1,17 @@
 extends PassiveEffect
 class_name RegenerationPassive
 
-@export var heal_amount := 3
+@export var heal_amount := 5
 
-func on_turn_end(owner):
-
-	owner.heal(heal_amount)
+func on_turn_start(owner):
 
 	print(
 		owner.name,
-		" regenerated ",
+		" regenerates ",
 		heal_amount,
 		" HP"
+	)
+
+	owner.heal(
+		heal_amount
 	)

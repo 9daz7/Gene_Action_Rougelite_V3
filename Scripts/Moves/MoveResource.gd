@@ -184,6 +184,14 @@ func execute_damage(
 
 		damage *= 2
 
+		user.trigger_passive_event(
+		"critical_hit",
+		{
+			"target":target,
+			"damage":damage
+		}
+	)
+
 		print(
 			user.name,
 			" landed a critical hit!"
@@ -204,6 +212,16 @@ func execute_damage(
 		damage,
 		user
 	)
+
+	# Check kill event
+	if target.hp <= 0:
+
+		user.trigger_passive_event(
+			"kill",
+			{
+				"target": target
+			}
+		)
 
 	user.trigger_passive_event(
 		"after_attack",

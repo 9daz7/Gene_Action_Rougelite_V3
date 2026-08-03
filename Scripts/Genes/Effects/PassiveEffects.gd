@@ -61,6 +61,9 @@ func on_attack_missed(owner, target):
 func on_critical_hit(owner, target, damage):
 	pass
 
+func modify_critical_chance(owner, chance):
+	return chance
+
 
 # ==================================================
 # Damage
@@ -114,6 +117,8 @@ func modify_armor(owner, armor):
 func modify_evasion(owner, evasion):
 	return evasion
 
+func get_critical_bonus(owner):
+	return 0
 
 # ==================================================
 # Healing
