@@ -274,15 +274,15 @@ func process_status_effects():
 			
 			StatusEffect.Type.POISON:
 				print(name," takes poison damage")
-				take_damage(effect.power)
+				take_damage(effect.get_total_power())
 				
 			StatusEffect.Type.BLEED:
 				print(name," bleeds")
-				take_damage(effect.power)
+				take_damage(effect.get_total_power())
 				
 			StatusEffect.Type.BURN:
 				print(name," burns")
-				take_damage(effect.power)
+				take_damage(effect.get_total_power())
 
 		effect.duration -= 1
 		
@@ -296,21 +296,74 @@ func apply_status_effect(effect:StatusEffect):
 	if effect == null:
 		return
 
-	effect.apply(self)
+	# check for existing copy
+	for existing in status_effects:
 
-	#status_effects.append(effect) # not needed as statuseffect owns this
+		if existing.type != effect.type:
+			continue
+
+		# refresh duration
+		if existing.refresh_duration:
+
+			existing.duration = effect.duration
+
+			print(
+				existing.effect_name,
+				" duration refreshed"
+			)
+
+		# add stack
+		if existing.can_stack:
+
+			var old_stacks = existing.stacks
+
+			existing.stacks = min(
+				existing.stacks + 1,
+				existing.max_stacks
+			)
+
+			var difference = existing.stacks - old_stacks
+
+			if difference > 0:
+
+				existing.apply_stack(
+					self,
+					difference
+				)
+
+				print(
+					existing.effect_name,
+					" stacked to ",
+					existing.stacks
+				)
+
+		return
+
+
+	# First application
+
+	var new_effect = effect.duplicate()
+
+	new_effect.stacks = 1
+
+	status_effects.append(new_effect)
+
+	new_effect.apply_stack(
+		self,
+		1
+	)
 
 	trigger_passive_event(
 		"status_applied",
 		{
-			"status":effect
+			"status":new_effect
 		}
 	)
 
 	print(
-		name,
-		" received ",
-		effect.effect_name
+		new_effect.effect_name,
+		" applied to ",
+		name
 	)
 
 
@@ -318,22 +371,22 @@ func remove_status_effect(effect:StatusEffect):
 
 	match effect.type:
 		StatusEffect.Type.SPEED_UP:
-			speed_modifier -= effect.power
+			speed_modifier -= effect.get_total_power()
 
 		StatusEffect.Type.SPEED_DOWN:
-			speed_modifier += effect.power
+			speed_modifier += effect.get_total_power()
 
 		StatusEffect.Type.ATTACK_UP:
-			attack_modifier -= effect.power
+			attack_modifier -= effect.get_total_power()
 
 		StatusEffect.Type.ATTACK_DOWN:
-			attack_modifier += effect.power
+			attack_modifier += effect.get_total_power()
 
 		StatusEffect.Type.DEFENSE_UP:
-			defense_modifier -= effect.power
+			defense_modifier -= effect.get_total_power()
 
 		StatusEffect.Type.DEFENSE_DOWN:
-			defense_modifier += effect.power
+			defense_modifier += effect.get_total_power()
 
 	trigger_passive_event(
 		"status_removed",

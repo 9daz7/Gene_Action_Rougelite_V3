@@ -256,7 +256,7 @@ func apply_effects(
 
 			EffectTarget.SELF:
 
-				effect.apply(user)
+				user.apply_status_effect(effect)
 
 				user.trigger_passive_event(
 					"status_applied",
@@ -265,7 +265,7 @@ func apply_effects(
 
 			EffectTarget.TARGET:
 
-				effect.apply(target)
+				target.apply_status_effect(effect)
 
 				target.trigger_passive_event(
 					"status_received",
