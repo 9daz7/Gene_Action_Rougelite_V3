@@ -298,7 +298,7 @@ func apply_status_effect(effect:StatusEffect):
 
 	effect.apply(self)
 
-	status_effects.append(effect)
+	#status_effects.append(effect) # not needed as statuseffect owns this
 
 	trigger_passive_event(
 		"status_applied",

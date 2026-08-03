@@ -25,6 +25,13 @@ enum EffectTarget {
 	TARGET
 }
 
+enum TargetType
+{
+	SELF,
+	SINGLE_ENEMY,
+	ALL_ENEMIES
+}
+
 
 # ==================================================
 # Basic Move Info
