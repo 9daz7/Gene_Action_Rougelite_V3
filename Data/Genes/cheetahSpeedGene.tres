@@ -6,13 +6,14 @@
 [ext_resource type="Resource" uid="uid://73ylas6rloet" path="res://Data/Moves/Outspeed.tres" id="3_fp5ls"]
 [ext_resource type="Script" uid="uid://cykpuveioj0q4" path="res://Scripts/Genes/Effects/PassiveEffects.gd" id="3_jhq8n"]
 [ext_resource type="Resource" uid="uid://deobyt5he5kb8" path="res://Data/Moves/Quick strike.tres" id="4_h6x74"]
+[ext_resource type="Resource" uid="uid://be6l6vgg4tlg3" path="res://Resources/PassiveEffects/SpeedBoostPassive.tres" id="6_fp5ls"]
 
 [resource]
 script = ExtResource("1_duhdq")
 gene_name = "Cheetah speed"
 rarity = 2
-slot_type = 2
-speed_bonus = 4
+slot_type = 4
 defense_bonus = -1
+passive_effects = Array[ExtResource("3_jhq8n")]([ExtResource("6_fp5ls")])
 move_pool = Array[ExtResource("2_fo1xa")]([ExtResource("3_fp5ls"), ExtResource("4_h6x74")])
 metadata/_custom_type_script = "uid://cnlwwn0eoa0pn"

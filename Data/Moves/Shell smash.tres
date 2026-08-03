@@ -5,4 +5,5 @@
 
 [resource]
 script = ExtResource("2_md6jd")
+move_name = "Shell Smash"
 metadata/_custom_type_script = "uid://bnmm0xqkm6atb"

@@ -7,13 +7,15 @@
 [ext_resource type="Resource" uid="uid://dssodq4lr1182" path="res://Data/Moves/Protect.tres" id="4_0nwxa"]
 [ext_resource type="Resource" uid="uid://b1eti45dqkuo7" path="res://Data/Moves/Rage.tres" id="5_b6xhm"]
 [ext_resource type="Resource" uid="uid://bkbgwk6wbwxuh" path="res://Data/Genes/HoneyBadgerPoisonDef.tres" id="7_uddjj"]
+[ext_resource type="Resource" uid="uid://b63650onw8qfj" path="res://Data/Genes/MartensRage.tres" id="8_0nwxa"]
 
 [resource]
 script = ExtResource("2_dshtd")
+enemy_name = "Honey Badger"
 ai_type = 1
 aggression = 1.5
 defense = 0.5
-starting_genes = Array[ExtResource("1_yr8o3")]([ExtResource("7_uddjj")])
+starting_genes = Array[ExtResource("1_yr8o3")]([ExtResource("7_uddjj"), ExtResource("8_0nwxa")])
 moves = Array[ExtResource("3_hxtar")]([ExtResource("3_uddjj"), ExtResource("4_0nwxa"), ExtResource("5_b6xhm")])
 drop_gene_pool = Array[ExtResource("1_yr8o3")]([ExtResource("7_uddjj")])
 metadata/_custom_type_script = "uid://byxi3hsf2x8dx"

@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="SpeedBoostPassive" format=3 uid="uid://be6l6vgg4tlg3"]
+
+[ext_resource type="Script" uid="uid://c4ijcv0r2ebj2" path="res://Scripts/Passives/SpeedBoostPassive.gd" id="1_5c2ni"]
+
+[resource]
+script = ExtResource("1_5c2ni")
+passive_id = "speed_boost"
+effect_name = "Cheetah Speed"
+description = "Increases speed at the start of battle."
+metadata/_custom_type_script = "uid://c4ijcv0r2ebj2"

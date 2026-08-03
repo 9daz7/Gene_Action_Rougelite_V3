@@ -6,3 +6,4 @@
 script = ExtResource("1_8mvnv")
 effect_name = "Speed boost"
 type = 3
+stat_modifier = "speed"

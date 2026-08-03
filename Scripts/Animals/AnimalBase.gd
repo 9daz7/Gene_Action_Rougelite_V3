@@ -566,19 +566,29 @@ func calculate_hit_chance(target, move_accuracy: int) -> int:
 	
 	var chance = move_accuracy + get_accuracy() - target.get_evasion()
 	
+	var final_chance = clamp(chance,10,100)
+
 	print(
 		name,
-		" move accuracy:",
-		move_accuracy,
-		" accuracy_bonus:",
-		get_accuracy(),
-		" target evasion:",
-		target.get_evasion(),
-		" final chance:",
-		chance
+		" hit chance:",
+		final_chance
 	)
 
-	return clamp(chance, 10, 100)
+	return final_chance
+	
+	#print(
+		#name,
+		#" move accuracy:",
+		#move_accuracy,
+		#" accuracy_bonus:",
+		#get_accuracy(),
+		#" target evasion:",
+		#target.get_evasion(),
+		#" final chance:",
+		#chance
+	#)
+#
+	#return clamp(chance, 10, 100)
 
 
 func setup_player_hp(manager):
@@ -985,7 +995,10 @@ func load_build(build: AnimalBuildResource):
 
 	is_protecting = false
 
-	hp = base_hp
+	if run_manager:
+		hp = run_manager.player_hp
+	else:
+		hp = base_hp
 
 	setup_basic_moves()
 

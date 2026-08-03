@@ -2,20 +2,29 @@ extends PassiveEffect
 class_name RagePassive
 
 
-@export var attack_bonus := 5
-@export var health_threshold := 0.5
+@export var attack_bonus := 2
+@export var max_stacks := 3
 
 
-func on_turn_start(owner):
+var stacks := 0
 
-	var hp_percent = float(owner.hp) / float(owner.get_max_hp())
 
-	if hp_percent <= health_threshold:
+func on_after_damage(owner, amount, attacker):
 
-		owner.modify_attack(attack_bonus)
+	if stacks >= max_stacks:
+		return
 
-		print(
-			owner.name,
-			" enters rage. Attack +",
-			attack_bonus
-		)
+	stacks += 1
+
+	owner.modify_attack(
+		attack_bonus
+	)
+
+	print(
+		owner.name,
+		" rage stack:",
+		stacks,
+		"+",
+		attack_bonus,
+		" attack"
+	)

@@ -29,7 +29,8 @@ enum TargetType
 {
 	SELF,
 	SINGLE_ENEMY,
-	ALL_ENEMIES
+	ALL_ENEMIES,
+	ALL_ALLIES
 }
 
 

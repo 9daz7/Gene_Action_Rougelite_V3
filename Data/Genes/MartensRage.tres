@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="GeneResource" format=3 uid="uid://b63650onw8qfj"]
+
+[ext_resource type="Script" uid="uid://btvgdy4ii0xbh" path="res://Scripts/Genes/Legendaries/LegendaryMutation.gd" id="1_b6y8t"]
+[ext_resource type="Script" uid="uid://bnmm0xqkm6atb" path="res://Scripts/Moves/MoveResource.gd" id="2_qqtxa"]
+[ext_resource type="Resource" uid="uid://deobyt5he5kb8" path="res://Data/Moves/Quick strike.tres" id="3_j3cvw"]
+[ext_resource type="Script" uid="uid://cykpuveioj0q4" path="res://Scripts/Genes/Effects/PassiveEffects.gd" id="4_1ber5"]
+[ext_resource type="Script" uid="uid://cnlwwn0eoa0pn" path="res://Scripts/Genes/GeneResource.gd" id="5_g4dlh"]
+[ext_resource type="Resource" uid="uid://81y60wcx8k4w" path="res://Resources/PassiveEffects/RagePassive.tres" id="5_qqtxa"]
+
+[resource]
+script = ExtResource("5_g4dlh")
+gene_name = "Marten anger"
+slot_cost = 0
+passive_effects = Array[ExtResource("4_1ber5")]([ExtResource("5_qqtxa")])
+move_pool = Array[ExtResource("2_qqtxa")]([ExtResource("3_j3cvw")])
+metadata/_custom_type_script = "uid://cnlwwn0eoa0pn"

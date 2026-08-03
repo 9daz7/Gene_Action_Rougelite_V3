@@ -4,4 +4,6 @@
 
 [resource]
 script = ExtResource("1_v6or1")
+effect_name = "rage"
+description = "Gain attack after taking damage."
 metadata/_custom_type_script = "uid://c1qwax3ai08f1"

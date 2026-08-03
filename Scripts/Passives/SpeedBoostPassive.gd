@@ -12,6 +12,7 @@ func on_battle_start(owner):
 
 	print(
 		owner.name,
-		" gained speed:",
-		speed_bonus
+		" gained ",
+		speed_bonus,
+		" speed from Cheetah Speed"
 	)

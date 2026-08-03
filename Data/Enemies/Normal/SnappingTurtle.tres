@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="EnemyResource" format=3 uid="uid://crmix04kh4c8q"]
+
+[ext_resource type="Script" uid="uid://cnlwwn0eoa0pn" path="res://Scripts/Genes/GeneResource.gd" id="1_tx14v"]
+[ext_resource type="Resource" uid="uid://djvhx41gomy2n" path="res://Data/Genes/TurtleShell.tres" id="2_unqf8"]
+[ext_resource type="Script" uid="uid://bnmm0xqkm6atb" path="res://Scripts/Moves/MoveResource.gd" id="2_xmye6"]
+[ext_resource type="Script" uid="uid://byxi3hsf2x8dx" path="res://Scripts/Enemies/EnemyResource.gd" id="3_gtqhu"]
+[ext_resource type="Resource" uid="uid://cfsalnn48dv3f" path="res://Data/Moves/Bite.tres" id="4_fwl11"]
+[ext_resource type="Resource" uid="uid://dssodq4lr1182" path="res://Data/Moves/Protect.tres" id="5_8dbvl"]
+[ext_resource type="Resource" uid="uid://bwi7mtlkrcgxw" path="res://Data/Moves/Shell smash.tres" id="6_d6mba"]
+
+[resource]
+script = ExtResource("3_gtqhu")
+enemy_name = "Snapping Turtle"
+ai_type = 2
+aggression = 0.6
+defense = 2.5
+starting_genes = Array[ExtResource("1_tx14v")]([ExtResource("2_unqf8")])
+moves = Array[ExtResource("2_xmye6")]([ExtResource("4_fwl11"), ExtResource("5_8dbvl"), ExtResource("6_d6mba")])
+drop_gene_pool = Array[ExtResource("1_tx14v")]([ExtResource("2_unqf8")])
+metadata/_custom_type_script = "uid://byxi3hsf2x8dx"

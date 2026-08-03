@@ -5,7 +5,7 @@
 [ext_resource type="Script" uid="uid://bnmm0xqkm6atb" path="res://Scripts/Moves/MoveResource.gd" id="2_tyibk"]
 [ext_resource type="Resource" uid="uid://deobyt5he5kb8" path="res://Data/Moves/Quick strike.tres" id="3_7j4ie"]
 [ext_resource type="Resource" uid="uid://dssodq4lr1182" path="res://Data/Moves/Protect.tres" id="4_4fthk"]
-[ext_resource type="Resource" uid="uid://b63650onw8qfj" path="res://Data/Genes/MartensMentality.tres" id="4_laq5i"]
+[ext_resource type="Resource" uid="uid://b63650onw8qfj" path="res://Data/Genes/MartensRage.tres" id="4_laq5i"]
 [ext_resource type="Resource" uid="uid://b1eti45dqkuo7" path="res://Data/Moves/Rage.tres" id="5_0w17s"]
 [ext_resource type="Resource" uid="uid://73ylas6rloet" path="res://Data/Moves/Outspeed.tres" id="6_7yly6"]
 

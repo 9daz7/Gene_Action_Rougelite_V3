@@ -4,10 +4,11 @@
 [ext_resource type="Script" uid="uid://bnmm0xqkm6atb" path="res://Scripts/Moves/MoveResource.gd" id="2_lby6w"]
 [ext_resource type="Script" uid="uid://cykpuveioj0q4" path="res://Scripts/Genes/Effects/PassiveEffects.gd" id="3_46b4n"]
 [ext_resource type="Script" uid="uid://cnlwwn0eoa0pn" path="res://Scripts/Genes/GeneResource.gd" id="4_ab6vp"]
+[ext_resource type="Resource" uid="uid://bl63shqo115nh" path="res://Resources/PassiveEffects/ArmorPassive.tres" id="4_lby6w"]
 
 [resource]
 script = ExtResource("4_ab6vp")
 gene_name = "Turtle shell"
 slot_type = 1
-armor_bonus = 20
+passive_effects = Array[ExtResource("3_46b4n")]([ExtResource("4_lby6w")])
 metadata/_custom_type_script = "uid://cnlwwn0eoa0pn"

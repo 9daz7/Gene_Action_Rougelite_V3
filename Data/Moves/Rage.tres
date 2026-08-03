@@ -5,4 +5,5 @@
 
 [resource]
 script = ExtResource("2_5smyk")
+move_name = "Rage"
 metadata/_custom_type_script = "uid://bnmm0xqkm6atb"

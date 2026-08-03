@@ -20,6 +20,7 @@ enum Type
 @export var type:Type
 @export var power:int = 5
 @export var duration:int = 3
+@export var stat_modifier := ""
 
 @export var can_stack := true
 @export var max_stacks := 3
@@ -30,6 +31,9 @@ var stacks := 1
 
 
 func get_display_text() -> String:
+
+	if stacks > 1:
+		return effect_name + " x" + str(stacks) + " (" + str(duration) + ")"
 
 	return effect_name + " (" + str(duration) + ")"
 

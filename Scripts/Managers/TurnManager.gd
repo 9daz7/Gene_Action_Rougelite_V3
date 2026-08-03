@@ -111,7 +111,9 @@ func start_player_turn():
 	current_state = TurnState.PLAYER_TURN
 
 	print("Player turn")
-	
+
+	player.tick_status_effects()
+
 	player.reset_turn_state()
 
 	# -----------------------------------
@@ -355,6 +357,34 @@ func trigger_turn_end_effects():
 
 			enemy.trigger_passive_event(
 				"turn_end"
+			)
+
+
+func tick_status_effects():
+
+	for effect in status_effects.duplicate():
+
+		effect.duration -= 1
+
+		print(
+			name,
+			" ",
+			effect.effect_name,
+			" duration:",
+			effect.duration
+		)
+
+
+		if effect.duration <= 0:
+
+			effect.remove(self)
+
+			status_effects.erase(effect)
+
+			print(
+				effect.effect_name,
+				" expired from ",
+				name
 			)
 
 

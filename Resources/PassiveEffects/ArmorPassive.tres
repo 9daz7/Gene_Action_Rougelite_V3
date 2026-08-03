@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="ArmorPassive" format=3 uid="uid://bl63shqo115nh"]
+
+[ext_resource type="Script" uid="uid://bnjhlinwk7m14" path="res://Scripts/Passives/ArmorPassive.gd" id="1_qrwh3"]
+
+[resource]
+script = ExtResource("1_qrwh3")
+effect_name = "Armor Passive"
+description = "Reduces incoming damage by 20%"
+metadata/_custom_type_script = "uid://bnjhlinwk7m14"
