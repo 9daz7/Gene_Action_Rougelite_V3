@@ -6,7 +6,8 @@ enum Rarity {
 	COMMON,
 	UNCOMMON,
 	RARE,
-	EPIC
+	EPIC,
+	LEGENDARY
 }
 
 
@@ -46,6 +47,8 @@ enum SlotType {
 # Accuracy / evasion
 @export var accuracy_bonus := 0
 @export var evasion_bonus := 0
+
+@export var critical_bonus := 0
 
 
 # Defensive stats
@@ -102,9 +105,10 @@ func get_passive_names() -> Array[String]:
 
 		if passive:
 
-			names.append(
-				passive.effect_name
-			)
+			if passive.has_method("get_display_name"):
+				names.append(passive.get_display_name())
+			else:
+				names.append(passive.resource_name)
 
 
 	return names

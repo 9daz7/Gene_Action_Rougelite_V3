@@ -122,7 +122,7 @@ func add_gene(gene: GeneResource) -> bool:
 		if passive == null:
 			continue
 
-		if passive.has_method("Initialize"):
+		if passive.has_method("initialize"):
 			passive.initialize(gene)
 			
 		passive_effects.append(passive)
@@ -474,10 +474,13 @@ func get_armor() -> int:
 
 func get_critical_chance():
 
-	var chance = 0
+	var chance = critical_modifier
+
+	for slot in gene_slots:
+		for gene in gene_slots[slot]:
+			chance += gene.critical_bonus
 
 	for passive in passive_effects:
-
 		chance = passive.modify_critical_chance(
 			self,
 			chance
