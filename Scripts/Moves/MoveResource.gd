@@ -192,7 +192,9 @@ func get_targets(
 
 		TargetType.ALL_ENEMIES:
 
-			return user.get_all_enemies()
+			var targets = user.get_all_enemies()
+
+			return targets
 
 
 		TargetType.SINGLE_ALLY:

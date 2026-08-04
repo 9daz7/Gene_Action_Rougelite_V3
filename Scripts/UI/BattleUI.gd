@@ -95,14 +95,22 @@ func _ready():
 
 func setup_names(
 		player: PlayerAnimal,
-		enemy: EnemyAnimal
+		enemies:Array
 	):
 
 	if player:
 		player_name_label.text = player.get_display_name()
 
-	if enemy:
-		enemy_name_label.text = enemy.get_display_name()
+	if enemies.size() > 0:
+
+		enemy_name_label.text = ""
+
+		for enemy in enemies:
+
+			enemy_name_label.text += (
+				enemy.get_display_name()
+				+ "\n"
+			)
 
 
 func setup_moves(player):
@@ -201,8 +209,13 @@ func update_player_hp(
 
 	elif animal is EnemyAnimal:
 
-		enemy_hp_bar.max_value = max_hp
-		enemy_hp_bar.value = current_hp
+		#enemy_hp_bar.max_value = max_hp
+		#enemy_hp_bar.value = current_hp
+		print(
+			"Enemy HP:",
+			animal.name,
+			current_hp
+		)
 
 
 # ==================================================

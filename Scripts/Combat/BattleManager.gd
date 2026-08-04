@@ -140,16 +140,18 @@ func start_battle(room_type = RoomData.RoomType.ENEMY):
 
 	var enemy_resource = get_enemy(room_type)
 
-	if enemy_resource == null:
-		push_error("No enemy resource selected")
-		return
+	var resources:Array[EnemyResource] = []
 
-	var enemy = spawner.spawn_enemy(
-		enemy_resource,
-		0
+	for i in range(enemy_count):
+
+		var resource = get_enemy(room_type)
+
+		if resource:
+			resources.append(resource)
+
+	enemies = spawner.spawn_enemies(
+		resources
 	)
-
-	enemies.append(enemy)
 
 	initialize_battle()
 
@@ -270,7 +272,7 @@ func initialize_battle():
 
 	GameEvents.battle_names_updated.emit(
 		player,
-		enemies[0]
+		enemies
 	)
 
 	GameEvents.hp_changed.emit(
@@ -300,6 +302,26 @@ func initialize_battle():
 func show_battle_start(enemy):
 
 	print("Battle started against ", enemy.get_display_name())
+
+
+func get_enemy_count(room_type)->int:
+
+	match room_type:
+
+		RoomData.RoomType.ENEMY:
+			return 1
+
+		RoomData.RoomType.GROUP_ENEMY:
+			return 3
+
+		RoomData.RoomType.ELITE:
+			return 2
+
+		RoomData.RoomType.BOSS:
+			return 1
+
+	return 1
+
 
 # ==================================================
 # Battle Results
