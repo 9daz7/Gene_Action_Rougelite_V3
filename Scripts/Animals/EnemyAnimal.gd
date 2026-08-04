@@ -33,6 +33,14 @@ func start_battle():
 		add_move(move)
 
 
+func get_all_enemies() -> Array:
+	return [turn_manager.player]
+
+
+func get_all_allies() -> Array:
+	return turn_manager.enemies
+
+
 func choose_action(player:AnimalBase) -> MoveResource:
 
 	var moves = get_battle_moves()

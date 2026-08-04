@@ -49,6 +49,11 @@ func initialize(
 	player = player_ref
 	enemies = enemy_refs
 
+	player.turn_manager = self
+
+	for enemy in enemies:
+		enemy.turn_manager = self
+
 	start_battle()
 
 func _ready():
@@ -286,16 +291,20 @@ func resolve_turn(
 		if enemy.hp <= 0:
 			continue
 
-		enemy.tick_status_effects()
+		enemy.trigger_passive_event(
+			"turn_start"
+		)
+
+		enemy.trigger_passive_event("turn_start")
+
+		enemy.process_status_effects()
 
 		check_battle_end()
 
 		if current_state == TurnState.BATTLE_OVER:
 			return
 
-		enemy.process_status_effects()
-
-		enemy.trigger_passive_event("turn_start")
+		enemy.tick_status_effects()
 
 
 # -----------------------------

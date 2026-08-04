@@ -5,6 +5,11 @@ class_name PlayerAnimal
 func start_battle():
 	print("Player ready")
 
+func get_all_enemies() -> Array:
+	return turn_manager.enemies
+
+func get_all_allies() -> Array:
+	return [self]
 
 func initialize_player(manager:RunManager):
 	run_manager = manager

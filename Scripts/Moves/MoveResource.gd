@@ -25,14 +25,15 @@ enum EffectTarget {
 	TARGET
 }
 
-enum TargetType
-{
-	SELF,
+enum TargetType {
 	SINGLE_ENEMY,
 	ALL_ENEMIES,
+	SELF,
+	SINGLE_ALLY,
 	ALL_ALLIES
 }
 
+@export var target_type = TargetType.SINGLE_ENEMY
 
 # ==================================================
 # Basic Move Info
@@ -88,6 +89,24 @@ func execute(
 		priority
 	)
 
+	var targets = get_targets(
+		user,
+		target
+	)
+
+	for current_target in targets:
+
+		execute_on_target(
+			user,
+			current_target
+		)
+
+
+func execute_on_target(
+	user:AnimalBase,
+	target:AnimalBase
+):
+
 	match effect_type:
 
 		MoveEffectType.STATUS:
@@ -105,7 +124,7 @@ func execute(
 
 
 		MoveEffectType.PROTECT:
-
+			
 			print(
 				user.name,
 				" uses ",
@@ -116,7 +135,7 @@ func execute(
 
 			apply_effects(
 				user,
-				target
+				user
 			)
 
 
@@ -150,6 +169,43 @@ func execute(
 				target,
 				true
 			)
+
+
+func get_targets(
+	user:AnimalBase,
+	target:AnimalBase
+)->Array:
+
+
+	match target_type:
+
+
+		TargetType.SINGLE_ENEMY:
+
+			return [target]
+
+
+		TargetType.SELF:
+
+			return [user]
+
+
+		TargetType.ALL_ENEMIES:
+
+			return user.get_all_enemies()
+
+
+		TargetType.SINGLE_ALLY:
+
+			return [target]
+
+
+		TargetType.ALL_ALLIES:
+
+			return user.get_all_allies()
+
+
+	return []
 
 
 # ==================================================
@@ -261,7 +317,10 @@ func apply_effects(
 
 				user.trigger_passive_event(
 					"status_applied",
-					effect
+					{
+						"status":effect,
+						"target":target
+					}
 				)
 
 			EffectTarget.TARGET:
@@ -270,5 +329,8 @@ func apply_effects(
 
 				target.trigger_passive_event(
 					"status_received",
-					effect
+					{
+						"status":effect,
+						"source":user
+					}
 				)

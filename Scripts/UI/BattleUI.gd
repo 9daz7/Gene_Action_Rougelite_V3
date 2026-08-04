@@ -80,6 +80,13 @@ func _ready():
 			setup_battle_ui
 		)
 
+	if not GameEvents.status_changed.is_connected(
+		update_status_labels
+	):
+
+		GameEvents.status_changed.connect(
+			update_status_labels
+		)
 
 # ==================================================
 # Public Functions
@@ -144,12 +151,19 @@ func update_status_labels(player:AnimalBase, enemy:AnimalBase):
 
 func get_status_text(animal:AnimalBase) -> String:
 
-	var text := ""
+	if animal == null:
+		return ""
 
-	for effect in animal.status_effects:
+	var text = ""
 
-		text += effect.effect_name
-		text += " (" + str(effect.duration) + ")\n"
+	for status in animal.status_effects:
+
+		text += (
+			status.effect_name
+			+ " x"
+			+ str(status.stacks)
+			+ "\n"
+		)
 
 	return text
 
@@ -189,8 +203,8 @@ func update_player_hp(
 
 		enemy_hp_bar.max_value = max_hp
 		enemy_hp_bar.value = current_hp
-	
-	
+
+
 # ==================================================
 # Private Functions
 # ==================================================
@@ -230,7 +244,8 @@ func _setup_buttons():
 
 
 	_clear_optional_moves()
-	
+
+
 
 # ==================================================
 # Helpers

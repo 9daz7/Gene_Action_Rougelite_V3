@@ -1,0 +1,126 @@
+[gd_scene format=3 uid="uid://cfbv4hu5i6pr2"]
+
+[ext_resource type="Script" uid="uid://ie8t5uvb4gse" path="res://Scripts/UI/BattleUI.gd" id="1_o21vf"]
+[ext_resource type="Script" uid="uid://bcfv1qu4c8wh8" path="res://Scripts/UI/PlayerHP.gd" id="2_31gad"]
+[ext_resource type="Texture2D" uid="uid://bjo4cf8ylnke2" path="res://Assets/Sprites/Animals/deebo_asset_test_battle.png" id="3_2xehn"]
+[ext_resource type="Script" uid="uid://dvsi4fgq53wkp" path="res://Scripts/UI/EnemyHP.gd" id="3_tr5vc"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gg2au"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2a143"]
+bg_color = Color(0.11666278, 0.45212668, 0, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_31gad"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xlvfx"]
+bg_color = Color(0.7645044, 0.019060427, 9.62615e-08, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+
+[node name="BattleUI" type="CanvasLayer" unique_id=1908710870]
+script = ExtResource("1_o21vf")
+
+[node name="PlayerPanel" type="Panel" parent="." unique_id=1121659238]
+offset_top = 539.0
+offset_right = 1920.0
+offset_bottom = 1079.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_gg2au")
+
+[node name="PlayerNameLabel" type="Label" parent="PlayerPanel" unique_id=1838283543]
+layout_mode = 0
+offset_left = 42.885
+offset_top = 253.09003
+offset_right = 82.885025
+offset_bottom = 276.0901
+
+[node name="PlayerHP" type="ProgressBar" parent="PlayerPanel" unique_id=458044599]
+layout_mode = 1
+anchors_preset = -1
+offset_left = 25.0
+offset_top = 282.69
+offset_right = 375.0
+offset_bottom = 312.69
+theme_override_styles/fill = SubResource("StyleBoxFlat_2a143")
+script = ExtResource("2_31gad")
+
+[node name="PlayerStatusLabel" type="Label" parent="PlayerPanel" unique_id=1521418484]
+layout_mode = 0
+offset_top = -539.0
+offset_right = 40.0
+offset_bottom = -516.0
+
+[node name="Sprite2D" type="Sprite2D" parent="PlayerPanel" unique_id=1590204960]
+position = Vector2(1294, 405.00006)
+scale = Vector2(0.3045539, 0.32799587)
+texture = ExtResource("3_2xehn")
+
+[node name="EnemyPanel" type="Panel" parent="." unique_id=169306677]
+offset_left = 1.0
+offset_right = 1921.0
+offset_bottom = 540.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_31gad")
+
+[node name="EnemyNameLabel" type="Label" parent="EnemyPanel" unique_id=1679866753]
+layout_mode = 0
+offset_left = 1569.355
+offset_top = 26.915
+offset_right = 1609.3549
+offset_bottom = 49.91501
+
+[node name="EnemyHP" type="ProgressBar" parent="EnemyPanel" unique_id=43262124]
+layout_mode = 1
+anchors_preset = -1
+offset_left = 1546.025
+offset_top = 59.36
+offset_right = 1896.025
+offset_bottom = 89.35997
+theme_override_styles/fill = SubResource("StyleBoxFlat_xlvfx")
+script = ExtResource("3_tr5vc")
+
+[node name="EnemyStatusLabel" type="Label" parent="EnemyPanel" unique_id=1684866720]
+layout_mode = 0
+offset_left = -1.0
+offset_right = 39.0
+offset_bottom = 23.0
+
+[node name="MoveButtons" type="HBoxContainer" parent="." unique_id=270229014]
+anchors_preset = -1
+offset_left = 173.06
+offset_top = 931.865
+offset_right = 438.06
+offset_bottom = 971.8649
+
+[node name="AttackButton" type="Button" parent="MoveButtons" unique_id=1974191994]
+layout_mode = 2
+text = "Attack"
+
+[node name="ProtectButton" type="Button" parent="MoveButtons" unique_id=1125897058]
+layout_mode = 2
+text = "Protect"
+
+[node name="Move3Button" type="Button" parent="MoveButtons" unique_id=1367933585]
+layout_mode = 2
+text = "Temp 3"
+
+[node name="Move4Button" type="Button" parent="MoveButtons" unique_id=510207000]
+layout_mode = 2
+text = "Temp 4"
+
+[connection signal="pressed" from="MoveButtons/AttackButton" to="." method="_on_attack_button_pressed"]
+[connection signal="pressed" from="MoveButtons/ProtectButton" to="." method="_on_protect_button_pressed"]

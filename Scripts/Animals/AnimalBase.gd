@@ -17,6 +17,7 @@ signal animal_died
 
 var run_manager: RunManager
 var animal_resource: AnimalResource
+var turn_manager: TurnManager
 
 
 # ==================================================
@@ -30,6 +31,12 @@ func initialize(resource: AnimalResource):
 	
 	setup_basic_moves()
 
+
+func get_all_enemies()->Array:
+	return []
+
+func get_all_allies() -> Array:
+	return []
 
 # ==================================================
 # Identity
