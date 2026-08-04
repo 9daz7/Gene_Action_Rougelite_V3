@@ -87,6 +87,7 @@ offset_right = 1609.3549
 offset_bottom = 49.91501
 
 [node name="Container" type="VBoxContainer" parent="EnemyPanel" unique_id=1485517162]
+visible = false
 custom_minimum_size = Vector2(350, 90)
 layout_mode = 0
 offset_left = 1534.465
@@ -118,11 +119,12 @@ offset_right = 1820.755
 offset_bottom = 250.9
 
 [node name="EnemyStatusContainer" type="VBoxContainer" parent="EnemyPanel" unique_id=1133935413]
+custom_minimum_size = Vector2(350, 90)
 layout_mode = 0
-offset_left = 1818.0
-offset_top = 306.0
-offset_right = 1858.0
-offset_bottom = 346.0
+offset_left = 1546.47
+offset_top = 30.53
+offset_right = 1896.47
+offset_bottom = 150.53
 
 [node name="EnemyStatusUi" parent="EnemyPanel/EnemyStatusContainer" unique_id=1869493834 instance=ExtResource("5_2xehn")]
 layout_mode = 2
