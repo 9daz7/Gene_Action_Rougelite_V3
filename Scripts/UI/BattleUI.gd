@@ -27,6 +27,7 @@ const ENEMY_STATUS_UI = preload(
 @onready var player_name_label = $PlayerPanel/PlayerNameLabel
 #@onready var enemy_name_label = $EnemyPanel/EnemyNameLabel
 @onready var enemy_container = $EnemyPanel/EnemyStatusContainer
+@onready var target_selection_ui = get_node_or_null("TargetSelectionUI")
 
 @onready var player_hp_bar = $PlayerPanel/PlayerHP
 #@onready var enemy_hp_bars = [
@@ -47,6 +48,8 @@ const ENEMY_STATUS_UI = preload(
 var move_buttons:Array[Button] = []
 
 var enemy_ui := {}
+
+var selecting_target := false
 
 
 # ==================================================
@@ -95,6 +98,21 @@ func _ready():
 			setup_battle_ui
 		)
 
+	if not GameEvents.request_target_selection.is_connected(
+		show_target_selection
+	):
+
+		GameEvents.request_target_selection.connect(
+			show_target_selection
+		)
+
+	if not GameEvents.target_selected.is_connected(
+		_on_target_selected
+	):
+
+		GameEvents.target_selected.connect(
+			_on_target_selected
+		)
 
 func setup_enemy_ui(
 	enemies:Array[EnemyAnimal]
@@ -256,6 +274,42 @@ func setup_battle_ui(
 	)
 
 
+func show_target_selection(
+	enemies:Array[EnemyAnimal]
+):
+
+	if target_selection_ui == null:
+		push_error("TargetSelectionUI missing from BattleUI")
+		return
+
+	selecting_target = true
+
+	disable_moves()
+
+	target_selection_ui.show_targets(
+		enemies
+	)
+
+
+func _on_target_selected(
+	enemy:EnemyAnimal
+):
+
+	print(
+		"BattleUI target selected:",
+		enemy.name
+	)
+
+	selecting_target = false
+
+	if target_selection_ui:
+
+		target_selection_ui.hide()
+
+
+	enable_moves()
+
+
 func update_player_hp(
 	animal:AnimalBase,
 	current_hp:int,
@@ -329,12 +383,18 @@ func _setup_buttons():
 
 	attack_button.pressed.connect(
 		func():
+
+			print("ATTACK BUTTON CLICKED")
+
 			GameEvents.move_selected.emit(0)
 	)
 
 
 	protect_button.pressed.connect(
 		func():
+
+			print("PROTECT BUTTON CLICKED")
+
 			GameEvents.move_selected.emit(1)
 	)
 

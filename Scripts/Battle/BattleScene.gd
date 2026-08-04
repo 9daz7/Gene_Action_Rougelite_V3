@@ -3,9 +3,10 @@ extends Node2D
 @onready var player_container = $PlayerContainer
 @onready var enemy_container = $EnemyContainer
 @onready var battle_ui = $BattleUI
+#@onready var target_selection_ui = $TargetSelectionUI
 
 @onready var player_hp = $BattleUI/PlayerPanel/PlayerHP
-@onready var enemy_hp = $BattleUI/EnemyPanel/EnemyHP
+#@onready var enemy_hp = $BattleUI/EnemyPanel/EnemyHP # old hp bars
 
 
 func _ready():
@@ -18,18 +19,23 @@ func _ready():
 	for child in enemy_container.get_children():
 		print("Enemy child", child.name)
 
+
 # -------------------------------------------------------------------
 # HP UI
 # -------------------------------------------------------------------
 
+# old hp bars
+#func setup_hp_bars(player, enemies):
+	#player_hp.set_player(player)
+#
+	#if enemies.size() > 0:
+		#enemy_hp.set_enemy(
+			#enemies[0]
+		#)
 func setup_hp_bars(player, enemies):
+
 	player_hp.set_player(player)
-
-	if enemies.size() > 0:
-		enemy_hp.set_enemy(
-			enemies[0]
-		)
-
+	
 
 # -------------------------------------------------------------------
 # Spawning
@@ -97,3 +103,12 @@ func spawn_enemy(scene, spawn_index:int = 0):
 	)
 
 	return enemy
+
+
+#func show_target_selection(
+	#enemies:Array[EnemyAnimal]
+#):
+#
+	#target_selection_ui.open(
+		#enemies
+	#)

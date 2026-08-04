@@ -19,6 +19,7 @@ signal battle_lost
 enum TurnState {
 	NONE,
 	PLAYER_TURN,
+	TARGET_SELECTION,
 	ENEMY_TURN,
 	END_TURN,
 	BATTLE_OVER
@@ -34,6 +35,14 @@ var current_state := TurnState.NONE
 
 var player: PlayerAnimal
 var enemies:Array[EnemyAnimal] = []
+
+var selected_enemy: EnemyAnimal
+
+# Target Selection
+var pending_move: MoveResource
+var pending_enemy_moves:Array = []
+
+var waiting_for_target := false
 
 
 # ==================================================
@@ -75,12 +84,21 @@ func _ready():
 			_on_move_selected
 		)
 
+	if not GameEvents.target_selected.is_connected(
+		_on_target_selected
+	):
+
+		GameEvents.target_selected.connect(
+			_on_target_selected
+		)
 
 # ==================================================
 # Battle Setup
 # ==================================================
 
 func start_battle():
+
+	selected_enemy = null
 
 	current_state = TurnState.NONE
 
@@ -151,7 +169,7 @@ func start_player_turn():
 
 	GameEvents.status_changed.emit(
 		player,
-		get_active_enemy()
+		enemies
 	)
 
 
@@ -193,9 +211,17 @@ func start_player_turn():
 
 
 func get_active_enemy() -> EnemyAnimal:
-	
+
+	if selected_enemy:
+
+		if selected_enemy.hp > 0:
+
+			return selected_enemy
+
 	for enemy in enemies:
+
 		if enemy.hp > 0:
+
 			return enemy
 
 	return null
@@ -207,9 +233,17 @@ func _on_move_selected(move_index: int):
 		print("Not player turn")
 		return
 
-	var target_enemy = get_active_enemy()
-	
-	if target_enemy == null:
+	var living_enemies:Array[EnemyAnimal] = []
+
+	for enemy in enemies:
+
+		if enemy.hp > 0:
+
+			living_enemies.append(enemy)
+
+
+	if living_enemies.is_empty():
+
 		print("No living enemies")
 		return
 		
@@ -242,13 +276,69 @@ func _on_move_selected(move_index: int):
 		"Enemies attacking:",
 		enemy_moves.size()
 	)
+
+	if living_enemies.size() == 1:
+
+		resolve_turn(
+			player_move,
+			living_enemies[0],
+			enemy_moves
+		)
+
+	else:
+
+		print(
+			"Waiting for target selection"
+		)
+
+		pending_move = player_move
+		pending_enemy_moves = enemy_moves
+
+		waiting_for_target = true
+
+		current_state = TurnState.TARGET_SELECTION
+
+		GameEvents.turn_changed.emit(
+			current_state
+		)
 	
+		GameEvents.request_target_selection.emit(
+			living_enemies
+		)
+
+
+func _on_target_selected(enemy:EnemyAnimal):
+
+	if not waiting_for_target:
+		return
+
+	if enemy == null:
+		return
+
+
+	if enemy.hp <= 0:
+		print(
+			"Cannot target defeated enemy"
+		)
+		return
+
+	print(
+		"Target selected:",
+		enemy.name
+	)
+	
+	waiting_for_target = false
+
+	selected_enemy = enemy
+
 	resolve_turn(
-		player_move,
-		target_enemy,
-		enemy_moves
+		pending_move,
+		enemy,
+		pending_enemy_moves
 	)
 
+	pending_move = null
+	pending_enemy_moves.clear()
 
 # ==================================================
 # Turn Resolution
@@ -465,5 +555,15 @@ func reset():
 	player = null
 
 	enemies.clear()
+
+
+	selected_enemy = null
+
+	pending_move = null
+
+	pending_enemy_moves.clear()
+
+	waiting_for_target = false
+
 
 	print("TurnManager reset")

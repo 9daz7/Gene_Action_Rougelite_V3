@@ -9,6 +9,15 @@ class_name EnemyStatusUI
 var enemy: EnemyAnimal
 
 
+#func _ready():
+#
+	#mouse_filter = Control.MOUSE_FILTER_PASS
+#
+	#gui_input.connect(
+		#_on_gui_input
+	#)
+
+
 func setup(enemy_ref:EnemyAnimal):
 
 	enemy = enemy_ref
@@ -19,6 +28,34 @@ func setup(enemy_ref:EnemyAnimal):
 	hp_bar.value = enemy.hp
 
 	status_label.text = ""
+
+
+#func select():
+#
+	#modulate = Color(1,1,0.5)
+#
+#
+#func deselect():
+#
+	#modulate = Color(1,1,1)
+#
+#
+#func _on_gui_input(event):
+#
+	#if event is InputEventMouseButton:
+#
+		#if event.button_index == MOUSE_BUTTON_LEFT:
+#
+			#if event.pressed:
+#
+				#print(
+					#"Selected enemy:",
+					#enemy.name
+				#)
+#
+				#GameEvents.target_selected.emit(
+					#enemy
+				#)
 
 
 func update_hp(

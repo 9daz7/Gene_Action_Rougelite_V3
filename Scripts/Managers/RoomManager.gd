@@ -106,7 +106,7 @@ func start_enemy(room):
 
 func start_group_enemy(room):
 	print("Starting group battle")
-	battle_manager.start_group_battle(RoomData.RoomType.GROUP_ENEMY)
+	battle_manager.start_battle(RoomData.RoomType.GROUP_ENEMY)
 
 func start_elite(room):
 	print("Starting elite battle")

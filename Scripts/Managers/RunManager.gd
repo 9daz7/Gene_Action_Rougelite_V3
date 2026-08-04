@@ -70,7 +70,7 @@ func start_run():
 
 	run_active = true
 	
-	gold = 0
+	gold = 35
 
 	GameEvents.gold_changed.emit(gold)
 

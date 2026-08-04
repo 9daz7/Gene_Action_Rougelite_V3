@@ -197,33 +197,35 @@ func create_battle_scene():
 		run_manager
 	)
 
-
-func start_group_battle():
-
-	current_battle_type = RoomData.RoomType.GROUP_ENEMY
-
-	enemies.clear()
-
-	await create_battle_scene()
-
-	player = spawner.spawn_player()
-
-	var resources:Array[EnemyResource] = []
-
-	for i in range(2):
-
-		resources.append(
-			get_enemy(
-				RoomData.RoomType.GROUP_ENEMY
-			)
-		)
-
-	enemies = spawner.spawn_enemies(
-		resources
-	)
-
-	initialize_battle()
-
+# dont think i need this
+#func start_group_battle(
+	#room_type = RoomData.RoomType.GROUP_ENEMY
+#):
+#
+	#current_battle_type = RoomData.RoomType.GROUP_ENEMY
+#
+	#enemies.clear()
+#
+	#await create_battle_scene()
+#
+	#player = spawner.spawn_player()
+#
+	#var resources:Array[EnemyResource] = []
+#
+	#for i in range(2):
+#
+		#resources.append(
+			#get_enemy(
+				#RoomData.RoomType.GROUP_ENEMY
+			#)
+		#)
+#
+	#enemies = spawner.spawn_enemies(
+		#resources
+	#)
+#
+	#initialize_battle()
+#
 
 # ==================================================
 # Enemy Selection

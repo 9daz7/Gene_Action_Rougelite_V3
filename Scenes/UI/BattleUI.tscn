@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://bjo4cf8ylnke2" path="res://Assets/Sprites/Animals/deebo_asset_test_battle.png" id="3_2xehn"]
 [ext_resource type="Script" uid="uid://dvsi4fgq53wkp" path="res://Scripts/UI/EnemyHP.gd" id="3_tr5vc"]
 [ext_resource type="PackedScene" uid="uid://cbkdrsj7grt7" path="res://Scenes/UI/EnemyStatusUI.tscn" id="5_2xehn"]
+[ext_resource type="PackedScene" uid="uid://nqpp7pvf7fxd" path="res://Scenes/UI/TargetSelectionUI.tscn" id="6_h4kvj"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gg2au"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
@@ -151,6 +152,8 @@ text = "Temp 3"
 [node name="Move4Button" type="Button" parent="MoveButtons" unique_id=510207000]
 layout_mode = 2
 text = "Temp 4"
+
+[node name="TargetSelectionUI" parent="." unique_id=1898668061 instance=ExtResource("6_h4kvj")]
 
 [connection signal="pressed" from="MoveButtons/AttackButton" to="." method="_on_attack_button_pressed"]
 [connection signal="pressed" from="MoveButtons/ProtectButton" to="." method="_on_protect_button_pressed"]

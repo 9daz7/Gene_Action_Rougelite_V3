@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://nqpp7pvf7fxd"]
+
+[ext_resource type="Script" uid="uid://288kpethsjh1" path="res://Scenes/UI/TargetSelectionUI.gd" id="1_oknfo"]
+
+[node name="TargetSelectionUI" type="PanelContainer" unique_id=1898668061]
+anchors_preset = -1
+anchor_left = 0.3
+anchor_top = 0.3
+anchor_right = 0.7
+anchor_bottom = 0.7
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_oknfo")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=614159927]
+layout_mode = 2
+
+[node name="TargetButton1" type="Button" parent="VBoxContainer" unique_id=550783722]
+layout_mode = 2
+
+[node name="TargetButton2" type="Button" parent="VBoxContainer" unique_id=1189746938]
+layout_mode = 2
+
+[node name="TargetButton3" type="Button" parent="VBoxContainer" unique_id=210302621]
+layout_mode = 2

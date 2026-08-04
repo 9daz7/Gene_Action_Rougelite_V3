@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cjyluyrq21x3k" path="res://Scripts/Battle/BattleScene.gd" id="1_u2duk"]
 [ext_resource type="PackedScene" uid="uid://cfbv4hu5i6pr2" path="res://Scenes/UI/BattleUI.tscn" id="2_jaxsk"]
+[ext_resource type="PackedScene" uid="uid://nqpp7pvf7fxd" path="res://Scenes/UI/TargetSelectionUI.tscn" id="3_k6flv"]
 
 [node name="BattleScene" type="Node2D" unique_id=953255763]
 script = ExtResource("1_u2duk")
@@ -24,3 +25,5 @@ position = Vector2(1301, 256)
 [node name="EnemySpawn3" type="Marker2D" parent="EnemyContainer" unique_id=1411174731]
 
 [node name="BattleUI" parent="." unique_id=1277132647 instance=ExtResource("2_jaxsk")]
+
+[node name="TargetSelectionUI" parent="." unique_id=880802949 instance=ExtResource("3_k6flv")]
