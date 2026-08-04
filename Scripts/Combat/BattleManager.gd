@@ -26,9 +26,15 @@ const ENEMY_POOL = [
 ]
 
 const ELITE_POOL = [
-	preload("res://Data/Enemies/Elite/AlphaWolf.tres"),
-	preload("res://Data/Enemies/Elite/AlphaBoar.tres"),
-	preload("res://Data/Enemies/Elite/GiantMarten.tres")
+	#preload("res://Data/Enemies/Elite/AlphaWolf.tres"),
+	#preload("res://Data/Enemies/Elite/AlphaBoar.tres"),
+	#preload("res://Data/Enemies/Elite/GiantMarten.tres")
+	preload("res://Data/Enemies/Normal/Wolf.tres"),
+	preload("res://Data/Enemies/Normal/Boar.tres"),
+	preload("res://Data/Enemies/Normal/Marten.tres"),
+	preload("res://Data/Enemies/Normal/Cheetah.tres"),
+	preload("res://Data/Enemies/Normal/SnappingTurtle.tres"),
+	preload("res://Data/Enemies/Normal/HoneyBadger.tres"),
 ]
 
 const BOSS_POOL = [
@@ -329,6 +335,14 @@ func initialize_battle():
 			enemy.hp,
 			enemy.get_max_hp()
 		)
+
+	print("==========================")
+	print("BattleManager enemy list")
+
+	for enemy in enemies:
+		print(enemy.name)
+
+	print("==========================")
 
 	turn_manager.initialize(
 		player,
