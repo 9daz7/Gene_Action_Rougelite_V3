@@ -29,6 +29,11 @@ func setup(enemy_ref:EnemyAnimal):
 
 	status_label.text = ""
 
+	enemy.status_changed.connect(
+		update_status
+	)
+
+	update_status()
 
 #func select():
 #
@@ -69,14 +74,15 @@ func update_hp(
 
 func update_status():
 
+	if enemy == null:
+		return
+
 	var text := ""
 
 	for status in enemy.status_effects:
 
 		text += (
-			status.effect_name
-			+ " x"
-			+ str(status.stacks)
+			status.get_display_text()
 			+ "\n"
 		)
 

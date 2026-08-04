@@ -27,7 +27,7 @@ enum Type
 @export var refresh_duration := true
 @export var stack_power := true
 
-var stacks := 1
+var stacks:int = 1
 
 
 func get_display_text() -> String:

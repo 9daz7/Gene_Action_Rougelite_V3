@@ -22,7 +22,7 @@ func start_battle():
 
 	load_animal_stats(enemy_data)
 
-	hp = base_hp
+	hp = get_max_hp()
 
 	load_genes(enemy_data.starting_genes)
 

@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="MoveResource" format=3 uid="uid://bk4tdmsrim677"]
+
+[ext_resource type="Script" uid="uid://cedh0hgwqddn4" path="res://Resources/StatusEffect.gd" id="1_w34kl"]
+[ext_resource type="Resource" uid="uid://b6jpn8m1d7vhr" path="res://Resources/StatusEffects/Poison.tres" id="2_8680k"]
+[ext_resource type="Script" uid="uid://bnmm0xqkm6atb" path="res://Scripts/Moves/MoveResource.gd" id="2_p2l2h"]
+
+[resource]
+script = ExtResource("2_p2l2h")
+move_name = "Poison Bite"
+effect_type = 3
+effects = Array[ExtResource("1_w34kl")]([ExtResource("2_8680k")])
+metadata/_custom_type_script = "uid://bnmm0xqkm6atb"

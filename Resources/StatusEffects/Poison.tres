@@ -1,3 +1,10 @@
-[gd_resource type="Resource" format=3 uid="uid://b6jpn8m1d7vhr"]
+[gd_resource type="Resource" script_class="StatusEffect" format=3 uid="uid://b6jpn8m1d7vhr"]
+
+[ext_resource type="Script" uid="uid://cedh0hgwqddn4" path="res://Resources/StatusEffect.gd" id="1_88n8q"]
 
 [resource]
+script = ExtResource("1_88n8q")
+effect_name = "Poison"
+power = 3
+can_stack = false
+stack_power = false

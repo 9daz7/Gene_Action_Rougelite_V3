@@ -17,7 +17,8 @@ func initialize_player(manager:RunManager):
 
 func take_damage(
 	amount:int,
-	attacker:AnimalBase = null
+	attacker:AnimalBase = null,
+	is_status_damage:bool = false
 ):
 
 	super.take_damage(

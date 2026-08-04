@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="EnemyResource" format=3 uid="uid://nve7k78syiny"]
+
+[ext_resource type="Script" uid="uid://cnlwwn0eoa0pn" path="res://Scripts/Genes/GeneResource.gd" id="1_lm88q"]
+[ext_resource type="Script" uid="uid://bnmm0xqkm6atb" path="res://Scripts/Moves/MoveResource.gd" id="2_lm88q"]
+[ext_resource type="Resource" uid="uid://deobyt5he5kb8" path="res://Data/Moves/Quick strike.tres" id="3_6ntmi"]
+[ext_resource type="Script" uid="uid://byxi3hsf2x8dx" path="res://Scripts/Enemies/EnemyResource.gd" id="3_47fc4"]
+[ext_resource type="Resource" uid="uid://dssodq4lr1182" path="res://Data/Moves/Protect.tres" id="4_2kc6e"]
+[ext_resource type="Resource" uid="uid://bk4tdmsrim677" path="res://Data/Moves/PoisonBite.tres" id="5_81s2l"]
+[ext_resource type="Resource" uid="uid://cwx5oe7wgvv3y" path="res://Data/Genes/RattlesnakeFangs.tres" id="7_2kc6e"]
+
+[resource]
+script = ExtResource("3_47fc4")
+enemy_name = "Rattlesnake"
+ai_type = 1
+base_hp = 50
+base_speed = 12
+starting_genes = Array[ExtResource("1_lm88q")]([ExtResource("7_2kc6e")])
+moves = Array[ExtResource("2_lm88q")]([ExtResource("3_6ntmi"), ExtResource("4_2kc6e"), ExtResource("5_81s2l")])
+drop_gene_pool = Array[ExtResource("1_lm88q")]([ExtResource("7_2kc6e")])
+metadata/_custom_type_script = "uid://byxi3hsf2x8dx"

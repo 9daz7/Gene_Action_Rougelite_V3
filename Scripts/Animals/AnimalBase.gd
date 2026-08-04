@@ -8,6 +8,7 @@ class_name AnimalBase
 
 signal hp_changed(current_hp)
 signal animal_died
+signal status_changed(animal)
 
 
 # ==================================================
@@ -33,9 +34,19 @@ func initialize(resource: AnimalResource):
 
 
 func get_all_enemies()->Array:
+	if turn_manager:
+
+		return turn_manager.enemies
+
 	return []
 
 func get_all_allies() -> Array:
+	if turn_manager:
+
+		return [
+			self
+		]
+
 	return []
 
 # ==================================================
@@ -276,23 +287,29 @@ var status_effects: Array = []
 
 func process_status_effects():
 	for effect in status_effects:
-		
+
 		match effect.type:
-			
+
 			StatusEffect.Type.POISON:
 				print(name," takes poison damage")
-				take_damage(effect.get_total_power())
-				
+				take_status_damage(
+					effect.get_total_power(),
+				)
+
 			StatusEffect.Type.BLEED:
 				print(name," bleeds")
-				take_damage(effect.get_total_power())
-				
+				take_status_damage(
+					effect.get_total_power(),
+				)
+
 			StatusEffect.Type.BURN:
 				print(name," burns")
-				take_damage(effect.get_total_power())
+				take_status_damage(
+					effect.get_total_power(),
+				)
 
 		effect.duration -= 1
-		
+
 	for effect in status_effects.duplicate():
 		if effect.duration <= 0:
 			remove_status_effect(effect)
@@ -322,27 +339,16 @@ func apply_status_effect(effect:StatusEffect):
 		# add stack
 		if existing.can_stack:
 
-			var old_stacks = existing.stacks
-
 			existing.stacks = min(
 				existing.stacks + 1,
 				existing.max_stacks
 			)
 
-			var difference = existing.stacks - old_stacks
-
-			if difference > 0:
-
-				existing.apply_stack(
-					self,
-					difference
-				)
-
-				print(
-					existing.effect_name,
-					" stacked to ",
-					existing.stacks
-				)
+			print(
+				existing.effect_name,
+				" stacked to ",
+				existing.stacks
+			)
 
 		return
 
@@ -371,6 +377,13 @@ func apply_status_effect(effect:StatusEffect):
 		new_effect.effect_name,
 		" applied to ",
 		name
+	)
+
+	status_changed.emit(self)
+
+	GameEvents.status_changed.emit(
+		self,
+		get_all_enemies()
 	)
 
 
@@ -404,6 +417,13 @@ func remove_status_effect(effect:StatusEffect):
 
 	status_effects.erase(effect)
 
+	status_changed.emit(self)
+	
+	GameEvents.status_changed.emit(
+		self,
+		get_all_enemies()
+	)
+
 	print(
 		effect.effect_name,
 		" expired on ",
@@ -431,6 +451,8 @@ func tick_status_effects():
 			effect.remove(self)
 
 			status_effects.erase(effect)
+
+			status_changed.emit(self)
 
 			print(
 				effect.effect_name,
@@ -652,7 +674,8 @@ var protect_reduction := 0.8
 
 func take_damage(
 	amount:int,
-	attacker:AnimalBase = null
+	attacker:AnimalBase = null,
+	is_status_damage:bool = false
 ):
 
 	var damage_data = {
@@ -666,6 +689,9 @@ func take_damage(
 	)
 
 	amount = damage_data.amount
+
+	if not is_status_damage:
+		amount = calculate_damage_taken(amount)
 
 	if is_protecting:
 
@@ -710,7 +736,44 @@ func take_damage(
 
 	hp_changed.emit(hp)
 
+	if hp <= 0:
+		die()
+	
 	damage_data.amount = amount
+
+	if hp <= 0:
+		die()
+
+
+func take_status_damage(
+	amount:int
+):
+
+	amount = max(1, amount)
+
+	hp -= amount
+
+	hp = clamp(
+		hp,
+		0,
+		get_max_hp()
+	)
+
+	print(
+		name,
+		" took ",
+		amount,
+		" status damage. HP:",
+		hp
+	)
+
+	GameEvents.hp_changed.emit(
+		self,
+		hp,
+		get_max_hp()
+	)
+
+	hp_changed.emit(hp)
 
 	if hp <= 0:
 		die()
@@ -771,6 +834,9 @@ func heal(amount:int):
 	)
 
 	hp_changed.emit(hp)
+
+	if hp <= 0:
+		die()
 
 
 func calculate_move_damage(move:MoveResource) -> int:
