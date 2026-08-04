@@ -20,6 +20,7 @@ enum TurnState {
 	NONE,
 	PLAYER_TURN,
 	ENEMY_TURN,
+	END_TURN,
 	BATTLE_OVER
 }
 
@@ -122,12 +123,6 @@ func start_player_turn():
 
 	player.process_status_effects()
 
-	for enemy in enemies:
-
-		if enemy.hp > 0:
-
-			enemy.process_status_effects()
-
 	# -----------------------------------
 	# Passive turn start effects
 	# -----------------------------------
@@ -135,14 +130,6 @@ func start_player_turn():
 	player.trigger_passive_event(
 		"turn_start"
 	)
-
-	for enemy in enemies:
-
-		if enemy.hp > 0:
-			
-			enemy.trigger_passive_event(
-				"turn_start"
-			)
 
 	# -----------------------------------
 	# Update UI
@@ -259,14 +246,11 @@ func resolve_turn(
 	target_enemy: EnemyAnimal,
 	enemy_moves:Array
 ):
-	
-	current_state = TurnState.ENEMY_TURN
-	
-	GameEvents.turn_changed.emit(
-		current_state
-	)
-	
-	# Player action
+
+# -----------------------------
+# Player action
+# -----------------------------
+
 	print(
 		"Player uses:",
 		player_move.move_name
@@ -282,17 +266,41 @@ func resolve_turn(
 		target_enemy
 	)
 
-	#battle_ui.update_status_labels(
-		#player,
-		#get_active_enemy()
-	#)
-
 	check_battle_end()
 
 	if current_state == TurnState.BATTLE_OVER:
 		return
 
-	# Enemy actions
+# -----------------------------
+# Enemy turn begins
+# -----------------------------
+
+	current_state = TurnState.ENEMY_TURN
+	
+	GameEvents.turn_changed.emit(
+		current_state
+	)
+
+	for enemy in enemies:
+
+		if enemy.hp <= 0:
+			continue
+
+		enemy.tick_status_effects()
+
+		check_battle_end()
+
+		if current_state == TurnState.BATTLE_OVER:
+			return
+
+		enemy.process_status_effects()
+
+		enemy.trigger_passive_event("turn_start")
+
+
+# -----------------------------
+# Enemy actions
+# -----------------------------
 	for data in enemy_moves:
 
 		var enemy = data.enemy
@@ -314,11 +322,6 @@ func resolve_turn(
 			player
 		)
 
-		#battle_ui.update_status_labels(
-			#player,
-			#get_active_enemy()
-		#)
-
 		check_battle_end()
 
 		if current_state == TurnState.BATTLE_OVER:
@@ -339,6 +342,11 @@ func end_turn():
 	if player == null:
 		return
 
+	current_state = TurnState.END_TURN
+
+	GameEvents.turn_changed.emit(current_state)
+
+
 	trigger_turn_end_effects()
 
 	start_player_turn()
@@ -357,34 +365,6 @@ func trigger_turn_end_effects():
 
 			enemy.trigger_passive_event(
 				"turn_end"
-			)
-
-
-func tick_status_effects():
-
-	for effect in status_effects.duplicate():
-
-		effect.duration -= 1
-
-		print(
-			name,
-			" ",
-			effect.effect_name,
-			" duration:",
-			effect.duration
-		)
-
-
-		if effect.duration <= 0:
-
-			effect.remove(self)
-
-			status_effects.erase(effect)
-
-			print(
-				effect.effect_name,
-				" expired from ",
-				name
 			)
 
 

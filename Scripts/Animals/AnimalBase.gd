@@ -404,6 +404,34 @@ func remove_status_effect(effect:StatusEffect):
 	)
 
 
+func tick_status_effects():
+
+	for effect in status_effects.duplicate():
+
+		effect.duration -= 1
+
+		print(
+			name,
+			" ",
+			effect.effect_name,
+			" duration:",
+			effect.duration
+		)
+
+
+		if effect.duration <= 0:
+
+			effect.remove(self)
+
+			status_effects.erase(effect)
+
+			print(
+				effect.effect_name,
+				" expired from ",
+				name
+			)
+
+
 # ==================================================
 # STATS
 # ==================================================
