@@ -103,17 +103,14 @@ func open(data:LabResource, manager:BattleManager):
 
 func close():
 
-	if connected_to_battle:
+	print("Closing abandoned lab")
 
-		if battle_manager.battle_won.is_connected(
-			_on_experiment_won
-		):
+	lab_data = null
+	battle_manager = null
 
-			battle_manager.battle_won.disconnect(
-				_on_experiment_won
-			)
-
-		connected_to_battle = false
+	critical_battle_complete = false
+	experiment_available = false
+	lab_action_used = false
 
 	hide()
 
@@ -156,6 +153,22 @@ func critical_battle_won():
 	print(
 		"Epic experiment gene recovered"
 	)
+
+		# permanently complete lab
+	lab_data.lab_status = LabResource.LabStatus.STABLE
+
+	#if connected_to_battle:
+#
+		#if battle_manager.battle_won.is_connected(
+			#_on_experiment_won
+		#):
+#
+			#battle_manager.battle_won.disconnect(
+				#_on_experiment_won
+			#)
+#
+#
+		#connected_to_battle = false
 
 	reset_buttons()
 

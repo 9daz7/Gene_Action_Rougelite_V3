@@ -121,14 +121,22 @@ func start_critical_experiment():
 # ==================================================
 
 
-func start_battle(room_type = RoomData.RoomType.ENEMY):
+func start_battle(
+	room_type = RoomData.RoomType.ENEMY
+):
 
 	if room_type != RoomData.RoomType.ELITE:
+
 		critical_experiment = false
 
 	if spawner == null:
-		push_error("BattleSpawner missing")
+
+		push_error(
+			"BattleSpawner missing"
+		)
+
 		return
+
 
 	current_battle_type = room_type
 
@@ -138,19 +146,26 @@ func start_battle(room_type = RoomData.RoomType.ENEMY):
 
 	player = spawner.spawn_player()
 
-	var enemy_resource = get_enemy(room_type)
+	var enemy_count := get_enemy_count(
+		room_type
+	)
 
-	var resources:Array[EnemyResource] = []
+	var enemy_resources:Array[EnemyResource] = []
 
 	for i in range(enemy_count):
 
-		var resource = get_enemy(room_type)
+		var resource = get_enemy(
+			room_type
+		)
 
 		if resource:
-			resources.append(resource)
+
+			enemy_resources.append(
+				resource
+			)
 
 	enemies = spawner.spawn_enemies(
-		resources
+		enemy_resources
 	)
 
 	initialize_battle()
@@ -238,6 +253,31 @@ func get_enemy(room_type) -> EnemyResource:
 	return choices[0]
 
 
+func get_enemy_count(
+	room_type
+) -> int:
+
+	match room_type:
+
+		RoomData.RoomType.ENEMY:
+
+			return 1
+
+		RoomData.RoomType.GROUP_ENEMY:
+
+			return 3
+
+		RoomData.RoomType.ELITE:
+
+			return 2
+
+		RoomData.RoomType.BOSS:
+
+			return 1
+
+	return 1
+
+
 func initialize_battle():
 	print("Battle initialized")
 
@@ -296,31 +336,12 @@ func initialize_battle():
 	)
 
 	GameEvents.battle_started.emit(
-		enemies[0]
+		enemies
 	)
 
 func show_battle_start(enemy):
 
 	print("Battle started against ", enemy.get_display_name())
-
-
-func get_enemy_count(room_type)->int:
-
-	match room_type:
-
-		RoomData.RoomType.ENEMY:
-			return 1
-
-		RoomData.RoomType.GROUP_ENEMY:
-			return 3
-
-		RoomData.RoomType.ELITE:
-			return 2
-
-		RoomData.RoomType.BOSS:
-			return 1
-
-	return 1
 
 
 # ==================================================

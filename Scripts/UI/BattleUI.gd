@@ -6,6 +6,14 @@ class_name BattleUI
 # Signals
 # ==================================================
 
+# ==================================================
+#preloads
+# ==================================================
+
+const ENEMY_STATUS_UI = preload(
+	"res://Scenes/UI/EnemyStatusUI.tscn"
+)
+
 
 # ==================================================
 # Onready Variables
@@ -17,10 +25,15 @@ class_name BattleUI
 @onready var move4_button = $MoveButtons/Move4Button
 
 @onready var player_name_label = $PlayerPanel/PlayerNameLabel
-@onready var enemy_name_label = $EnemyPanel/EnemyNameLabel
+#@onready var enemy_name_label = $EnemyPanel/EnemyNameLabel
+@onready var enemy_container = $EnemyPanel/EnemyStatusContainer
 
 @onready var player_hp_bar = $PlayerPanel/PlayerHP
-@onready var enemy_hp_bar = $EnemyPanel/EnemyHP
+#@onready var enemy_hp_bars = [
+	#$EnemyPanel/EnemyHPContainer/EnemyHP1,
+	#$EnemyPanel/EnemyHPContainer/EnemyHP2,
+	#$EnemyPanel/EnemyHPContainer/EnemyHP3
+#]
 
 @onready var player_status_label = $PlayerPanel/PlayerStatusLabel
 @onready var enemy_status_label = $EnemyPanel/EnemyStatusLabel
@@ -32,6 +45,8 @@ class_name BattleUI
 
 
 var move_buttons:Array[Button] = []
+
+var enemy_ui := {}
 
 
 # ==================================================
@@ -80,13 +95,27 @@ func _ready():
 			setup_battle_ui
 		)
 
-	if not GameEvents.status_changed.is_connected(
-		update_status_labels
-	):
 
-		GameEvents.status_changed.connect(
-			update_status_labels
-		)
+func setup_enemy_ui(
+	enemies:Array[EnemyAnimal]
+):
+
+	for child in enemy_container.get_children():
+		child.queue_free()
+
+	enemy_ui.clear()
+
+	for enemy in enemies:
+
+		var ui = ENEMY_STATUS_UI.instantiate()
+
+		enemy_container.add_child(ui)
+
+		ui.setup(enemy)
+
+
+		enemy_ui[enemy] = ui
+
 
 # ==================================================
 # Public Functions
@@ -95,25 +124,36 @@ func _ready():
 
 func setup_names(
 		player: PlayerAnimal,
-		enemies:Array
+		enemies:Array[EnemyAnimal]
 	):
 
 	if player:
-		player_name_label.text = player.get_display_name()
+		player_name_label.text = (
+			player.get_display_name()
+		)
 
-	if enemies.size() > 0:
-
-		enemy_name_label.text = ""
-
-		for enemy in enemies:
-
-			enemy_name_label.text += (
-				enemy.get_display_name()
-				+ "\n"
-			)
+	#if enemies.is_empty():
+#
+		#enemy_name_label.text = ""
+#
+		#return
+#
+		#var enemy_text := ""
+#
+		#for enemy in enemies:
+#
+			#if enemy:
+#
+				#enemy_text += (
+				#enemy.get_display_name()
+				#+ "\n"
+			#)
 
 
 func setup_moves(player):
+
+	if player == null:
+		return
 
 	print("Updating battle moves")
 
@@ -147,14 +187,35 @@ func disable_moves():
 		button.disabled = true
 		
 		
-func update_status_labels(player:AnimalBase, enemy:AnimalBase):
+func update_status_labels(
+	player:AnimalBase,
+	enemies:Array[EnemyAnimal]
+):
 
-	player_status_label.text = get_status_text(player)
-	
-	if enemy != null:
-		enemy_status_label.text = get_status_text(enemy)
-	else:
-		enemy_status_label.text = ""
+	player_status_label.text = (
+		get_status_text(player)
+	)
+
+	for enemy in enemies:
+
+		if enemy_ui.has(enemy):
+
+			enemy_ui[enemy].update_status()
+
+	#var text := ""
+#
+	#for enemy in enemies:
+#
+		#if enemy:
+#
+			#text += (
+				#enemy.name
+				#+ ": "
+				#+ get_status_text(enemy)
+				#+ "\n"
+			#)
+#
+	#enemy_status_label.text = text
 
 
 func get_status_text(animal:AnimalBase) -> String:
@@ -176,16 +237,23 @@ func get_status_text(animal:AnimalBase) -> String:
 	return text
 
 
-func setup_battle_ui(player, enemies):
+func setup_battle_ui(
+	player,
+	enemies
+):
 
-	var enemy = enemies[0]
-
-	setup_names(
-		player,
-		enemy
+	setup_enemy_ui(
+		enemies
 	)
 
-	print("Battle UI initialized")
+	update_status_labels(
+		player,
+		enemies
+	)
+
+	print(
+		"Battle UI initialized"
+	)
 
 
 func update_player_hp(
@@ -206,16 +274,43 @@ func update_player_hp(
 		player_hp_bar.max_value = max_hp
 		player_hp_bar.value = current_hp
 
-
 	elif animal is EnemyAnimal:
 
-		#enemy_hp_bar.max_value = max_hp
-		#enemy_hp_bar.value = current_hp
-		print(
-			"Enemy HP:",
-			animal.name,
-			current_hp
-		)
+		if enemy_ui.has(animal):
+
+			enemy_ui[animal].update_hp(
+				current_hp,
+				max_hp
+			)
+		
+	#elif animal is EnemyAnimal:
+#
+		#update_enemy_hp(
+			#animal,
+			#current_hp,
+			#max_hp
+		#)
+
+
+#func update_enemy_hp(
+	#enemy:EnemyAnimal,
+	#current_hp:int,
+	#max_hp:int
+#):
+#
+	#var index = enemy.enemy_index
+#
+#
+	#if index >= enemy_hp_bars.size():
+#
+		#return
+#
+#
+	#var bar = enemy_hp_bars[index]
+#
+#
+	#bar.max_value = max_hp
+	#bar.value = current_hp
 
 
 # ==================================================

@@ -175,15 +175,19 @@ func open_lab(room):
 	abandoned_lab = ABANDONED_LAB_SCENE.instantiate()
 	get_tree().current_scene.add_child(abandoned_lab)
 
-	abandoned_lab.lab_finished.connect(
-		_on_lab_finished
-	)
 
 	abandoned_lab.open(
 		room.lab_data,
 		battle_manager
 	)
 
+	if not abandoned_lab.lab_finished.is_connected(
+		_on_lab_finished
+	):
+
+		abandoned_lab.lab_finished.connect(
+			_on_lab_finished
+		)
 
 func open_mystery(room):
 	

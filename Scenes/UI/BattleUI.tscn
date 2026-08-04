@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://bcfv1qu4c8wh8" path="res://Scripts/UI/PlayerHP.gd" id="2_31gad"]
 [ext_resource type="Texture2D" uid="uid://bjo4cf8ylnke2" path="res://Assets/Sprites/Animals/deebo_asset_test_battle.png" id="3_2xehn"]
 [ext_resource type="Script" uid="uid://dvsi4fgq53wkp" path="res://Scripts/UI/EnemyHP.gd" id="3_tr5vc"]
+[ext_resource type="PackedScene" uid="uid://cbkdrsj7grt7" path="res://Scenes/UI/EnemyStatusUI.tscn" id="5_2xehn"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gg2au"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
@@ -60,10 +61,12 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_2a143")
 script = ExtResource("2_31gad")
 
 [node name="PlayerStatusLabel" type="Label" parent="PlayerPanel" unique_id=1521418484]
+custom_minimum_size = Vector2(81.1, 82.49)
 layout_mode = 0
-offset_top = -539.0
-offset_right = 40.0
-offset_bottom = -516.0
+offset_left = 28.145
+offset_top = 67.44
+offset_right = 109.24501
+offset_bottom = 149.93002
 
 [node name="Sprite2D" type="Sprite2D" parent="PlayerPanel" unique_id=1590204960]
 position = Vector2(1294, 405.00006)
@@ -83,21 +86,46 @@ offset_top = 26.915
 offset_right = 1609.3549
 offset_bottom = 49.91501
 
-[node name="EnemyHP" type="ProgressBar" parent="EnemyPanel" unique_id=43262124]
-layout_mode = 1
-anchors_preset = -1
-offset_left = 1546.025
-offset_top = 59.36
-offset_right = 1896.025
-offset_bottom = 89.35997
+[node name="Container" type="VBoxContainer" parent="EnemyPanel" unique_id=1485517162]
+custom_minimum_size = Vector2(350, 90)
+layout_mode = 0
+offset_left = 1534.465
+offset_top = 61.02
+offset_right = 1884.465
+offset_bottom = 151.02005
+
+[node name="EnemyHP1" type="ProgressBar" parent="EnemyPanel/Container" unique_id=43262124]
+layout_mode = 2
 theme_override_styles/fill = SubResource("StyleBoxFlat_xlvfx")
 script = ExtResource("3_tr5vc")
 
+[node name="EnemyHP2" type="ProgressBar" parent="EnemyPanel/Container" unique_id=166186595]
+layout_mode = 2
+script = ExtResource("3_tr5vc")
+metadata/_custom_type_script = "uid://dvsi4fgq53wkp"
+
+[node name="EnemyHP3" type="ProgressBar" parent="EnemyPanel/Container" unique_id=1865160193]
+layout_mode = 2
+script = ExtResource("3_tr5vc")
+metadata/_custom_type_script = "uid://dvsi4fgq53wkp"
+
 [node name="EnemyStatusLabel" type="Label" parent="EnemyPanel" unique_id=1684866720]
+custom_minimum_size = Vector2(70.755, 66.9)
 layout_mode = 0
-offset_left = -1.0
-offset_right = 39.0
-offset_bottom = 23.0
+offset_left = 1750.0
+offset_top = 184.0
+offset_right = 1820.755
+offset_bottom = 250.9
+
+[node name="EnemyStatusContainer" type="VBoxContainer" parent="EnemyPanel" unique_id=1133935413]
+layout_mode = 0
+offset_left = 1818.0
+offset_top = 306.0
+offset_right = 1858.0
+offset_bottom = 346.0
+
+[node name="EnemyStatusUi" parent="EnemyPanel/EnemyStatusContainer" unique_id=1869493834 instance=ExtResource("5_2xehn")]
+layout_mode = 2
 
 [node name="MoveButtons" type="HBoxContainer" parent="." unique_id=270229014]
 anchors_preset = -1

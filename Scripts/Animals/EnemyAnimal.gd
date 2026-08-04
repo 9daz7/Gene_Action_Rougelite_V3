@@ -4,6 +4,8 @@ class_name EnemyAnimal
 
 @export var enemy_data: EnemyResource
 
+var enemy_index:int = 0
+
 var last_move: MoveResource = null
 #var protect_count := 0
 
