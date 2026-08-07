@@ -1,14 +1,24 @@
 extends Resource
 class_name PassiveEffect
 
-@export var passive_id:String = ""
-@export var effect_name := ""
-@export_multiline var description := ""
+# ==================================================
+# Configuration
+# ==================================================
+
+@export var passive_id: String = ""
+@export var effect_name: String = ""
+
+@export_multiline var description: String = ""
+
+
+# ==================================================
+# Source Gene
+# ==================================================
 
 var source_gene: GeneResource
 
 
-func initialize(gene:GeneResource):
+func initialize(gene: GeneResource):
 
 	source_gene = gene
 
@@ -17,6 +27,7 @@ func initialize(gene:GeneResource):
 # Battle
 # ==================================================
 
+# Battle starts
 func on_battle_start(owner):
 	pass
 
@@ -43,14 +54,15 @@ func on_turn_end(owner):
 # ==================================================
 
 # Before owner attacks
-func on_before_attack(owner, target):
+func on_before_attack(owner, data: Dictionary):
 	pass
 
 # After owner attacks
-func on_after_attack(owner, target, damage):
+func on_after_attack(owner, data: Dictionary):
 	pass
 
-func on_attack_missed(owner, target):
+# After attack misses
+func on_attack_missed(owner, data: Dictionary):
 	pass
 
 
@@ -58,10 +70,10 @@ func on_attack_missed(owner, target):
 # Critical Hits
 # ==================================================
 
-func on_critical_hit(owner, target, damage):
+func on_critical_hit(owner, data: Dictionary):
 	pass
 
-func modify_critical_chance(owner, chance):
+func modify_critical_chance(owner, chance: int) -> int:
 	return chance
 
 
@@ -70,17 +82,17 @@ func modify_critical_chance(owner, chance):
 # ==================================================
 
 # Before taking damage
-func on_before_damage(owner, amount):
-	return amount
-
-# After taking damage
-func on_after_damage(owner, amount, attacker):
+func on_before_damage(owner, data: Dictionary):
 	pass
 
-func modify_damage_dealt(owner, damage):
+# After taking damage
+func on_after_damage(owner, data: Dictionary):
+	pass
+
+func modify_damage_dealt(owner, damage: int) -> int:
 	return damage
 
-func modify_damage_taken(owner, damage):
+func modify_damage_taken(owner, damage: int) -> int:
 	return damage
 
 
@@ -88,10 +100,10 @@ func modify_damage_taken(owner, damage):
 # Status Effects
 # ==================================================
 
-func on_apply_status(owner, status):
+func on_apply_status(owner, data: Dictionary):
 	pass
 
-func on_remove_status(owner, status):
+func on_remove_status(owner, data: Dictionary):
 	pass
 
 
@@ -99,38 +111,35 @@ func on_remove_status(owner, status):
 # Stats
 # ==================================================
 
-func modify_max_hp(owner, hp):
+func modify_max_hp(owner, hp: int) -> int:
 	return hp
 
-func modify_attack(owner, attack):
+func modify_attack(owner, attack: int) -> int:
 	return attack
 
-func modify_speed(owner, speed):
+func modify_speed(owner, speed: int) -> int:
 	return speed
 
-func modify_accuracy(owner, accuracy):
+func modify_accuracy(owner, accuracy: int) -> int:
 	return accuracy
 
-func modify_armor(owner, armor):
+func modify_armor(owner, armor: int) -> int:
 	return armor
 
-func modify_evasion(owner, evasion):
+func modify_evasion(owner, evasion: int) -> int:
 	return evasion
 
-func get_critical_bonus(owner):
+func get_critical_bonus(owner) -> int:
 	return 0
 
 # ==================================================
 # Healing
 # ==================================================
 
-func on_before_heal(owner, amount):
-	return amount
-
-func on_after_heal(owner, amount):
+func on_before_heal(owner, data: Dictionary):
 	pass
 
-func on_heal(owner, amount):
+func on_after_heal(owner, data: Dictionary):
 	pass
 
 
@@ -146,5 +155,5 @@ func on_death(owner):
 # Kill Events
 # ==================================================
 
-func on_kill(owner, target):
+func on_kill(owner, data: Dictionary):
 	pass
