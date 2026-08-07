@@ -37,7 +37,7 @@ signal damage_dealt(target, amount)
 
 signal enemy_updated(enemy)
 
-signal status_changed(player, enemies)
+signal status_changed(animal:AnimalBase, enemies:Array)
 
 signal battle_initialized(player, enemies)
 

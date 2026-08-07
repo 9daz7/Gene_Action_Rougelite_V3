@@ -316,19 +316,27 @@ func update_player_hp(
 	max_hp:int
 ):
 
-	print(
-		"BattleUI HP UPDATE:",
-		current_hp,
-		"/",
-		max_hp
-	)
-
 	if animal is PlayerAnimal:
+
+		print(
+			"PLAYER HP UPDATE:",
+			current_hp,
+			"/",
+			max_hp
+		)
 
 		player_hp_bar.max_value = max_hp
 		player_hp_bar.value = current_hp
 
 	elif animal is EnemyAnimal:
+
+		print(
+			"ENEMY HP UPDATE:",
+			animal.name,
+			current_hp,
+			"/",
+			max_hp
+		)
 
 		if enemy_ui.has(animal):
 
@@ -336,35 +344,6 @@ func update_player_hp(
 				current_hp,
 				max_hp
 			)
-		
-	#elif animal is EnemyAnimal:
-#
-		#update_enemy_hp(
-			#animal,
-			#current_hp,
-			#max_hp
-		#)
-
-
-#func update_enemy_hp(
-	#enemy:EnemyAnimal,
-	#current_hp:int,
-	#max_hp:int
-#):
-#
-	#var index = enemy.enemy_index
-#
-#
-	#if index >= enemy_hp_bars.size():
-#
-		#return
-#
-#
-	#var bar = enemy_hp_bars[index]
-#
-#
-	#bar.max_value = max_hp
-	#bar.value = current_hp
 
 
 # ==================================================

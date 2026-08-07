@@ -17,12 +17,12 @@ signal battle_lost
 
 
 const ENEMY_POOL = [
-	#preload("res://Data/Enemies/Normal/Wolf.tres"),
-	#preload("res://Data/Enemies/Normal/Boar.tres"),
-	#preload("res://Data/Enemies/Normal/Marten.tres"),
-	#preload("res://Data/Enemies/Normal/Cheetah.tres"),
-	#preload("res://Data/Enemies/Normal/SnappingTurtle.tres"),
-	#preload("res://Data/Enemies/Normal/HoneyBadger.tres"),
+	preload("res://Data/Enemies/Normal/Wolf.tres"),
+	preload("res://Data/Enemies/Normal/Boar.tres"),
+	preload("res://Data/Enemies/Normal/Marten.tres"),
+	preload("res://Data/Enemies/Normal/Cheetah.tres"),
+	preload("res://Data/Enemies/Normal/SnappingTurtle.tres"),
+	preload("res://Data/Enemies/Normal/HoneyBadger.tres"),
 	preload("res://Data/Enemies/Normal/Rattlesnake.tres")
 ]
 
@@ -329,15 +329,6 @@ func initialize_battle():
 	player.hp,
 	player.get_max_hp()
 )
-
-
-	for enemy in enemies:
-
-		GameEvents.hp_changed.emit(
-			enemy,
-			enemy.hp,
-			enemy.get_max_hp()
-		)
 
 	print("==========================")
 	print("BattleManager enemy list")

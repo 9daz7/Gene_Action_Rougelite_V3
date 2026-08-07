@@ -72,7 +72,7 @@ func update_hp(
 	hp_bar.value = current_hp
 
 
-func update_status():
+func update_status(_animal = null):
 
 	if enemy == null:
 		return
@@ -80,7 +80,6 @@ func update_status():
 	var text := ""
 
 	for status in enemy.status_effects:
-
 		text += (
 			status.get_display_text()
 			+ "\n"

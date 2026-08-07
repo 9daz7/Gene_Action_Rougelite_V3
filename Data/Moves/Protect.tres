@@ -5,9 +5,10 @@
 
 [resource]
 script = ExtResource("1_btfc1")
-effect_type = 1
+target_type = 2
 move_name = "Protect"
+effect_type = 1
+category = 1
 power = -1
 priority = 2
-category = 1
 effect_target = 0

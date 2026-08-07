@@ -308,8 +308,6 @@ func process_status_effects():
 					effect.get_total_power(),
 				)
 
-		effect.duration -= 1
-
 	for effect in status_effects.duplicate():
 		if effect.duration <= 0:
 			remove_status_effect(effect)
@@ -669,8 +667,89 @@ func setup_player_hp(manager):
 var is_protecting := false
 
 # 80% damage reduction
-var protect_reduction := 0.8
+var protect_reduction := 0.6
 
+
+#func take_damage(
+	#amount:int,
+	#attacker:AnimalBase = null,
+	#is_status_damage:bool = false
+#):
+#
+	#var damage_data = {
+		#"amount": amount,
+		#"attacker": attacker
+	#}
+#
+	#trigger_passive_event(
+		#"before_damage",
+		#damage_data
+	#)
+#
+	#amount = damage_data.amount
+#
+	#if not is_status_damage:
+#
+		#amount = calculate_damage_taken(amount)
+#
+		#if is_protecting:
+			#amount = int(
+				#amount * (1.0 - protect_reduction)
+			#)
+#
+			#print(
+				#name,
+				#" blocked damage with protect"
+			#)
+#
+	#if not is_status_damage and is_protecting:
+#
+		#amount = int(
+			#amount * (1.0 - protect_reduction)
+		#)
+#
+		#print(
+			#name,
+			#" blocked damage with protect"
+		#)
+#
+	## Always deal at least 1 damage
+	#amount = max(1, amount)
+#
+	#hp -= amount
+#
+	#hp = clamp(
+		#hp,
+		#0,
+		#get_max_hp()
+	#)
+#
+	#print(
+		#name,
+		#" took ",
+		#amount,
+		#" damage. HP:",
+		#hp
+	#)
+#
+	#trigger_passive_event(
+		#"after_damage",
+		#{
+			#"amount": amount,
+			#"attacker": attacker
+		#}
+	#)
+#
+	#GameEvents.hp_changed.emit(
+		#self,
+		#hp,
+		#get_max_hp()
+	#)
+#
+	#hp_changed.emit(hp)
+#
+	#if hp <= 0:
+		#die()
 
 func take_damage(
 	amount:int,
@@ -683,17 +762,14 @@ func take_damage(
 		"attacker": attacker
 	}
 
-	trigger_passive_event(
-		"before_damage",
-		damage_data
-	)
-
 	amount = damage_data.amount
 
-	if not is_status_damage:
-		amount = calculate_damage_taken(amount)
 
-	if is_protecting:
+	# ==========================================
+	# Protect first
+	# ==========================================
+
+	if not is_status_damage and is_protecting:
 
 		amount = int(
 			amount * (1.0 - protect_reduction)
@@ -703,6 +779,34 @@ func take_damage(
 			name,
 			" blocked damage with protect"
 		)
+
+
+	# ==========================================
+	# Passive damage modifiers second
+	# ==========================================
+
+	damage_data.amount = amount
+
+	trigger_passive_event(
+		"before_damage",
+		damage_data
+	)
+
+	amount = damage_data.amount
+
+
+	# ==========================================
+	# Armor last
+	# ==========================================
+
+	if not is_status_damage:
+
+		amount = calculate_damage_taken(amount)
+
+	amount = max(
+		1,
+		amount
+	)
 
 	hp -= amount
 
@@ -720,14 +824,6 @@ func take_damage(
 		hp
 	)
 
-	trigger_passive_event(
-		"after_damage",
-		{
-			"amount": amount,
-			"attacker": attacker
-		}
-	)
-
 	GameEvents.hp_changed.emit(
 		self,
 		hp,
@@ -735,11 +831,6 @@ func take_damage(
 	)
 
 	hp_changed.emit(hp)
-
-	if hp <= 0:
-		die()
-	
-	damage_data.amount = amount
 
 	if hp <= 0:
 		die()
@@ -978,6 +1069,13 @@ func trigger_passive_event(
 						self,
 						data.amount
 					)
+
+			"before_damage_reduction":
+
+				data.amount = passive.on_before_damage(
+					self,
+					data.amount
+				)
 
 			"after_damage":
 

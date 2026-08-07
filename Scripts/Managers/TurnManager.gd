@@ -277,7 +277,16 @@ func _on_move_selected(move_index: int):
 		enemy_moves.size()
 	)
 
-	if living_enemies.size() == 1:
+	if player_move.target_type == MoveResource.TargetType.SELF:
+
+		resolve_turn(
+			player_move,
+			get_active_enemy(),
+			enemy_moves
+		)
+
+
+	elif living_enemies.size() == 1:
 
 		resolve_turn(
 			player_move,
