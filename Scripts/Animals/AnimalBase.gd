@@ -8,7 +8,7 @@ class_name AnimalBase
 
 signal hp_changed(current_hp)
 signal animal_died
-signal status_changed(animal)
+signal status_changed(animal, enemies)
 
 
 # ==================================================
@@ -792,6 +792,14 @@ func take_damage(
 		damage_data
 	)
 
+	if damage_data.has("messages"):
+
+		for message in damage_data.messages:
+
+			BattleLog.add_message(
+				message
+			)
+
 	amount = damage_data.amount
 
 
@@ -822,6 +830,13 @@ func take_damage(
 		amount,
 		" damage. HP:",
 		hp
+	)
+
+	BattleLog.add_message(
+		"%s took %d damage!" % [
+			name,
+			amount
+		]
 	)
 
 	GameEvents.hp_changed.emit(
@@ -1001,9 +1016,8 @@ func activate_protect():
 
 	is_protecting = true
 
-	print(
-		name,
-		" is protecting"
+	BattleLog.add_message(
+		"%s is protecting itself!" % name
 	)
 
 
@@ -1063,11 +1077,9 @@ func trigger_passive_event(
 
 			"before_damage":
 
-				#if data:
-
-					data.amount = passive.on_before_damage(
+					passive.on_before_damage(
 						self,
-						data.amount
+						data
 					)
 
 			"before_damage_reduction":

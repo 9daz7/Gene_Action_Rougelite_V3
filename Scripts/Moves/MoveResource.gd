@@ -82,6 +82,16 @@ func execute(
 	target: AnimalBase
 ):
 
+	BattleLog.add_message(
+		""
+	)
+
+	BattleLog.add_message(
+		"%s used %s!" % [
+			user.name,
+			move_name
+		]
+	)
 	print(
 		"Executing move:",
 		move_name,
@@ -111,12 +121,6 @@ func execute_on_target(
 
 		MoveEffectType.STATUS:
 
-			print(
-				user.name,
-				" uses ",
-				move_name
-			)
-
 			apply_effects(
 				user,
 				target
@@ -124,12 +128,6 @@ func execute_on_target(
 
 
 		MoveEffectType.PROTECT:
-			
-			print(
-				user.name,
-				" uses ",
-				move_name
-			)
 
 			user.activate_protect()
 
@@ -230,19 +228,19 @@ func execute_damage(
 
 	if roll > hit_chance:
 
-		print(
-			user.name,
-			" missed"
+		BattleLog.add_message(
+			"But it missed!"
 		)
 
 		user.trigger_passive_event(
 			"attack_missed",
 			{
-				"target":target
+				"target": target
 			}
 		)
 
 		return
+
 
 	var damage = user.calculate_move_damage(self)
 
@@ -250,55 +248,43 @@ func execute_damage(
 
 		damage *= 2
 
-		user.trigger_passive_event(
-		"critical_hit",
-		{
-			"target":target,
-			"damage":damage
-		}
-	)
-
-		print(
-			user.name,
-			" landed a critical hit!"
+		BattleLog.add_message(
+			"Critical hit!"
 		)
-	
-	damage = target.calculate_damage_taken(
-		damage
-	)
 
-	print(
-		user.name,
-		" deals ",
-		damage,
-		" damage"
-	)
+		user.trigger_passive_event(
+			"critical_hit",
+			{
+				"target":target,
+				"damage":damage
+			}
+		)
 
 	target.take_damage(
 		damage,
 		user
 	)
 
-	# Check kill event
+
 	if target.hp <= 0:
 
 		user.trigger_passive_event(
 			"kill",
 			{
-				"target": target
+				"target":target
 			}
 		)
 
 	user.trigger_passive_event(
 		"after_attack",
 		{
-			"target": target,
-			"damage": damage
+			"target":target,
+			"damage":damage
 		}
 	)
 
 	if apply_status:
-		apply_effects(user, target)
+		apply_effects(user,target)
 
 
 func apply_effects(

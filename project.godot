@@ -18,6 +18,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 GameEvents="*uid://bisx34jujwv45"
+BattleLog="*uid://c3uqfdrvbn6h6"
 
 [display]
 

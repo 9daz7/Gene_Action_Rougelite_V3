@@ -38,6 +38,8 @@ var enemies:Array[EnemyAnimal] = []
 
 var selected_enemy: EnemyAnimal
 
+var battle_sequence:BattleSequence
+
 # Target Selection
 var pending_move: MoveResource
 var pending_enemy_moves:Array = []
@@ -57,6 +59,9 @@ func initialize(
 
 	player = player_ref
 	enemies = enemy_refs
+	
+	battle_sequence = BattleSequence.new()
+	add_child(battle_sequence)
 
 	print("================================")
 	print("TURN MANAGER INITIALIZED")
@@ -360,6 +365,8 @@ func resolve_turn(
 	enemy_moves:Array
 ):
 
+	await battle_sequence.play()
+
 # -----------------------------
 # Player action
 # -----------------------------
@@ -374,10 +381,15 @@ func resolve_turn(
 		player_move
 	)
 
-	player_move.execute(
-		player,
-		target_enemy
+	battle_sequence.add_action(
+		func():
+			player_move.execute(
+				player,
+				target_enemy
+			)
 	)
+
+	await battle_sequence.play()
 
 	check_battle_end()
 
@@ -436,10 +448,15 @@ func resolve_turn(
 			move
 		)
 
-		move.execute(
-			enemy,
-			player
+		battle_sequence.add_action(
+			func():
+				move.execute(
+					enemy,
+					player
+				)
 		)
+
+		await battle_sequence.play()
 
 		check_battle_end()
 
