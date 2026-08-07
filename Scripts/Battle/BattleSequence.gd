@@ -2,30 +2,53 @@ extends Node
 class_name BattleSequence
 
 
+# ==================================================
+# Variables
+# ==================================================
+
 var queue:Array = []
 var running := false
 
 
+# ==================================================
+# Queue Management
+# ==================================================
+
+
 func add_message(text:String):
-	queue.append({
-		"type":"message",
-		"text":text
-	})
+	queue.append(
+		{
+			"type":"message",
+			"text":text
+		}
+	)
 
 
-func add_action(callable:Callable):
-	queue.append({
-		"type":"action",
-		"callable":callable
-	})
+func add_action(action: Callable):
+	queue.append(
+	{
+		"type": "action",
+		"callable": action
+	}
+	)
+
+
+# ==================================================
+# Sequence Playback
+# ==================================================
 
 
 func play():
+
 	if running:
+		print("Battle sequence already running")
 		return
 
 	running = true
+
 	await run_queue()
+
+	running = false
 
 
 func run_queue():
@@ -34,12 +57,16 @@ func run_queue():
 
 		var step = queue.pop_front()
 
-		match step.type:
+		match step["type"]:
+
+			# ------------------------------------------
+			# Battle Log Messages
+			# ------------------------------------------
 
 			"message":
 
 				BattleLog.add_message(
-					step.text
+					step["text"]
 				)
 
 				await get_tree().create_timer(
@@ -47,13 +74,15 @@ func run_queue():
 				).timeout
 
 
+			# ------------------------------------------
+			# Combat Actions
+			# ------------------------------------------
+
 			"action":
 
-				step.callable.call()
+				var action: Callable = step["callable"]
 
-				await get_tree().create_timer(
-					0.3
-				).timeout
+				if action.is_valid():
+					await action.call()
 
-
-	running = false
+				await get_tree().create_timer(0.3).timeout

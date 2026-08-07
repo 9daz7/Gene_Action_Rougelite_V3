@@ -190,9 +190,7 @@ func get_targets(
 
 		TargetType.ALL_ENEMIES:
 
-			var targets = user.get_all_enemies()
-
-			return targets
+			return user.get_opponents()
 
 
 		TargetType.SINGLE_ALLY:
@@ -218,6 +216,16 @@ func execute_damage(
 	target: AnimalBase,
 	apply_status: bool
 ):
+
+	print(
+		"TARGET VALID:",
+		is_instance_valid(target)
+	)
+
+	print(
+		"TARGET HP:",
+		target.hp
+	)
 
 	var hit_chance = user.calculate_hit_chance(
 		target,
@@ -259,6 +267,15 @@ func execute_damage(
 				"damage":damage
 			}
 		)
+
+	print("")
+	print("ATTACK")
+	print("Attacker:", user.name)
+	print("Attacker ID:", user.get_instance_id())
+	print("Target:", target.name)
+	print("Target ID:", target.get_instance_id())
+	print("Target HP BEFORE:", target.hp)
+	print("Damage:", damage)
 
 	target.take_damage(
 		damage,

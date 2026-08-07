@@ -99,7 +99,9 @@ func spawn_enemy(scene, spawn_index:int = 0):
 
 	print(
 		"Enemy created:",
-		enemy
+		enemy.name,
+		" ID:",
+		enemy.get_instance_id()
 	)
 
 	return enemy

@@ -35,11 +35,11 @@ func start_battle():
 		add_move(move)
 
 
-func get_all_enemies() -> Array:
+func get_opponents() -> Array:
 	return [turn_manager.player]
 
 
-func get_all_allies() -> Array:
+func get_team_members() -> Array:
 	return turn_manager.enemies
 
 

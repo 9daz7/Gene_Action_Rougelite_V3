@@ -59,16 +59,32 @@ func initialize(
 
 	player = player_ref
 	enemies = enemy_refs
-	
-	battle_sequence = BattleSequence.new()
-	add_child(battle_sequence)
 
-	print("================================")
-	print("TURN MANAGER INITIALIZED")
-	print("Enemy count:", enemies.size())
+	print("")
+	print("TURN MANAGER PLAYER ID:", player.get_instance_id())
 
 	for enemy in enemies:
-		print("Enemy:", enemy.name)
+		print(
+			enemy.name,
+			" ID:",
+			enemy.get_instance_id()
+		)
+
+	battle_sequence = BattleSequence.new()
+	add_child(battle_sequence)
+	# temp?
+	print("================================")
+	print("TURN MANAGER INITIALIZED")
+
+	print("Player:")
+	print(player)
+	print("Player ID:", player.get_instance_id())
+
+	for enemy in enemies:
+		print("----------------")
+		print(enemy.name)
+		print(enemy)
+		print("Enemy ID:", enemy.get_instance_id())
 
 	print("================================")
 
@@ -266,7 +282,7 @@ func _on_move_selected(move_index: int):
 	var enemy_moves:Array = []
 
 	for enemy in enemies:
-		if enemy.hp > 0:
+		if is_instance_valid(enemy) and enemy.hp > 0:
 			var move = enemy.choose_action(player)
 
 			if move:
@@ -276,7 +292,16 @@ func _on_move_selected(move_index: int):
 						"move":move
 					}
 				)
-				
+
+	for data in enemy_moves:
+
+		print(
+			"Enemy queued:",
+			data["enemy"].name,
+			" Move:",
+			data["move"].move_name
+		)
+
 	print(
 		"Enemies attacking:",
 		enemy_moves.size()
@@ -354,6 +379,7 @@ func _on_target_selected(enemy:EnemyAnimal):
 	pending_move = null
 	pending_enemy_moves.clear()
 
+
 # ==================================================
 # Turn Resolution
 # ==================================================
@@ -365,110 +391,243 @@ func resolve_turn(
 	enemy_moves:Array
 ):
 
-	await battle_sequence.play()
+	current_state = TurnState.PLAYER_TURN
 
-# -----------------------------
-# Player action
-# -----------------------------
+
+	# ================================
+	# PLAYER ACTION
+	# ================================
 
 	print(
 		"Player uses:",
 		player_move.move_name
 	)
 
-	GameEvents.move_used.emit(
-		player,
-		player_move
-	)
 
 	battle_sequence.add_action(
-		func():
-			player_move.execute(
-				player,
-				target_enemy
-			)
+		_execute_player_move.bind(
+			player_move,
+			target_enemy
+		)
 	)
 
+
 	await battle_sequence.play()
+
 
 	check_battle_end()
 
 	if current_state == TurnState.BATTLE_OVER:
 		return
 
-# -----------------------------
-# Enemy turn begins
-# -----------------------------
+
+	# ================================
+	# END PLAYER TURN STATUS
+	# ================================
+
+	await process_end_turn_effects()
+
+
+	check_battle_end()
+
+	if current_state == TurnState.BATTLE_OVER:
+		return
+
+
+	# ================================
+	# ENEMY TURN
+	# ================================
 
 	current_state = TurnState.ENEMY_TURN
-	
+
+
 	GameEvents.turn_changed.emit(
 		current_state
 	)
 
-	for enemy in enemies:
 
-		if enemy.hp <= 0:
-			continue
-
-		enemy.trigger_passive_event(
-			"turn_start"
-		)
-
-		enemy.process_status_effects()
-
-		check_battle_end()
-
-		if current_state == TurnState.BATTLE_OVER:
-			return
-
-		enemy.tick_status_effects()
+	await execute_enemy_turn(
+		enemy_moves
+	)
 
 
-# -----------------------------
-# Enemy actions
-# -----------------------------
+	check_battle_end()
+
+	if current_state == TurnState.BATTLE_OVER:
+		return
+
+
+	# ================================
+	# START PLAYER TURN
+	# ================================
+
+	end_turn()
+	
+	#current_state = TurnState.ENEMY_TURN
+#
+	#GameEvents.turn_changed.emit(
+		#current_state
+	#)
+#
+	#for enemy in enemies:
+		#if enemy.hp <= 0:
+			#continue
+#
+		#enemy.trigger_passive_event(
+			#"turn_start"
+		#)
+#
+		#enemy.process_status_effects()
+#
+		#check_battle_end()
+#
+		#if current_state == TurnState.BATTLE_OVER:
+			#return
+#
+		#enemy.tick_status_effects()
+#
+#
+	## -----------------------------
+	## Queue enemy actions
+	## -----------------------------
+#
+	#for data in enemy_moves:
+#
+		#var enemy: EnemyAnimal = data["enemy"]
+		#var enemy_move: MoveResource = data["move"]
+#
+		#if not is_instance_valid(enemy):
+			#continue
+#
+		#if enemy.hp <= 0:
+			#continue
+#
+		#print(
+			#"QUEUEING ENEMY:",
+			#enemy.name,
+			#" MOVE:",
+			#enemy_move.move_name
+		#)
+#
+		#battle_sequence.add_action(
+			#_execute_enemy_move.bind(
+				#enemy,
+				#enemy_move
+			#)
+		#)
+#
+#
+	## Play ALL enemy attacks
+	#await battle_sequence.play()
+#
+#
+	#check_battle_end()
+#
+	#if current_state == TurnState.BATTLE_OVER:
+		#return
+#
+#
+	#end_turn()
+
+
+func execute_enemy_turn(enemy_moves:Array):
+
 	for data in enemy_moves:
 
-		var enemy = data.enemy
-		var move = data.move
+		var enemy:EnemyAnimal = data["enemy"]
+		var enemy_move:MoveResource = data["move"]
 
-		# Skip dead enemies
+		if not is_instance_valid(enemy):
+			continue
+
 		if enemy.hp <= 0:
 			continue
 
-		print(
-			enemy.name,
-			" uses ",
-			move.move_name
-		)
 
-		GameEvents.move_used.emit(
-			enemy,
-			move
+		print(
+			"QUEUEING ENEMY:",
+			enemy.name,
+			" MOVE:",
+			enemy_move.move_name
 		)
 
 		battle_sequence.add_action(
-			func():
-				move.execute(
-					enemy,
-					player
-				)
+			_execute_enemy_move.bind(
+				enemy,
+				enemy_move
+			)
 		)
 
-		await battle_sequence.play()
 
-		check_battle_end()
+	await battle_sequence.play()
 
-		if current_state == TurnState.BATTLE_OVER:
-			return
 
-	end_turn()
+# ==================================================
+# Player Move Execution
+# ==================================================
+
+func _execute_player_move(
+	player_move: MoveResource,
+	target: EnemyAnimal
+):
+
+	print(
+		"EXECUTING PLAYER MOVE:",
+		player_move.move_name
+	)
+
+
+	await player_move.execute(
+		player,
+		target
+	)
+
+
+# ==================================================
+# Enemy Move Execution
+# ==================================================
+func _execute_enemy_move(
+	enemy: EnemyAnimal,
+	enemy_move: MoveResource
+):
+
+	if not is_instance_valid(enemy):
+		return
+
+	if enemy.hp <= 0:
+		return
+
+
+	print(
+		"EXECUTING ENEMY:",
+		enemy.name,
+		" MOVE:",
+		enemy_move.move_name
+	)
+
+
+	print(
+		"PLAYER HP BEFORE:",
+		player.hp
+	)
+
+
+	await enemy_move.execute(
+		enemy,
+		player
+	)
+
+
+	print(
+		"PLAYER HP AFTER:",
+		player.hp
+	)
 
 
 # ==================================================
 # Turn End
 # ==================================================
+
 
 func end_turn():
 	
@@ -576,7 +735,25 @@ func check_battle_end():
 
 func reset():
 
+	print("===== TURN MANAGER RESET =====")
+
+	print("Old player:", player)
+
+	for enemy in enemies:
+		print(
+			"Old enemy:",
+			enemy
+		)
+
+
 	current_state = TurnState.NONE
+
+
+	if is_instance_valid(battle_sequence):
+		battle_sequence.queue_free()
+
+	battle_sequence = null
+
 
 	player = null
 
@@ -585,11 +762,13 @@ func reset():
 
 	selected_enemy = null
 
+
 	pending_move = null
 
 	pending_enemy_moves.clear()
 
+
 	waiting_for_target = false
 
 
-	print("TurnManager reset")
+	print("TurnManager references cleared")

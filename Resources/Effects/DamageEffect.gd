@@ -13,4 +13,7 @@ func apply(user, target):
 		damage
 	)
 
-	target.take_damage(damage)
+	target.take_damage(
+		damage,
+		user
+	)

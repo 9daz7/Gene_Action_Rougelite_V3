@@ -757,6 +757,12 @@ func take_damage(
 	is_status_damage:bool = false
 ):
 
+	print("")
+	print("TAKE DAMAGE")
+	print(name)
+	print("Instance:", get_instance_id())
+	print("HP before:", hp)
+
 	var damage_data = {
 		"amount": amount,
 		"attacker": attacker
@@ -849,6 +855,8 @@ func take_damage(
 
 	if hp <= 0:
 		die()
+
+	print("HP after:", hp)
 
 
 func take_status_damage(

@@ -55,6 +55,8 @@ const BATTLE_SCENE = preload("res://Scenes/Battle/BattleScene.tscn")
 # Dependencies
 # ==================================================
 
+# temp
+var battle_number := 0 
 
 var turn_manager: TurnManager
 var run_manager: RunManager
@@ -112,7 +114,11 @@ func initialize(
 
 func start_critical_experiment():
 
-	print("Starting critical experiment battle")
+	print("==============================")
+	print("STARTING CRITICAL EXPERIMENT")
+	print("critical flag BEFORE:", critical_experiment)
+	print("battle type BEFORE:", current_battle_type)
+	print("==============================")
 
 	critical_experiment = true
 
@@ -131,6 +137,13 @@ func start_critical_experiment():
 func start_battle(
 	room_type = RoomData.RoomType.ENEMY
 ):
+	# temp
+	battle_number += 1
+
+	print("")
+	print("==========================")
+	print("STARTING BATTLE", battle_number)
+	print("==========================")
 
 	if room_type != RoomData.RoomType.ELITE:
 
@@ -227,6 +240,36 @@ func create_battle_scene():
 #
 	#initialize_battle()
 #
+ # temp
+# ==================================================
+# DEBUG BATTLE TESTING
+# ==================================================
+
+var debug_battle_index := 0
+
+func start_debug_battle():
+
+	var test_battles = [
+		RoomData.RoomType.ENEMY,
+		RoomData.RoomType.GROUP_ENEMY,
+		RoomData.RoomType.ELITE
+	]
+
+	var battle_type = test_battles[debug_battle_index]
+
+	print("")
+	print("==============================")
+	print("DEBUG BATTLE TEST")
+	print("Battle number:", debug_battle_index + 1)
+	print("Type:", battle_type)
+	print("==============================")
+
+	debug_battle_index += 1
+
+	if debug_battle_index >= test_battles.size():
+		debug_battle_index = 0
+
+	start_battle(battle_type)
 
 # ==================================================
 # Enemy Selection
@@ -404,27 +447,66 @@ func _on_turn_battle_lost():
 
 func end_battle():
 
-	print("Cleaning battle")
+	print("==============================")
+	print("SIGNAL DEBUG BEFORE CLEANUP")
+
+	if turn_manager:
+		print("TurnManager instance:", turn_manager.get_instance_id())
+
+	if player:
+		print("Player instance:", player.get_instance_id())
+
+	for enemy in enemies:
+		print(
+			"Enemy:",
+			enemy.name,
+			"ID:",
+			enemy.get_instance_id()
+		)
+
+	print("==============================")
+
+	print("==============================")
+	print("SIGNAL DEBUG BEFORE CLEANUP")
+	print("TurnManager:", turn_manager)
+	print("Current battle:", current_battle)
+	print("Player:", player)
+	print("Enemies:", enemies.size())
+	print("==============================")
+
+	print("")
+	print("========== END BATTLE ==========")
+
+	print("Current battle:", current_battle)
+	print("Player:", player)
+
+	print("Enemy count before cleanup:", enemies.size())
+
+	for enemy in enemies:
+		print(
+			enemy.name,
+			" ID:",
+			enemy.get_instance_id(),
+			" HP:",
+			enemy.hp
+		)
 
 	critical_experiment = false
 
-	# Reset turn manager references
+	# Reset turn manager state
 	if turn_manager:
-		
 		turn_manager.current_state = TurnManager.TurnState.BATTLE_OVER
 
+	if is_instance_valid(current_battle):
+		print("Battle children before free:")
+		for child in current_battle.get_children():
+			print(child.name)
+	else:
+		print("No valid battle scene before cleanup")
+	
 	# Remove battle scene
 	if is_instance_valid(current_battle):
 		current_battle.queue_free()
-
-	# Remove player
-	if is_instance_valid(player):
-		player.queue_free()
-
-	# Remove enemies
-	for enemy in enemies:
-		if is_instance_valid(enemy):
-			enemy.queue_free()
 
 	enemies.clear()
 
@@ -434,9 +516,53 @@ func end_battle():
 	if turn_manager:
 		turn_manager.reset()
 
-	print("Battle cleanup complete")
+	print("Enemy count after cleanup:", enemies.size())
+	print("Current battle after cleanup:", current_battle)
+	print("Player after cleanup:", player)
+
+	print("========== CLEANUP COMPLETE ==========")
+
+#func end_battle():
+#
+	#print("Cleaning battle")
+#
+	#critical_experiment = false
+#
+	## Reset turn manager references
+	#if turn_manager:
+		#
+		#turn_manager.current_state = TurnManager.TurnState.BATTLE_OVER
+#
+	## Remove battle scene
+	#if is_instance_valid(current_battle):
+		#current_battle.queue_free()
+#
+	## Remove player
+	#if is_instance_valid(player):
+		#player.queue_free()
+#
+	## Remove enemies
+	#for enemy in enemies:
+		#if is_instance_valid(enemy):
+			#enemy.queue_free()
+#
+	#enemies.clear()
+#
+	#current_battle = null
+	#player = null
+#
+	#if turn_manager:
+		#turn_manager.reset()
+#
+	#print("Battle cleanup complete")
 
 
 func reset_battle_state():
 	current_battle_type = null
 	critical_experiment = false
+
+	print("==============================")
+	print("BATTLE STATE RESET")
+	print("critical flag:", critical_experiment)
+	print("battle type:", current_battle_type)
+	print("==============================")
