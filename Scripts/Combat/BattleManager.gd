@@ -7,8 +7,8 @@ class_name BattleManager
 # ==================================================
 
 
-signal battle_won(enemy)
-signal battle_lost
+#signal battle_won(enemy)
+#signal battle_lost
 
 
 # ==================================================
@@ -77,6 +77,30 @@ var current_battle_type = null
 var critical_experiment := false
 
 
+# ==================================================
+# Initialization
+# ==================================================
+
+
+func _ready():
+
+	if not GameEvents.battle_won.is_connected(
+		_on_battle_won
+	):
+
+		GameEvents.battle_won.connect(
+			_on_battle_won
+	)
+
+	if not GameEvents.battle_lost.is_connected(
+		_on_battle_lost
+	):
+
+		GameEvents.battle_lost.connect(
+			_on_battle_lost
+	)
+
+
 func initialize(
 	manager: RunManager,
 	turns: TurnManager,
@@ -89,26 +113,24 @@ func initialize(
 	battle_root = root
 	spawner = spawn
 
-	if turn_manager:
-
-		if not turn_manager.battle_won.is_connected(
-			_on_turn_battle_won
-		):
-			turn_manager.battle_won.connect(
-				_on_turn_battle_won
-			)
-
-		if not turn_manager.battle_lost.is_connected(
-			_on_turn_battle_lost
-		):
-			turn_manager.battle_lost.connect(
-				_on_turn_battle_lost
-			)
-
-	else:
-
+	if turn_manager == null:
 		push_error(
 			"BattleManager initialized without TurnManager"
+		)
+
+	if run_manager == null:
+		push_error(
+			"BattleManager initialized without RunManager"
+		)
+
+	if battle_root == null:
+		push_error(
+			"BattleManager initialized without BattleRoot"
+		)
+
+	if spawner == null:
+		push_error(
+			"BattleManager initialized without BattleSpawner"
 		)
 
 
@@ -387,6 +409,7 @@ func initialize_battle():
 	)
 
 	GameEvents.battle_started.emit(
+		player,
 		enemies
 	)
 
@@ -400,7 +423,8 @@ func show_battle_start(enemy):
 # ==================================================
 
 
-func _on_turn_battle_won(enemy):
+func _on_battle_won(enemy):
+
 	print("BattleManager received victory")
 
 	if enemy == null:
@@ -415,30 +439,21 @@ func _on_turn_battle_won(enemy):
 		"win"
 	)
 
-	battle_won.emit(enemy)
-
-	#if critical_experiment:
-		#print("Resetting critical experiment flag")
-		#critical_experiment = false
-
 	await get_tree().process_frame
 
 	end_battle()
 
 
-func _on_turn_battle_lost():
+func _on_battle_lost():
 
 	print("BattleManager received defeat")
 
 	if turn_manager:
 		turn_manager.current_state = TurnManager.TurnState.BATTLE_OVER
 
-
 	GameEvents.battle_finished.emit(
 		"lose"
 	)
-
-	battle_lost.emit()
 
 	await get_tree().process_frame
 

@@ -311,7 +311,7 @@ func _on_target_selected(
 
 
 func update_player_hp(
-	animal:AnimalBase,
+	animal: AnimalBase,
 	current_hp:int,
 	max_hp:int
 ):

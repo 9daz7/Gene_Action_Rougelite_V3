@@ -15,30 +15,30 @@ signal run_ended
 # ==================================================
 
 
-signal battle_started(enemies) 
+signal battle_started(player, enemies)
+signal battle_initialized(player, enemies)
 signal battle_finished(result)
 
-signal battle_won(enemy) 
+signal battle_won(enemy)
 signal battle_lost
 
-signal turn_changed(state) 
+signal turn_changed(state)
 
-signal move_selected(move_index) 
-signal target_selected(enemy) 
+signal move_selected(move_index)
+signal move_used(attacker, move)
+
+signal target_selected(enemy)
+signal enemy_selected(enemy)
+
 signal request_target_selection(enemies) 
-signal enemy_selected(enemy) 
 
 signal moves_updated(player) 
-
-signal move_used(attacker, move) 
 
 signal damage_dealt(target, amount) 
 
 signal enemy_updated(enemy) 
 
 signal status_changed(animal, enemies)
-
-signal battle_initialized(player, enemies)
 
 signal battle_names_updated(player, enemies)
 
@@ -71,6 +71,7 @@ signal gene_unlocked(gene)
 # ================================================== 
 # PLAYER EVENTS 
 # ==================================================
+
 
 
 signal hp_changed(current_hp, max_hp)

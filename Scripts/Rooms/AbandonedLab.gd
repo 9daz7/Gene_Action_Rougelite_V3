@@ -77,9 +77,9 @@ func open(data:LabResource, manager:BattleManager):
 
 	if lab_data.lab_status == LabResource.LabStatus.CRITICAL:
 		
-		if not battle_manager.battle_won.is_connected(_on_experiment_won):
+		if not GameEvents.battle_won.is_connected(_on_experiment_won):
 			
-			battle_manager.battle_won.connect(_on_experiment_won)
+			GameEvents.battle_won.connect(_on_experiment_won)
 			
 			connected_to_battle = true
 	

@@ -7,8 +7,8 @@ class_name TurnManager
 # ==================================================
 
 
-signal battle_won(enemy)
-signal battle_lost
+#signal battle_won(enemy)
+#signal battle_lost
 
 
 # ==================================================
@@ -134,8 +134,6 @@ func start_battle():
 		enemy.trigger_passive_event(
 			"battle_start"
 		)
-
-	GameEvents.battle_started.emit()
 
 	##battle_ui.setup_moves(player)
 	GameEvents.turn_changed.emit(
@@ -711,7 +709,7 @@ func check_battle_end():
 				"battle_end"
 			)
 
-		battle_lost.emit()
+		GameEvents.battle_lost.emit()
 
 		return
 
@@ -744,7 +742,7 @@ func check_battle_end():
 		if enemy:
 			enemy.trigger_passive_event("battle_end")
 
-	battle_won.emit(
+	GameEvents.battle_won.emit(
 		enemies[0] if enemies.size() > 0 else null
 	)
 

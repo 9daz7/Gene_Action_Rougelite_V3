@@ -6,7 +6,7 @@ class_name AnimalBase
 # ==================================================
 
 
-signal hp_changed(current_hp)
+#signal hp_changed(current_hp)
 signal animal_died
 signal status_changed(animal, enemies)
 
@@ -80,7 +80,7 @@ var defense_modifier:int = 0
 var accuracy_modifier:int = 0
 var evasion_modifier:int = 0
 var armor_modifier:int = 0
-var critical_modifier := 15
+var critical_modifier := 10
 
 
 # ==================================================
@@ -973,7 +973,7 @@ func take_damage(
 		get_max_hp()
 	)
 
-	hp_changed.emit(hp)
+	#hp_changed.emit(hp)
 
 	if hp <= 0:
 		die()
@@ -1009,7 +1009,7 @@ func take_status_damage(
 		get_max_hp()
 	)
 
-	hp_changed.emit(hp)
+	#hp_changed.emit(hp)
 
 	if hp <= 0:
 		die()
@@ -1069,7 +1069,7 @@ func heal(amount:int):
 		get_max_hp()
 	)
 
-	hp_changed.emit(hp)
+	#hp_changed.emit(hp)
 
 	if hp <= 0:
 		die()

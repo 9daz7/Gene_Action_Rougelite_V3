@@ -45,9 +45,6 @@ var gene_collection: Array[GeneResource] = []
 func _ready():
 	print("RUN MANAGER READY")
 
-	#GameEvents.gene_unlocked.connect(
-		#_on_gene_unlocked
-	#)
 
 # ==================================================
 # Run Control
@@ -307,8 +304,3 @@ func damage_player(amount: int):
 		"/",
 		max_hp
 	)
-
-
-#func _on_gene_unlocked(gene: GeneResource):
-#
-	#unlock_gene(gene)
