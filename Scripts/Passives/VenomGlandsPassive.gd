@@ -7,7 +7,15 @@ class_name VenomGlandsPassive
 @export var poison_duration := 3
 
 
-func on_after_attack(owner, target, damage):
+func on_after_attack(owner, data: Dictionary):
+
+	var target: AnimalBase = data.get("target")
+
+	if target == null:
+		return
+
+	if not is_instance_valid(target):
+		return
 
 	var roll = randi_range(1,100)
 

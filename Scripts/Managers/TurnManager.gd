@@ -166,9 +166,11 @@ func start_player_turn():
 
 	print("Player turn")
 
-	player.tick_status_effects()
-
 	player.reset_turn_state()
+
+	player.trigger_passive_event(
+		"turn_start"
+	)
 
 	# -----------------------------------
 	# Status damage first
@@ -180,9 +182,7 @@ func start_player_turn():
 	# Passive turn start effects
 	# -----------------------------------
 
-	player.trigger_passive_event(
-		"turn_start"
-	)
+	player.tick_status_effects()
 
 	# -----------------------------------
 	# Update UI
@@ -425,8 +425,7 @@ func resolve_turn(
 	# END PLAYER TURN STATUS
 	# ================================
 
-	await process_end_turn_effects()
-
+	trigger_turn_end_effects()
 
 	check_battle_end()
 
@@ -530,7 +529,7 @@ func resolve_turn(
 	#end_turn()
 
 
-func execute_enemy_turn(enemy_moves:Array):
+func execute_enemy_turn(enemy_moves: Array):
 
 	for data in enemy_moves:
 
@@ -543,6 +542,30 @@ func execute_enemy_turn(enemy_moves:Array):
 		if enemy.hp <= 0:
 			continue
 
+		# ==========================================
+		# Process Enemy Status Effects
+		# ==========================================
+
+		enemy.process_status_effects()
+
+		if enemy.hp <= 0:
+			check_battle_end()
+
+			if current_state == TurnState.BATTLE_OVER:
+				return
+
+			continue
+
+		enemy.tick_status_effects()
+
+		GameEvents.status_changed.emit(
+			enemy,
+			enemies
+		)
+
+		# ==========================================
+		# Enemy Attack
+		# ==========================================
 
 		print(
 			"QUEUEING ENEMY:",

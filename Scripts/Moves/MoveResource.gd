@@ -2,6 +2,9 @@ extends Resource
 class_name MoveResource
 
 
+# ==================================================
+# Enums
+# ==================================================
 enum MoveCategory {
 	BIOLOGICAL,
 	GENETIC
@@ -33,14 +36,19 @@ enum TargetType {
 	ALL_ALLIES
 }
 
-@export var target_type = TargetType.SINGLE_ENEMY
+
+# ==================================================
+# Targeting
+# ==================================================
+
+@export var target_type: TargetType = TargetType.SINGLE_ENEMY
 
 # ==================================================
 # Basic Move Info
 # ==================================================-
 
 @export var move_name: String = "Unnamed Move"
-@export var description: String = ""
+@export_multiline var description: String = ""
 
 @export var effect_type: MoveEffectType = MoveEffectType.DAMAGE
 @export var category: MoveCategory = MoveCategory.BIOLOGICAL
@@ -92,6 +100,7 @@ func execute(
 			move_name
 		]
 	)
+
 	print(
 		"Executing move:",
 		move_name,
@@ -105,8 +114,11 @@ func execute(
 	)
 
 	for current_target in targets:
+		
+		if current_target == null:
+			continue
 
-		execute_on_target(
+		await execute_on_target(
 			user,
 			current_target
 		)
@@ -159,7 +171,7 @@ func execute_on_target(
 			user.trigger_passive_event(
 				"before_attack",
 				{
-					"target":target
+					"target": target,
 					"move": self
 				}
 			)
@@ -171,6 +183,11 @@ func execute_on_target(
 			)
 
 
+# ==================================================
+# Targeting
+# ==================================================
+
+
 func get_targets(
 	user:AnimalBase,
 	target:AnimalBase
@@ -179,10 +196,10 @@ func get_targets(
 
 	match target_type:
 
-
 		TargetType.SINGLE_ENEMY:
 
-			return [target]
+			if target:
+				return [target]
 
 
 		TargetType.SELF:
@@ -197,7 +214,8 @@ func get_targets(
 
 		TargetType.SINGLE_ALLY:
 
-			return [target]
+			if target:
+				return [target]
 
 
 		TargetType.ALL_ALLIES:
@@ -209,7 +227,7 @@ func get_targets(
 
 
 # ==================================================
-# Effects
+# Damage Execution
 # ==================================================
 
 
@@ -218,6 +236,12 @@ func execute_damage(
 	target: AnimalBase,
 	apply_status: bool
 ):
+
+	if target == null:
+		return
+
+	if not is_instance_valid(target):
+		return
 
 	print(
 		"TARGET VALID:",
@@ -228,6 +252,10 @@ func execute_damage(
 		"TARGET HP:",
 		target.hp
 	)
+
+	# ==========================================
+	# Accuracy
+	# ==========================================
 
 	var hit_chance = user.calculate_hit_chance(
 		target,
@@ -252,10 +280,35 @@ func execute_damage(
 
 		return
 
+	# ==========================================
+	# Damage
+	# ==========================================
+	
+	var damage = user.calculate_move_damage(
+		self
+	)
 
-	var damage = user.calculate_move_damage(self)
+	# ==========================================
+	# Critical Hit
+	# ==========================================
 
-	if randi_range(1,100) <= critical_chance:
+	var final_critical_chance: int = (
+		critical_chance
+		+ user.get_critical_chance()
+	)
+
+	print(
+		"CRITICAL DEBUG | Move:",
+		move_name,
+		" | Move Crit:",
+		critical_chance,
+		" | User Crit:",
+		user.get_critical_chance(),
+		" | Final Crit:",
+		final_critical_chance
+	)
+
+	if randi_range(1, 100) <= final_critical_chance:
 
 		damage *= 2
 
@@ -272,6 +325,10 @@ func execute_damage(
 			}
 		)
 
+	# ==========================================
+	# Attack Information
+	# ==========================================
+
 	print("")
 	print("ATTACK")
 	print("Attacker:", user.name)
@@ -281,11 +338,18 @@ func execute_damage(
 	print("Target HP BEFORE:", target.hp)
 	print("Damage:", damage)
 
+	# ==========================================
+	# Apply Damage
+	# ==========================================
+
 	target.take_damage(
 		damage,
 		user
 	)
 
+	# ==========================================
+	# Kill
+	# ==========================================
 
 	if target.hp <= 0:
 
@@ -297,6 +361,10 @@ func execute_damage(
 			}
 		)
 
+	# ==========================================
+	# After Attack
+	# ==========================================
+
 	user.trigger_passive_event(
 		"after_attack",
 		{
@@ -306,8 +374,20 @@ func execute_damage(
 		}
 	)
 
+	# ==========================================
+	# Status Effects
+	# ==========================================
+
 	if apply_status:
-		apply_effects(user,target)
+		apply_effects(
+			user,
+			target
+		)
+
+
+# ==================================================
+# Status Effects
+# ==================================================
 
 
 func apply_effects(
@@ -324,24 +404,15 @@ func apply_effects(
 
 			EffectTarget.SELF:
 
-				user.apply_status_effect(effect)
-
-				user.trigger_passive_event(
-					"status_applied",
-					{
-						"status":effect,
-						"target":target
-					}
+				user.apply_status_effect(
+					effect
 				)
 
 			EffectTarget.TARGET:
 
-				target.apply_status_effect(effect)
+				if target == null:
+					continue
 
-				target.trigger_passive_event(
-					"status_received",
-					{
-						"status":effect,
-						"source":user
-					}
+				target.apply_status_effect(
+					effect
 				)

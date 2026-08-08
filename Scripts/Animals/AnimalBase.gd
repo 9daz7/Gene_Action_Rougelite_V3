@@ -80,7 +80,7 @@ var defense_modifier:int = 0
 var accuracy_modifier:int = 0
 var evasion_modifier:int = 0
 var armor_modifier:int = 0
-var critical_modifier := 0
+var critical_modifier := 15
 
 
 # ==================================================
@@ -286,31 +286,53 @@ var status_effects: Array = []
 
 
 func process_status_effects():
-	for effect in status_effects:
+
+	for effect in status_effects.duplicate():
+
+		if not is_alive():
+			return
+
 
 		match effect.type:
 
 			StatusEffect.Type.POISON:
-				print(name," takes poison damage")
-				take_status_damage(
-					effect.get_total_power(),
+
+				print(
+					name,
+					" takes poison damage"
 				)
+
+				take_status_damage(
+					effect.get_total_power()
+				)
+
 
 			StatusEffect.Type.BLEED:
-				print(name," bleeds")
-				take_status_damage(
-					effect.get_total_power(),
+
+				print(
+					name,
+					" bleeds"
 				)
+
+				take_status_damage(
+					effect.get_total_power()
+				)
+
 
 			StatusEffect.Type.BURN:
-				print(name," burns")
-				take_status_damage(
-					effect.get_total_power(),
+
+				print(
+					name,
+					" burns"
 				)
 
-	for effect in status_effects.duplicate():
-		if effect.duration <= 0:
-			remove_status_effect(effect)
+				take_status_damage(
+					effect.get_total_power()
+				)
+
+	#for effect in status_effects.duplicate():
+		#if effect.duration <= 0:
+			#remove_status_effect(effect)
 
 
 func apply_status_effect(effect:StatusEffect):
@@ -318,13 +340,21 @@ func apply_status_effect(effect:StatusEffect):
 	if effect == null:
 		return
 
-	# check for existing copy
+
+	# ==========================================
+	# Check for existing status
+	# ==========================================
+
+
 	for existing in status_effects:
 
 		if existing.type != effect.type:
 			continue
 
-		# refresh duration
+		# --------------------------------------
+		# Refresh duration
+		# --------------------------------------
+
 		if existing.refresh_duration:
 
 			existing.duration = effect.duration
@@ -334,13 +364,27 @@ func apply_status_effect(effect:StatusEffect):
 				" duration refreshed"
 			)
 
-		# add stack
+		# --------------------------------------
+		# Add stack
+		# --------------------------------------
+
 		if existing.can_stack:
 
+			var old_stacks: int = existing.stacks
+
 			existing.stacks = min(
-				existing.stacks + 1,
+				existing.stacks + effect.stacks,
 				existing.max_stacks
 			)
+
+			var added_stacks: int = existing.stacks - old_stacks
+
+			if added_stacks > 0:
+
+				existing.apply_stack(
+					self,
+					added_stacks
+				)
 
 			print(
 				existing.effect_name,
@@ -348,16 +392,34 @@ func apply_status_effect(effect:StatusEffect):
 				existing.stacks
 			)
 
+		trigger_passive_event(
+			"status_applied",
+			{
+				"status": existing
+			}
+		)
+
+		status_changed.emit(self)
+
+		GameEvents.status_changed.emit(
+			self,
+			get_all_enemies()
+		)
+
 		return
 
 
+	# ==========================================
 	# First application
+	# ==========================================
 
-	var new_effect = effect.duplicate()
+	var new_effect: StatusEffect = effect.duplicate()
 
 	new_effect.stacks = 1
 
-	status_effects.append(new_effect)
+	status_effects.append(
+		new_effect
+	)
 
 	new_effect.apply_stack(
 		self,
@@ -385,26 +447,61 @@ func apply_status_effect(effect:StatusEffect):
 	)
 
 
-func remove_status_effect(effect:StatusEffect):
+func remove_status_effect(
+	effect:StatusEffect
+):
+
+	if effect == null:
+		return
+
+	if not status_effects.has(effect):
+		return
+
+	# ==========================================
+	# Remove stat modifiers
+	# ==========================================
 
 	match effect.type:
+
 		StatusEffect.Type.SPEED_UP:
-			speed_modifier -= effect.get_total_power()
+
+			speed_modifier -= (
+				effect.get_total_power()
+			)
 
 		StatusEffect.Type.SPEED_DOWN:
-			speed_modifier += effect.get_total_power()
+			
+			speed_modifier += (
+				effect.get_total_power()
+			)
 
 		StatusEffect.Type.ATTACK_UP:
-			attack_modifier -= effect.get_total_power()
+
+			attack_modifier -= (
+				effect.get_total_power()
+			)
 
 		StatusEffect.Type.ATTACK_DOWN:
-			attack_modifier += effect.get_total_power()
+
+			attack_modifier += (
+				effect.get_total_power()
+			)
 
 		StatusEffect.Type.DEFENSE_UP:
-			defense_modifier -= effect.get_total_power()
+
+			defense_modifier -= (
+				effect.get_total_power()
+			)
 
 		StatusEffect.Type.DEFENSE_DOWN:
-			defense_modifier += effect.get_total_power()
+
+			defense_modifier += (
+				effect.get_total_power()
+			)
+
+	# ==========================================
+	# Passive event
+	# ==========================================
 
 	trigger_passive_event(
 		"status_removed",
@@ -413,9 +510,17 @@ func remove_status_effect(effect:StatusEffect):
 		}
 	)
 
-	status_effects.erase(effect)
+	# ==========================================
+	# Remove
+	# ==========================================
 
-	status_changed.emit(self)
+	status_effects.erase(
+		effect
+	)
+
+	status_changed.emit(
+		self
+	)
 	
 	GameEvents.status_changed.emit(
 		self,
@@ -446,16 +551,8 @@ func tick_status_effects():
 
 		if effect.duration <= 0:
 
-			effect.remove(self)
-
-			status_effects.erase(effect)
-
-			status_changed.emit(self)
-
-			print(
-				effect.effect_name,
-				" expired from ",
-				name
+			remove_status_effect(
+				effect
 			)
 
 
@@ -580,19 +677,44 @@ func get_armor() -> int:
 	return value
 
 
-func get_critical_chance():
+func get_critical_chance() -> int:
 
-	var chance = critical_modifier
+	var chance: int = critical_modifier
+
+	print(
+		"CRIT CHECK:",
+		name,
+		" base:",
+		critical_modifier
+	)
 
 	for slot in gene_slots:
+
 		for gene in gene_slots[slot]:
+
+			if gene == null:
+				continue
+
+			print(
+				"  Gene:",
+				gene.gene_name,
+				" Crit Bonus:",
+				gene.critical_bonus
+			)
+
 			chance += gene.critical_bonus
 
 	for passive in passive_effects:
+
 		chance = passive.modify_critical_chance(
 			self,
 			chance
 		)
+
+	print(
+		"  FINAL CRIT:",
+		chance
+	)
 
 	return chance
 
@@ -1217,7 +1339,6 @@ func load_build(build: AnimalBuildResource):
 	accuracy_modifier = 0
 	evasion_modifier = 0
 	armor_modifier = 0
-	critical_modifier = 0
 
 	is_protecting = false
 

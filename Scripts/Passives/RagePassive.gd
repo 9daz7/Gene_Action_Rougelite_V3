@@ -9,7 +9,13 @@ class_name RagePassive
 var stacks := 0
 
 
-func on_after_damage(owner, amount, attacker):
+func on_after_damage(owner, data: Dictionary):
+
+	var amount: int = data.get("amount", 0)
+	var attacker: AnimalBase = data.get("attacker")
+
+	if amount <= 0:
+		return
 
 	if stacks >= max_stacks:
 		return

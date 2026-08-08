@@ -38,15 +38,10 @@ func get_display_text() -> String:
 	return effect_name + " (" + str(duration) + ")"
 
 
-func apply(target):
+func apply(target: AnimalBase):
 
-	if type == Type.HEAL:
-		target.heal(power)
+	if target == null:
 		return
-
-	#var new_effect = duplicate()
-#
-	#target.status_effects.append(new_effect)
 
 	print(
 		effect_name,
@@ -55,6 +50,53 @@ func apply(target):
 	)
 
 	match type:
+
+		Type.POISON:
+			target.take_damage(
+				get_total_power(),
+				null,
+				true
+			)
+
+			BattleLog.add_message(
+				"%s took %d poison damage!" % [
+					target.name,
+					get_total_power()
+				]
+			)
+
+		Type.BLEED:
+			target.take_damage(
+				get_total_power(),
+				null,
+				true
+			)
+
+			BattleLog.add_message(
+				"%s took %d bleed damage!" % [
+					target.name,
+					get_total_power()
+				]
+			)
+
+		Type.BURN:
+			target.take_damage(
+				get_total_power(),
+				null,
+				true
+			)
+
+			BattleLog.add_message(
+				"%s took %d burn damage!" % [
+					target.name,
+					get_total_power()
+				]
+			)
+
+		Type.HEAL:
+			target.heal(
+				get_total_power()
+			)
 
 		Type.SPEED_UP:
 			target.modify_speed(get_total_power())
@@ -149,26 +191,111 @@ func get_total_power() -> int:
 	return power
 
 
-func apply_stack(target, amount:int):
+# ==================================================
+# Turn Processing
+# ==================================================
 
-	var stack_amount = power * amount
+func process_turn(target: AnimalBase):
+
+	if target == null:
+		return
+
+	if not is_instance_valid(target):
+		return
+
+	match type:
+
+		Type.POISON:
+
+			var damage: int = get_total_power()
+
+			BattleLog.add_message(
+				"%s took %d poison damage!" % [
+					target.name,
+					damage
+				]
+			)
+
+			target.take_damage(
+				damage,
+				null,
+				true
+			)
+
+
+		Type.BLEED:
+
+			var damage: int = get_total_power()
+
+			BattleLog.add_message(
+				"%s took %d bleed damage!" % [
+					target.name,
+					damage
+				]
+			)
+
+			target.take_damage(
+				damage,
+				null,
+				true
+			)
+
+
+		Type.BURN:
+
+			var damage: int = get_total_power()
+
+			BattleLog.add_message(
+				"%s took %d burn damage!" % [
+					target.name,
+					damage
+				]
+			)
+
+			target.take_damage(
+				damage,
+				null,
+				true
+			)
+
+
+func apply_stack(
+	target,
+	amount:int
+):
+
+	var stack_amount = (
+		power * amount
+	)
 
 	match type:
 
 		Type.SPEED_UP:
-			target.modify_speed(stack_amount)
+			target.modify_speed(
+				stack_amount
+			)
 
 		Type.SPEED_DOWN:
-			target.modify_speed(-stack_amount)
+			target.modify_speed(
+				-stack_amount
+			)
 
 		Type.ATTACK_UP:
-			target.modify_attack(stack_amount)
+			target.modify_attack(
+				stack_amount
+			)
 
 		Type.ATTACK_DOWN:
-			target.modify_attack(-stack_amount)
+			target.modify_attack(
+				-stack_amount
+			)
 
 		Type.DEFENSE_UP:
-			target.modify_defense(stack_amount)
+			target.modify_defense(
+				stack_amount
+			)
 
 		Type.DEFENSE_DOWN:
-			target.modify_defense(-stack_amount)
+			target.modify_defense(
+				-stack_amount
+			)
