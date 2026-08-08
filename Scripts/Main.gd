@@ -58,9 +58,6 @@ func _ready():
 
 	map_ui.room_entered.connect(enter_room)
 
-	battle_manager.battle_won.connect(_on_battle_won)
-	battle_manager.battle_lost.connect(_on_battle_lost)
-
 	lab_hub.animal_creation.build_confirmed.connect(
 		_on_build_confirmed
 	)

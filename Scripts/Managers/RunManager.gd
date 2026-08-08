@@ -132,6 +132,11 @@ func reset_run():
 
 	GameEvents.gold_changed.emit(gold)
 
+	GameEvents.hp_changed.emit(
+		player_hp,
+		max_hp
+	)
+
 	current_animal_build = null
 	
 	print("Run reset")
@@ -280,7 +285,7 @@ func get_hp_percent() -> float:
 	return float(player_hp) / float(max_hp)
 
 
-func damage_player(amount:int):
+func damage_player(amount: int):
 
 	player_hp -= amount
 
@@ -290,6 +295,10 @@ func damage_player(amount:int):
 	GameEvents.hp_changed.emit(
 		player_hp,
 		max_hp
+	)
+
+	GameEvents.player_damaged.emit(
+		amount
 	)
 
 	print(
