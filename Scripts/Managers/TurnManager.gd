@@ -40,6 +40,8 @@ var selected_enemy: EnemyAnimal
 
 var battle_sequence:BattleSequence
 
+var battle_finished := false
+
 # Target Selection
 var pending_move: MoveResource
 var pending_enemy_moves:Array = []
@@ -92,6 +94,8 @@ func initialize(
 
 	for enemy in enemies:
 		enemy.turn_manager = self
+
+	battle_finished = false
 
 	start_battle()
 
@@ -389,8 +393,10 @@ func resolve_turn(
 	enemy_moves:Array
 ):
 
-	current_state = TurnState.PLAYER_TURN
+	if battle_finished:
+		return
 
+	current_state = TurnState.PLAYER_TURN
 
 	# ================================
 	# PLAYER ACTION
@@ -409,15 +415,10 @@ func resolve_turn(
 		)
 	)
 
-
 	await battle_sequence.play()
 
-
-	check_battle_end()
-
-	if current_state == TurnState.BATTLE_OVER:
+	if check_battle_end():
 		return
-
 
 	# ================================
 	# END PLAYER TURN STATUS
@@ -425,11 +426,8 @@ func resolve_turn(
 
 	trigger_turn_end_effects()
 
-	check_battle_end()
-
-	if current_state == TurnState.BATTLE_OVER:
+	if check_battle_end():
 		return
-
 
 	# ================================
 	# ENEMY TURN
@@ -437,94 +435,22 @@ func resolve_turn(
 
 	current_state = TurnState.ENEMY_TURN
 
-
 	GameEvents.turn_changed.emit(
 		current_state
 	)
-
 
 	await execute_enemy_turn(
 		enemy_moves
 	)
 
-
-	check_battle_end()
-
-	if current_state == TurnState.BATTLE_OVER:
+	if check_battle_end():
 		return
-
 
 	# ================================
 	# START PLAYER TURN
 	# ================================
 
 	end_turn()
-	
-	#current_state = TurnState.ENEMY_TURN
-#
-	#GameEvents.turn_changed.emit(
-		#current_state
-	#)
-#
-	#for enemy in enemies:
-		#if enemy.hp <= 0:
-			#continue
-#
-		#enemy.trigger_passive_event(
-			#"turn_start"
-		#)
-#
-		#enemy.process_status_effects()
-#
-		#check_battle_end()
-#
-		#if current_state == TurnState.BATTLE_OVER:
-			#return
-#
-		#enemy.tick_status_effects()
-#
-#
-	## -----------------------------
-	## Queue enemy actions
-	## -----------------------------
-#
-	#for data in enemy_moves:
-#
-		#var enemy: EnemyAnimal = data["enemy"]
-		#var enemy_move: MoveResource = data["move"]
-#
-		#if not is_instance_valid(enemy):
-			#continue
-#
-		#if enemy.hp <= 0:
-			#continue
-#
-		#print(
-			#"QUEUEING ENEMY:",
-			#enemy.name,
-			#" MOVE:",
-			#enemy_move.move_name
-		#)
-#
-		#battle_sequence.add_action(
-			#_execute_enemy_move.bind(
-				#enemy,
-				#enemy_move
-			#)
-		#)
-#
-#
-	## Play ALL enemy attacks
-	#await battle_sequence.play()
-#
-#
-	#check_battle_end()
-#
-	#if current_state == TurnState.BATTLE_OVER:
-		#return
-#
-#
-	#end_turn()
 
 
 func execute_enemy_turn(enemy_moves: Array):
@@ -651,7 +577,10 @@ func _execute_enemy_move(
 
 
 func end_turn():
-	
+
+	if battle_finished:
+		return
+
 	if current_state == TurnState.BATTLE_OVER:
 		return
 
@@ -660,10 +589,14 @@ func end_turn():
 
 	current_state = TurnState.END_TURN
 
-	GameEvents.turn_changed.emit(current_state)
-
+	GameEvents.turn_changed.emit(
+		current_state
+	)
 
 	trigger_turn_end_effects()
+
+	if check_battle_end():
+		return
 
 	start_player_turn()
 
@@ -691,27 +624,32 @@ func trigger_turn_end_effects():
 
 func check_battle_end():
 
+	if battle_finished:
+		return true
+
 	if player == null:
 		return
 
 	if player.hp <= 0:
 		print("Player defeated")
 
+		battle_finished = true
 		current_state = TurnState.BATTLE_OVER
 
 		player.trigger_passive_event(
 			"battle_end"
 		)
 
-		for defeated_enemy in enemies:
+		for enemy in enemies:
 
-			defeated_enemy.trigger_passive_event(
-				"battle_end"
-			)
+			if enemy:
+				enemy.trigger_passive_event(
+					"battle_end"
+				)
 
 		GameEvents.battle_lost.emit()
 
-		return
+		return true
 
 	var living_enemies := 0
 
@@ -730,21 +668,25 @@ func check_battle_end():
 	print("Living enemies:", living_enemies)
 
 	if living_enemies > 0:
-		return
+		return false
 
 	print("All enemies defeated")
 
+	battle_finished = true
 	current_state = TurnState.BATTLE_OVER
 
 	player.trigger_passive_event("battle_end")
 
 	for enemy in enemies:
+
 		if enemy:
 			enemy.trigger_passive_event("battle_end")
 
 	GameEvents.battle_won.emit(
 		enemies[0] if enemies.size() > 0 else null
 	)
+
+	return true
 
 		#if battle_ui:
 			#battle_ui.hide()
@@ -766,30 +708,25 @@ func reset():
 			enemy
 		)
 
-
 	current_state = TurnState.NONE
-
 
 	if is_instance_valid(battle_sequence):
 		battle_sequence.queue_free()
 
 	battle_sequence = null
 
-
 	player = null
 
 	enemies.clear()
 
-
 	selected_enemy = null
-
 
 	pending_move = null
 
 	pending_enemy_moves.clear()
 
-
 	waiting_for_target = false
 
+	battle_finished = false
 
 	print("TurnManager references cleared")

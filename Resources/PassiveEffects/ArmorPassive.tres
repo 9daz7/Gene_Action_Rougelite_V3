@@ -4,6 +4,7 @@
 
 [resource]
 script = ExtResource("1_qrwh3")
+damage_reduction = 0.2
 effect_name = "Armor Passive"
 description = "Reduces incoming damage by 20%"
 metadata/_custom_type_script = "uid://bnjhlinwk7m14"

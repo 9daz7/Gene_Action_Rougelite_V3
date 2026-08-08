@@ -63,10 +63,10 @@ func _ready():
 	_setup_buttons()
 
 	
-	if not GameEvents.hp_changed.is_connected(update_player_hp):
+	if not GameEvents.hp_changed.is_connected(update_hp):
 
 		GameEvents.hp_changed.connect(
-			update_player_hp
+			update_hp
 		)
 
 	if not GameEvents.moves_updated.is_connected(setup_moves):
@@ -310,7 +310,7 @@ func _on_target_selected(
 	enable_moves()
 
 
-func update_player_hp(
+func update_hp(
 	animal: AnimalBase,
 	current_hp:int,
 	max_hp:int
@@ -409,9 +409,9 @@ func _clear_optional_moves():
 
 func _exit_tree():
 
-	if GameEvents.hp_changed.is_connected(update_player_hp):
+	if GameEvents.hp_changed.is_connected(update_hp):
 
-		GameEvents.hp_changed.disconnect(update_player_hp)
+		GameEvents.hp_changed.disconnect(update_hp)
 
 	if GameEvents.battle_names_updated.is_connected(
 		setup_names
