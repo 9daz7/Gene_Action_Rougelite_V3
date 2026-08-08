@@ -142,7 +142,8 @@ func execute_on_target(
 			user.trigger_passive_event(
 				"before_attack",
 				{
-					"target":target
+					"target": target,
+					"move": self
 				}
 			)
 
@@ -159,6 +160,7 @@ func execute_on_target(
 				"before_attack",
 				{
 					"target":target
+					"move": self
 				}
 			)
 
@@ -243,7 +245,8 @@ func execute_damage(
 		user.trigger_passive_event(
 			"attack_missed",
 			{
-				"target": target
+				"target": target,
+				"move": self
 			}
 		)
 
@@ -263,8 +266,9 @@ func execute_damage(
 		user.trigger_passive_event(
 			"critical_hit",
 			{
-				"target":target,
-				"damage":damage
+				"target": target,
+				"move": self,
+				"damage": damage
 			}
 		)
 
@@ -288,15 +292,17 @@ func execute_damage(
 		user.trigger_passive_event(
 			"kill",
 			{
-				"target":target
+				"target": target,
+				"move": self
 			}
 		)
 
 	user.trigger_passive_event(
 		"after_attack",
 		{
-			"target":target,
-			"damage":damage
+			"target": target,
+			"move": self,
+			"damage": damage
 		}
 	)
 

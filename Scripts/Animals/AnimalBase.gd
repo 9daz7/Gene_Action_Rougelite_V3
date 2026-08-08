@@ -1043,6 +1043,9 @@ func trigger_passive_event(
 	data = null
 ):
 
+	if data == null:
+		data = {}
+
 	for passive in passive_effects:
 
 		if passive == null:
@@ -1052,114 +1055,118 @@ func trigger_passive_event(
 
 			"battle_start":
 
-				passive.on_battle_start(self)
+				passive.on_battle_start(
+					self
+				)
 
 			"battle_end":
 
-				passive.on_battle_end(self)
+				passive.on_battle_end(
+					self
+				)
 
 			"turn_start":
 
-				passive.on_turn_start(self)
+				passive.on_turn_start(
+					self
+				)
 
 			"turn_end":
 
-				passive.on_turn_end(self)
+				passive.on_turn_end(
+					self
+				)
 
 			"before_attack":
 
-					passive.on_before_attack(
-						self,
-						data.target
-					)
+				passive.on_before_attack(
+					self,
+					data
+				)
 
 			"after_attack":
 
-				#if data:
+				passive.on_after_attack(
+					self,
+					data
+				)
 
-					passive.on_after_attack(
-						self,
-						data.target,
-						data.damage
-					)
+			"attack_missed":
+
+				passive.on_attack_missed(
+					self,
+					data
+				)
+
+			"critical_hit":
+
+				passive.on_critical_hit(
+					self,
+					data
+				)
 
 			"before_damage":
 
-					passive.on_before_damage(
-						self,
-						data
-					)
-
-			"before_damage_reduction":
-
-				data.amount = passive.on_before_damage(
+				passive.on_before_damage(
 					self,
-					data.amount
+					data
 				)
 
 			"after_damage":
 
-				#if data:
 
-					passive.on_after_damage(
-						self,
-						data.amount,
-						data.attacker
-					)
+				passive.on_after_damage(
+					self,
+					data
+				)
 
 			"before_heal":
 
-				#if data:
-
-					data.amount = passive.on_before_heal(
-						self,
-						data.amount
-					)
+				passive.on_before_heal(
+					self,
+					data
+				)
 
 			"after_heal":
 
-				#if data:
-
-					passive.on_after_heal(
-						self,
-						data.amount
-					)
+				passive.on_after_heal(
+					self,
+					data
+				)
 
 			"status_applied":
 
-				if data:
-
-					passive.on_apply_status(
-						self,
-						data.status
-					)
+				passive.on_apply_status(
+					self,
+					data
+				)
 
 			"status_removed":
 
-				if data:
+				passive.on_remove_status(
+					self,
+					data
+				)
 
-					passive.on_remove_status(
-						self,
-						data.status
-					)
+			"status_received":
+
+				passive.on_apply_status(
+					self,
+					data
+				)
 
 			"death":
 
-				passive.on_death(self)
+				passive.on_death(
+					self
+				)
 
 			"kill":
 
-				#if data:
-
-					passive.on_kill(
-						self,
-						data.target
-					)
-				
-			#"battle_end":
-
-				##if passive.has_method("on_battle_end"):
-				#passive.on_battle_end(self)
+				passive.on_kill(
+					self,
+					data
+				)
 
 
 # ==================================================

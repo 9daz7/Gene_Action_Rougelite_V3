@@ -5,13 +5,21 @@ class_name ArmorPassive
 @export var damage_reduction := 0.8
 
 
-func modify_damage_taken(owner, damage):
+func modify_damage_taken(
+	owner,
+	damage: int
+) -> int:
 
-	var reduced = damage * (1.0 - damage_reduction)
+	var reduced := damage * (
+		1.0 - damage_reduction
+	)
 
 	print(
 		owner.name,
-		" reduced damage by turtle shell"
+		" reduced damage with Turtle Shell:",
+		damage,
+		"->",
+		reduced
 	)
 
-	return int(damage)
+	return int(reduced)

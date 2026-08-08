@@ -6,13 +6,27 @@ class_name PredatorPassive
 @export var target_threshold := 0.3
 
 
-func on_after_attack(owner, target, damage):
+func on_after_attack(
+	owner,
+	data: Dictionary
+):
 
-	var hp_percent = float(target.hp) / float(target.get_max_hp())
+	var target: AnimalBase = data.get("target")
+
+	if target == null:
+		return
+
+	var hp_percent := (
+		float(target.hp)
+		/ float(target.get_max_hp())
+	)
 
 	if hp_percent <= target_threshold:
 
-		target.take_damage(damage_bonus)
+		target.take_damage(
+			damage_bonus,
+			owner
+		)
 
 		print(
 			owner.name,

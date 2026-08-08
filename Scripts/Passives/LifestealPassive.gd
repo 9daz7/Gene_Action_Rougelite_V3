@@ -6,11 +6,12 @@ class_name LifestealPassive
 
 func on_after_attack(
 	owner,
-	target,
-	damage
+	data: Dictionary
 ):
 
-	var heal_amount = int(
+	var damage = data.get("damage", 0)
+
+	var heal_amount := int(
 		damage * heal_percent
 	)
 

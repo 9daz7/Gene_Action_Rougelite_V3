@@ -3,8 +3,19 @@ class_name BloodlustPassive
 
 @export var attack_gain := 1
 
-func on_after_attack(owner, target, damage):
+func on_after_attack(
+	owner,
+	data: Dictionary
+):
 
-	owner.modify_attack(attack_gain)
+	var target = data.get("target")
+	var damage = data.get("damage", 0)
 
-	print(owner.name, " gains attack.")
+	owner.modify_attack(
+		attack_gain
+	)
+
+	print(
+		owner.name,
+		" gains attack."
+	)
