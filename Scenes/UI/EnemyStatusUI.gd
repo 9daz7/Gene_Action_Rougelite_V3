@@ -69,7 +69,7 @@ func update_hp(
 # ==================================================
 
 
-func update_status(_animal = null):
+func update_status(_animal: AnimalBase = null):
 
 	if enemy == null:
 		return

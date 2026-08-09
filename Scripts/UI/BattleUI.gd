@@ -316,6 +316,17 @@ func update_hp(
 	max_hp:int
 ):
 
+	print("")
+	print("===== BATTLE UI HP UPDATE =====")
+	print("Animal:", animal)
+	print("Name:", animal.name)
+	print("Instance:", animal.get_instance_id())
+	print("HP:", current_hp, "/", max_hp)
+	print("Is Enemy:", animal is EnemyAnimal)
+	print("Enemy UI has animal:", enemy_ui.has(animal))
+	print("Enemy UI dictionary size:", enemy_ui.size())
+
+
 	if animal is PlayerAnimal:
 
 		print(
@@ -343,6 +354,17 @@ func update_hp(
 			enemy_ui[animal].update_hp(
 				current_hp,
 				max_hp
+			)
+			
+			print("SUCCESS: Enemy HP bar updated")
+
+		else:
+
+			print(
+				"ERROR: No EnemyStatusUI found for",
+				animal.name,
+				"ID:",
+				animal.get_instance_id()
 			)
 
 

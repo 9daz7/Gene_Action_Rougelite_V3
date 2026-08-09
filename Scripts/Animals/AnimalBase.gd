@@ -8,7 +8,7 @@ class_name AnimalBase
 
 #signal hp_changed(current_hp)
 signal animal_died
-signal status_changed(animal, enemies)
+signal status_changed(animal)
 
 
 # ==================================================
@@ -1000,6 +1000,15 @@ func take_status_damage(
 		" took ",
 		amount,
 		" status damage. HP:",
+		hp
+	)
+
+	print(
+		"STATUS HP EVENT:",
+		name,
+		" ID:",
+		get_instance_id(),
+		" HP:",
 		hp
 	)
 
