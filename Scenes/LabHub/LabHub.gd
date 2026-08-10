@@ -26,7 +26,6 @@ signal start_run_requested
 func _ready():
 
 	_connect_buttons()
-
 	animal_creation.hide()
 
 

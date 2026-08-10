@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 GameEvents="*uid://bisx34jujwv45"
 BattleLog="*uid://c3uqfdrvbn6h6"
+PermanentProgressionManager="*uid://blbx6mybwplqo"
 
 [display]
 
