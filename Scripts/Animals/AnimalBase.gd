@@ -80,7 +80,7 @@ var defense_modifier:int = 0
 var accuracy_modifier:int = 0
 var evasion_modifier:int = 0
 var armor_modifier:int = 0
-var critical_modifier := 10
+var critical_modifier := 0
 
 
 # ==================================================

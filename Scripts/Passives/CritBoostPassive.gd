@@ -4,6 +4,6 @@ class_name CritBoostPassive
 
 @export var critical_bonus := 20
 
-func get_critical_bonus(owner):
+func modify_critical_chance(owner, chance: int) -> int:
 
-	return critical_bonus
+	return chance + critical_bonus

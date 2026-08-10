@@ -256,21 +256,29 @@ func _on_move_selected(move_index: int):
 		print("Not player turn")
 		return
 
-	var living_enemies:Array[EnemyAnimal] = []
+	#if waiting_for_target:
+		#print("Already waiting for target selection")
+		#return
+
+	# ==================================================
+	# Get Living Enemies
+	# ==================================================
+
+	var living_enemies: Array[EnemyAnimal] = []
 
 	for enemy in enemies:
-
-		if enemy.hp > 0:
-
+		if is_instance_valid(enemy) and enemy.hp > 0:
 			living_enemies.append(enemy)
 
-
 	if living_enemies.is_empty():
-
 		print("No living enemies")
 		return
-		
-	var player_move = player.get_move(move_index)
+
+	# ==================================================
+	# Get Player Move
+	# ==================================================
+
+	var player_move: MoveResource = player.get_move(move_index)
 	
 	if player_move == null:
 		print("Invalid player move")
@@ -280,61 +288,105 @@ func _on_move_selected(move_index: int):
 		"Player selected:",
 		player_move.move_name
 	)
-	
-	var enemy_moves:Array = []
 
-	for enemy in enemies:
-		if is_instance_valid(enemy) and enemy.hp > 0:
-			var move = enemy.choose_action(player)
+	# ==================================================
+	# ENEMY MOVE SELECTION
+	# ==================================================
 
-			if move:
-				enemy_moves.append(
-					{
-						"enemy":enemy,
-						"move":move
-					}
-				)
+	var enemy_moves: Array = []
 
-	for data in enemy_moves:
+	for enemy in living_enemies:
+		var move := enemy.choose_action(player)
 
-		print(
-			"Enemy queued:",
-			data["enemy"].name,
-			" Move:",
-			data["move"].move_name
-		)
+		if move:
+
+			enemy_moves.append(
+				{
+					"enemy": enemy,
+					"move": move
+				}
+			)
+
+			print(
+				enemy.name,
+				" selected:",
+				move.move_name,
+				"Priority:",
+				move.priority,
+				"Speed:",
+				enemy.get_speed()
+			)
 
 	print(
-		"Enemies attacking:",
+		"Enemies selected:",
 		enemy_moves.size()
 	)
+
+	# ==================================================
+	# TARGET DEBUG
+	# ==================================================
+
+	print("========== TARGET DEBUG ==========")
+	print("Move:", player_move.move_name)
+	print("Target type:", player_move.target_type)
+	print("SINGLE_ENEMY:", MoveResource.TargetType.SINGLE_ENEMY)
+	print("SELF:", MoveResource.TargetType.SELF)
+	print("ALL_ENEMIES:", MoveResource.TargetType.ALL_ENEMIES)
+	print("Living enemies:", living_enemies.size())
+	print("Current state:", current_state)
+	print("==================================")
+
+	# ==================================================
+	# SELF TARGET
+	# ==================================================
 
 	if player_move.target_type == MoveResource.TargetType.SELF:
 
 		resolve_turn(
 			player_move,
-			get_active_enemy(),
+			player,
 			enemy_moves
 		)
 
+		return
 
-	elif living_enemies.size() == 1:
+	# ==================================================
+	# ALL ENEMIES
+	# ==================================================
+
+	if player_move.target_type == MoveResource.TargetType.ALL_ENEMIES: 
 
 		resolve_turn(
 			player_move,
 			living_enemies[0],
 			enemy_moves
 		)
+		
+		return
 
-	else:
+	# ==================================================
+	# SINGLE ENEMY TARGET
+	# ==================================================
 
-		print(
-			"Waiting for target selection"
-		)
+	if player_move.target_type == MoveResource.TargetType.SINGLE_ENEMY:
+	
+		if living_enemies.size() == 1:
+
+			resolve_turn(
+				player_move,
+				living_enemies[0],
+				enemy_moves
+			)
+
+			return
+
+		print("==================================")
+		print("Waiting for target selection")
+		print("Enemies available:", living_enemies.size())
+		print("==================================")
 
 		pending_move = player_move
 		pending_enemy_moves = enemy_moves
-
 		waiting_for_target = true
 
 		current_state = TurnState.TARGET_SELECTION
@@ -342,10 +394,46 @@ func _on_move_selected(move_index: int):
 		GameEvents.turn_changed.emit(
 			current_state
 		)
-	
+
 		GameEvents.request_target_selection.emit(
 			living_enemies
 		)
+
+		return
+
+	print(
+		"WARNING: Unsupported target type:",
+		player_move.target_type
+	)
+
+
+	## ==================================================
+	## Multiple Enemies - Request Target
+	## ==================================================
+#
+		#print(
+			#"Waiting for target selection"
+		#)
+#
+		#pending_move = player_move
+		#pending_enemy_moves = enemy_moves.duplicate(true)
+#
+		#waiting_for_target = true
+		#current_state = TurnState.TARGET_SELECTION
+#
+		#GameEvents.turn_changed.emit(
+			#current_state
+		#)
+	#
+		#GameEvents.request_target_selection.emit(
+			#living_enemies
+		#)
+#
+	#print(
+		#"Target selection requested for",
+		#living_enemies.size(),
+		#"enemies"
+	#)
 
 
 func _on_target_selected(enemy: EnemyAnimal):
@@ -356,10 +444,15 @@ func _on_target_selected(enemy: EnemyAnimal):
 	if enemy == null:
 		return
 
+	if not is_instance_valid(enemy):
+		return
+
 	if enemy.hp <= 0:
+
 		print(
 			"Cannot target defeated enemy"
 		)
+
 		return
 
 	print(
@@ -403,76 +496,42 @@ func _on_target_selected(enemy: EnemyAnimal):
 
 func resolve_turn(
 	player_move: MoveResource,
-	target_enemy: EnemyAnimal,
+	target_enemy: AnimalBase,
 	enemy_moves:Array
 ):
 
 	if battle_finished:
 		return
 
-	current_state = TurnState.PLAYER_TURN
+	if player_move == null:
+		return
+
+	# ==================================================
+	# BUILD ACTION LIST
+	# ==================================================
+
+	var actions: Array = []
 
 	# ================================
 	# PLAYER ACTION
 	# ================================
 
-	print(
-		"Player uses:",
-		player_move.move_name
+	actions.append(
+		{
+			"actor": player,
+			"move": player_move,
+			"target": target_enemy
+		}
 	)
 
-
-	battle_sequence.add_action(
-		_execute_player_move.bind(
-			player_move,
-			target_enemy
-		)
-	)
-
-	await battle_sequence.play()
-
-	if check_battle_end():
-		return
-
-	# ================================
-	# END PLAYER TURN STATUS
-	# ================================
-
-	trigger_turn_end_effects()
-
-	if check_battle_end():
-		return
-
-	# ================================
-	# ENEMY TURN
-	# ================================
-
-	current_state = TurnState.ENEMY_TURN
-
-	GameEvents.turn_changed.emit(
-		current_state
-	)
-
-	await execute_enemy_turn(
-		enemy_moves
-	)
-
-	if check_battle_end():
-		return
-
-	# ================================
-	# START PLAYER TURN
-	# ================================
-
-	end_turn()
-
-
-func execute_enemy_turn(enemy_moves: Array):
+	# ==================================================
+	# Enemy Actions
+	# ==================================================
 
 	for data in enemy_moves:
 
-		var enemy:EnemyAnimal = data["enemy"]
-		var enemy_move:MoveResource = data["move"]
+		var enemy: EnemyAnimal = data["enemy"]
+		var enemy_move: MoveResource = data["move"]
 
 		if not is_instance_valid(enemy):
 			continue
@@ -480,108 +539,189 @@ func execute_enemy_turn(enemy_moves: Array):
 		if enemy.hp <= 0:
 			continue
 
-		# ==========================================
-		# Process Enemy Status Effects
-		# ==========================================
-
-		enemy.process_status_effects()
-
-		if enemy.hp <= 0:
-			check_battle_end()
-
-			if current_state == TurnState.BATTLE_OVER:
-				return
-
+		if enemy_move == null:
 			continue
 
-		enemy.tick_status_effects()
-
-		GameEvents.status_changed.emit(
-			enemy,
-			enemies
+		actions.append(
+			{
+				"actor": enemy,
+				"move": enemy_move,
+				"target": player
+			}
 		)
+	
+	# ==================================================
+	# SORT ACTIONS
+	# ==================================================
 
-		# ==========================================
-		# Enemy Attack
-		# ==========================================
+	actions.sort_custom(
+		_compare_actions
+	)
+
+	print("")
+	print("========== ACTION ORDER ==========")
+
+	for action in actions:
+
+		var actor: AnimalBase = action["actor"]
+		var move: MoveResource = action["move"]
 
 		print(
-			"QUEUEING ENEMY:",
-			enemy.name,
-			" MOVE:",
-			enemy_move.move_name
+			actor.name,
+			" -> ",
+			move.move_name,
+			" | Priority:",
+			move.priority,
+			" | Speed:",
+			actor.get_speed()
 		)
 
-		battle_sequence.add_action(
-			_execute_enemy_move.bind(
-				enemy,
-				enemy_move
-			)
-		)
+	print("==================================")
 
+	# ==================================================
+	# EXECUTE ACTIONS
+	# ==================================================
 
-	await battle_sequence.play()
+	current_state = TurnState.ENEMY_TURN
 
-
-# ==================================================
-# Player Move Execution
-# ==================================================
-
-func _execute_player_move(
-	player_move: MoveResource,
-	target: EnemyAnimal
-):
-
-	print(
-		"EXECUTING PLAYER MOVE:",
-		player_move.move_name
+	GameEvents.turn_changed.emit(
+		current_state
 	)
 
+	for action in actions:
 
-	await player_move.execute(
-		player,
+		if battle_finished:
+			return
+
+		var actor: AnimalBase = action["actor"]
+		var move: MoveResource = action["move"]
+		var action_target: AnimalBase = action["target"]
+
+		# ------------------------------------------------
+		# Skip defeated actors
+		# ------------------------------------------------
+
+		if not is_instance_valid(actor):
+			continue
+
+		if actor.hp <= 0:
+			continue
+
+		# ------------------------------------------------
+		# Skip invalid targets
+		# ------------------------------------------------
+
+		if action_target != null:
+
+			if not is_instance_valid(action_target):
+				continue
+
+			if action_target.hp <= 0:
+				continue
+
+		# ------------------------------------------------
+		# Execute
+		# ------------------------------------------------
+
+		await _execute_action(
+			actor,
+			move,
+			action_target
+		)
+
+		if check_battle_end():
+			return
+
+	# ==================================================
+	# END OF ROUND
+	# ==================================================
+
+	if check_battle_end():
+		return
+
+	end_turn()
+
+
+func _compare_actions(
+	a: Dictionary,
+	b: Dictionary
+) -> bool:
+
+	var move_a: MoveResource = a["move"]
+	var move_b: MoveResource = b["move"]
+
+	var actor_a: AnimalBase = a["actor"]
+	var actor_b: AnimalBase = b["actor"]
+
+	# ==================================================
+	# Priority
+	# ==================================================
+
+	if move_a.priority != move_b.priority:
+
+		return move_a.priority > move_b.priority
+
+	# ==================================================
+	# Speed
+	# ==================================================
+
+	var speed_a := actor_a.get_speed()
+	var speed_b := actor_b.get_speed()
+
+	if speed_a != speed_b:
+
+		return speed_a > speed_b
+
+	# ==================================================
+	# Tie
+	# ==================================================
+	#
+	# Return false so the existing order is preserved.
+	#
+	# ==================================================
+
+	return false
+
+
+func _execute_action(
+	actor: AnimalBase,
+	move: MoveResource,
+	target: AnimalBase
+):
+
+	if not is_instance_valid(actor):
+		return
+
+	if actor.hp <= 0:
+		return
+
+	print("")
+	print(
+		"EXECUTING ACTION:",
+		actor.name,
+		"->",
+		move.move_name
+	)
+
+	print(
+		"Priority:",
+		move.priority,
+		"Speed:",
+		actor.get_speed()
+	)
+
+	if target:
+
+		print(
+			"Target:",
+			target.name,
+			"HP:",
+			target.hp
+		)
+
+	await move.execute(
+		actor,
 		target
-	)
-
-
-# ==================================================
-# Enemy Move Execution
-# ==================================================
-func _execute_enemy_move(
-	enemy: EnemyAnimal,
-	enemy_move: MoveResource
-):
-
-	if not is_instance_valid(enemy):
-		return
-
-	if enemy.hp <= 0:
-		return
-
-
-	print(
-		"EXECUTING ENEMY:",
-		enemy.name,
-		" MOVE:",
-		enemy_move.move_name
-	)
-
-
-	print(
-		"PLAYER HP BEFORE:",
-		player.hp
-	)
-
-
-	await enemy_move.execute(
-		enemy,
-		player
-	)
-
-
-	print(
-		"PLAYER HP AFTER:",
-		player.hp
 	)
 
 
@@ -636,13 +776,18 @@ func trigger_turn_end_effects():
 # ==================================================
 
 
-func check_battle_end():
+func check_battle_end() -> bool:
 
 	if battle_finished:
 		return true
 
 	if player == null:
-		return
+		print("Battle check failed: player is null")
+		return true
+
+	# ==================================================
+	# Player Defeated
+	# ==================================================
 
 	if player.hp <= 0:
 		print("Player defeated")
@@ -650,27 +795,39 @@ func check_battle_end():
 		battle_finished = true
 		current_state = TurnState.BATTLE_OVER
 
+		# ------------------------------------------
+		# Battle End Passive Effects
+		# ------------------------------------------
+
 		player.trigger_passive_event(
 			"battle_end"
 		)
 
 		for enemy in enemies:
-
-			if enemy:
+			if is_instance_valid(enemy):
 				enemy.trigger_passive_event(
 					"battle_end"
 				)
 
+		# ------------------------------------------
+		# Notify Game
+		# ------------------------------------------
+
+		print("Emitting battle_lost")
+
 		GameEvents.battle_lost.emit()
 
 		return true
+
+	# ==================================================
+	# Enemy Defeat Check
+	# ==================================================
 
 	var living_enemies := 0
 
 	print("----- Checking Enemies -----")
 
 	for enemy in enemies:
-
 		if enemy == null:
 			continue
 
@@ -684,6 +841,10 @@ func check_battle_end():
 	if living_enemies > 0:
 		return false
 
+	# ==================================================
+	# All Enemies Defeated
+	# ==================================================
+
 	print("All enemies defeated")
 
 	battle_finished = true
@@ -692,18 +853,16 @@ func check_battle_end():
 	player.trigger_passive_event("battle_end")
 
 	for enemy in enemies:
-
-		if enemy:
+		if is_instance_valid(enemy):
 			enemy.trigger_passive_event("battle_end")
+
+	print("Emitting battle_won")
 
 	GameEvents.battle_won.emit(
 		enemies[0] if enemies.size() > 0 else null
 	)
 
 	return true
-
-		#if battle_ui:
-			#battle_ui.hide()
 
 
 # ==================================================

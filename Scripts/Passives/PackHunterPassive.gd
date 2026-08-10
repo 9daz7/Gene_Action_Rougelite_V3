@@ -5,18 +5,28 @@ class_name PackHunterPassive
 @export var damage_bonus := 5
 
 
-func on_before_attack(owner,target):
+func on_before_attack(owner, data: Dictionary):
 
-	var allies = 0
+	var allies := owner.get_all_allies()
 
+	var living_allies := 0
 
-	for animal in get_tree().get_nodes_in_group("animals"):
+	for animal in allies:
 
-		if animal != owner and animal.is_alive():
-			allies += 1
+		if animal == null:
+			continue
 
+		if not is_instance_valid(animal):
+			continue
 
-	if allies > 0:
+		if animal == owner:
+			continue
+
+		if animal.is_alive():
+			living_allies += 1
+
+	if living_allies > 0:
+		return
 
 		owner.modify_attack(damage_bonus)
 

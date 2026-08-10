@@ -100,9 +100,16 @@ func modify_damage_taken(owner, damage: int) -> int:
 # Status Effects
 # ==================================================
 
+
+# Status applied to owner
 func on_apply_status(owner, data: Dictionary):
 	pass
 
+# Status received by owner
+func on_status_received(owner, data: Dictionary):
+	pass
+
+# Status removed from owner
 func on_remove_status(owner, data: Dictionary):
 	pass
 
@@ -110,6 +117,7 @@ func on_remove_status(owner, data: Dictionary):
 # ==================================================
 # Stats
 # ==================================================
+
 
 func modify_max_hp(owner, hp: int) -> int:
 	return hp
@@ -129,8 +137,8 @@ func modify_armor(owner, armor: int) -> int:
 func modify_evasion(owner, evasion: int) -> int:
 	return evasion
 
-func get_critical_bonus(owner) -> int:
-	return 0
+#func get_critical_bonus(owner) -> int:
+	#return 0
 
 # ==================================================
 # Healing

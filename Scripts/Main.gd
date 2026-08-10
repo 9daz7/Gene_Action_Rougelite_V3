@@ -28,19 +28,30 @@ var current_room: RoomData = null
 
 
 func _ready():
-	
+
 	GameEvents.battle_won.connect(
 		_on_battle_won
 	)
-	
+
+	GameEvents.battle_lost.connect(
+		_on_battle_lost
+	)
+
+	if not GameEvents.battle_lost.is_connected(
+		_on_battle_lost
+	):
+		GameEvents.battle_lost.connect(
+			_on_battle_lost
+		)
+
 	print("THIS IS THE CURRENT MAIN SCRIPT")
 
 	battle_manager.initialize(
-	run_manager,
-	turn_manager,
-	battle_root,
-	battle_spawner
-)
+		run_manager,
+		turn_manager,
+		battle_root,
+		battle_spawner
+	)
 
 	gene_database.load_genes()
 
@@ -53,7 +64,7 @@ func _ready():
 
 	map_ui.hide()
 	lab_hub.hide()
-	
+
 	lab_hub.start_run_requested.connect(start_run)
 
 	map_ui.room_entered.connect(enter_room)

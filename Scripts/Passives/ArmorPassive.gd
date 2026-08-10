@@ -2,7 +2,7 @@ extends PassiveEffect
 class_name ArmorPassive
 
 
-@export var damage_reduction := 0.8
+@export var damage_reduction := 0.6
 
 
 func modify_damage_taken(
