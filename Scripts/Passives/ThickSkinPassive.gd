@@ -5,18 +5,22 @@ class_name ThickSkinPassive
 @export var damage_reduction := 0.20
 
 
-func on_before_damage(
-	owner,
-	damage_data: Dictionary
-):
+func on_before_damage(owner, damage_data: Dictionary):
 
-	var original_damage = damage_data.amount
-
-
-	var reduced_damage = original_damage * (
-		1.0 - damage_reduction
+	var original_damage: int = damage_data.get(
+		"amount",
+		0
 	)
 
+
+	if original_damage <= 0:
+		return
+
+	var reduced_damage := int(
+		original_damage * (
+			1.0 - damage_reduction
+		)
+	)
 
 	print(
 		owner.name,
@@ -26,14 +30,10 @@ func on_before_damage(
 		reduced_damage
 	)
 
-
 	damage_data.amount = int(reduced_damage)
 
-
 	if not damage_data.has("messages"):
-
 		damage_data["messages"] = []
-
 
 	damage_data.messages.append(
 		"%s's Thick Hide reduced damage!" % owner.name

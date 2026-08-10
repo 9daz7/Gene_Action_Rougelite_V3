@@ -7,7 +7,7 @@ class_name PackHunterPassive
 
 func on_before_attack(owner, data: Dictionary):
 
-	var allies := owner.get_all_allies()
+	var allies: Array = owner.get_all_allies()
 
 	var living_allies := 0
 

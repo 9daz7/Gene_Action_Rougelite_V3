@@ -3,6 +3,7 @@ class_name ToxicBloodPassive
 
 @export var poison: StatusEffect
 
+
 func on_after_damage(owner, data: Dictionary):
 
 	var amount: int = data.get(
@@ -21,6 +22,9 @@ func on_after_damage(owner, data: Dictionary):
 		return
 
 	if not is_instance_valid(attacker):
+		return
+
+	if not attacker.is_alive():
 		return
 
 	if poison == null:

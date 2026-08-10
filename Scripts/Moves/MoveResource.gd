@@ -88,7 +88,7 @@ enum TargetType {
 func execute(
 	user: AnimalBase,
 	target: AnimalBase
-):
+) -> void:
 
 	BattleLog.add_message(
 		""
@@ -127,7 +127,7 @@ func execute(
 func execute_on_target(
 	user:AnimalBase,
 	target:AnimalBase
-):
+) -> void:
 
 	match effect_type:
 
@@ -235,7 +235,7 @@ func execute_damage(
 	user: AnimalBase,
 	target: AnimalBase,
 	apply_status: bool
-):
+) -> void:
 
 	if target == null:
 		return
@@ -393,7 +393,7 @@ func execute_damage(
 func apply_effects(
 	user: AnimalBase,
 	target: AnimalBase
-):
+) -> void:
 
 	for effect in effects:
 

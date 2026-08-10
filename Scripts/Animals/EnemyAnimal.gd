@@ -36,10 +36,16 @@ func start_battle():
 
 
 func get_opponents() -> Array:
+	if turn_manager == null:
+		return []
+
 	return [turn_manager.player]
 
 
 func get_team_members() -> Array:
+	if turn_manager == null:
+		return []
+
 	return turn_manager.enemies
 
 

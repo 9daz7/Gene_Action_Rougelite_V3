@@ -26,7 +26,7 @@ func on_after_attack(owner, data: Dictionary):
 		100
 	)
 
-	if roll > poison_chance:
+	if roll <= poison_chance:
 
 		print(
 			target.name,

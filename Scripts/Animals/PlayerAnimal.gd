@@ -12,18 +12,15 @@ func start_battle():
 # Targeting
 # ==================================================
 
-func get_all_enemies() -> Array:
-	return turn_manager.enemies
-
-func get_all_allies() -> Array:
-	return [self]
-
 func get_opponents() -> Array:
 	if turn_manager == null:
 		return []
 
 	return turn_manager.enemies
 
+func get_team_members() -> Array:
+	return [self]
+	
 # ==================================================
 # Initialization
 # ==================================================

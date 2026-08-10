@@ -32,22 +32,29 @@ func initialize(resource: AnimalResource):
 	
 	setup_basic_moves()
 
+# ==================================================
+# Team / Targeting
+# ==================================================
 
-func get_all_enemies()->Array:
-	if turn_manager:
+func get_opponents() -> Array:
+	if turn_manager == null:
+		return []
 
-		return turn_manager.enemies
+	return turn_manager.enemies
 
-	return []
+
+func get_team_members() -> Array:
+	if turn_manager == null:
+		return []
+
+	return [self]
+
+func get_all_enemies() -> Array:
+	return get_opponents()
+
 
 func get_all_allies() -> Array:
-	if turn_manager:
-
-		return [
-			self
-		]
-
-	return []
+	return get_team_members()
 
 # ==================================================
 # Identity
@@ -668,12 +675,20 @@ func get_evasion() -> int:
 
 
 func get_armor() -> int:
+
 	var value = base_armor + defense_modifier
 	
 	for slot in gene_slots:
 		for gene in gene_slots[slot]:
 			value += gene.armor_bonus
 			
+	for passive in passive_effects:
+
+		value = passive.modify_armor(
+			self,
+			value
+		)
+
 	return value
 
 
@@ -965,6 +980,14 @@ func take_damage(
 			name,
 			amount
 		]
+	)
+
+	trigger_passive_event(
+		"after_damage",
+		{
+			"amount": amount,
+			"attacker": attacker
+		}
 	)
 
 	GameEvents.hp_changed.emit(
@@ -1281,7 +1304,7 @@ func trigger_passive_event(
 
 			"status_received":
 
-				passive.on_apply_status(
+				passive.on_status_received(
 					self,
 					data
 				)
