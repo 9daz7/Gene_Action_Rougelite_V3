@@ -497,6 +497,12 @@ func end_battle():
 
 	print("Enemy count before cleanup:", enemies.size())
 
+	if is_instance_valid(current_battle):
+		var battle_ui = current_battle.get_node_or_null("BattleUI")
+
+		if battle_ui:
+			battle_ui.cancel_target_selection()
+
 	for enemy in enemies:
 		print(
 			enemy.name,

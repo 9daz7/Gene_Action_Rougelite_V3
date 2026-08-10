@@ -291,9 +291,30 @@ func show_target_selection(
 	)
 
 
+func cancel_target_selection() -> void:
+
+	if not selecting_target:
+		return
+
+	print("Cancelling target selection")
+
+	selecting_target = false
+
+	if target_selection_ui:
+		target_selection_ui.hide()
+
+	enable_moves()
+
+
 func _on_target_selected(
 	enemy:EnemyAnimal
 ):
+
+	if not selecting_target:
+		return
+
+	if not is_instance_valid(enemy):
+		return
 
 	print(
 		"BattleUI target selected:",
@@ -303,9 +324,7 @@ func _on_target_selected(
 	selecting_target = false
 
 	if target_selection_ui:
-
 		target_selection_ui.hide()
-
 
 	enable_moves()
 
@@ -430,15 +449,25 @@ func _clear_optional_moves():
 
 
 func _exit_tree():
+	print("BattleUI exiting tree")
 
 	if GameEvents.hp_changed.is_connected(update_hp):
-
 		GameEvents.hp_changed.disconnect(update_hp)
 
-	if GameEvents.battle_names_updated.is_connected(
-		setup_names
-	):
+	if GameEvents.moves_updated.is_connected(setup_moves):
+		GameEvents.moves_updated.disconnect(setup_moves)
 
-		GameEvents.battle_names_updated.disconnect(
-			setup_names
-		)
+	if GameEvents.battle_names_updated.is_connected(setup_names):
+		GameEvents.battle_names_updated.disconnect(setup_names)
+
+	if GameEvents.status_changed.is_connected(update_status_labels):
+		GameEvents.status_changed.disconnect(update_status_labels)
+
+	if GameEvents.battle_initialized.is_connected(setup_battle_ui):
+		GameEvents.battle_initialized.disconnect(setup_battle_ui)
+
+	if GameEvents.request_target_selection.is_connected(show_target_selection):
+		GameEvents.request_target_selection.disconnect(show_target_selection)
+
+	if GameEvents.target_selected.is_connected(_on_target_selected):
+		GameEvents.target_selected.disconnect(_on_target_selected)
