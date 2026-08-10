@@ -348,14 +348,13 @@ func _on_move_selected(move_index: int):
 		)
 
 
-func _on_target_selected(enemy:EnemyAnimal):
+func _on_target_selected(enemy: EnemyAnimal):
 
 	if not waiting_for_target:
 		return
 
 	if enemy == null:
 		return
-
 
 	if enemy.hp <= 0:
 		print(
@@ -372,14 +371,29 @@ func _on_target_selected(enemy:EnemyAnimal):
 
 	selected_enemy = enemy
 
-	resolve_turn(
-		pending_move,
-		enemy,
-		pending_enemy_moves
-	)
+	# ==========================================
+	# Preserve the queued enemy actions
+	# ==========================================
+
+	var selected_move := pending_move
+	var selected_enemy_moves := pending_enemy_moves.duplicate()
+
+	# ==========================================
+	# Clear target-selection state
+	# ==========================================
 
 	pending_move = null
 	pending_enemy_moves.clear()
+
+	# ==========================================
+	# Clear target-selection state
+	# ==========================================
+
+	await resolve_turn(
+		selected_move,
+		enemy,
+		selected_enemy_moves
+	)
 
 
 # ==================================================
