@@ -56,7 +56,7 @@ func _ready():
 	gene_database.load_genes()
 
 	save_manager.load_game(
-		run_manager,
+		PermanentProgressionManager,
 		gene_database
 	)
 

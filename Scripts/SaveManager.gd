@@ -140,7 +140,7 @@ func load_game(
 		FileAccess.READ
 	)
 
-	if data == null:
+	if file == null:
 
 		push_error(
 			"Could not open save file"
