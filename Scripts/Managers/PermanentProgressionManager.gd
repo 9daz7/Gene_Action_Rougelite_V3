@@ -17,6 +17,17 @@ var gene_counts: Dictionary = {}
 
 
 # ==================================================
+# Gene Storage
+# ==================================================
+
+const BASE_GENE_STORAGE_CAPACITY: int = 10
+
+var gene_storage_upgrade_level: int = 0
+
+const GENE_STORAGE_PER_UPGRADE: int = 5
+
+
+# ==================================================
 # Permanent Upgrades
 # ==================================================
 
@@ -57,6 +68,10 @@ func add_currency(amount: int) -> void:
 
 	permanent_currency += amount
 
+	GameEvents.permanent_currency_changed.emit(
+		permanent_currency
+	)
+
 	print(
 		"Permanent currency gained:",
 		amount,
@@ -75,6 +90,10 @@ func spend_currency(amount: int) -> bool:
 
 	permanent_currency -= amount
 
+	GameEvents.permanent_currency_changed.emit(
+		permanent_currency
+	)
+
 	print(
 		"Permanent currency spent:",
 		amount,
@@ -89,12 +108,62 @@ func spend_currency(amount: int) -> bool:
 # Gene Collection
 # ==================================================
 
-func add_gene(gene: GeneResource, amount: int = 1) -> bool:
+
+func get_gene_storage_capacity() -> int:
+
+	return (
+		BASE_GENE_STORAGE_CAPACITY
+		+
+		gene_storage_upgrade_level
+		*
+		GENE_STORAGE_PER_UPGRADE
+	)
+
+
+func get_gene_storage_used() -> int:
+
+	var total := 0
+
+	for count in gene_counts.values():
+		total += int(count)
+
+	return total
+
+
+func can_add_gene(
+	amount: int = 1
+) -> bool:
+
+	if amount <= 0:
+		return false
+
+	return (
+		get_gene_storage_used() + amount
+		<=
+		get_gene_storage_capacity()
+	)
+
+
+func add_gene(
+	gene: GeneResource,
+	amount: int = 1
+) -> bool:
 
 	if gene == null:
 		return false
 
 	if amount <= 0:
+		return false
+
+	if not can_add_gene(amount):
+
+		print(
+			"Gene storage full:",
+			get_gene_storage_used(),
+			"/",
+			get_gene_storage_capacity()
+		)
+
 		return false
 
 	var gene_name := gene.gene_name
@@ -104,7 +173,7 @@ func add_gene(gene: GeneResource, amount: int = 1) -> bool:
 		0
 	)
 
-	gene_counts[gene_name] = current_count + amount
+	gene_counts[gene_name] = (current_count + amount)
 
 	print(
 		"Permanent gene added:",
@@ -114,6 +183,13 @@ func add_gene(gene: GeneResource, amount: int = 1) -> bool:
 		"Total:",
 		gene_counts[gene_name]
 	)
+
+	GameEvents.gene_storage_changed.emit(
+		get_gene_storage_used(),
+		get_gene_storage_capacity()
+	)
+
+	GameEvents.gene_collection_changed.emit()
 
 	return true
 
@@ -157,6 +233,13 @@ func remove_gene(gene: GeneResource, amount: int = 1) -> bool:
 		"Remaining:",
 		current_count
 	)
+
+	GameEvents.gene_storage_changed.emit(
+		get_gene_storage_used(),
+		get_gene_storage_capacity()
+	)
+
+	GameEvents.gene_collection_changed.emit()
 
 	return true
 
@@ -215,6 +298,8 @@ func trade_gene(gene: GeneResource) -> bool:
 			gene.gene_name
 		)
 
+		return false
+
 	if not remove_gene(gene):
 
 		print(
@@ -238,6 +323,9 @@ func trade_gene(gene: GeneResource) -> bool:
 
 	return true
 
+
+func get_all_gene_counts() -> Dictionary:
+	return gene_counts.duplicate()
 
 # ==================================================
 # Run Rewards

@@ -239,13 +239,12 @@ func apply_reward(reward):
 	)
 
 	if reward is GeneResource:
-		run_manager.unlock_gene(reward)
 
-	#else:
-		#print("Unknown reward type")
+		if PermanentProgressionManager.add_gene(reward):
 
-	# Temporary
-	# Actual reward logic will go here later
+			save_manager.save_game(
+				PermanentProgressionManager
+			)
 
 
 # ==================================================

@@ -2,10 +2,10 @@ extends Node
 class_name RewardManager
 
 
-@export var all_mutagens: Array[MutagenResource] = []
-
 @onready var run_manager = $"../RunManager"
 @onready var gene_database = $"../GeneDatabase"
+
+@export var all_mutagens: Array[MutagenResource] = []
 
 
 func generate_rewards(enemy: EnemyAnimal):
@@ -32,7 +32,9 @@ func generate_rewards(enemy: EnemyAnimal):
 
 
 func generate_gold(enemy_type: EnemyResource.EnemyType) -> int:
+
 	match enemy_type:
+
 		EnemyResource.EnemyType.NORMAL:
 			return randi_range(5,15)
 
@@ -55,9 +57,9 @@ func generate_gold(enemy_type: EnemyResource.EnemyType) -> int:
 			return 0
 
 
-func generate_enemy_genes(enemy: EnemyAnimal):
+func generate_enemy_genes(enemy: EnemyAnimal) -> Array[GeneResource]:
 	
-	var choices:Array[GeneResource] = []
+	var choices: Array[GeneResource] = []
 	
 	if enemy == null:
 		print("ERROR: No enemy")
@@ -80,13 +82,7 @@ func generate_enemy_genes(enemy: EnemyAnimal):
 		EnemyResource.EnemyType.BOSS:
 			amount = 2
 			
-	var pool = enemy.enemy_data.drop_gene_pool.duplicate()
-
-	#remove genes player owns
-	pool = pool.filter(
-		func(gene):
-			return not run_manager.owns_gene(gene)
-	)
+	var pool: Array[GeneResource] = enemy.enemy_data.drop_gene_pool.duplicate()
 
 	pool.shuffle()
 
@@ -94,9 +90,25 @@ func generate_enemy_genes(enemy: EnemyAnimal):
 		choices.append(pool[i])
 
 	return choices
-	
-	
+
+
+func generate_gene_rewards(amount : int = 3) -> Array[GeneResource]:
+
+	var available_genes:Array[GeneResource] = (gene_database.all_genes.duplicate())
+
+	available_genes.shuffle()
+
+	var choices: Array[GeneResource] = []
+
+	for i in range(min(amount, available_genes.size())):
+		choices.append(
+			available_genes[i]
+		)
+
+	return choices
+
 func generate_resources(enemy_type: EnemyResource.EnemyType) -> Array:
+
 	var resources: Array = []
 
 	match enemy_type:
@@ -115,90 +127,15 @@ func generate_resources(enemy_type: EnemyResource.EnemyType) -> Array:
 	return resources
 
 
-func generate_gene_rewards(amount := 3):
-
-	var available_genes:Array[GeneResource] = []
-
-	for gene in gene_database.all_genes:
-		if not run_manager.owns_gene(gene):
-			available_genes.append(gene)
-
-	available_genes.shuffle()
-
-	var choices:Array[GeneResource] = []
-
-	for i in range(min(amount, available_genes.size())):
-		choices.append(
-			available_genes[i]
-		)
-
-	return choices
-#func generate_gene_rewards(room_type: int) -> Array[GeneResource]:
-	#match room_type:
-		#RoomData.RoomType.ENEMY:
-			#if randf() < 0.2:
-				#return [
-					#gene_database.get_random_gene_by_rarity(
-						#GeneResource.Rarity.COMMON
-					#)
-				#]
-#
-			#return []
-
-
-		#RoomData.RoomType.GROUP_ENEMY:
-			#return gene_database.get_random_gene_choices(
-				#2,
-				#[
-					#GeneResource.Rarity.COMMON,
-					#GeneResource.Rarity.UNCOMMON
-				#]
-			#)
-#
-#
-		#RoomData.RoomType.ELITE:
-			#return gene_database.get_random_gene_choices(
-				#3,
-				#[
-					#GeneResource.Rarity.UNCOMMON,
-					#GeneResource.Rarity.RARE
-				#]
-			#)
-#
-#
-		#RoomData.RoomType.BOSS:
-			#return gene_database.get_random_gene_choices(
-				#3,
-				#[
-					#GeneResource.Rarity.RARE,
-					#GeneResource.Rarity.EPIC
-				#]
-			#)
-#
-#
-		#RoomData.RoomType.LAB:
-			#return gene_database.get_random_gene_choices(
-				#3,
-				#[
-					#GeneResource.Rarity.RARE,
-					#GeneResource.Rarity.EPIC
-				#]
-			#)
-#
-#
-		#_:
-			#return []
-#
-
 func generate_mutagens(room_type: int) -> Array[MutagenResource]:
-	if room_type != RoomData.RoomType.BOSS \
-	and room_type != RoomData.RoomType.ELITE \
-	and room_type != RoomData.RoomType.ABANDONED_LAB:
-
+	if (
+		room_type != RoomData.RoomType.BOSS
+		and room_type != RoomData.RoomType.ELITE
+		and room_type != RoomData.RoomType.ABANDONED_LAB
+	):
 		return []
 
-
-	var choices = all_mutagens.duplicate()
+	var choices := all_mutagens.duplicate()
 
 	choices.shuffle()
 
