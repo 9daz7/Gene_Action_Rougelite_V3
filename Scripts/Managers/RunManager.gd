@@ -240,21 +240,21 @@ func get_random_owned_genes(count:int) -> Array[GeneResource]:
 	return available
 
 
-func unlock_gene(gene:GeneResource):
-	
-	if gene_collection.has(gene):
-		return
+func add_gene_to_run(gene: GeneResource) -> bool:
 
-	gene_collection.append(gene)
+	if gene == null:
+		return false
+
+	gene_collection.append(
+		gene
+	)
 
 	print(
-		"Unlocked gene:",
+		"Gene added to run collection:",
 		gene.gene_name
 	)
 
-	GameEvents.gene_unlocked.emit(gene)
-
-	save_manager.save_game(self)
+	return true
 
 
 func owns_gene(gene: GeneResource) -> bool:
