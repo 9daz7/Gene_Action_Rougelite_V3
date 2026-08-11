@@ -435,6 +435,29 @@ func _on_battle_won(enemy):
 			enemy.enemy_data.enemy_name
 		)
 
+	# ==================================================
+	# Register Battle Victory
+	# ==================================================
+
+	if run_manager:
+		run_manager.record_battle_victory(
+			enemies
+		)
+
+		print(
+			"Total enemies defeated this run:",
+			run_manager.enemies_defeated
+		)
+
+	else:
+		push_error(
+			"BattleManager has no RunManager"
+		)
+
+	# ==================================================
+	# Finish Battle
+	# ==================================================
+
 	GameEvents.battle_finished.emit(
 		"win"
 	)

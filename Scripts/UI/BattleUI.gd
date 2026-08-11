@@ -307,8 +307,11 @@ func cancel_target_selection() -> void:
 
 
 func _on_target_selected(
-	enemy:EnemyAnimal
+	enemy: EnemyAnimal
 ):
+
+	if not is_inside_tree():
+		return
 
 	if not selecting_target:
 		return

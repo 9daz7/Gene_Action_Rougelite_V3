@@ -191,6 +191,15 @@ func open_victory_screen():
 
 	current_room = null
 
+	var enemy_reward := PermanentProgressionManager.reward_enemy_defeats(
+		run_manager.enemies_defeated
+	)
+
+	print(
+		"Permanent progression reward:",
+		enemy_reward
+	)
+
 	run_manager.reset_run()
 
 	map_ui.hide()
@@ -203,11 +212,34 @@ func _on_battle_lost():
 
 	current_room = null
 
+	var enemy_reward := PermanentProgressionManager.reward_enemy_defeats(
+		run_manager.enemies_defeated
+	)
+
+	print(
+		"Permanent progression reward:",
+		enemy_reward
+	)
+
 	run_manager.reset_run()
 
 	map_ui.hide()
 
 	open_lab_hub()
+
+
+func finish_run():
+
+	var enemy_reward := PermanentProgressionManager.reward_enemy_defeats(
+		run_manager.enemies_defeated
+	)
+
+	print(
+		"Permanent progression reward:",
+		enemy_reward
+	)
+
+	run_manager.reset_run()
 
 
 func return_to_map():

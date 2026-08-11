@@ -22,6 +22,8 @@ var max_hp:int = 100
 
 var run_active := false
 
+var enemies_defeated: int = 0
+
 
 # ==================================================
 # Current Animal
@@ -35,6 +37,26 @@ var current_animal_build:AnimalBuildResource
 # ==================================================
 
 var gene_collection: Array[GeneResource] = []
+
+
+func remove_gene(
+	gene: GeneResource
+) -> bool:
+
+	if gene == null:
+		return false
+
+	if not gene_collection.has(gene):
+		return false
+
+	gene_collection.erase(gene)
+
+	print(
+		"Gene removed from collection:",
+		gene.gene_name
+	)
+
+	return true
 
 
 # ==================================================
@@ -85,9 +107,6 @@ func start_run():
 
 	player_hp = max_hp
 
-	#player_hp = current_animal_build.final_hp
-	#max_hp = current_animal_build.final_hp
-
 	GameEvents.hp_changed.emit(
 		player_hp,
 		max_hp
@@ -107,25 +126,16 @@ func start_run():
 		current_animal_build.animal_name
 	)
 
-	#for gene in current_animal_build.genes:
-		#print(
-			#"Gene:",
-			#gene.gene_name
-		#)
-#
-	#for move in current_animal_build.moves:
-		#print(
-			#"Move:",
-			#move.move_name
-		#)
 
-
-func reset_run():
-
-	run_active = false
+func reset_run() -> void:
 
 	gold = 0
 	player_hp = max_hp
+	run_active = false
+
+	enemies_defeated = 0
+
+	current_animal_build = null
 
 	GameEvents.gold_changed.emit(gold)
 
@@ -134,11 +144,40 @@ func reset_run():
 		max_hp
 	)
 
-	current_animal_build = null
-	
 	print("Run reset")
-	
-	
+
+
+# ==================================================
+# Enemy Defeats
+# ==================================================
+
+
+func record_battle_victory(defeated_enemies: Array) -> void:
+
+	var defeated_count := 0
+
+	for enemy in defeated_enemies:
+
+		if enemy == null:
+			continue
+
+		if not enemy.is_alive():
+			defeated_count += 1
+
+	enemies_defeated += defeated_count
+
+	print(
+		"Battle victory:",
+		defeated_count,
+		" enemies defeated"
+	)
+
+	print(
+		"Total enemies defeated this run:",
+		enemies_defeated
+	)
+
+
 # ==================================================
 # Animal Management
 # ==================================================

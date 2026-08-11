@@ -55,18 +55,27 @@ func show_targets(
 
 func select_target(enemy:EnemyAnimal):
 
+	if not visible:
+		return
+
+	if not is_instance_valid(enemy):
+		return
+
+	if enemy.hp <= 0:
+		return
+
 	print(
 		"Target button selected:",
 		enemy.name
 	)
 
-	GameEvents.target_selected.emit(
-		enemy
-	)
-
 	hide()
 
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+	GameEvents.target_selected.emit(
+		enemy
+	)
 
 
 func _clear_buttons():

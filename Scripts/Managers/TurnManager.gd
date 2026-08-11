@@ -101,6 +101,12 @@ func initialize(
 
 func _ready():
 
+	print("================================")
+	print("TURN MANAGER READY")
+	print("TurnManager ID:", get_instance_id())
+	print("Connecting to GameEvents")
+	print("================================")
+
 	if not GameEvents.move_selected.is_connected(
 		_on_move_selected
 	):
@@ -116,6 +122,14 @@ func _ready():
 		GameEvents.target_selected.connect(
 			_on_target_selected
 		)
+
+	print(
+		"Target selected connected:",
+		GameEvents.target_selected.is_connected(
+			_on_target_selected
+		)
+	)
+
 
 # ==================================================
 # Battle Setup
@@ -438,13 +452,28 @@ func _on_move_selected(move_index: int):
 
 func _on_target_selected(enemy: EnemyAnimal):
 
+	print("")
+	print("================================")
+	print("TURN MANAGER RECEIVED TARGET")
+	print("TurnManager ID:", get_instance_id())
+	print("Enemy:", enemy)
+	print("Enemy name:", enemy.name if enemy else "NULL")
+	print("Waiting for target:", waiting_for_target)
+	print("Current state:", current_state)
+	print("Pending move:", pending_move)
+	print("Pending enemy moves:", pending_enemy_moves.size())
+	print("================================")
+
 	if not waiting_for_target:
+		print("IGNORING TARGET: not waiting for target")
 		return
 
 	if enemy == null:
+		print("IGNORING TARGET: enemy is null")
 		return
 
 	if not is_instance_valid(enemy):
+		print("IGNORING TARGET: enemy is invalid")
 		return
 
 	if enemy.hp <= 0:
@@ -477,6 +506,13 @@ func _on_target_selected(enemy: EnemyAnimal):
 
 	pending_move = null
 	pending_enemy_moves.clear()
+
+	print("================================")
+	print("RESOLVING SELECTED TARGET")
+	print("Move:", selected_move.move_name if selected_move else "NULL")
+	print("Target:", enemy.name)
+	print("Enemy actions:", selected_enemy_moves.size())
+	print("================================")
 
 	# ==========================================
 	# Clear target-selection state

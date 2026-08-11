@@ -37,17 +37,30 @@ func initialize(resource: AnimalResource):
 # ==================================================
 
 func get_opponents() -> Array:
+
 	if turn_manager == null:
 		return []
 
-	return turn_manager.enemies
+	if self == turn_manager.player:
+		return turn_manager.enemies
+
+	return [turn_manager.player]
 
 
 func get_team_members() -> Array:
 	if turn_manager == null:
 		return []
 
-	return [self]
+	if self == turn_manager.player:
+		return [self]
+
+	var allies: Array = []
+
+	for enemy in turn_manager.enemies:
+		if is_instance_valid(enemy) and enemy.hp > 0:
+			allies.append(enemy)
+
+	return allies
 
 func get_all_enemies() -> Array:
 	return get_opponents()
@@ -803,7 +816,7 @@ func setup_player_hp(manager):
 
 var is_protecting := false
 
-# 80% damage reduction
+# 60% damage reduction
 var protect_reduction := 0.6
 
 
@@ -1049,7 +1062,8 @@ func take_status_damage(
 
 func die():
 
-	hp = 0
+	if hp > 0:
+		return
 
 	trigger_passive_event(
 		"death"

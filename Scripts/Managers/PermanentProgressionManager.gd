@@ -1,5 +1,4 @@
 extends Node
-class_name PermanentProgressionManager
 
 
 # ==================================================
@@ -7,6 +6,18 @@ class_name PermanentProgressionManager
 # ==================================================
 
 var permanent_currency: int = 0
+
+
+# ==================================================
+# Gene Trade Values
+# ==================================================
+
+const GENE_TRADE_VALUES := {
+	GeneResource.Rarity.COMMON: 5,
+	GeneResource.Rarity.UNCOMMON: 10,
+	GeneResource.Rarity.RARE: 20,
+	GeneResource.Rarity.EPIC: 40,
+}
 
 
 # ==================================================
@@ -71,6 +82,95 @@ func spend_currency(amount: int) -> bool:
 	)
 
 	return true
+
+
+# ==================================================
+# Gene Trading
+# ==================================================
+
+func get_gene_trade_value(
+	gene: GeneResource
+) -> int:
+
+	if gene == null:
+		return 0
+
+	return GENE_TRADE_VALUES.get(
+		gene.rarity,
+		0
+	)
+
+
+func trade_gene(
+	gene: GeneResource,
+	run_manager: RunManager
+) -> bool:
+
+	if gene == null:
+		return false
+
+	if run_manager == null:
+		print(
+			"Cannot trade gene: RunManager not provided"
+		)
+
+		return false
+
+	var trade_value := get_gene_trade_value(
+		gene
+	)
+
+	if trade_value <= 0:
+		print(
+			"Cannot trade gene:",
+			gene.gene_name
+		)
+
+		return false
+
+	if not run_manager.remove_gene(gene):
+		print(
+			"Cannot trade gene:",
+			gene.gene_name,
+			"Gene is not in collection"
+		)
+
+		return false
+
+	add_currency(
+		trade_value
+	)
+
+	print(
+		"Gene traded:",
+		gene.gene_name,
+		"Value:",
+		trade_value
+	)
+
+	return true
+
+
+# ==================================================
+# Run Rewards
+# ==================================================
+
+func reward_enemy_defeats(enemy_count: int) -> int:
+
+	if enemy_count <= 0:
+		return 0
+
+	# 1 defeated enemy = 1 permanent currency
+	var reward := enemy_count
+
+	add_currency(reward)
+
+	print(
+		"Enemy defeat reward:",
+		reward
+	)
+
+	return reward
 
 
 # ==================================================
