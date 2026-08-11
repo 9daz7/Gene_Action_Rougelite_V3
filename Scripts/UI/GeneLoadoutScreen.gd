@@ -43,28 +43,46 @@ func open(owned_genes: Array[GeneResource]):
 
 
 func display_choices(genes: Array[GeneResource]):
+
 	var buttons = container.get_children()
 
 	for i in range(buttons.size()):
+
 		var btn = buttons[i]
 
 		if i < genes.size():
-			btn.text = (
-				genes[i].gene_name
-				+ " ("
-				+ str(genes[i].adaptation_cost)
-				+ ")"
+
+			var gene := genes[i]
+
+			var count: int = PermanentProgressionManager.get_gene_count(
+				gene
 			)
+
+			btn.text = (
+				gene.gene_name
+				+
+				" x"
+				+
+				str(count)
+				+
+				" ("
+				+
+				str(gene.adaptation_cost)
+				+
+				")"
+			)
+
 			btn.show()
 
 			# Avoid duplicate connections
-			if not btn.pressed.is_connected(_on_button_pressed):
+			if not btn.pressed.is_connected(_on_button_pressed(i)):
 				
 				btn.pressed.connect(
 					_on_button_pressed.bind(i)
 				)
 
 		else:
+
 			btn.hide()
 
 

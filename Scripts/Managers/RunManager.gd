@@ -212,9 +212,6 @@ func initialize_starting_collection(gene_database):
 		return
 
 	var starter_genes = [
-		
-		"Turtle shell",
-		
 	]
 
 	for gene in gene_database.all_genes:

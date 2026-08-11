@@ -2,6 +2,14 @@ extends Node
 
 
 # ==================================================
+# Signals
+# ==================================================
+
+signal gene_collection_changed
+signal gene_storage_changed
+
+
+# ==================================================
 # Permanent Currency
 # ==================================================
 
@@ -173,7 +181,9 @@ func add_gene(
 		0
 	)
 
-	gene_counts[gene_name] = (current_count + amount)
+	var was_unlocked: bool = current_count > 0
+
+	gene_counts[gene_name] = current_count + amount
 
 	print(
 		"Permanent gene added:",
@@ -184,12 +194,11 @@ func add_gene(
 		gene_counts[gene_name]
 	)
 
-	GameEvents.gene_storage_changed.emit(
-		get_gene_storage_used(),
-		get_gene_storage_capacity()
-	)
+	if not was_unlocked:
+		GameEvents.gene_unlocked.emit(gene)
 
-	GameEvents.gene_collection_changed.emit()
+	gene_collection_changed.emit()
+	gene_storage_changed.emit()
 
 	return true
 
@@ -234,12 +243,8 @@ func remove_gene(gene: GeneResource, amount: int = 1) -> bool:
 		current_count
 	)
 
-	GameEvents.gene_storage_changed.emit(
-		get_gene_storage_used(),
-		get_gene_storage_capacity()
-	)
-
-	GameEvents.gene_collection_changed.emit()
+	gene_collection_changed.emit()
+	gene_storage_changed.emit()
 
 	return true
 
@@ -253,6 +258,29 @@ func get_gene_count(gene: GeneResource) -> int:
 		gene.gene_name,
 		0
 	)
+
+
+func get_all_gene_counts() -> Dictionary:
+
+	return gene_counts.duplicate()
+
+
+func get_owned_genes(
+	gene_database: GeneDatabase
+) -> Array[GeneResource]:
+
+	var result: Array[GeneResource] = []
+
+	if gene_database == null:
+		return result
+
+	for gene in gene_database.all_genes:
+
+		if owns_gene(gene):
+
+			result.append(gene)
+
+	return result
 
 
 func owns_gene(gene: GeneResource) -> bool:
@@ -323,9 +351,6 @@ func trade_gene(gene: GeneResource) -> bool:
 
 	return true
 
-
-func get_all_gene_counts() -> Dictionary:
-	return gene_counts.duplicate()
 
 # ==================================================
 # Run Rewards

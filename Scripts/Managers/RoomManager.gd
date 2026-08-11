@@ -238,13 +238,42 @@ func apply_reward(reward):
 		reward
 	)
 
+	# ==================================================
+	# Gene Reward
+	# ==================================================
+
 	if reward is GeneResource:
 
-		if PermanentProgressionManager.add_gene(reward):
+		var added: bool = PermanentProgressionManager.add_gene(reward)
+
+		if added:
 
 			save_manager.save_game(
 				PermanentProgressionManager
 			)
+			
+			print(
+				"Permanent gene reward added:",
+				reward.gene_name
+			)
+
+		else:
+
+			print(
+				"Could not add gene reward:",
+				reward.gene_name
+			)
+
+		return
+
+	# ==================================================
+	# Unknown Reward
+	# ==================================================
+
+	print(
+		"Unknown reward type:",
+		reward
+	)
 
 
 # ==================================================

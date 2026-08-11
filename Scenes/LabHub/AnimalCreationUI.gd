@@ -103,15 +103,29 @@ func _load_owned_genes():
 
 	owned_genes.clear()
 
-	for gene in run_manager.gene_collection:
+	var permanent_genes: Array[GeneResource] = (
+		PermanentProgressionManager.get_owned_genes(
+			gene_database
+		)
+	)
+
+	for gene in permanent_genes:
+
 		owned_genes.append(gene)
 
 		print(
-			"Owned genes loaded",
-			owned_genes.size()
+			"Owned gene:",
+			gene.gene_name,
+			"x",
+			PermanentProgressionManager.get_gene_count(gene)
 		)
-		
-		
+
+	print(
+		"Owned genes loaded",
+		owned_genes.size()
+	)
+
+
 func _build_gene_buttons():
 
 	for child in gene_container.get_children():

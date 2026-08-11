@@ -45,6 +45,9 @@ func save_game(permanent_manager: Node) -> void:
 		"genes":
 			permanent_manager.gene_counts,
 
+		"gene_storage_upgrade_level":
+			permanent_manager.gene_storage_upgrade_level,
+
 		"upgrades": {
 			"max_health_level":
 				permanent_manager.max_health_level,
@@ -213,6 +216,16 @@ func load_game(
 				permanent_manager.gene_counts[
 					gene.gene_name
 				] = count
+
+	# ==================================================
+	# Load Gene Storage Upgrade
+	# ==================================================
+
+	if data.has("gene_storage_upgrade_level"):
+
+		permanent_manager.gene_storage_upgrade_level = int(
+			data["gene_storage_upgrade_level"]
+		)
 
 	# ==================================================
 	# Load Permanent Upgrades
