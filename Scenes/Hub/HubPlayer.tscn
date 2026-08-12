@@ -1,0 +1,32 @@
+[gd_scene format=3 uid="uid://fager0gtnvbd"]
+
+[ext_resource type="Script" uid="uid://bokt7i83h556u" path="res://Scenes/Hub/HubPlayer.gd" id="1_pbl33"]
+[ext_resource type="Texture2D" uid="uid://rq85nl11ce4q" path="res://Assets/Sprites/Animals/deebo_asset_test_gene_select.png" id="2_7ptil"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gs0tk"]
+size = Vector2(75, 115)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_7ptil"]
+radius = 74.0
+
+[node name="HubPlayer" type="CharacterBody2D" unique_id=1058320588]
+position = Vector2(15.695, 0)
+script = ExtResource("1_pbl33")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1977358198]
+position = Vector2(945.305, 381)
+scale = Vector2(0.05, 0.05)
+texture = ExtResource("2_7ptil")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1013688364]
+position = Vector2(944.30505, 380)
+shape = SubResource("RectangleShape2D_gs0tk")
+
+[node name="InteractionArea" type="Area2D" parent="." unique_id=1892641765]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea" unique_id=1594310104]
+position = Vector2(943.30505, 381)
+shape = SubResource("CircleShape2D_7ptil")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1184511532]
+position = Vector2(944.305, 539)

@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://dkud2pckwd72f"]
+
+[node name="LabHubV2" type="Control" unique_id=1421119555]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="World" type="Control" parent="." unique_id=819320082]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Floor" type="Node" parent="World" unique_id=258526366]
+
+[node name="Walls" type="Node" parent="World" unique_id=1789263859]
+
+[node name="Decorations" type="Node" parent="World" unique_id=569559387]
+
+[node name="Collision" type="Node" parent="World" unique_id=555567669]
+
+[node name="HubPlayer" type="CharacterBody2D" parent="." unique_id=1313772415]
+
+[node name="Sprite2D" type="Sprite2D" parent="HubPlayer" unique_id=1351818901]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HubPlayer" unique_id=914324610]
+
+[node name="InteractionArea" type="Node" parent="HubPlayer" unique_id=1674811149]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HubPlayer/InteractionArea" unique_id=1835826358]
+
+[node name="Camera2D" type="Camera2D" parent="HubPlayer" unique_id=1905478635]
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=291379974]
+
+[node name="Interactables" type="Node" parent="." unique_id=402682577]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1179913050]

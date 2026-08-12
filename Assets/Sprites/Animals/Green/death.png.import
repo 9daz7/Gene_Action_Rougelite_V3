@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://i5r0tdjdmjia"
-path="res://.godot/imported/index.icon.png-93a694170773df06a19231daced0b495.ctex"
+uid="uid://3nywr1bmlrnm"
+path="res://.godot/imported/death.png-7017fb4851d22a4c16df112914c3d8f2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Export/Web/gene_rougelite_itch4/index.icon.png"
-dest_files=["res://.godot/imported/index.icon.png-93a694170773df06a19231daced0b495.ctex"]
+source_file="res://Assets/Sprites/Animals/Green/death.png"
+dest_files=["res://.godot/imported/death.png-7017fb4851d22a4c16df112914c3d8f2.ctex"]
 
 [params]
 

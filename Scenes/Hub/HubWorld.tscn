@@ -1,0 +1,55 @@
+[gd_scene format=3 uid="uid://cedb6l4k7ejsf"]
+
+[ext_resource type="PackedScene" uid="uid://fager0gtnvbd" path="res://Scenes/Hub/HubPlayer.tscn" id="1_ve7n7"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vvpqm"]
+size = Vector2(1930, 10)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6m1m8"]
+size = Vector2(1920, 10)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_y077b"]
+size = Vector2(10, 1090)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7ptil"]
+size = Vector2(11.000061, 1099)
+
+[node name="HubWorld" type="Node2D" unique_id=636739777]
+
+[node name="Ground" type="ColorRect" parent="." unique_id=594292751]
+custom_minimum_size = Vector2(81.41, 67.395)
+anchors_preset = -1
+offset_right = 1920.0
+offset_bottom = 1079.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.100409485, 0.079954185, 0.005918807, 1)
+
+[node name="TopWall" type="StaticBody2D" parent="." unique_id=996852060]
+position = Vector2(53.88, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TopWall" unique_id=336965306]
+position = Vector2(901.12, -5)
+shape = SubResource("RectangleShape2D_vvpqm")
+
+[node name="BottomWall" type="StaticBody2D" parent="." unique_id=835409074]
+position = Vector2(0, 1078.795)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BottomWall" unique_id=321788876]
+position = Vector2(960, 5.204956)
+shape = SubResource("RectangleShape2D_6m1m8")
+
+[node name="LeftWall" type="StaticBody2D" parent="." unique_id=1250561020]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LeftWall" unique_id=1371099647]
+position = Vector2(-5, 544)
+shape = SubResource("RectangleShape2D_y077b")
+
+[node name="RightWall" type="StaticBody2D" parent="." unique_id=631970748]
+position = Vector2(1920.525, 36.69)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RightWall" unique_id=1131669164]
+position = Vector2(4.9749756, 502.81)
+shape = SubResource("RectangleShape2D_7ptil")
+
+[node name="HubPlayer" parent="." unique_id=1058320588 instance=ExtResource("1_ve7n7")]
