@@ -1,6 +1,23 @@
 [gd_scene format=3 uid="uid://cedb6l4k7ejsf"]
 
+[ext_resource type="Texture2D" uid="uid://b66jvsxl5int" path="res://Assets/House.png" id="1_l370f"]
 [ext_resource type="PackedScene" uid="uid://fager0gtnvbd" path="res://Scenes/Hub/HubPlayer.tscn" id="1_ve7n7"]
+[ext_resource type="Texture2D" uid="uid://c7s0f0icm3a10" path="res://Assets/shop.png" id="2_25iap"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gs0tk"]
+size = Vector2(112, 82)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pqjnt"]
+size = Vector2(76.95453, 30.975891)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_npkn0"]
+size = Vector2(79.01663, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_l370f"]
+size = Vector2(76, 68)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_agc68"]
+size = Vector2(1730.2131, 1559.0227)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vvpqm"]
 size = Vector2(1930, 10)
@@ -16,40 +33,189 @@ size = Vector2(11.000061, 1099)
 
 [node name="HubWorld" type="Node2D" unique_id=636739777]
 
-[node name="Ground" type="ColorRect" parent="." unique_id=594292751]
-custom_minimum_size = Vector2(81.41, 67.395)
-anchors_preset = -1
-offset_right = 1920.0
-offset_bottom = 1079.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.100409485, 0.079954185, 0.005918807, 1)
+[node name="Ground" type="Node2D" parent="." unique_id=1386503651]
 
-[node name="TopWall" type="StaticBody2D" parent="." unique_id=996852060]
+[node name="Environment" type="Node2D" parent="." unique_id=1399107644]
+
+[node name="House" type="Node2D" parent="Environment" unique_id=3258838]
+
+[node name="Door" type="Sprite2D" parent="Environment/House" unique_id=137385899]
+
+[node name="House" type="Sprite2D" parent="Environment/House" unique_id=1616726704]
+position = Vector2(1091.035, 75.955)
+rotation = -0.0022137603
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("1_l370f")
+
+[node name="Label" type="Label" parent="Environment/House" unique_id=1427734938]
+anchors_preset = -1
+offset_left = 1064.935
+offset_top = 41.955
+offset_right = 1113.9355
+offset_bottom = 64.955
+theme_override_colors/font_color = Color(0.57700837, 0.5770084, 0.57700837, 1)
+text = "House"
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Environment/House" unique_id=1022398095]
+position = Vector2(1079.805, 79.14)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/House/StaticBody2D" unique_id=278900752]
+position = Vector2(11.194946, 17.86)
+shape = SubResource("RectangleShape2D_gs0tk")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Environment/House/StaticBody2D" unique_id=1836908402]
+position = Vector2(-12.863159, -32.662468)
+rotation = -0.598648
+shape = SubResource("RectangleShape2D_pqjnt")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Environment/House/StaticBody2D" unique_id=241572657]
+position = Vector2(37.88257, -38.415024)
+rotation = 0.598648
+shape = SubResource("RectangleShape2D_npkn0")
+
+[node name="AnimalLab" type="Node2D" parent="Environment" unique_id=1705431603]
+
+[node name="Sprite2D" type="Sprite2D" parent="Environment/AnimalLab" unique_id=708545616]
+position = Vector2(800, 940.67)
+rotation = 9.431868e-05
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("1_l370f")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Environment/AnimalLab" unique_id=1039759154]
+position = Vector2(788.855, 944.14)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/AnimalLab/StaticBody2D" unique_id=1095953344]
+position = Vector2(11.194946, 17.86)
+shape = SubResource("RectangleShape2D_gs0tk")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Environment/AnimalLab/StaticBody2D" unique_id=1513573762]
+position = Vector2(-12.863159, -32.662468)
+rotation = -0.598648
+shape = SubResource("RectangleShape2D_pqjnt")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Environment/AnimalLab/StaticBody2D" unique_id=1889659225]
+position = Vector2(37.88257, -38.415024)
+rotation = 0.598648
+shape = SubResource("RectangleShape2D_npkn0")
+
+[node name="Label" type="Label" parent="Environment/AnimalLab" unique_id=473173029]
+anchors_preset = -1
+offset_left = 759.11
+offset_top = 906.24
+offset_right = 842.11017
+offset_bottom = 929.24
+theme_override_colors/font_color = Color(0.43134022, 0.43134025, 0.43134025, 1)
+text = "AnimalLab"
+
+[node name="UpgradeShop" type="Node2D" parent="Environment" unique_id=618326344]
+
+[node name="Sprite2D" type="Sprite2D" parent="Environment/UpgradeShop" unique_id=1825380639]
+position = Vector2(700, 500)
+rotation = 0.0010443345
+scale = Vector2(0.045, 0.045)
+texture = ExtResource("2_25iap")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Environment/UpgradeShop" unique_id=178012336]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/UpgradeShop/StaticBody2D" unique_id=32498601]
+position = Vector2(700, 500)
+shape = SubResource("RectangleShape2D_l370f")
+
+[node name="Label" type="Label" parent="Environment/UpgradeShop" unique_id=974746415]
+anchors_preset = -1
+offset_left = 675.0
+offset_top = 466.38
+offset_right = 784.0
+offset_bottom = 489.38
+scale = Vector2(0.465, 0.465)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Upgrade Shop"
+
+[node name="ItemShop" type="Node2D" parent="Environment" unique_id=995183207]
+
+[node name="Sprite2D" type="Sprite2D" parent="Environment/ItemShop" unique_id=500807375]
+position = Vector2(700, 356.21)
+rotation = -0.0020035903
+scale = Vector2(0.045, 0.045)
+texture = ExtResource("2_25iap")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Environment/ItemShop/Sprite2D" unique_id=591024176]
+position = Vector2(423.02, 600)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/ItemShop/Sprite2D/StaticBody2D" unique_id=760710703]
+position = Vector2(-423.0088, -604.66504)
+scale = Vector2(0.9999999, 0.9999999)
+shape = SubResource("RectangleShape2D_agc68")
+
+[node name="Label" type="Label" parent="Environment/ItemShop" unique_id=638980062]
+anchors_preset = -1
+offset_left = 682.965
+offset_top = 322.245
+offset_right = 761.965
+offset_bottom = 345.24503
+scale = Vector2(0.465, 0.465)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Item Shop"
+
+[node name="RunEntrance" type="Node2D" parent="Environment" unique_id=1981127881]
+
+[node name="Node2D" type="Node2D" parent="Environment" unique_id=1631660167]
+
+[node name="Collision" type="Node2D" parent="." unique_id=954128343]
+
+[node name="Walls" type="Node2D" parent="Collision" unique_id=278341931]
+
+[node name="TopWall" type="StaticBody2D" parent="Collision/Walls" unique_id=996852060]
 position = Vector2(53.88, 0)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="TopWall" unique_id=336965306]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Collision/Walls/TopWall" unique_id=336965306]
 position = Vector2(901.12, -5)
 shape = SubResource("RectangleShape2D_vvpqm")
 
-[node name="BottomWall" type="StaticBody2D" parent="." unique_id=835409074]
+[node name="BottomWall" type="StaticBody2D" parent="Collision/Walls" unique_id=835409074]
 position = Vector2(0, 1078.795)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="BottomWall" unique_id=321788876]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Collision/Walls/BottomWall" unique_id=321788876]
 position = Vector2(960, 5.204956)
 shape = SubResource("RectangleShape2D_6m1m8")
 
-[node name="LeftWall" type="StaticBody2D" parent="." unique_id=1250561020]
+[node name="LeftWall" type="StaticBody2D" parent="Collision/Walls" unique_id=1250561020]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="LeftWall" unique_id=1371099647]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Collision/Walls/LeftWall" unique_id=1371099647]
 position = Vector2(-5, 544)
 shape = SubResource("RectangleShape2D_y077b")
 
-[node name="RightWall" type="StaticBody2D" parent="." unique_id=631970748]
+[node name="RightWall" type="StaticBody2D" parent="Collision/Walls" unique_id=631970748]
 position = Vector2(1920.525, 36.69)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RightWall" unique_id=1131669164]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Collision/Walls/RightWall" unique_id=1131669164]
 position = Vector2(4.9749756, 502.81)
 shape = SubResource("RectangleShape2D_7ptil")
 
+[node name="Buildings" type="StaticBody2D" parent="Collision" unique_id=638993091]
+
+[node name="House" type="CollisionShape2D" parent="Collision/Buildings" unique_id=7313609]
+
+[node name="AnimalLab" type="CollisionShape2D" parent="Collision/Buildings" unique_id=431939993]
+
+[node name="Shop1" type="CollisionShape2D" parent="Collision/Buildings" unique_id=1025532014]
+
+[node name="Shop2" type="CollisionShape2D" parent="Collision/Buildings" unique_id=1509734896]
+
+[node name="Obstacles" type="StaticBody2D" parent="Collision" unique_id=567880528]
+
+[node name="Tree" type="CollisionShape2D" parent="Collision/Obstacles" unique_id=607208044]
+
+[node name="Rock" type="CollisionShape2D" parent="Collision/Obstacles" unique_id=278253016]
+
+[node name="Crates" type="CollisionShape2D" parent="Collision/Obstacles" unique_id=1231455112]
+
+[node name="Fences" type="CollisionShape2D" parent="Collision/Obstacles" unique_id=731083169]
+
 [node name="HubPlayer" parent="." unique_id=1058320588 instance=ExtResource("1_ve7n7")]
+
+[node name="Foreground" type="Node2D" parent="." unique_id=34531133]
+
+[node name="Lighting" type="Node2D" parent="." unique_id=832601277]
+
+[node name="PointLight2D" type="PointLight2D" parent="Lighting" unique_id=138051988]

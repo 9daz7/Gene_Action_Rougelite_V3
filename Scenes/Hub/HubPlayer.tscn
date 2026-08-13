@@ -4,10 +4,10 @@
 [ext_resource type="Texture2D" uid="uid://rq85nl11ce4q" path="res://Assets/Sprites/Animals/deebo_asset_test_gene_select.png" id="2_7ptil"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gs0tk"]
-size = Vector2(75, 115)
+size = Vector2(11.999992, 31)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_7ptil"]
-radius = 74.0
+radius = 29.62261
 
 [node name="HubPlayer" type="CharacterBody2D" unique_id=1058320588]
 position = Vector2(15.695, 0)
@@ -15,18 +15,23 @@ script = ExtResource("1_pbl33")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1977358198]
 position = Vector2(945.305, 381)
-scale = Vector2(0.05, 0.05)
+scale = Vector2(0.02, 0.02)
 texture = ExtResource("2_7ptil")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1013688364]
-position = Vector2(944.30505, 380)
+position = Vector2(945.305, 383.5)
+rotation = 0.0015685768
 shape = SubResource("RectangleShape2D_gs0tk")
 
 [node name="InteractionArea" type="Area2D" parent="." unique_id=1892641765]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea" unique_id=1594310104]
-position = Vector2(943.30505, 381)
+position = Vector2(944.75, 381)
+rotation = -0.009292991
 shape = SubResource("CircleShape2D_7ptil")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1184511532]
-position = Vector2(944.305, 539)
+position = Vector2(945.305, 539)
+rotation = -0.0015576184
+zoom = Vector2(2, 2)
+drag_vertical_offset = -1.0
