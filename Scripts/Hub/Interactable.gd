@@ -1,4 +1,4 @@
-extends Node2D
+extends Area2D
 class_name Interactable
 
 
@@ -7,6 +7,8 @@ class_name Interactable
 # ==================================================
 
 signal interacted
+signal player_entered
+signal player_exited
 
 # ==================================================
 # Settings
@@ -26,60 +28,57 @@ var player_in_range: bool = false
 
 func _ready() -> void:
 
-	if has_node("InteractionArea"):
-		var area := $InteractionArea as Area2D
+	body_entered.connect(_on_body_entered)
+	body_exited.connect(_on_body_exited)
 
-		area.body_entered.connect(
-			_on_body_entered
-		)
-
-		area.body_exited.connect(
-			_on_body_exited
-		)
 
 # ==================================================
-# Input
+# Interaction
 # ==================================================
 
-func _unhandled_input(event: InputEvent) -> void:
+func interact() -> void:
 
 	if not player_in_range:
 		return
 
-	if event.is_action_pressed("interact"):
+	print("INTERACTED WITH:", name)
 
-		print(
-			"INTERACTED WITH:",
-			name
-		)
-
-		interacted.emit()
+	interacted.emit()
 
 # ==================================================
 # Interaction Range
 # ==================================================
 
-func _on_body_entered(body: Node) -> void:
+func _on_body_entered(body: Node2D) -> void:
 
-	if not body is CharacterBody2D:
+	if not body is HubPlayer:
 		return
 
 	player_in_range = true
 
+	body.set_nearby_interactable(self)
+
 	print(
-		"Interaction available:",
+		"Player entered interaction range:",
 		name
 	)
 
+	player_entered.emit()
 
-func _on_body_exited(body: Node) -> void:
 
-	if not body is CharacterBody2D:
+func _on_body_exited(body: Node2D) -> void:
+
+	if not body is HubPlayer:
 		return
 
 	player_in_range = false
 
+	if body.nearby_interactable == self:
+		body.set_nearby_interactable(null)
+
 	print(
-		"Interaction unavailable:",
+		"Player left interaction range:",
 		name
 	)
+
+	player_exited.emit()

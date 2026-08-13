@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://bohsv48hmsnv8"]
+
+[ext_resource type="Script" uid="uid://dujrji3acqxot" path="res://Scenes/UI/InteractionPrompt.gd" id="1_s0ya0"]
+
+[node name="InteractionPrompt" type="Control" unique_id=1894620983]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_s0ya0")
+
+[node name="Label" type="Label" parent="." unique_id=1309574795]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+text = "[E] Interact"
