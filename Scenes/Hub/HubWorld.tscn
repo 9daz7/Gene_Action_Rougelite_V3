@@ -3,6 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://b66jvsxl5int" path="res://Assets/House.png" id="1_l370f"]
 [ext_resource type="PackedScene" uid="uid://fager0gtnvbd" path="res://Scenes/Hub/HubPlayer.tscn" id="1_ve7n7"]
 [ext_resource type="Texture2D" uid="uid://c7s0f0icm3a10" path="res://Assets/shop.png" id="2_25iap"]
+[ext_resource type="Script" uid="uid://csjgqa1kcrfgr" path="res://Scripts/Hub/Interactable.gd" id="3_25iap"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gs0tk"]
 size = Vector2(112, 82)
@@ -30,6 +31,8 @@ size = Vector2(10, 1090)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7ptil"]
 size = Vector2(11.000061, 1099)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_gs0tk"]
 
 [node name="HubWorld" type="Node2D" unique_id=636739777]
 
@@ -211,6 +214,16 @@ shape = SubResource("RectangleShape2D_7ptil")
 [node name="Crates" type="CollisionShape2D" parent="Collision/Obstacles" unique_id=1231455112]
 
 [node name="Fences" type="CollisionShape2D" parent="Collision/Obstacles" unique_id=731083169]
+
+[node name="TestInteractable" type="Node2D" parent="." unique_id=532659758]
+position = Vector2(699.985, 357.575)
+scale = Vector2(7.99, 7.99)
+script = ExtResource("3_25iap")
+
+[node name="InteractionArea" type="Area2D" parent="TestInteractable" unique_id=543923695]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TestInteractable/InteractionArea" unique_id=1731827040]
+shape = SubResource("CircleShape2D_gs0tk")
 
 [node name="HubPlayer" parent="." unique_id=1058320588 instance=ExtResource("1_ve7n7")]
 
