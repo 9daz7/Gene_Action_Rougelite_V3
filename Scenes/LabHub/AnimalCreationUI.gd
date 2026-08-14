@@ -24,8 +24,10 @@ const MOVE_BUTTON = preload("res://Scenes/UI/MoveSelectButton.tscn")
 # Onready Variables
 # ==================================================
 
-@onready var run_manager = $"../../../Managers/RunManager"
-@onready var gene_database = $"../../../Managers/GeneDatabase"
+#@onready var run_manager = $"../../../Managers/RunManager"
+#@onready var gene_database = $"../../../Managers/GeneDatabase"
+var run_manager: RunManager
+var gene_database: GeneDatabase
 
 @onready var confirm_button = $ConfirmButton
 @onready var cancel_button = $CancelButton
@@ -65,8 +67,29 @@ func _ready():
 # ==================================================
 
 
+func setup(
+	new_run_manager: RunManager,
+	new_gene_database: GeneDatabase
+) -> void:
+
+	run_manager = new_run_manager
+	gene_database = new_gene_database
+
+
 func open():
-	
+
+	if run_manager == null:
+		push_error(
+			"AnimalCreationUI: RunManager has not been assigned."
+		)
+		return
+
+	if gene_database == null:
+		push_error(
+			"AnimalCreationUI: GeneDatabase has not been assigned."
+		)
+		return
+
 	selected_genes.clear()
 	selected_moves.clear()
 	available_moves.clear()

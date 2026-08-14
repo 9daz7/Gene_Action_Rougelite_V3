@@ -12,6 +12,7 @@
 [ext_resource type="Script" uid="uid://bbfr6ua0f4fu" path="res://Scripts/Managers/RoomManager.gd" id="8_hfg1r"]
 [ext_resource type="PackedScene" uid="uid://duo7vnk5nhe3f" path="res://Scenes/UI/GeneLoadoutScreen.tscn" id="8_imbg2"]
 [ext_resource type="PackedScene" uid="uid://c77fp71r8tcxd" path="res://Scenes/UI/MapUI.tscn" id="9_imbg2"]
+[ext_resource type="PackedScene" uid="uid://cedb6l4k7ejsf" path="res://Scenes/Hub/HubWorld.tscn" id="11_vk4q2"]
 [ext_resource type="PackedScene" uid="uid://behj6glwxh240" path="res://Scenes/LabHub/LabHub.tscn" id="12_4e4y2"]
 
 [node name="Main" type="Node" unique_id=1435261983]
@@ -50,6 +51,8 @@ script = ExtResource("8_hfg1r")
 
 [node name="World" type="Node2D" parent="." unique_id=903047276]
 
+[node name="HubWorld" parent="World" unique_id=636739777 instance=ExtResource("11_vk4q2")]
+
 [node name="BattleRoot" type="Node2D" parent="World" unique_id=252651737]
 
 [node name="MapRoot" type="Node2D" parent="World" unique_id=334794433]
@@ -61,6 +64,7 @@ script = ExtResource("8_hfg1r")
 [node name="MapUI" parent="UI" unique_id=701148956 instance=ExtResource("9_imbg2")]
 
 [node name="LabHub" parent="UI" unique_id=219335493 instance=ExtResource("12_4e4y2")]
+visible = false
 
 [node name="GeneLoadoutScreen" parent="UI" unique_id=38721201 instance=ExtResource("8_imbg2")]
 

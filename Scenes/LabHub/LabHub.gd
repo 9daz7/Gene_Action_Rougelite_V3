@@ -7,6 +7,8 @@ class_name LabHub
 # ==================================================
 
 signal start_run_requested
+signal build_confirmed(build: AnimalBuildResource)
+#signal lab_closed
 
 
 # ==================================================
@@ -15,18 +17,33 @@ signal start_run_requested
 
 @onready var start_button = $StartRunButton
 @onready var animal_button = $AnimalButton
-@onready var run_manager = $"../../Managers/RunManager"
-@onready var animal_creation = $AnimalCreationUI
+@onready var animal_creation: AnimalCreationUI = $AnimalCreationUI
 
 
 # ==================================================
 # Initialization
 # ==================================================
 
-func _ready():
+func _ready() -> void:
 
-	_connect_buttons()
+	_setup_connections()
+
 	animal_creation.hide()
+
+
+# ==================================================
+# Setup
+# ==================================================
+
+func setup(
+	new_run_manager: RunManager,
+	new_gene_database: GeneDatabase
+) -> void:
+
+	animal_creation.setup(
+		new_run_manager,
+		new_gene_database
+	)
 
 
 # ==================================================
@@ -34,12 +51,14 @@ func _ready():
 # ==================================================
 
 
-func open():
+func open() -> void:
+
 	print("Lab Hub opened")
 	show()
 
 
-func close():
+func close() -> void:
+
 	hide()
 	
 	
@@ -48,38 +67,69 @@ func close():
 # ==================================================
 
 
-func _connect_buttons():
+func _setup_connections() -> void:
 
-	start_button.pressed.connect(
+	if not start_button.pressed.is_connected(
 		_on_start_run_pressed
-	)
+	):
 
-	animal_button.pressed.connect(
+		start_button.pressed.connect(
+			_on_start_run_pressed
+		)
+
+	if not animal_button.pressed.is_connected(
 		_open_animal_creation
-	)
+	):
 
-	animal_creation.build_confirmed.connect(
+		animal_button.pressed.connect(
+			_open_animal_creation
+		)
+
+	if not animal_creation.build_confirmed.is_connected(
 		_on_build_confirmed
-	)
+	):
+
+		animal_creation.build_confirmed.connect(
+			_on_build_confirmed
+		)
 
 
-func _open_animal_creation():
+# ==================================================
+# Animal Creation
+# ==================================================
+
+
+func _open_animal_creation() -> void:
 
 	print("Opening animal creation")
+
 	animal_creation.open()
 
 
-func _on_start_run_pressed():
-	
-	print("LabHub requesting run start")
-	start_run_requested.emit()
-	
-	
-func _on_build_confirmed(build):
+func _on_build_confirmed(
+	build: AnimalBuildResource
+) -> void:
 
 	print(
-		"Saving animal:",
+		"LabHub received build:",
 		build.animal_name
 	)
 
-	run_manager.set_animal_build(build)
+	build_confirmed.emit(build)
+
+	animal_creation.close()
+
+	#close()
+#
+	#lab_closed.emit()
+
+
+# ==================================================
+# Run
+# ==================================================
+
+func _on_start_run_pressed() -> void:
+
+	print("LabHub requesting run start")
+
+	start_run_requested.emit()

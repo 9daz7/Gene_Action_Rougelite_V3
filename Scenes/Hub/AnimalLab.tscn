@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://cgn0n075o0ysl"]
+
+[ext_resource type="Script" uid="uid://bty5723p8q2y5" path="res://Scenes/Hub/AnimalLab.gd" id="1_vcdeo"]
+[ext_resource type="Script" uid="uid://csjgqa1kcrfgr" path="res://Scripts/Hub/Interactable.gd" id="2_xta41"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wfc4i"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_oaf1g"]
+
+[node name="AnimalLab" type="Node2D" unique_id=614979239]
+script = ExtResource("1_vcdeo")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1509671273]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=990889035]
+visible = false
+shape = SubResource("RectangleShape2D_wfc4i")
+
+[node name="Interactable" type="Area2D" parent="." unique_id=116702305]
+script = ExtResource("2_xta41")
+interaction_text = "[E] Interact"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interactable" unique_id=1703107906]
+visible = false
+shape = SubResource("RectangleShape2D_oaf1g")

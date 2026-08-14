@@ -82,17 +82,44 @@ func enter_room(room:RoomData):
 			print("Unknown room")
 
 
-func open_reward(rewards):
+func open_reward(rewards) -> void:
+
+	print("================================")
+	print("ROOM MANAGER: OPENING REWARD")
+	print("================================")
+
+	print("Rewards object:", rewards)
 
 	reward_room = REWARD_SCENE.instantiate()
 
+	if reward_room == null:
+		push_error("RoomManager: Failed to instantiate RewardRoom")
+		return
+
+	print("RewardRoom instantiated:", reward_room)
+
 	get_tree().current_scene.add_child(reward_room)
 
-	reward_room.reward_finished.connect(
+	print("RewardRoom added to current scene")
+
+	if not reward_room.reward_finished.is_connected(
 		_on_reward_finished
-	)
+	):
+
+		reward_room.reward_finished.connect(
+			_on_reward_finished
+		)
+
+	print("Calling RewardRoom.open()")
 
 	reward_room.open(rewards)
+
+	print(
+		"RewardRoom visible:",
+		reward_room.visible
+	)
+
+	print("================================")
 
 
 # ==================================================
@@ -211,6 +238,10 @@ func open_mystery(room):
 
 func _on_reward_finished(reward):
 
+	print("================================")
+	print("ROOM MANAGER: REWARD FINISHED")
+	print("================================")
+
 	if reward:
 		print("Chosen:", reward)
 	else:
@@ -224,7 +255,17 @@ func _on_reward_finished(reward):
 	if reward:
 		apply_reward(reward)
 
-	get_tree().current_scene.return_to_map()
+	if get_tree().current_scene.has_method("return_to_map"):
+
+		print("Returning to map")
+
+		get_tree().current_scene.return_to_map()
+
+	else:
+
+		push_error(
+			"RoomManager: Current scene has no return_to_map() method."
+		)
 
 
 func apply_reward(reward):

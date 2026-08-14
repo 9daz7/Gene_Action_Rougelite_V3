@@ -1,9 +1,11 @@
 [gd_scene format=3 uid="uid://cedb6l4k7ejsf"]
 
 [ext_resource type="Texture2D" uid="uid://b66jvsxl5int" path="res://Assets/House.png" id="1_l370f"]
+[ext_resource type="Script" uid="uid://dyj6c1l0hul3f" path="res://Scenes/Hub/HubWorld.gd" id="1_va13n"]
 [ext_resource type="PackedScene" uid="uid://fager0gtnvbd" path="res://Scenes/Hub/HubPlayer.tscn" id="1_ve7n7"]
 [ext_resource type="Texture2D" uid="uid://c7s0f0icm3a10" path="res://Assets/shop.png" id="2_25iap"]
 [ext_resource type="Script" uid="uid://csjgqa1kcrfgr" path="res://Scripts/Hub/Interactable.gd" id="3_25iap"]
+[ext_resource type="PackedScene" uid="uid://cgn0n075o0ysl" path="res://Scenes/Hub/AnimalLab.tscn" id="4_txqr2"]
 [ext_resource type="Script" uid="uid://dujrji3acqxot" path="res://Scenes/UI/InteractionPrompt.gd" id="5_y1qvb"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gs0tk"]
@@ -14,6 +16,15 @@ size = Vector2(76.95453, 30.975891)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_npkn0"]
 size = Vector2(79.01663, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kibel"]
+size = Vector2(114, 73)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_va13n"]
+size = Vector2(75.93652, 25.346619)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_evdtt"]
+size = Vector2(75.75073, 20)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_l370f"]
 size = Vector2(76, 68)
@@ -36,22 +47,68 @@ size = Vector2(11.000061, 1099)
 [sub_resource type="CircleShape2D" id="CircleShape2D_oaf1g"]
 
 [node name="HubWorld" type="Node2D" unique_id=636739777]
+script = ExtResource("1_va13n")
 
-[node name="Ground" type="Node2D" parent="." unique_id=1386503651]
+[node name="HubPlayer" parent="." unique_id=1058320588 instance=ExtResource("1_ve7n7")]
+
+[node name="World" type="Node2D" parent="." unique_id=1123594653]
+
+[node name="Ground" type="Node2D" parent="World" unique_id=1386503651]
 
 [node name="Environment" type="Node2D" parent="." unique_id=1399107644]
 
-[node name="House" type="Node2D" parent="Environment" unique_id=3258838]
+[node name="AnimalLab" parent="." unique_id=1259764970 instance=ExtResource("4_txqr2")]
+position = Vector2(797.62524, 933.3593)
+scale = Vector2(9.601826, 9.601826)
 
-[node name="Door" type="Sprite2D" parent="Environment/House" unique_id=137385899]
+[node name="Sprite2D2" type="Sprite2D" parent="AnimalLab" unique_id=708545616]
+position = Vector2(0.24732208, 0.76138306)
+rotation = 9.431868e-05
+scale = Vector2(0.026036715, 0.026036715)
+texture = ExtResource("1_l370f")
 
-[node name="House" type="Sprite2D" parent="Environment/House" unique_id=1616726704]
+[node name="StaticBody2D2" type="StaticBody2D" parent="AnimalLab" unique_id=1039759154]
+position = Vector2(-0.91339874, 1.1227722)
+scale = Vector2(0.10414686, 0.10414686)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AnimalLab/StaticBody2D2" unique_id=1095953344]
+position = Vector2(11.194946, 17.86)
+shape = SubResource("RectangleShape2D_gs0tk")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="AnimalLab/StaticBody2D2" unique_id=1513573762]
+position = Vector2(-12.863159, -32.662468)
+rotation = -0.598648
+shape = SubResource("RectangleShape2D_pqjnt")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="AnimalLab/StaticBody2D2" unique_id=1889659225]
+position = Vector2(37.88257, -38.415024)
+rotation = 0.598648
+shape = SubResource("RectangleShape2D_npkn0")
+
+[node name="Interactable2" type="Area2D" parent="AnimalLab" unique_id=1185801349]
+script = ExtResource("3_25iap")
+interaction_text = "[E] Interact"
+metadata/_custom_type_script = "uid://csjgqa1kcrfgr"
+
+[node name="Label" type="Label" parent="AnimalLab" unique_id=473173029]
+anchors_preset = -1
+offset_left = -4.0112457
+offset_top = -2.8243942
+offset_right = 78.988754
+offset_bottom = 20.175606
+scale = Vector2(0.1, 0.1)
+theme_override_colors/font_color = Color(0.43134022, 0.43134025, 0.43134025, 1)
+text = "AnimalLab"
+
+[node name="House" type="CollisionShape2D" parent="." unique_id=7313609]
+
+[node name="House" type="Sprite2D" parent="House" unique_id=1616726704]
 position = Vector2(1091.035, 75.955)
 rotation = -0.0022137603
 scale = Vector2(0.25, 0.25)
 texture = ExtResource("1_l370f")
 
-[node name="Label" type="Label" parent="Environment/House" unique_id=1427734938]
+[node name="Label" type="Label" parent="House" unique_id=1427734938]
 anchors_preset = -1
 offset_left = 1064.935
 offset_top = 41.955
@@ -60,72 +117,38 @@ offset_bottom = 64.955
 theme_override_colors/font_color = Color(0.57700837, 0.5770084, 0.57700837, 1)
 text = "House"
 
-[node name="StaticBody2D" type="StaticBody2D" parent="Environment/House" unique_id=1022398095]
+[node name="StaticBody2D" type="StaticBody2D" parent="House" unique_id=1022398095]
 position = Vector2(1079.805, 79.14)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/House/StaticBody2D" unique_id=278900752]
-position = Vector2(11.194946, 17.86)
-shape = SubResource("RectangleShape2D_gs0tk")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="House/StaticBody2D" unique_id=278900752]
+position = Vector2(11.194946, 20.36)
+shape = SubResource("RectangleShape2D_kibel")
 
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="Environment/House/StaticBody2D" unique_id=1836908402]
-position = Vector2(-12.863159, -32.662468)
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="House/StaticBody2D" unique_id=1836908402]
+position = Vector2(-12.462524, -36.171837)
 rotation = -0.598648
-shape = SubResource("RectangleShape2D_pqjnt")
+shape = SubResource("RectangleShape2D_va13n")
 
-[node name="CollisionShape2D3" type="CollisionShape2D" parent="Environment/House/StaticBody2D" unique_id=241572657]
-position = Vector2(37.88257, -38.415024)
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="House/StaticBody2D" unique_id=241572657]
+position = Vector2(37.68152, -38.552193)
 rotation = 0.598648
-shape = SubResource("RectangleShape2D_npkn0")
+shape = SubResource("RectangleShape2D_evdtt")
 
-[node name="AnimalLab" type="Node2D" parent="Environment" unique_id=1705431603]
+[node name="UpgradeShop" type="CollisionShape2D" parent="." unique_id=1025532014]
 
-[node name="Sprite2D" type="Sprite2D" parent="Environment/AnimalLab" unique_id=708545616]
-position = Vector2(800, 940.67)
-rotation = 9.431868e-05
-scale = Vector2(0.25, 0.25)
-texture = ExtResource("1_l370f")
-
-[node name="StaticBody2D" type="StaticBody2D" parent="Environment/AnimalLab" unique_id=1039759154]
-position = Vector2(788.855, 944.14)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/AnimalLab/StaticBody2D" unique_id=1095953344]
-position = Vector2(11.194946, 17.86)
-shape = SubResource("RectangleShape2D_gs0tk")
-
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="Environment/AnimalLab/StaticBody2D" unique_id=1513573762]
-position = Vector2(-12.863159, -32.662468)
-rotation = -0.598648
-shape = SubResource("RectangleShape2D_pqjnt")
-
-[node name="CollisionShape2D3" type="CollisionShape2D" parent="Environment/AnimalLab/StaticBody2D" unique_id=1889659225]
-position = Vector2(37.88257, -38.415024)
-rotation = 0.598648
-shape = SubResource("RectangleShape2D_npkn0")
-
-[node name="Label" type="Label" parent="Environment/AnimalLab" unique_id=473173029]
-anchors_preset = -1
-offset_left = 759.11
-offset_top = 906.24
-offset_right = 842.11017
-offset_bottom = 929.24
-theme_override_colors/font_color = Color(0.43134022, 0.43134025, 0.43134025, 1)
-text = "AnimalLab"
-
-[node name="UpgradeShop" type="Node2D" parent="Environment" unique_id=618326344]
-
-[node name="Sprite2D" type="Sprite2D" parent="Environment/UpgradeShop" unique_id=1825380639]
+[node name="Sprite2D" type="Sprite2D" parent="UpgradeShop" unique_id=1825380639]
 position = Vector2(700, 500)
-rotation = 0.0010443345
+rotation = 0.0010443344
 scale = Vector2(0.045, 0.045)
 texture = ExtResource("2_25iap")
 
-[node name="StaticBody2D" type="StaticBody2D" parent="Environment/UpgradeShop" unique_id=178012336]
+[node name="StaticBody2D" type="StaticBody2D" parent="UpgradeShop" unique_id=178012336]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/UpgradeShop/StaticBody2D" unique_id=32498601]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="UpgradeShop/StaticBody2D" unique_id=32498601]
 position = Vector2(700, 500)
 shape = SubResource("RectangleShape2D_l370f")
 
-[node name="Label" type="Label" parent="Environment/UpgradeShop" unique_id=974746415]
+[node name="Label" type="Label" parent="UpgradeShop" unique_id=974746415]
 anchors_preset = -1
 offset_left = 675.0
 offset_top = 466.38
@@ -135,35 +158,52 @@ scale = Vector2(0.465, 0.465)
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "Upgrade Shop"
 
-[node name="ItemShop" type="Node2D" parent="Environment" unique_id=995183207]
+[node name="ItemShop" type="CollisionShape2D" parent="." unique_id=1509734896]
 
-[node name="Sprite2D" type="Sprite2D" parent="Environment/ItemShop" unique_id=500807375]
+[node name="Sprite2D" type="Sprite2D" parent="ItemShop" unique_id=500807375]
 position = Vector2(700, 356.21)
 rotation = -0.0020035903
 scale = Vector2(0.045, 0.045)
 texture = ExtResource("2_25iap")
 
-[node name="StaticBody2D" type="StaticBody2D" parent="Environment/ItemShop/Sprite2D" unique_id=591024176]
+[node name="StaticBody2D" type="StaticBody2D" parent="ItemShop/Sprite2D" unique_id=591024176]
 position = Vector2(423.02, 600)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/ItemShop/Sprite2D/StaticBody2D" unique_id=760710703]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ItemShop/Sprite2D/StaticBody2D" unique_id=760710703]
 position = Vector2(-423.0088, -604.66504)
 scale = Vector2(0.9999999, 0.9999999)
 shape = SubResource("RectangleShape2D_agc68")
 
-[node name="Label" type="Label" parent="Environment/ItemShop" unique_id=638980062]
+[node name="Label" type="Label" parent="ItemShop" unique_id=638980062]
 anchors_preset = -1
-offset_left = 682.965
-offset_top = 322.245
-offset_right = 761.965
+offset_left = 682.9651
+offset_top = 322.24503
+offset_right = 761.9651
 offset_bottom = 345.24503
 scale = Vector2(0.465, 0.465)
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "Item Shop"
 
-[node name="RunEntrance" type="Node2D" parent="Environment" unique_id=1981127881]
+[node name="RunEntrance" type="Node2D" parent="." unique_id=1981127881]
 
-[node name="Node2D" type="Node2D" parent="Environment" unique_id=1631660167]
+[node name="Interactable" type="Area2D" parent="RunEntrance" unique_id=1385515555]
+script = ExtResource("3_25iap")
+metadata/_custom_type_script = "uid://csjgqa1kcrfgr"
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=901308114]
+
+[node name="InteractionPrompt" type="Control" parent="UI" unique_id=1757099720]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("5_y1qvb")
+metadata/_custom_type_script = "uid://dujrji3acqxot"
+
+[node name="Label" type="Label" parent="UI/InteractionPrompt" unique_id=2028111194]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
 
 [node name="Collision" type="Node2D" parent="." unique_id=954128343]
 
@@ -198,14 +238,6 @@ shape = SubResource("RectangleShape2D_7ptil")
 
 [node name="Buildings" type="StaticBody2D" parent="Collision" unique_id=638993091]
 
-[node name="House" type="CollisionShape2D" parent="Collision/Buildings" unique_id=7313609]
-
-[node name="AnimalLab" type="CollisionShape2D" parent="Collision/Buildings" unique_id=431939993]
-
-[node name="Shop1" type="CollisionShape2D" parent="Collision/Buildings" unique_id=1025532014]
-
-[node name="Shop2" type="CollisionShape2D" parent="Collision/Buildings" unique_id=1509734896]
-
 [node name="Obstacles" type="StaticBody2D" parent="Collision" unique_id=567880528]
 
 [node name="Tree" type="CollisionShape2D" parent="Collision/Obstacles" unique_id=607208044]
@@ -225,18 +257,6 @@ script = ExtResource("3_25iap")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Interactables/Interactable" unique_id=739325170]
 shape = SubResource("CircleShape2D_oaf1g")
-
-[node name="HubPlayer" parent="." unique_id=1058320588 instance=ExtResource("1_ve7n7")]
-
-[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=901308114]
-
-[node name="InteractionPrompt" type="Control" parent="CanvasLayer" unique_id=1757099720]
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-script = ExtResource("5_y1qvb")
-metadata/_custom_type_script = "uid://dujrji3acqxot"
 
 [node name="Foreground" type="Node2D" parent="." unique_id=34531133]
 

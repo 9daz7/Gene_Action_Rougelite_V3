@@ -1,6 +1,10 @@
 extends Node
 
 
+# ==================================================
+# Managers
+# ==================================================
+
 @onready var managers = $Managers
 
 @onready var battle_manager: BattleManager = $Managers/BattleManager
@@ -18,24 +22,29 @@ extends Node
 @onready var reward_manager = $Managers/RewardManager
 @onready var save_manager = $Managers/SaveManager
 
+# ==================================================
+# World
+# ==================================================
+
+@onready var hub_world: HubWorld = $World/HubWorld
 
 @onready var map_ui = $UI/MapUI
-@onready var lab_hub = $UI/LabHub
 @onready var room_manager = $Managers/RoomManager
 
+const LAB_HUB_SCENE = preload(
+	"res://Scenes/LabHub/LabHub.tscn"
+)
+
+# ==================================================
+# State
+# ==================================================
+
+var lab_hub: LabHub = null
 
 var current_room: RoomData = null
 
 
 func _ready():
-
-	GameEvents.battle_won.connect(
-		_on_battle_won
-	)
-
-	GameEvents.battle_lost.connect(
-		_on_battle_lost
-	)
 
 	if not GameEvents.battle_lost.is_connected(
 		_on_battle_lost
@@ -60,40 +69,164 @@ func _ready():
 		gene_database
 	)
 
-	run_manager.initialize_starting_collection(gene_database)
-
-	map_ui.hide()
-	lab_hub.hide()
-
-	lab_hub.start_run_requested.connect(start_run)
-
-	map_ui.room_entered.connect(enter_room)
-
-	lab_hub.animal_creation.build_confirmed.connect(
-		_on_build_confirmed
+	run_manager.initialize_starting_collection(
+		gene_database
 	)
 
-	open_lab_hub()
+	_create_lab_hub()
 
 
-func open_lab_hub():
-	print("Opening Lab Hub")
+	# ==================================================
+	# Hub World Setup
+	# ==================================================
+
+	hub_world.setup(
+		run_manager,
+		gene_database
+	)
+
+	if not hub_world.animal_lab_requested.is_connected(
+		_on_animal_lab_requested
+	):
+		hub_world.animal_lab_requested.connect(
+			_on_animal_lab_requested
+		)
+
+	# ==================================================
+	# Map Setup
+	# ==================================================
 
 	map_ui.hide()
 
-	lab_hub.open()
+	if not map_ui.room_entered.is_connected(
+		enter_room
+	):
 
-	print("LabHub visible:", lab_hub.visible)
+		map_ui.room_entered.connect(
+			enter_room
+		)
+
+	print("Opening Hub World")
+
+	hub_world.open()
+
+	if is_instance_valid(lab_hub):
+		lab_hub.hide()
 
 
-func _on_build_confirmed(build):
+# ==================================================
+# Hub World
+# ==================================================
+
+func _create_lab_hub() -> void:
+
+	if is_instance_valid(lab_hub):
+		return
+
+	lab_hub = LAB_HUB_SCENE.instantiate()
+
+	$UI.add_child(lab_hub)
+
+	lab_hub.setup(
+		run_manager,
+		gene_database
+	)
+
+	if not lab_hub.build_confirmed.is_connected(
+		_on_hub_build_confirmed
+	):
+
+		lab_hub.build_confirmed.connect(
+			_on_hub_build_confirmed
+		)
+
+	if not lab_hub.start_run_requested.is_connected(
+		_on_hub_start_run_requested
+	):
+
+		lab_hub.start_run_requested.connect(
+			_on_hub_start_run_requested
+		)
+
+	#lab_hub.lab_closed.connect(
+		#_on_lab_hub_closed
+	#)
+
+	lab_hub.hide()
+
+	print("LabHub created")
+
+
+func _on_hub_build_confirmed(
+	build: AnimalBuildResource
+) -> void:
 
 	print(
-		"Build confirmed:",
+		"MAIN RECEIVED BUILD:",
 		build.animal_name
 	)
 
 	run_manager.set_animal_build(build)
+
+
+func _on_hub_start_run_requested() -> void:
+
+	print("MAIN RECEIVED RUN REQUEST")
+
+	start_run()
+
+
+func open_lab_hub() -> void:
+
+	print("================================")
+	print("OPENING LAB HUB")
+	print("================================")
+
+	map_ui.hide()
+
+	hub_world.close()
+
+	if not is_instance_valid(lab_hub):
+		push_error("LabHub instance is missing.")
+		return
+
+	lab_hub.show()
+
+	print("LabHub visible:",
+		lab_hub.visible
+	)
+
+
+func _on_lab_hub_closed() -> void:
+
+	print("MAIN: LabHub closed")
+
+	lab_hub.hide()
+
+	hub_world.open()
+
+
+func _on_animal_lab_requested() -> void:
+
+	if run_manager.run_active:
+		print("Ignoring Animal Lab request because a run is active")
+		return
+
+	print("MAIN: Animal Lab requested")
+
+	hub_world.close()
+
+	open_lab_hub()
+
+
+#func _on_build_confirmed(build):
+#
+	#print(
+		#"Build confirmed:",
+		#build.animal_name
+	#)
+#
+	#run_manager.set_animal_build(build)
 
 
 func start_run():
@@ -102,7 +235,7 @@ func start_run():
 	print("MAIN START_RUN CALLED")
 	print("======================")
 
-	GameEvents.run_started.emit()
+	#GameEvents.run_started.emit()
 
 	if run_manager.current_animal_build == null:
 		print("ERROR: No animal build exists")
@@ -115,9 +248,13 @@ func start_run():
 
 	run_manager.start_run()
 
+	GameEvents.run_started.emit()
+
 	map_manager.generate_map()
 
+	hub_world.close()
 	lab_hub.hide()
+
 	map_ui.show()
 
 	map_ui.display_map(
@@ -244,8 +381,6 @@ func finish_run():
 
 func return_to_map():
 	print("Returning to map")
-
-	lab_hub.hide()
 
 	map_ui.display_map(
 		map_manager.current_map
