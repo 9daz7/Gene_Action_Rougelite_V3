@@ -39,3 +39,8 @@ layout_mode = 2
 [node name="BattleUI" parent="." unique_id=1277132647 instance=ExtResource("2_jaxsk")]
 
 [node name="TargetSelectionUI" parent="." unique_id=880802949 instance=ExtResource("3_k6flv")]
+custom_minimum_size = Vector2(38.75, 0)
+offset_left = 23.495
+offset_top = 49.745
+offset_right = 62.245003
+offset_bottom = 81.745

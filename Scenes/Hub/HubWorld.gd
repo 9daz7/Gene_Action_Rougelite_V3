@@ -10,6 +10,7 @@ signal animal_lab_requested
 #signal start_run_requested
 #signal build_confirmed(build: AnimalBuildResource)
 
+var is_open := false
 
 # ==================================================
 # Onready Variables
@@ -62,14 +63,33 @@ func setup(
 
 func open() -> void:
 
+	is_open = true
+
+	process_mode = Node.PROCESS_MODE_INHERIT
+
 	show()
+
+	if animal_lab != null:
+		animal_lab.monitoring = true
 
 	print("HubWorld opened")
 
 
 func close() -> void:
 
+	is_open = false
+
+	if animal_lab != null:
+		animal_lab.monitoring = false
+
+	var hub_player := get_node_or_null("HubPlayer")
+
+	if hub_player is HubPlayer:
+		hub_player.set_nearby_interactable(null)
+
 	hide()
+
+	process_mode = Node.PROCESS_MODE_DISABLED
 
 	print("HubWorld closed")
 

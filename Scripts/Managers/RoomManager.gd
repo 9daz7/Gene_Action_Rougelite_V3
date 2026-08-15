@@ -10,6 +10,7 @@ class_name RoomManager
 @onready var battle_manager = $"../BattleManager"
 @onready var run_manager = $"../RunManager"
 @onready var save_manager = $"../SaveManager"
+@onready var ui = $"../../UI"
 
 
 # ==================================================
@@ -31,7 +32,7 @@ const REWARD_SCENE = preload("res://Scenes/Rooms/RewardRoom.tscn")
 # ==================================================
 
 
-var reward_room: RewardRoom = null
+var reward_room = null
 
 var treasure_room = null
 var merchant_room = null
@@ -93,14 +94,25 @@ func open_reward(rewards) -> void:
 	reward_room = REWARD_SCENE.instantiate()
 
 	if reward_room == null:
-		push_error("RoomManager: Failed to instantiate RewardRoom")
+		push_error(
+			"RoomManager: Failed to instantiate RewardRoom"
+		)
 		return
 
-	print("RewardRoom instantiated:", reward_room)
+	print(
+		"RewardRoom instantiated:",
+		reward_room
+	)
 
-	get_tree().current_scene.add_child(reward_room)
+	ui.add_child(reward_room)
 
-	print("RewardRoom added to current scene")
+	reward_room.set_anchors_and_offsets_preset(
+		Control.PRESET_FULL_RECT
+	)
+
+	print(
+		"RewardRoom added to current scene"
+	)
 
 	if not reward_room.reward_finished.is_connected(
 		_on_reward_finished
@@ -110,9 +122,13 @@ func open_reward(rewards) -> void:
 			_on_reward_finished
 		)
 
-	print("Calling RewardRoom.open()")
+	print(
+		"Calling RewardRoom.open()"
+	)
 
-	reward_room.open(rewards)
+	reward_room.open(
+		rewards
+	)
 
 	print(
 		"RewardRoom visible:",
@@ -120,7 +136,6 @@ func open_reward(rewards) -> void:
 	)
 
 	print("================================")
-
 
 # ==================================================
 # Battle Rooms

@@ -46,6 +46,13 @@ var current_room: RoomData = null
 
 func _ready():
 
+	if not GameEvents.battle_won.is_connected(
+		_on_battle_won
+	):
+		GameEvents.battle_won.connect(
+			_on_battle_won
+		)
+
 	if not GameEvents.battle_lost.is_connected(
 		_on_battle_lost
 	):
@@ -213,8 +220,6 @@ func _on_animal_lab_requested() -> void:
 		return
 
 	print("MAIN: Animal Lab requested")
-
-	hub_world.close()
 
 	open_lab_hub()
 
