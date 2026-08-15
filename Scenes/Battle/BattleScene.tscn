@@ -2,8 +2,6 @@
 
 [ext_resource type="Script" uid="uid://cjyluyrq21x3k" path="res://Scripts/Battle/BattleScene.gd" id="1_u2duk"]
 [ext_resource type="PackedScene" uid="uid://cfbv4hu5i6pr2" path="res://Scenes/UI/BattleUI.tscn" id="2_jaxsk"]
-[ext_resource type="Script" uid="uid://crbhidet0q2cr" path="res://Scenes/Battle/BattleLogPanel.gd" id="2_nutpp"]
-[ext_resource type="PackedScene" uid="uid://nqpp7pvf7fxd" path="res://Scenes/UI/TargetSelectionUI.tscn" id="3_k6flv"]
 
 [node name="BattleScene" type="Node2D" unique_id=953255763]
 script = ExtResource("1_u2duk")
@@ -25,22 +23,4 @@ position = Vector2(1301, 256)
 
 [node name="EnemySpawn3" type="Marker2D" parent="EnemyContainer" unique_id=1411174731]
 
-[node name="BattleLogPanel" type="PanelContainer" parent="." unique_id=671029663]
-custom_minimum_size = Vector2(450, 120)
-offset_left = 6.0
-offset_top = 678.0
-offset_right = 456.0
-offset_bottom = 798.0
-script = ExtResource("2_nutpp")
-
-[node name="LogText" type="RichTextLabel" parent="BattleLogPanel" unique_id=1960345354]
-layout_mode = 2
-
 [node name="BattleUI" parent="." unique_id=1277132647 instance=ExtResource("2_jaxsk")]
-
-[node name="TargetSelectionUI" parent="." unique_id=880802949 instance=ExtResource("3_k6flv")]
-custom_minimum_size = Vector2(38.75, 0)
-offset_left = 23.495
-offset_top = 49.745
-offset_right = 62.245003
-offset_bottom = 81.745

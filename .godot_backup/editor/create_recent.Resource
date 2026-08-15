@@ -1,0 +1,15 @@
+GeneResource
+EnemyResource
+AnimalResource
+StatusEffect
+MoveResource
+ArmorPassive
+SpeedBoostPassive
+PassiveEffect
+VenomGlandsPassive
+ThornsPassive
+AdrenalinePassive
+RagePassive
+QuickReflexPassive
+ThickSkinPassive
+ToxicBloodPassive

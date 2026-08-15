@@ -1,0 +1,14 @@
+ColorRect
+Interactable
+Label
+CollisionShape2D
+Node2D
+Control
+StaticBody2D
+Area2D
+Sprite2D
+InteractionPrompt
+CanvasLayer
+PointLight2D
+Node
+CharacterBody2D

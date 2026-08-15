@@ -1,25 +1,33 @@
 extends Node
 
 
+# ==================================================
+# Signals
+# ==================================================
+
 signal message_added(text)
 
 
+# ==================================================
+# Member Variables
+# ==================================================
+
 var messages:Array[String] = []
 
-var max_messages := 5
+
+# ==================================================
+# Public Functions
+# ==================================================
 
 
 func add_message(text:String):
 
-	if text.strip_edges() == "":
-		return
-
-	print("BATTLE LOG:", text)
-
 	messages.append(text)
 
-	if messages.size() > max_messages:
-		messages.pop_front()
+	print(
+		"BATTLE LOG MESSAGE COUNT:",
+		messages.size()
+	)
 
 	message_added.emit(text)
 
