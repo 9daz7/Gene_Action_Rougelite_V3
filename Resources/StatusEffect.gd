@@ -219,8 +219,8 @@ func process_turn(target: AnimalBase):
 				]
 			)
 
-			target.take_damage(
-				damage,
+			target.take_status_damage(
+				damage
 			)
 
 
@@ -235,8 +235,8 @@ func process_turn(target: AnimalBase):
 				]
 			)
 
-			target.take_damage(
-				damage,
+			target.take_status_damage(
+				damage
 			)
 
 
@@ -251,7 +251,7 @@ func process_turn(target: AnimalBase):
 				]
 			)
 
-			target.take_damage(
+			target.take_status_damage(
 				damage,
 			)
 

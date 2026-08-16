@@ -6,9 +6,9 @@
 
 [resource]
 script = ExtResource("2_oyrbi")
-effect_type = 2
 move_name = "Outspeed"
 description = "The user thinks about being faster."
+effect_type = 2
 category = 1
 effects = Array[ExtResource("1_am6l7")]([ExtResource("2_eocsn")])
 effect_target = 0
