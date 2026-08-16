@@ -307,52 +307,23 @@ var status_effects: Array = []
 
 func process_status_effects():
 
+	if not is_alive():
+		return
+
 	for effect in status_effects.duplicate():
+
+		if effect == null:
+			continue
+
+		if not is_instance_valid(effect):
+			continue
 
 		if not is_alive():
 			return
 
-
-		match effect.type:
-
-			StatusEffect.Type.POISON:
-
-				print(
-					name,
-					" takes poison damage"
-				)
-
-				take_status_damage(
-					effect.get_total_power()
-				)
-
-
-			StatusEffect.Type.BLEED:
-
-				print(
-					name,
-					" bleeds"
-				)
-
-				take_status_damage(
-					effect.get_total_power()
-				)
-
-
-			StatusEffect.Type.BURN:
-
-				print(
-					name,
-					" burns"
-				)
-
-				take_status_damage(
-					effect.get_total_power()
-				)
-
-	#for effect in status_effects.duplicate():
-		#if effect.duration <= 0:
-			#remove_status_effect(effect)
+		effect.process_turn(
+			self
+		)
 
 
 func apply_status_effect(effect:StatusEffect):
@@ -558,6 +529,12 @@ func tick_status_effects():
 
 	for effect in status_effects.duplicate():
 
+		if effect == null:
+			continue
+
+		if not is_instance_valid(effect):
+			continue
+
 		effect.duration -= 1
 
 		print(
@@ -574,6 +551,13 @@ func tick_status_effects():
 			remove_status_effect(
 				effect
 			)
+
+	status_changed.emit(self)
+
+	GameEvents.status_changed.emit(
+		self,
+		get_all_enemies()
+	)
 
 
 # ==================================================

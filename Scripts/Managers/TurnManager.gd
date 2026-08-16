@@ -178,37 +178,20 @@ func start_player_turn():
 		print("Cannot start player turn. Player is missing.")
 		return
 
+	if not player.is_alive():
+		check_battle_end()
+		return
+
 	current_state = TurnState.PLAYER_TURN
 
 	print("Player turn")
 
-	player.reset_turn_state()
-
-	player.trigger_passive_event(
-		"turn_start"
+	process_turn_start_effects(
+		player
 	)
 
-	# -----------------------------------
-	# Status damage first
-	# -----------------------------------
-
-	player.process_status_effects()
-
-	# -----------------------------------
-	# Passive turn start effects
-	# -----------------------------------
-
-	player.tick_status_effects()
-
-	# -----------------------------------
-	# Update UI
-	# -----------------------------------
-
-	GameEvents.status_changed.emit(
-		player,
-		enemies
-	)
-
+	if check_battle_end():
+		return
 
 	GameEvents.turn_changed.emit(
 		current_state
@@ -239,6 +222,37 @@ func start_player_turn():
 	#GameEvents.moves_updated.emit(
 		#player
 	#)
+
+
+func process_turn_start_effects(
+	animal: AnimalBase
+):
+
+	if animal == null:
+		return
+
+	if not is_instance_valid(animal):
+		return
+
+	if not animal.is_alive():
+		return
+
+	animal.reset_turn_state()
+
+	animal.trigger_passive_event(
+		"turn_start"
+	)
+
+	animal.process_status_effects()
+
+	if animal.is_alive():
+
+		animal.tick_status_effects()
+
+	GameEvents.status_changed.emit(
+		animal,
+		enemies
+	)
 
 
 # ==================================================
@@ -634,7 +648,7 @@ func resolve_turn(
 		var action_target: AnimalBase = action["target"]
 
 		# ------------------------------------------------
-		# Skip defeated actors
+		# Skip invalid actors
 		# ------------------------------------------------
 
 		if not is_instance_valid(actor):
@@ -642,6 +656,22 @@ func resolve_turn(
 
 		if actor.hp <= 0:
 			continue
+
+		# ------------------------------------------------
+		# Turn-start effects
+		# ------------------------------------------------
+
+		if actor is EnemyAnimal:
+
+			process_turn_start_effects(
+				actor
+			)
+
+			if check_battle_end():
+				return
+
+			if actor.hp <= 0:
+				continue
 
 		# ------------------------------------------------
 		# Skip invalid targets
@@ -656,7 +686,7 @@ func resolve_turn(
 				continue
 
 		# ------------------------------------------------
-		# Execute
+		# Execute action
 		# ------------------------------------------------
 
 		await _execute_action(
@@ -664,9 +694,6 @@ func resolve_turn(
 			move,
 			action_target
 		)
-
-		if check_battle_end():
-			return
 
 	# ==================================================
 	# END OF ROUND

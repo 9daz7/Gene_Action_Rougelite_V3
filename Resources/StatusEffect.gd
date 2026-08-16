@@ -203,11 +203,14 @@ func process_turn(target: AnimalBase):
 	if not is_instance_valid(target):
 		return
 
+	if not target.is_alive():
+		return
+
 	match type:
 
 		Type.POISON:
 
-			var damage: int = get_total_power()
+			var damage := get_total_power()
 
 			BattleLog.add_message(
 				"%s took %d poison damage!" % [
@@ -218,14 +221,12 @@ func process_turn(target: AnimalBase):
 
 			target.take_damage(
 				damage,
-				null,
-				true
 			)
 
 
 		Type.BLEED:
 
-			var damage: int = get_total_power()
+			var damage := get_total_power()
 
 			BattleLog.add_message(
 				"%s took %d bleed damage!" % [
@@ -236,14 +237,12 @@ func process_turn(target: AnimalBase):
 
 			target.take_damage(
 				damage,
-				null,
-				true
 			)
 
 
 		Type.BURN:
 
-			var damage: int = get_total_power()
+			var damage := get_total_power()
 
 			BattleLog.add_message(
 				"%s took %d burn damage!" % [
@@ -254,10 +253,22 @@ func process_turn(target: AnimalBase):
 
 			target.take_damage(
 				damage,
-				null,
-				true
 			)
 
+		Type.HEAL:
+
+			var healing := get_total_power()
+
+			target.heal(
+				healing
+			)
+
+			BattleLog.add_message(
+				"%s recovered %d HP!" % [
+					target.name,
+					healing
+				]
+			)
 
 func apply_stack(
 	target,
