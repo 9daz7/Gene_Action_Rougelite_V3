@@ -2,10 +2,13 @@
 
 [ext_resource type="Script" uid="uid://cedh0hgwqddn4" path="res://Resources/StatusEffect.gd" id="1_plpxg"]
 [ext_resource type="Script" uid="uid://bnmm0xqkm6atb" path="res://Scripts/Moves/MoveResource.gd" id="2_6h4wc"]
+[ext_resource type="Resource" uid="uid://bq2kpucrulylp" path="res://Resources/StatusEffects/Bleed.tres" id="2_eudcy"]
 
 [resource]
 script = ExtResource("2_6h4wc")
 move_name = "Ferocious bite"
 description = "The user lunges forward and deals damage through a ferocious bite."
-power = 10
+effect_type = 3
+power = 7
+effects = Array[ExtResource("1_plpxg")]([ExtResource("2_eudcy")])
 metadata/_custom_type_script = "uid://bnmm0xqkm6atb"

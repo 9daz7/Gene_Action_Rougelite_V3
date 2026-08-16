@@ -4,3 +4,6 @@
 
 [resource]
 script = ExtResource("1_2fovq")
+effect_name = "Bleed"
+type = 1
+power = 2
