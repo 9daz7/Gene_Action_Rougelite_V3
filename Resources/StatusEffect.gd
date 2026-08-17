@@ -153,27 +153,32 @@ func apply(target: AnimalBase):
 			)
 
 
-func remove(target):
+func remove(target: AnimalBase) -> void:
+
+	if target == null:
+		return
+
+	var total_power := get_total_power()
 
 	match type:
 
 		Type.SPEED_UP:
-			target.modify_speed(-get_total_power())
+			target.modify_speed(-total_power)
 
 		Type.SPEED_DOWN:
-			target.modify_speed(get_total_power())
+			target.modify_speed(total_power)
 
 		Type.ATTACK_UP:
-			target.modify_attack(-get_total_power())
+			target.modify_attack(-total_power)
 
 		Type.ATTACK_DOWN:
-			target.modify_attack(get_total_power())
+			target.modify_attack(total_power)
 
 		Type.DEFENSE_UP:
-			target.modify_defense(-get_total_power())
+			target.modify_defense(-total_power)
 
 		Type.DEFENSE_DOWN:
-			target.modify_defense(get_total_power())
+			target.modify_defense(total_power)
 
 
 	print(
@@ -271,13 +276,17 @@ func process_turn(target: AnimalBase):
 			)
 
 func apply_stack(
-	target,
+	target: AnimalBase,
 	amount:int
-):
+) -> void:
 
-	var stack_amount = (
-		power * amount
-	)
+	if target == null:
+		return
+
+	if amount <= 0:
+		return
+
+	var stack_amount := power * amount
 
 	match type:
 
@@ -310,3 +319,11 @@ func apply_stack(
 			target.modify_defense(
 				-stack_amount
 			)
+
+	print(
+		effect_name,
+		" applied ",
+		amount,
+		" stack(s) to ",
+		target.name
+	)
