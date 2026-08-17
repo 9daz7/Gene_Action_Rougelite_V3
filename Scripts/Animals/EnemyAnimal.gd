@@ -35,18 +35,18 @@ func start_battle():
 		add_move(move)
 
 
-func get_opponents() -> Array:
-	if turn_manager == null:
-		return []
+#func get_opponents() -> Array:
+	#if turn_manager == null:
+		#return []
+#
+	#return [turn_manager.player]
 
-	return [turn_manager.player]
 
-
-func get_team_members() -> Array:
-	if turn_manager == null:
-		return []
-
-	return turn_manager.enemies
+#func get_team_members() -> Array:
+	#if turn_manager == null:
+		#return []
+#
+	#return turn_manager.enemies
 
 
 func choose_action(player:AnimalBase) -> MoveResource:
