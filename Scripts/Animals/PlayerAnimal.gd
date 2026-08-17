@@ -11,16 +11,16 @@ func start_battle():
 # ==================================================
 # Targeting
 # ==================================================
-
-func get_opponents() -> Array:
-	if turn_manager == null:
-		return []
-
-	return turn_manager.enemies
-
-func get_team_members() -> Array:
-	return [self]
-	
+#
+#func get_opponents() -> Array:
+	#if turn_manager == null:
+		#return []
+#
+	#return turn_manager.enemies
+#
+#func get_team_members() -> Array:
+	#return [self]
+	#
 # ==================================================
 # Initialization
 # ==================================================
@@ -51,5 +51,5 @@ func take_damage(
 # Identity
 # ==================================================
 
-func get_display_name() -> String:
-	return name
+#func get_display_name() -> String:
+	#return name
