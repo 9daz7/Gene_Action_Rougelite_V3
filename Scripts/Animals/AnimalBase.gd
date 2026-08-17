@@ -488,6 +488,19 @@ func remove_status_effect(
 	)
 
 
+func clear_status_effects() -> void:
+
+	for effect in status_effects.duplicate():
+
+		if effect == null:
+			continue
+
+		if not is_instance_valid(effect):
+			continue
+
+		remove_status_effect(effect)
+
+
 func tick_status_effects():
 
 	for effect in status_effects.duplicate():
@@ -719,20 +732,6 @@ func calculate_hit_chance(target, move_accuracy: int) -> int:
 	)
 
 	return final_chance
-	
-	#print(
-		#name,
-		#" move accuracy:",
-		#move_accuracy,
-		#" accuracy_bonus:",
-		#get_accuracy(),
-		#" target evasion:",
-		#target.get_evasion(),
-		#" final chance:",
-		#chance
-	#)
-#
-	#return clamp(chance, 10, 100)
 
 
 func setup_player_hp(manager):
@@ -758,87 +757,6 @@ var is_protecting := false
 # 60% damage reduction
 var protect_reduction := 0.6
 
-
-#func take_damage(
-	#amount:int,
-	#attacker:AnimalBase = null,
-	#is_status_damage:bool = false
-#):
-#
-	#var damage_data = {
-		#"amount": amount,
-		#"attacker": attacker
-	#}
-#
-	#trigger_passive_event(
-		#"before_damage",
-		#damage_data
-	#)
-#
-	#amount = damage_data.amount
-#
-	#if not is_status_damage:
-#
-		#amount = calculate_damage_taken(amount)
-#
-		#if is_protecting:
-			#amount = int(
-				#amount * (1.0 - protect_reduction)
-			#)
-#
-			#print(
-				#name,
-				#" blocked damage with protect"
-			#)
-#
-	#if not is_status_damage and is_protecting:
-#
-		#amount = int(
-			#amount * (1.0 - protect_reduction)
-		#)
-#
-		#print(
-			#name,
-			#" blocked damage with protect"
-		#)
-#
-	## Always deal at least 1 damage
-	#amount = max(1, amount)
-#
-	#hp -= amount
-#
-	#hp = clamp(
-		#hp,
-		#0,
-		#get_max_hp()
-	#)
-#
-	#print(
-		#name,
-		#" took ",
-		#amount,
-		#" damage. HP:",
-		#hp
-	#)
-#
-	#trigger_passive_event(
-		#"after_damage",
-		#{
-			#"amount": amount,
-			#"attacker": attacker
-		#}
-	#)
-#
-	#GameEvents.hp_changed.emit(
-		#self,
-		#hp,
-		#get_max_hp()
-	#)
-#
-	#hp_changed.emit(hp)
-#
-	#if hp <= 0:
-		#die()
 
 func take_damage(
 	amount:int,
@@ -1313,7 +1231,7 @@ func load_build(build: AnimalBuildResource):
 	gene_moves.clear()
 	selected_moves.clear()
 
-	status_effects.clear()
+	clear_status_effects()
 	
 	for slot in gene_slots:
 		gene_slots[slot].clear()
