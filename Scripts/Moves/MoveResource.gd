@@ -108,7 +108,7 @@ func execute(
 		priority
 	)
 
-	var targets = get_targets(
+	var targets := get_targets(
 		user,
 		target
 	)
@@ -116,6 +116,9 @@ func execute(
 	for current_target in targets:
 		
 		if current_target == null:
+			continue
+
+		if not is_instance_valid(current_target):
 			continue
 
 		await execute_on_target(
@@ -295,14 +298,10 @@ func execute_damage(
 	var user_critical_chance := user.get_critical_chance()
 
 	var final_critical_chance: int = clamp(
-		critical_chance + user.get_critical_chance(),
+		critical_chance + user_critical_chance,
 		0,
 		100
 	)
-	#var final_critical_chance: int = (
-		#critical_chance
-		#+ user.get_critical_chance()
-	#)
 
 	print(
 		"CRITICAL DEBUG | Move:",
