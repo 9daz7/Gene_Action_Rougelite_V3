@@ -85,5 +85,7 @@ signal permanent_gene_removed(gene, amount)
 
 
 signal hp_changed(current_hp, max_hp)
+signal animal_hp_changed(animal, current_hp, max_hp)
+
 signal player_healed(amount) 
 signal player_damaged(amount)

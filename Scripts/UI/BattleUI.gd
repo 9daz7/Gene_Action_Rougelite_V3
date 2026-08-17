@@ -63,9 +63,9 @@ func _ready():
 	_setup_buttons()
 
 	
-	if not GameEvents.hp_changed.is_connected(update_hp):
+	if not GameEvents.animal_hp_changed.is_connected(update_hp):
 
-		GameEvents.hp_changed.connect(
+		GameEvents.animal_hp_changed.connect(
 			update_hp
 		)
 
@@ -142,7 +142,7 @@ func setup_enemy_ui(
 
 func setup_names(
 		player: PlayerAnimal,
-		enemies:Array[EnemyAnimal]
+		enemies:Array
 	):
 
 	if player:
@@ -207,7 +207,7 @@ func disable_moves():
 		
 func update_status_labels(
 	player:AnimalBase,
-	enemies:Array[EnemyAnimal]
+	enemies:Array
 ):
 
 	player_status_label.text = (
@@ -275,7 +275,7 @@ func setup_battle_ui(
 
 
 func show_target_selection(
-	enemies:Array[EnemyAnimal]
+	enemies:Array
 ):
 
 	if target_selection_ui == null:
@@ -454,8 +454,8 @@ func _clear_optional_moves():
 func _exit_tree():
 	print("BattleUI exiting tree")
 
-	if GameEvents.hp_changed.is_connected(update_hp):
-		GameEvents.hp_changed.disconnect(update_hp)
+	if GameEvents.animal_hp_changed.is_connected(update_hp):
+		GameEvents.animal_hp_changed.disconnect(update_hp)
 
 	if GameEvents.moves_updated.is_connected(setup_moves):
 		GameEvents.moves_updated.disconnect(setup_moves)

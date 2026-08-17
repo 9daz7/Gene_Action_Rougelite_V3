@@ -6,7 +6,6 @@ class_name AnimalBase
 # ==================================================
 
 
-#signal hp_changed(current_hp)
 signal animal_died
 signal status_changed(animal)
 
@@ -860,7 +859,7 @@ func take_damage(
 		}
 	)
 
-	GameEvents.hp_changed.emit(
+	GameEvents.animal_hp_changed.emit(
 		self,
 		hp,
 		get_max_hp()
@@ -905,7 +904,7 @@ func take_status_damage(
 		hp
 	)
 
-	GameEvents.hp_changed.emit(
+	GameEvents.animal_hp_changed.emit(
 		self,
 		hp,
 		get_max_hp()
@@ -966,7 +965,7 @@ func heal(amount:int):
 		}
 	)
 
-	GameEvents.hp_changed.emit(
+	GameEvents.animal_hp_changed.emit(
 		self,
 		hp,
 		get_max_hp()
