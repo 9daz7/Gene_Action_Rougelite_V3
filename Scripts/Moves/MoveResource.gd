@@ -292,10 +292,17 @@ func execute_damage(
 	# Critical Hit
 	# ==========================================
 
-	var final_critical_chance: int = (
-		critical_chance
-		+ user.get_critical_chance()
+	var user_critical_chance := user.get_critical_chance()
+
+	var final_critical_chance: int = clamp(
+		critical_chance + user.get_critical_chance(),
+		0,
+		100
 	)
+	#var final_critical_chance: int = (
+		#critical_chance
+		#+ user.get_critical_chance()
+	#)
 
 	print(
 		"CRITICAL DEBUG | Move:",

@@ -371,7 +371,6 @@ func apply_status_effect(effect:StatusEffect):
 			var added_stacks: int = existing.stacks - old_stacks
 
 			if added_stacks > 0:
-
 				existing.apply_stack(
 					self,
 					added_stacks
@@ -452,43 +451,7 @@ func remove_status_effect(
 	# Remove stat modifiers
 	# ==========================================
 
-	match effect.type:
-
-		StatusEffect.Type.SPEED_UP:
-
-			speed_modifier -= (
-				effect.get_total_power()
-			)
-
-		StatusEffect.Type.SPEED_DOWN:
-			
-			speed_modifier += (
-				effect.get_total_power()
-			)
-
-		StatusEffect.Type.ATTACK_UP:
-
-			attack_modifier -= (
-				effect.get_total_power()
-			)
-
-		StatusEffect.Type.ATTACK_DOWN:
-
-			attack_modifier += (
-				effect.get_total_power()
-			)
-
-		StatusEffect.Type.DEFENSE_UP:
-
-			defense_modifier -= (
-				effect.get_total_power()
-			)
-
-		StatusEffect.Type.DEFENSE_DOWN:
-
-			defense_modifier += (
-				effect.get_total_power()
-			)
+	effect.remove(self)
 
 	# ==========================================
 	# Passive event
@@ -545,19 +508,11 @@ func tick_status_effects():
 			effect.duration
 		)
 
-
 		if effect.duration <= 0:
 
 			remove_status_effect(
 				effect
 			)
-
-	status_changed.emit(self)
-
-	GameEvents.status_changed.emit(
-		self,
-		get_all_enemies()
-	)
 
 
 # ==================================================

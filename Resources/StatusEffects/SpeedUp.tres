@@ -9,3 +9,4 @@ type = 4
 power = 4
 stat_modifier = "speed"
 can_stack = false
+refresh_duration = false
