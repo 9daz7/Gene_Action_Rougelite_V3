@@ -79,7 +79,7 @@ func _on_room_selected(room):
 
 	print("Clicked:", room.room_id)
 
-	if !map_manager.move_to_room(room):
+	if not map_manager.move_to_room(room):
 		print("Invalid path")
 		return
 
@@ -91,30 +91,3 @@ func _on_room_selected(room):
 	update_player_position(room)
 	
 	room_entered.emit(room)
-
-
-	#match room.room_type:
-		#RoomData.RoomType.ENEMY:
-			#print("Starting enemy battle")
-#
-		#RoomData.RoomType.ELITE:
-			#print("Starting elite battle")
-#
-		#RoomData.RoomType.MERCHANT_TRAP:
-			#print("Merchant was a trap!")
-			#print("Starting trap battle")
-#
-		#RoomData.RoomType.TREASURE:
-			#print("Opening treasure")
-#
-		#RoomData.RoomType.REST:
-			#print("Rest room")
-#
-		#RoomData.RoomType.MERCHANT:
-			#print("Merchant")
-#
-		#RoomData.RoomType.LAB:
-			#print("Laboratory")
-#
-		#RoomData.RoomType.BOSS:
-			#print("BOSS FIGHT")

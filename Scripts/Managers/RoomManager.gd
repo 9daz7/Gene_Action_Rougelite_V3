@@ -11,6 +11,22 @@ class_name RoomManager
 @onready var run_manager = $"../RunManager"
 @onready var save_manager = $"../SaveManager"
 @onready var ui = $"../../UI"
+@onready var map_ui = $"../../UI/MapUI"
+
+
+# ==================================================
+# Initialization
+# ==================================================
+
+func _ready():
+
+	if not GameEvents.battle_finished.is_connected(
+		_on_battle_finished
+	):
+
+		GameEvents.battle_finished.connect(
+			_on_battle_finished
+	)
 
 
 # ==================================================
@@ -31,6 +47,7 @@ const REWARD_SCENE = preload("res://Scenes/Rooms/RewardRoom.tscn")
 # Member Variables
 # ==================================================
 
+var active_room: RoomData = null
 
 var reward_room = null
 
@@ -47,9 +64,22 @@ var mystery_room = null
 
 
 func enter_room(room:RoomData):
-	
-	print("ROOM MANAGER ENTERED:", room.room_type)
-	
+
+	if room == null:
+		push_error(
+			"RoomManager: Cannot enter null room"
+		)
+		return
+
+	active_room = room
+
+	print(
+		"ROOM MANAGER ENTERED:",
+		room.room_type,
+		" ID:",
+		room.room_id
+	)
+
 	match room.room_type:
 		
 		RoomData.RoomType.ENEMY:
@@ -89,6 +119,8 @@ func open_reward(rewards) -> void:
 	print("ROOM MANAGER: OPENING REWARD")
 	print("================================")
 
+	map_ui.hide()
+
 	print("Rewards object:", rewards)
 
 	reward_room = REWARD_SCENE.instantiate()
@@ -103,6 +135,7 @@ func open_reward(rewards) -> void:
 		"RewardRoom instantiated:",
 		reward_room
 	)
+
 
 	ui.add_child(reward_room)
 
@@ -330,6 +363,70 @@ func apply_reward(reward):
 		"Unknown reward type:",
 		reward
 	)
+
+# ==================================================
+# Battle Completion
+# ==================================================
+
+
+func _on_battle_finished(result):
+
+	print("================================")
+	print("ROOM MANAGER: BATTLE FINISHED")
+	print("Result:", result)
+	print("================================")
+
+	match result:
+
+		"win":
+
+			_on_battle_won()
+
+		"lose":
+
+			_on_battle_lost()
+
+		_:
+
+			push_error(
+				"RoomManager received unknown battle result: "
+				+ str(result)
+			)
+
+
+func _on_battle_won():
+
+	print("RoomManager: Battle won")
+
+	if get_tree().current_scene.has_method(
+		"return_to_map"
+	):
+
+		get_tree().current_scene.return_to_map()
+
+	else:
+
+		push_error(
+			"RoomManager: Current scene has no return_to_map() method."
+	)
+
+
+func _on_battle_lost():
+
+	print("RoomManager: Battle lost")
+
+	# temp battle lost. code added later
+	#if get_tree().current_scene.has_method(
+		#"return_to_map"
+	#):
+#
+		#get_tree().current_scene.return_to_map()
+#
+	#else:
+#
+		#push_error(
+			#"RoomManager: Current scene has no return_to_map() method."
+	#)
 
 
 # ==================================================

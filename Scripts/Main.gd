@@ -41,7 +41,7 @@ const LAB_HUB_SCENE = preload(
 
 var lab_hub: LabHub = null
 
-var current_room: RoomData = null
+#var current_room: RoomData = null
 
 
 func _ready():
@@ -272,13 +272,20 @@ func start_run():
 
 func enter_room(room):
 
-	current_room = room
-
 	print("MAIN ENTERING ROOM:", room.room_type)
 
 	map_ui.hide()
 
 	room_manager.enter_room(room)
+#func enter_room(room):
+#
+	#current_room = room
+#
+	#print("MAIN ENTERING ROOM:", room.room_type)
+#
+	#map_ui.hide()
+#
+	#room_manager.enter_room(room)
 
 
 func _on_battle_won(enemy):
@@ -331,7 +338,7 @@ func open_victory_screen():
 
 	await get_tree().create_timer(0.0).timeout
 
-	current_room = null
+	#current_room = null
 
 	var enemy_reward := PermanentProgressionManager.reward_enemy_defeats(
 		run_manager.enemies_defeated
@@ -352,7 +359,7 @@ func open_victory_screen():
 func _on_battle_lost():
 	print("Run failed")
 
-	current_room = null
+	#current_room = null
 
 	var enemy_reward := PermanentProgressionManager.reward_enemy_defeats(
 		run_manager.enemies_defeated

@@ -74,7 +74,7 @@ func _ready():
 		GameEvents.moves_updated.connect(
 			setup_moves
 		)
-
+#
 	if not GameEvents.battle_names_updated.is_connected(
 		setup_names
 	):
@@ -264,10 +264,23 @@ func setup_battle_ui(
 		enemies
 	)
 
+	setup_names(
+		player,
+		enemies
+	)
+
 	update_status_labels(
 		player,
 		enemies
 	)
+
+	if player:
+
+		update_hp(
+			player,
+			player.hp,
+			player.get_max_hp()
+		)
 
 	print(
 		"Battle UI initialized"

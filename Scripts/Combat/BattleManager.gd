@@ -353,6 +353,7 @@ func get_enemy_count(
 
 
 func initialize_battle():
+
 	print("Battle initialized")
 
 	if player == null:
@@ -390,10 +391,10 @@ func initialize_battle():
 	)
 
 	GameEvents.hp_changed.emit(
-	player,
-	player.hp,
-	player.get_max_hp()
-)
+		player,
+		player.hp,
+		player.get_max_hp()
+	)
 
 	print("==========================")
 	print("BattleManager enemy list")
@@ -405,13 +406,14 @@ func initialize_battle():
 
 	turn_manager.initialize(
 		player,
-		enemies,
+		enemies
 	)
 
 	GameEvents.battle_started.emit(
 		player,
 		enemies
 	)
+
 
 func show_battle_start(enemy):
 
