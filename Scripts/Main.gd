@@ -41,8 +41,6 @@ const LAB_HUB_SCENE = preload(
 
 var lab_hub: LabHub = null
 
-#var current_room: RoomData = null
-
 
 func _ready():
 
@@ -105,12 +103,12 @@ func _ready():
 
 	map_ui.hide()
 
-	if not map_ui.room_entered.is_connected(
-		enter_room
+	if not GameEvents.room_entered.is_connected(
+		_on_room_entered
 	):
 
-		map_ui.room_entered.connect(
-			enter_room
+		GameEvents.room_entered.connect(
+			_on_room_entered
 		)
 
 	print("Opening Hub World")
@@ -270,23 +268,18 @@ func start_run():
 	print("Map displayed")
 
 
-func enter_room(room):
+func _on_room_entered(room: RoomData) -> void:
 
-	print("MAIN ENTERING ROOM:", room.room_type)
+	#current_room = room
+
+	print(
+		"MAIN RECEIVED ROOM ENTERED:",
+		room.room_type
+	)
 
 	map_ui.hide()
 
 	room_manager.enter_room(room)
-#func enter_room(room):
-#
-	#current_room = room
-#
-	#print("MAIN ENTERING ROOM:", room.room_type)
-#
-	#map_ui.hide()
-#
-	#room_manager.enter_room(room)
-
 
 func _on_battle_won(enemy):
 	print("MAIN RECEIVED BATTLE WON")

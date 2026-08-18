@@ -141,6 +141,10 @@ func move_to_room(room: RoomData) -> bool:
 
 	update_available_rooms()
 
+	GameEvents.room_entered.emit(
+		current_room
+	)
+
 	return true
 
 
@@ -158,6 +162,10 @@ func complete_current_room() -> void:
 	)
 	
 	update_available_rooms()
+
+	GameEvents.room_completed.emit(
+		current_room
+	)
 
 
 func generate_lab_type() -> LabResource:

@@ -2,8 +2,6 @@ extends Control
 class_name MapUI
 
 
-signal room_entered(room)
-
 
 @onready var map_manager = $"../../Managers/MapManager"
 @onready var room_container = $RoomContainer
@@ -89,5 +87,3 @@ func _on_room_selected(room):
 	print("EMITTING ROOM:", room.room_type)
 	
 	update_player_position(room)
-	
-	room_entered.emit(room)
