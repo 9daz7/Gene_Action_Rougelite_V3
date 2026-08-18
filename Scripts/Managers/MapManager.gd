@@ -119,27 +119,47 @@ func generate_map() -> void:
 
 
 func move_to_room(room: RoomData) -> bool:
-	
+
+	if current_room == null:
+		print("Cannot move: current room is null")
+		return false
+
 	if room not in current_room.connections:
-		
+	
 		print(
 			"Cannot move from",
 			current_room.room_id,
 			"to",
 			room.room_id
 		)
-		
+
 		return false
-		
-	current_room.completed = true
 
 	current_room = room
+
+	current_room.visited = true
 
 	update_available_rooms()
 
 	return true
+
+
+func complete_current_room() -> void:
 	
+	if current_room == null:
+		print("Cannot complete room: current room is null")
+		return
 	
+	current_room.completed = true
+	
+	print(
+		"ROOM COMPLETED:",
+		current_room.room_id
+	)
+	
+	update_available_rooms()
+
+
 func generate_lab_type() -> LabResource:
 
 	var roll := randf()

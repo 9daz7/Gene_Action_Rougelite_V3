@@ -10,6 +10,7 @@ class_name RoomManager
 @onready var battle_manager = $"../BattleManager"
 @onready var run_manager = $"../RunManager"
 @onready var save_manager = $"../SaveManager"
+@onready var map_manager = $"../MapManager"
 @onready var ui = $"../../UI"
 @onready var map_ui = $"../../UI/MapUI"
 
@@ -303,6 +304,8 @@ func _on_reward_finished(reward):
 	if reward:
 		apply_reward(reward)
 
+	complete_current_room()
+
 	if get_tree().current_scene.has_method("return_to_map"):
 
 		print("Returning to map")
@@ -434,9 +437,26 @@ func _on_battle_lost():
 # ==================================================
 
 
+func complete_current_room() -> void:
+	
+	if map_manager == null:
+		push_error(
+			"RoomManager: MapManager is missing."
+		)
+		return
+	
+	map_manager.complete_current_room()
+	
+	GameEvents.room_completed.emit(
+		map_manager.current_room
+	)
+
+
 func _on_treasure_finished(reward):
 
 	print("Treasure complete", reward)
+
+	complete_current_room()
 
 	treasure_room = null
 
@@ -446,6 +466,8 @@ func _on_treasure_finished(reward):
 func _on_merchant_finished():
 
 	print("Merchant complete")
+
+	complete_current_room()
 
 	if is_instance_valid(merchant_room):
 		merchant_room.close()
@@ -460,6 +482,8 @@ func _on_rest_finished():
 
 	print("Rest complete")
 
+	complete_current_room()
+
 	rest_room = null
 
 	get_tree().current_scene.return_to_map()
@@ -468,6 +492,8 @@ func _on_rest_finished():
 func _on_lab_finished():
 
 	print("Lab complete")
+
+	complete_current_room()
 
 	if is_instance_valid(abandoned_lab):
 		abandoned_lab.close()
@@ -482,6 +508,8 @@ func _on_mystery_finished():
 
 	if is_instance_valid(mystery_room):
 		mystery_room.queue_free()
+
+	complete_current_room()
 
 	mystery_room = null
 
