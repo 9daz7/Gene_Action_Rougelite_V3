@@ -17,6 +17,15 @@ class_name RoomPlayer
 
 
 # ==================================================
+# Interaction
+# ==================================================
+
+@onready var interaction_prompt: InteractionPrompt = $InteractionPrompt
+
+var nearby_interactable: Interactable = null
+
+
+# ==================================================
 # State
 # ==================================================
 
@@ -40,6 +49,11 @@ func _ready() -> void:
 			camera.is_current()
 		)
 
+	if interaction_prompt != null:
+
+		interaction_prompt.hide_prompt()
+
+
 # ==================================================
 # Physics
 # ==================================================
@@ -48,6 +62,7 @@ func _physics_process(_delta: float) -> void:
 
 	if not controls_enabled:
 		velocity = Vector2.ZERO
+		_hide_interaction_prompt()
 		return
 		
 	var direction := Input.get_vector(
@@ -60,6 +75,61 @@ func _physics_process(_delta: float) -> void:
 	velocity = direction * move_speed
 
 	move_and_slide()	
+
+	_handle_interaction()
+
+
+# ==================================================
+# Interaction
+# ==================================================
+
+func _handle_interaction() -> void:
+
+	if nearby_interactable == null:
+		return
+
+	if not Input.is_action_just_pressed(
+		"interact"
+	):
+
+		return
+
+	nearby_interactable.interact()
+
+
+# ==================================================
+# Interaction Detection
+# ==================================================
+
+func set_nearby_interactable(
+	interactable: Interactable
+) -> void:
+
+	nearby_interactable = interactable
+
+	if interaction_prompt == null:
+		return
+
+	if nearby_interactable == null:
+
+		interaction_prompt.hide_prompt()
+
+	else:
+
+		interaction_prompt.show_prompt(
+			nearby_interactable.interaction_text
+		)
+
+
+# ==================================================
+# Interaction Prompt
+# ==================================================
+
+func _hide_interaction_prompt() -> void:
+
+	if interaction_prompt != null:
+
+		interaction_prompt.hide_prompt()
 
 
 # ==================================================
@@ -75,6 +145,8 @@ func set_controls_enabled(
 	if not enabled:
 
 		velocity = Vector2.ZERO
+
+		_hide_interaction_prompt()
 
 	print(
 		"RoomPlayer controls:",

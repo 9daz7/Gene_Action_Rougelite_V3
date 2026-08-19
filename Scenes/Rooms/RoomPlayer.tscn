@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dvt7hk336elb8" path="res://Scenes/Rooms/RoomPlayer.gd" id="1_te51a"]
 [ext_resource type="Texture2D" uid="uid://rq85nl11ce4q" path="res://Assets/Sprites/Animals/deebo_asset_test_gene_select.png" id="2_sdt0f"]
+[ext_resource type="PackedScene" uid="uid://bohsv48hmsnv8" path="res://Scenes/UI/InteractionPrompt.tscn" id="3_a6y7p"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_y2tb5"]
 size = Vector2(11.999992, 31)
@@ -21,6 +22,12 @@ texture = ExtResource("2_sdt0f")
 position = Vector2(945.305, 383.5)
 rotation = 0.0015685768
 shape = SubResource("RectangleShape2D_y2tb5")
+
+[node name="InteractionPrompt" parent="." unique_id=1894620983 instance=ExtResource("3_a6y7p")]
+offset_left = 904.0
+offset_top = 346.0
+offset_right = 904.0
+offset_bottom = 346.0
 
 [node name="InteractionArea" type="Area2D" parent="." unique_id=1988804112]
 

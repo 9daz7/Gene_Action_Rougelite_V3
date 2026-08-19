@@ -29,6 +29,13 @@ var room_player: RoomPlayer
 
 
 # ==================================================
+# Room Exits
+# ==================================================
+
+@onready var room_exits: Array[RoomExit] = []
+
+
+# ==================================================
 # Initialization
 # ==================================================
 
@@ -40,6 +47,7 @@ func _ready() -> void:
 	print("================================")
 
 	_connect_battle_trigger()
+	_connect_room_exits()
 	_spawn_player()
 
 
@@ -84,6 +92,97 @@ func _on_battle_trigger_entered() -> void:
 	set_player_controls(false)
 
 	room_manager.start_room_battle()
+
+
+# ==================================================
+# Room Exits
+# ==================================================
+
+func _connect_room_exits() -> void:
+
+	room_exits.clear()
+
+	for child in get_children():
+
+		if child is RoomExit:
+
+			room_exits.append(child)
+
+			child.set_enabled(false)
+
+			if not child.exit_entered.is_connected(
+				_on_room_exit_entered
+			):
+
+				child.exit_entered.connect(
+					_on_room_exit_entered
+				)
+
+			print(
+				"Connected RoomExit:",
+				child.exit_id
+			)
+
+
+# ==================================================
+# Room Completion
+# ==================================================\
+
+
+func _disable_room_exits() -> void:
+
+	print("================================")
+	print("DISABLING ROOM EXITS")
+	print("================================")
+
+	for room_exit in room_exits:
+
+		if is_instance_valid(room_exit):
+
+			room_exit.set_enabled(false)
+
+			print(
+				"Exit disabled:",
+				room_exit.exit_id
+			)
+
+
+func enable_room_exits() -> void:
+
+	print("================================")
+	print("ENABLING ROOM EXITS")
+	print("================================")
+
+	for room_exit in room_exits:
+
+		if is_instance_valid(room_exit):
+
+			room_exit.set_enabled(true)
+
+			print(
+				"Exit enabled:",
+				room_exit.exit_id
+			)
+
+
+func _on_room_exit_entered(exit_id: int) -> void:
+
+	print("================================")
+	print("NORMAL BATTLE ROOM: EXIT ENTERED")
+	print("Exit ID:", exit_id)
+	print("================================")
+
+	if room_manager == null:
+
+		push_error(
+			"NormalBattleRoom: RoomManager not found."
+		)
+
+		return
+
+	room_manager.select_room_exit(
+		exit_id
+	)
 
 
 # ==================================================
@@ -158,11 +257,11 @@ func set_battle_active(
 		not active
 	)
 	
-	if room_player != null:
-
-		room_player.set_controls_enabled(
-			not active
-		)
+	#if room_player != null:
+#
+		#room_player.set_controls_enabled(
+			#not active
+		#)
 
 	if battle_trigger != null:
 
@@ -177,3 +276,10 @@ func set_battle_active(
 			battle_trigger.set_process_mode(
 				Node.PROCESS_MODE_INHERIT
 			)
+
+	if active:
+
+		_disable_room_exits()
+
+	else:
+		enable_room_exits()

@@ -14,7 +14,7 @@ signal player_exited
 # Settings
 # ==================================================
 
-@export var interaction_text: String = "Interact"
+@export var interaction_text: String = "E Interact"
 
 # ==================================================
 # State
@@ -51,7 +51,10 @@ func interact() -> void:
 
 func _on_body_entered(body: Node2D) -> void:
 
-	if not body is HubPlayer:
+	if not body.has_method(
+		"set_nearby_interactable"
+	):
+
 		return
 
 	player_in_range = true
@@ -68,12 +71,16 @@ func _on_body_entered(body: Node2D) -> void:
 
 func _on_body_exited(body: Node2D) -> void:
 
-	if not body is HubPlayer:
+	if not body.has_method(
+		"set_nearby_interactable"
+	):
+
 		return
 
 	player_in_range = false
 
 	if body.nearby_interactable == self:
+
 		body.set_nearby_interactable(null)
 
 	print(

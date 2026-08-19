@@ -915,6 +915,81 @@ func _on_battle_lost() -> void:
 
 
 # ==================================================
+# Room Exits
+# ==================================================
+
+func select_room_exit(exit_id: int) -> void:
+
+	print("================================")
+	print("ROOM MANAGER: EXIT SELECTED")
+	print("Exit ID:", exit_id)
+	print("Current Room:", current_room)
+	print("================================")
+
+	if current_room == null:
+
+		push_error(
+			"RoomManager: Cannot select exit without current room."
+		)
+
+		return
+
+	if not current_room.completed:
+
+		print(
+			"RoomManager: Current room is not completed."
+		)
+
+		return
+
+	print(
+		"Exit selected:",
+		exit_id
+	)
+
+	# --------------------------------------------------
+	# Get Next Room
+	# --------------------------------------------------
+
+	var next_room: RoomResource = (
+		current_room.get_next_room(
+			exit_id
+		)
+	)
+
+	if next_room == null:
+
+		push_error(
+			"RoomManager: Exit "
+			+ str(exit_id)
+			+ " has no connected room."
+		)
+
+		return
+
+		print(
+			"Exit selected:",
+			exit_id
+		)
+
+		print(
+			"Next room:",
+			next_room.room_name
+		) 
+
+		print(
+			"Next room type:",
+			next_room.room_type
+		)
+
+		# --------------------------------------------------
+		# Start Next Room
+		# --------------------------------------------------
+
+		start_room( next_room )
+
+
+# ==================================================
 # Legacy Room Completion (temp)
 # ==================================================
 
