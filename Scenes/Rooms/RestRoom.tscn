@@ -5,6 +5,10 @@
 [node name="RestRoom" type="Control" unique_id=436275297]
 layout_mode = 3
 anchors_preset = 0
+offset_left = 364.01
+offset_top = 240.82
+offset_right = 364.01
+offset_bottom = 240.82
 script = ExtResource("1_6y63p")
 
 [node name="CenterContainer" type="CenterContainer" parent="." unique_id=1847433381]

@@ -253,19 +253,27 @@ func start_run():
 
 	GameEvents.run_started.emit()
 
-	map_manager.generate_map()
-
 	hub_world.close()
 	lab_hub.hide()
 
-	map_ui.show()
+	print("================================")
+	print("TESTING NEW ROOM RESOURCE SYSTEM")
+	print("================================")
 
-	map_ui.display_map(
-		map_manager.current_map
-	)
-
-
-	print("Map displayed")
+	room_manager.test_room_resource_battle()
+	#map_manager.generate_map()
+#
+	#hub_world.close()
+	#lab_hub.hide()
+#
+	#map_ui.show()
+#
+	#map_ui.display_map(
+		#map_manager.current_map
+	#)
+#
+#
+	#print("Map displayed")
 
 
 func _on_room_entered(room: RoomData) -> void:

@@ -1,10 +1,10 @@
 extends Resource
 class_name RoomResource
 
+
 # ==================================================
 # Room Types
 # ==================================================
-
 
 enum RoomType {
 	BATTLE,
@@ -12,7 +12,9 @@ enum RoomType {
 	REWARD,
 	SHOP,
 	EVENT,
-	BOSS 
+	BOSS,
+	REST,
+	TREASURE
 }
 
 
@@ -20,17 +22,20 @@ enum RoomType {
 # Room Information
 # ==================================================
 
-
 @export var room_type: RoomType = RoomType.BATTLE
-
 @export var room_name: String = "Battle"
-
 @export_multiline var description: String = ""
+
+
+# ==================================================
+# Room Scene
+# ==================================================
+
+@export var room_scene: PackedScene
 
 
 # ==================================================
 # Room State
 # ==================================================
 
-
-var completed: bool = false
+@export var completed: bool = false

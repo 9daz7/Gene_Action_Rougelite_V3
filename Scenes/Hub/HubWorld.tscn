@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://fager0gtnvbd" path="res://Scenes/Hub/HubPlayer.tscn" id="1_ve7n7"]
 [ext_resource type="Texture2D" uid="uid://c7s0f0icm3a10" path="res://Assets/shop.png" id="2_25iap"]
 [ext_resource type="Script" uid="uid://csjgqa1kcrfgr" path="res://Scripts/Hub/Interactable.gd" id="3_25iap"]
+[ext_resource type="Texture2D" uid="uid://ccsr4dcgj8vms" path="res://Assets/Sprites/world/Tileset/Slice 1.png" id="3_va13n"]
 [ext_resource type="PackedScene" uid="uid://cgn0n075o0ysl" path="res://Scenes/Hub/AnimalLab.tscn" id="4_txqr2"]
 [ext_resource type="Script" uid="uid://dujrji3acqxot" path="res://Scenes/UI/InteractionPrompt.gd" id="5_y1qvb"]
 
@@ -54,6 +55,38 @@ script = ExtResource("1_va13n")
 [node name="World" type="Node2D" parent="." unique_id=1123594653]
 
 [node name="Ground" type="Node2D" parent="World" unique_id=1386503651]
+
+[node name="grass" type="Sprite2D" parent="World/Ground" unique_id=1420459630]
+position = Vector2(610, 500)
+texture = ExtResource("3_va13n")
+
+[node name="grass3" type="Sprite2D" parent="World/Ground" unique_id=1357941995]
+position = Vector2(593, 510)
+texture = ExtResource("3_va13n")
+
+[node name="grass2" type="Sprite2D" parent="World/Ground" unique_id=1858121496]
+position = Vector2(609, 520)
+texture = ExtResource("3_va13n")
+
+[node name="grass5" type="Sprite2D" parent="World/Ground" unique_id=1310912538]
+position = Vector2(576, 519)
+texture = ExtResource("3_va13n")
+
+[node name="grass4" type="Sprite2D" parent="World/Ground" unique_id=564133816]
+position = Vector2(593, 529)
+texture = ExtResource("3_va13n")
+
+[node name="grass6" type="Sprite2D" parent="World/Ground" unique_id=74081134]
+position = Vector2(579, 539)
+texture = ExtResource("3_va13n")
+
+[node name="grass7" type="Sprite2D" parent="World/Ground" unique_id=803599051]
+position = Vector2(609, 538)
+texture = ExtResource("3_va13n")
+
+[node name="grass8" type="Sprite2D" parent="World/Ground" unique_id=799774011]
+position = Vector2(595, 548)
+texture = ExtResource("3_va13n")
 
 [node name="Environment" type="Node2D" parent="." unique_id=1399107644]
 

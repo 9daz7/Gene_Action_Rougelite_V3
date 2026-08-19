@@ -44,7 +44,7 @@ const REWARD_SCENE = preload("res://Scenes/Rooms/RewardRoom.tscn")
 
 
 var current_room: RoomResource = null
-
+var active_room_scene: Node = null
 
 # --------------------------------------------------
 # temporary Map System
@@ -117,7 +117,34 @@ func create_room(
 
 	return room
 
+# --------------------------------------------------
+# Temporary RoomResource Test
+# --------------------------------------------------
 
+func test_room_resource_battle() -> void:
+
+	var room: RoomResource = load(
+		"res://Data/Rooms/NormalBattle.tres"
+	)
+
+	if room == null:
+
+		push_error(
+			"RoomManager: Failed to load NormalBattle.tres."
+		)
+
+		return
+
+	room.completed = false
+
+	print("================================")
+	print("ROOM RESOURCE TEST")
+	print("Loaded:", room.room_name)
+	print("Type:", room.room_type)
+	print("================================")
+
+	start_room(room)
+	
 # --------------------------------------------------
 # Start Room
 # --------------------------------------------------
@@ -148,7 +175,7 @@ func start_room(room: RoomResource) -> void:
 	match room.room_type:
 
 		RoomResource.RoomType.BATTLE:
-			start_new_battle_room(room)
+			open_room_scene(room)
 
 		RoomResource.RoomType.ELITE:
 			start_new_elite_room(room)
@@ -169,6 +196,61 @@ func start_room(room: RoomResource) -> void:
 			push_error(
 				"RoomManager: Unknown RoomResource type."
 			)
+
+
+# ==================================================
+# Room Scene
+# ==================================================
+
+func open_room_scene(room: RoomResource) -> void:
+
+	if room == null:
+		push_error(
+			"RoomManager: Cannot open null RoomResource."
+		)
+		return
+
+	if room.room_scene == null:
+		push_error(
+			"RoomManager: Room has no assigned scene: "
+			+ room.room_name
+		)
+		return
+
+	# --------------------------------------------------
+	# Clean Up Previous Room
+	# --------------------------------------------------
+
+	if is_instance_valid(active_room_scene):
+
+		active_room_scene.queue_free()
+
+		active_room_scene = null
+
+	# --------------------------------------------------
+	# Create Room
+	# --------------------------------------------------
+
+	active_room_scene = room.room_scene.instantiate()
+
+	if active_room_scene == null:
+
+		push_error(
+			"RoomManager: Failed to instantiate room scene: "
+			+ room.room_name
+		)
+
+		return
+
+	get_tree().current_scene.add_child(
+		active_room_scene
+	)
+
+	print("================================")
+	print("ROOM SCENE OPENED")
+	print("Room:", room.room_name)
+	print("Scene:", active_room_scene.name)
+	print("================================")
 
 
 # --------------------------------------------------
@@ -262,6 +344,7 @@ func get_room_type_name(
 		_:
 			return "Unknown"
 
+
 # ==================================================
 # Battle Rooms
 # ==================================================
@@ -269,16 +352,14 @@ func get_room_type_name(
 func start_new_battle_room(room: RoomResource) -> void:
 
 	print(
-		"Starting new RoomResource battle:"
+		"Starting RoomResource battle room:"
 	)
 
 	print(
 		room.room_name
 	)
 
-	battle_manager.start_battle(
-		RoomData.RoomType.ENEMY
-	)
+	open_room_scene(room)
 
 
 func start_new_elite_room(room: RoomResource) -> void:
@@ -291,9 +372,7 @@ func start_new_elite_room(room: RoomResource) -> void:
 		room.room_name
 	)
 
-	battle_manager.start_battle(
-		RoomData.RoomType.ELITE
-	)
+	open_room_scene(room)
 
 
 func start_new_boss_room(room: RoomResource) -> void:
@@ -306,9 +385,58 @@ func start_new_boss_room(room: RoomResource) -> void:
 		room.room_name
 	)
 
+	open_room_scene(room)
+
+
+# ==================================================
+# Room Encounters
+# ==================================================
+
+func start_room_battle() -> void:
+
+	if current_room == null:
+
+		push_error(
+			"RoomManager: Cannot start battle without current room."
+		)
+
+		return
+
+	if battle_manager == null:
+
+		push_error(
+			"RoomManager: BattleManager is missing."
+		)
+
+		return
+
+	print("================================")
+	print("ROOM MANAGER: STARTING ROOM BATTLE")
+	print("Room:", current_room.room_name)
+	print("================================")
+
+	# --------------------------------------------------
+	# Lock current room
+	# --------------------------------------------------
+
+	if active_room_scene != null:
+
+		if active_room_scene.has_method(
+			"set_battle_active"
+		):
+
+			active_room_scene.set_battle_active(
+				true
+			)
+
+	# --------------------------------------------------
+	# Start battle
+	# --------------------------------------------------
+
 	battle_manager.start_battle(
-		RoomData.RoomType.BOSS
+		RoomData.RoomType.ENEMY
 	)
+
 
 # ==================================================
 # Legacy Map Room Compatibility (temp)

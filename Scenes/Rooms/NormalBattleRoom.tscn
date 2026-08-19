@@ -1,0 +1,33 @@
+[gd_scene format=3 uid="uid://bmdklddw430wi"]
+
+[ext_resource type="Script" uid="uid://bd4c5xvt4q8t" path="res://Scenes/Rooms/NormalBattleRoom.gd" id="1_av6k5"]
+[ext_resource type="Script" uid="uid://ckxjn41pglkmx" path="res://Scenes/Rooms/BattleTrigger.gd" id="2_3yrn4"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gs0tk"]
+size = Vector2(60, 60)
+
+[node name="NormalBattleRoom" type="Node2D" unique_id=1973370823]
+script = ExtResource("1_av6k5")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1723921837]
+offset_right = 1923.0
+offset_bottom = 1083.0
+color = Color(0, 0.27067333, 0.08999216, 1)
+
+[node name="PlayerSpawn" type="Marker2D" parent="." unique_id=286849254]
+position = Vector2(-755, 578)
+
+[node name="BattleTrigger" type="Area2D" parent="." unique_id=2141645197]
+position = Vector2(180, 800)
+script = ExtResource("2_3yrn4")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BattleTrigger" unique_id=2048770366]
+position = Vector2(0, 1)
+shape = SubResource("RectangleShape2D_gs0tk")
+
+[node name="Label" type="Label" parent="BattleTrigger" unique_id=1157140154]
+offset_left = -26.0
+offset_top = -12.0
+offset_right = 29.0
+offset_bottom = 11.0
+text = "ENEMY"

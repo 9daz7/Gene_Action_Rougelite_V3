@@ -4,4 +4,6 @@
 
 [resource]
 script = ExtResource("1_ec82b")
+room_type = 4
+room_name = "Event"
 metadata/_custom_type_script = "uid://0k05qgpjl5gm"
