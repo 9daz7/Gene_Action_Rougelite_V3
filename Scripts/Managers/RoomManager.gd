@@ -65,6 +65,12 @@ var rest_room = null
 var abandoned_lab = null
 var mystery_room = null
 
+# --------------------------------------------------
+# Active Battle Room
+# --------------------------------------------------
+
+var active_battle_room: NormalBattleRoom = null
+
 
 # ==================================================
 # Initialization
@@ -246,11 +252,30 @@ func open_room_scene(room: RoomResource) -> void:
 		active_room_scene
 	)
 
+	# --------------------------------------------------
+	# Track Active Battle Room
+	# --------------------------------------------------
+
+	if active_room_scene is NormalBattleRoom:
+
+		active_battle_room = active_room_scene
+
+	else:
+
+		active_battle_room = null
+
 	print("================================")
 	print("ROOM SCENE OPENED")
 	print("Room:", room.room_name)
 	print("Scene:", active_room_scene.name)
 	print("================================")
+
+	if active_battle_room != null:
+
+		print(
+			"Active battle room:",
+			active_battle_room.name
+		)
 
 
 # --------------------------------------------------
@@ -653,7 +678,7 @@ func open_reward(rewards) -> void:
 	print("ROOM MANAGER: OPENING REWARD")
 	print("================================")
 
-	map_ui.hide()
+	#map_ui.hide()
 
 	print(
 		"Rewards object:",
@@ -712,13 +737,9 @@ func _on_reward_finished(reward) -> void:
 
 		print("Skipped reward")
 
-
-	if is_instance_valid(reward_room):
-
-		reward_room.queue_free()
-
-	reward_room = null
-
+	# ==================================================
+	# Apply Reward
+	# ==================================================
 
 	if reward:
 
@@ -726,23 +747,48 @@ func _on_reward_finished(reward) -> void:
 			reward
 		)
 
+	# ==================================================
+	# Close Reward Room
+	# ==================================================
 
-	complete_current_room()
+	if is_instance_valid(reward_room):
 
+		reward_room.queue_free()
 
-	if get_tree().current_scene.has_method(
-		"return_to_map"
-	):
+	reward_room = null
 
-		print("Returning to map")
+	# ==================================================
+	# Complete Current Room
+	# ==================================================
 
-		get_tree().current_scene.return_to_map()
+	if current_room != null:
+
+		complete_room()
+
+	# ==================================================
+	# Return To Battle Room
+	# ==================================================
+
+	if active_battle_room != null:
+
+		print(
+			"Returning to NormalBattleRoom"
+		)
+
+		active_battle_room.set_battle_active(
+			false
+		)
 
 	else:
 
 		push_error(
 			"RoomManager: Current scene has no return_to_map()."
 		)
+
+	print("================================")
+	print("RETURNED TO NORMAL BATTLE ROOM")
+	print("PLAYER CONTROLS RESTORED")
+	print("================================")
 
 
 func apply_reward(reward) -> void:

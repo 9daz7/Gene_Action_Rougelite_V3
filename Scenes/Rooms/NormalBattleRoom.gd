@@ -81,27 +81,7 @@ func _on_battle_trigger_entered() -> void:
 
 		return
 
-	# --------------------------------------------------
-	# Disable room controls immediately
-	# --------------------------------------------------
-
-	if room_player != null:
-
-		room_player.set_controls_enabled(false)
-
-	# --------------------------------------------------
-	# Disable the trigger
-	# --------------------------------------------------
-
-	if battle_trigger != null:
-
-		battle_trigger.set_process_mode(
-			Node.PROCESS_MODE_DISABLED
-		)
-
-	# --------------------------------------------------
-	# Start battle
-	# --------------------------------------------------
+	set_player_controls(false)
 
 	room_manager.start_room_battle()
 
@@ -134,6 +114,33 @@ func _spawn_player() -> void:
 
 
 # ==================================================
+# Player Controls
+# ==================================================
+
+func set_player_controls(
+	enabled: bool
+) -> void:
+
+	if room_player == null:
+
+		push_error(
+			"NormalBattleRoom: Cannot change controls. "
+			+ "RoomPlayer is missing."
+		)
+
+		return
+
+	room_player.set_controls_enabled(
+		enabled
+	)
+
+	print(
+		"NormalBattleRoom player controls:",
+		enabled
+	)
+
+
+# ==================================================
 # Battle State
 # ==================================================
 
@@ -147,6 +154,10 @@ func set_battle_active(
 		active
 	)
 
+	set_player_controls(
+		not active
+	)
+	
 	if room_player != null:
 
 		room_player.set_controls_enabled(
