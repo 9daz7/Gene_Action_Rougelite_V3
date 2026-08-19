@@ -3,35 +3,30 @@ class_name RoomManager
 
 
 # ==================================================
-# Onready Variables
+# Managers
 # ==================================================
 
 
 @onready var battle_manager = $"../BattleManager"
 @onready var run_manager = $"../RunManager"
 @onready var save_manager = $"../SaveManager"
+
+# --------------------------------------------------
+# Temporary Map Dependency
+# --------------------------------------------------
 @onready var map_manager = $"../MapManager"
+
+# ==================================================
+# UI
+# ==================================================
+
+
 @onready var ui = $"../../UI"
 @onready var map_ui = $"../../UI/MapUI"
 
 
 # ==================================================
-# Initialization
-# ==================================================
-
-func _ready():
-
-	if not GameEvents.battle_finished.is_connected(
-		_on_battle_finished
-	):
-
-		GameEvents.battle_finished.connect(
-			_on_battle_finished
-	)
-
-
-# ==================================================
-# Constants
+# Room Scenes
 # ==================================================
 
 
@@ -40,15 +35,27 @@ const MERCHANT_SCENE = preload("res://Scenes/Rooms/MerchantRoom.tscn")
 const REST_SCENE = preload("res://Scenes/Rooms/RestRoom.tscn")
 const ABANDONED_LAB_SCENE = preload("res://Scenes/Rooms/AbandonedLab.tscn")
 const MYSTERY_SCENE = preload("res://Scenes/Rooms/MysteryRoom.tscn")
-
 const REWARD_SCENE = preload("res://Scenes/Rooms/RewardRoom.tscn")
 
 
 # ==================================================
-# Member Variables
+# Room State
 # ==================================================
 
-var active_room: RoomData = null
+
+var current_room: RoomResource = null
+
+
+# --------------------------------------------------
+# temporary Map System
+# --------------------------------------------------
+
+var active_map_room: RoomData = null
+
+
+# ==================================================
+# Active Room Scenes
+# ==================================================
 
 var reward_room = null
 
@@ -60,19 +67,264 @@ var mystery_room = null
 
 
 # ==================================================
-# Public Functions
+# Initialization
+# ==================================================
+
+func _ready() -> void:
+
+	if not GameEvents.battle_finished.is_connected(
+		_on_battle_finished
+	):
+
+		GameEvents.battle_finished.connect(
+			_on_battle_finished
+	)
+
+
+# ==================================================
+# Room System
 # ==================================================
 
 
-func enter_room(room:RoomData):
+# --------------------------------------------------
+# Create Room
+# --------------------------------------------------
+
+func create_room(
+	room_type: RoomResource.RoomType,
+	room_name: String = "",
+	description: String = ""
+) -> RoomResource:
+
+	var room := RoomResource.new()
+
+	room.room_type = room_type
+
+	if room_name.is_empty():
+		room.room_name = get_room_type_name(room_type)
+	else:
+		room.room_name = room_name
+
+	room.description = description
+	room.completed = false
+
+	print(
+		"ROOM CREATED:",
+		room.room_name,
+		" Type:",
+		room.room_type
+	)
+
+	return room
+
+
+# --------------------------------------------------
+# Start Room
+# --------------------------------------------------
+
+func start_room(room: RoomResource) -> void:
 
 	if room == null:
 		push_error(
-			"RoomManager: Cannot enter null room"
+			"RoomManager: Cannot start null RoomResource."
 		)
 		return
 
-	active_room = room
+	if room.completed:
+		push_error(
+			"RoomManager: Cannot start completed room: "
+			+ room.room_name
+		)
+		return
+
+	current_room = room
+
+	print("================================")
+	print("ROOM MANAGER: START ROOM")
+	print("Room:", room.room_name)
+	print("Type:", room.room_type)
+	print("================================")
+
+	match room.room_type:
+
+		RoomResource.RoomType.BATTLE:
+			start_new_battle_room(room)
+
+		RoomResource.RoomType.ELITE:
+			start_new_elite_room(room)
+
+		RoomResource.RoomType.REWARD:
+			print("Reward room selected.")
+
+		RoomResource.RoomType.SHOP:
+			print("Shop room selected.")
+
+		RoomResource.RoomType.EVENT:
+			print("Event room selected.")
+
+		RoomResource.RoomType.BOSS:
+			start_new_boss_room(room)
+
+		_:
+			push_error(
+				"RoomManager: Unknown RoomResource type."
+			)
+
+
+# --------------------------------------------------
+# Complete Room
+# --------------------------------------------------
+
+func complete_room() -> void:
+
+	if current_room == null:
+		push_error(
+			"RoomManager: No active RoomResource to complete."
+		)
+		return
+
+	if current_room.completed:
+		print(
+			"RoomManager: Room already completed:",
+			current_room.room_name
+		)
+		return
+
+	current_room.completed = true
+
+	print(
+		"ROOM COMPLETED:",
+		current_room.room_name
+	)
+
+	GameEvents.room_completed.emit(
+		current_room
+	)
+
+
+# --------------------------------------------------
+# Advance Room
+# --------------------------------------------------
+
+func advance_room() -> void:
+
+	print("================================")
+	print("ROOM MANAGER: ADVANCING ROOM")
+	print("================================")
+
+	if current_room != null:
+
+		if not current_room.completed:
+
+			print(
+				"Current room not completed:",
+				current_room.room_name
+			)
+
+			return
+
+	print("Ready to create/select next room.")
+
+	# --------------------------------------------------
+	# temp
+	# --------------------------------------------------
+
+	current_room = null
+
+# --------------------------------------------------
+# Room Type Name
+# --------------------------------------------------
+
+func get_room_type_name(
+	room_type: RoomResource.RoomType
+) -> String:
+
+	match room_type:
+
+		RoomResource.RoomType.BATTLE:
+			return "Battle"
+
+		RoomResource.RoomType.ELITE:
+			return "Elite"
+
+		RoomResource.RoomType.REWARD:
+			return "Reward"
+
+		RoomResource.RoomType.SHOP:
+			return "Shop"
+
+		RoomResource.RoomType.EVENT:
+			return "Event"
+
+		RoomResource.RoomType.BOSS:
+			return "Boss"
+
+		_:
+			return "Unknown"
+
+# ==================================================
+# Battle Rooms
+# ==================================================
+
+func start_new_battle_room(room: RoomResource) -> void:
+
+	print(
+		"Starting new RoomResource battle:"
+	)
+
+	print(
+		room.room_name
+	)
+
+	battle_manager.start_battle(
+		RoomData.RoomType.ENEMY
+	)
+
+
+func start_new_elite_room(room: RoomResource) -> void:
+
+	print(
+		"Starting new RoomResource elite battle:"
+	)
+
+	print(
+		room.room_name
+	)
+
+	battle_manager.start_battle(
+		RoomData.RoomType.ELITE
+	)
+
+
+func start_new_boss_room(room: RoomResource) -> void:
+
+	print(
+		"Starting new RoomResource boss battle:"
+	)
+
+	print(
+		room.room_name
+	)
+
+	battle_manager.start_battle(
+		RoomData.RoomType.BOSS
+	)
+
+# ==================================================
+# Legacy Map Room Compatibility (temp)
+# ==================================================
+
+func enter_room(room: RoomData) -> void:
+
+	if room == null:
+
+		push_error(
+			"RoomManager: Cannot enter null RoomData."
+		)
+
+		return
+
+	active_map_room = room
 
 	print(
 		"ROOM MANAGER ENTERED:",
@@ -82,175 +334,155 @@ func enter_room(room:RoomData):
 	)
 
 	match room.room_type:
-		
+
 		RoomData.RoomType.ENEMY:
 			start_enemy(room)
-			
+
 		RoomData.RoomType.ELITE:
 			start_elite(room)
-			
+
 		RoomData.RoomType.GROUP_ENEMY:
 			start_group_enemy(room)
-			
+
 		RoomData.RoomType.BOSS:
 			start_boss(room)
-			
+
 		RoomData.RoomType.TREASURE:
 			open_treasure(room)
-			
+
 		RoomData.RoomType.MERCHANT:
 			open_shop(room)
-			
+
 		RoomData.RoomType.REST:
 			open_rest(room)
-			
+
 		RoomData.RoomType.ABANDONED_LAB:
 			open_lab(room)
-			
+
 		RoomData.RoomType.MYSTERY_ROOM:
 			open_mystery(room)
-			
+
 		_:
-			print("Unknown room")
+			print("Unknown legacy room type.")
 
-
-func open_reward(rewards) -> void:
-
-	print("================================")
-	print("ROOM MANAGER: OPENING REWARD")
-	print("================================")
-
-	map_ui.hide()
-
-	print("Rewards object:", rewards)
-
-	reward_room = REWARD_SCENE.instantiate()
-
-	if reward_room == null:
-		push_error(
-			"RoomManager: Failed to instantiate RewardRoom"
-		)
-		return
-
-	print(
-		"RewardRoom instantiated:",
-		reward_room
-	)
-
-
-	ui.add_child(reward_room)
-
-	reward_room.set_anchors_and_offsets_preset(
-		Control.PRESET_FULL_RECT
-	)
-
-	print(
-		"RewardRoom added to current scene"
-	)
-
-	if not reward_room.reward_finished.is_connected(
-		_on_reward_finished
-	):
-
-		reward_room.reward_finished.connect(
-			_on_reward_finished
-		)
-
-	print(
-		"Calling RewardRoom.open()"
-	)
-
-	reward_room.open(
-		rewards
-	)
-
-	print(
-		"RewardRoom visible:",
-		reward_room.visible
-	)
-
-	print("================================")
 
 # ==================================================
-# Battle Rooms
+# Legacy Battle Rooms (temp)
 # ==================================================
 
+func start_enemy(room: RoomData) -> void:
 
-func start_enemy(room):
 	print("Starting normal battle")
-	battle_manager.start_battle(RoomData.RoomType.ENEMY)
 
-func start_group_enemy(room):
+	battle_manager.start_battle(
+		RoomData.RoomType.ENEMY
+	)
+
+
+func start_group_enemy(room: RoomData) -> void:
+
 	print("Starting group battle")
-	battle_manager.start_battle(RoomData.RoomType.GROUP_ENEMY)
 
-func start_elite(room):
+	battle_manager.start_battle(
+		RoomData.RoomType.GROUP_ENEMY
+	)
+
+
+func start_elite(room: RoomData) -> void:
+
 	print("Starting elite battle")
-	battle_manager.start_battle(RoomData.RoomType.ELITE)
+
+	battle_manager.start_battle(
+		RoomData.RoomType.ELITE
+	)
 
 
-func start_boss(room):
+func start_boss(room: RoomData) -> void:
+
 	print("Starting boss")
-	battle_manager.start_battle(RoomData.RoomType.BOSS)
 
+	battle_manager.start_battle(
+		RoomData.RoomType.BOSS
+	)
 
 # ==================================================
 # Special Rooms
 # ==================================================
 
-
-func open_shop(room):
+func open_shop(room: RoomData) -> void:
 
 	print("Opening merchant")
 
 	merchant_room = MERCHANT_SCENE.instantiate()
 
-	get_tree().current_scene.add_child(merchant_room)
+	get_tree().current_scene.add_child(
+		merchant_room
+	)
 
 	merchant_room.merchant_finished.connect(
 		_on_merchant_finished
 	)
 
-	merchant_room.open(run_manager)
+	merchant_room.open(
+		run_manager
+	)
 
 
-func open_treasure(room):
-	
+func open_treasure(room: RoomData) -> void:
+
 	print("Opening treasure")
 
 	treasure_room = TREASURE_SCENE.instantiate()
 
-	get_tree().current_scene.add_child(treasure_room)
+	get_tree().current_scene.add_child(
+		treasure_room
+	)
 
-	treasure_room.treasure_finished.connect(_on_treasure_finished)
+	treasure_room.treasure_finished.connect(
+		_on_treasure_finished
+	)
 
-	treasure_room.open(run_manager)
+	treasure_room.open(
+		run_manager
+	)
 
 
-func open_rest(room):
+func open_rest(room: RoomData) -> void:
 
 	print("Opening rest room")
 
 	rest_room = REST_SCENE.instantiate()
 
-	get_tree().current_scene.add_child(rest_room)
+	get_tree().current_scene.add_child(
+		rest_room
+	)
 
-	rest_room.rest_finished.connect(_on_rest_finished)
+	rest_room.rest_finished.connect(
+		_on_rest_finished
+	)
 
-	rest_room.open(run_manager)
+	rest_room.open(
+		run_manager
+	)
 
 
-func open_lab(room):
+func open_lab(room: RoomData) -> void:
 
 	print("Opening abandoned lab")
 
 	if room.lab_data == null:
-		print("ERROR: Lab room has no LabResource")
+
+		print(
+			"ERROR: Lab room has no LabResource"
+		)
+
 		return
 
 	abandoned_lab = ABANDONED_LAB_SCENE.instantiate()
-	get_tree().current_scene.add_child(abandoned_lab)
 
+	get_tree().current_scene.add_child(
+		abandoned_lab
+	)
 
 	abandoned_lab.open(
 		room.lab_data,
@@ -265,13 +497,16 @@ func open_lab(room):
 			_on_lab_finished
 		)
 
-func open_mystery(room):
-	
+
+func open_mystery(room: RoomData) -> void:
+
 	print("Opening a mystery room")
 
 	mystery_room = MYSTERY_SCENE.instantiate()
 
-	get_tree().current_scene.add_child(mystery_room)
+	get_tree().current_scene.add_child(
+		mystery_room
+	)
 
 	mystery_room.mystery_finished.connect(
 		_on_mystery_finished
@@ -281,32 +516,95 @@ func open_mystery(room):
 
 
 # ==================================================
+# Reward Room
+# ==================================================
+
+func open_reward(rewards) -> void:
+
+	print("================================")
+	print("ROOM MANAGER: OPENING REWARD")
+	print("================================")
+
+	map_ui.hide()
+
+	print(
+		"Rewards object:",
+		rewards
+	)
+
+	reward_room = REWARD_SCENE.instantiate()
+
+	if reward_room == null:
+
+		push_error(
+			"RoomManager: Failed to instantiate RewardRoom."
+		)
+
+		return
+
+	ui.add_child(
+		reward_room
+	)
+
+	reward_room.set_anchors_and_offsets_preset(
+		Control.PRESET_FULL_RECT
+	)
+
+	if not reward_room.reward_finished.is_connected(
+		_on_reward_finished
+	):
+
+		reward_room.reward_finished.connect(
+			_on_reward_finished
+		)
+
+	reward_room.open(
+		rewards
+	)
+
+
+# ==================================================
 # Reward Handling
 # ==================================================
 
-
-func _on_reward_finished(reward):
+func _on_reward_finished(reward) -> void:
 
 	print("================================")
 	print("ROOM MANAGER: REWARD FINISHED")
 	print("================================")
 
 	if reward:
-		print("Chosen:", reward)
+
+		print(
+			"Chosen:",
+			reward
+		)
+
 	else:
+
 		print("Skipped reward")
 
+
 	if is_instance_valid(reward_room):
+
 		reward_room.queue_free()
 
 	reward_room = null
 
+
 	if reward:
-		apply_reward(reward)
+
+		apply_reward(
+			reward
+		)
+
 
 	complete_current_room()
 
-	if get_tree().current_scene.has_method("return_to_map"):
+
+	if get_tree().current_scene.has_method(
+		"return_to_map"
+	):
 
 		print("Returning to map")
 
@@ -315,14 +613,16 @@ func _on_reward_finished(reward):
 	else:
 
 		push_error(
-			"RoomManager: Current scene has no return_to_map() method."
+			"RoomManager: Current scene has no return_to_map()."
 		)
 
 
-func apply_reward(reward):
+func apply_reward(reward) -> void:
 
 	if reward == null:
+
 		print("No reward selected")
+
 		return
 
 	print(
@@ -330,20 +630,25 @@ func apply_reward(reward):
 		reward
 	)
 
+
 	# ==================================================
 	# Gene Reward
 	# ==================================================
 
 	if reward is GeneResource:
 
-		var added: bool = PermanentProgressionManager.add_gene(reward)
+		var added: bool = (
+			PermanentProgressionManager.add_gene(
+				reward
+			)
+		)
 
 		if added:
 
 			save_manager.save_game(
 				PermanentProgressionManager
 			)
-			
+
 			print(
 				"Permanent gene reward added:",
 				reward.gene_name
@@ -358,6 +663,7 @@ func apply_reward(reward):
 
 		return
 
+
 	# ==================================================
 	# Unknown Reward
 	# ==================================================
@@ -367,12 +673,12 @@ func apply_reward(reward):
 		reward
 	)
 
+
 # ==================================================
 # Battle Completion
 # ==================================================
 
-
-func _on_battle_finished(result):
+func _on_battle_finished(result) -> void:
 
 	print("================================")
 	print("ROOM MANAGER: BATTLE FINISHED")
@@ -382,79 +688,98 @@ func _on_battle_finished(result):
 	match result:
 
 		"win":
-
 			_on_battle_won()
 
 		"lose":
-
 			_on_battle_lost()
 
 		_:
-
 			push_error(
 				"RoomManager received unknown battle result: "
 				+ str(result)
 			)
 
 
-func _on_battle_won():
+func _on_battle_won() -> void:
 
-	print("RoomManager: Battle won")
+	print(
+		"RoomManager: Battle won"
+	)
 
-	if get_tree().current_scene.has_method(
-		"return_to_map"
-	):
+	# --------------------------------------------------
+	# New RoomResource path
+	# --------------------------------------------------
 
-		get_tree().current_scene.return_to_map()
+	if current_room != null:
+
+		complete_room()
+
+	# --------------------------------------------------
+	# Legacy map path
+	# --------------------------------------------------
 
 	else:
 
-		push_error(
-			"RoomManager: Current scene has no return_to_map() method."
+		if get_tree().current_scene.has_method(
+			"return_to_map"
+		):
+
+			get_tree().current_scene.return_to_map()
+
+		else:
+
+			push_error(
+				"RoomManager: Current scene has no return_to_map()."
+			)
+
+
+func _on_battle_lost() -> void:
+
+	print(
+		"RoomManager: Battle lost"
 	)
 
 
-func _on_battle_lost():
-
-	print("RoomManager: Battle lost")
-
-	# temp battle lost. code added later
-	#if get_tree().current_scene.has_method(
-		#"return_to_map"
-	#):
-#
-		#get_tree().current_scene.return_to_map()
-#
-	#else:
-#
-		#push_error(
-			#"RoomManager: Current scene has no return_to_map() method."
-	#)
-
-
 # ==================================================
-# Room Completion
+# Legacy Room Completion (temp)
 # ==================================================
 
 
 func complete_current_room() -> void:
-	
+
 	if map_manager == null:
+
 		push_error(
 			"RoomManager: MapManager is missing."
 		)
+
 		return
-	
+
+	if map_manager.current_room == null:
+
+		push_error(
+			"RoomManager: MapManager has no current room."
+		)
+
+		return
+
 	map_manager.complete_current_room()
-	
+
 	GameEvents.room_completed.emit(
 		map_manager.current_room
 	)
 
 
-func _on_treasure_finished(reward):
+# ==================================================
+# Special Room Completion
+# ==================================================
 
-	print("Treasure complete", reward)
+func _on_treasure_finished(reward) -> void:
+
+	print(
+		"Treasure complete:",
+		reward
+	)
 
 	complete_current_room()
 
@@ -463,13 +788,14 @@ func _on_treasure_finished(reward):
 	get_tree().current_scene.return_to_map()
 
 
-func _on_merchant_finished():
+func _on_merchant_finished() -> void:
 
 	print("Merchant complete")
 
 	complete_current_room()
 
 	if is_instance_valid(merchant_room):
+
 		merchant_room.close()
 		merchant_room.queue_free()
 
@@ -478,7 +804,7 @@ func _on_merchant_finished():
 	get_tree().current_scene.return_to_map()
 
 
-func _on_rest_finished():
+func _on_rest_finished() -> void:
 
 	print("Rest complete")
 
@@ -489,13 +815,14 @@ func _on_rest_finished():
 	get_tree().current_scene.return_to_map()
 
 
-func _on_lab_finished():
+func _on_lab_finished() -> void:
 
 	print("Lab complete")
 
 	complete_current_room()
 
 	if is_instance_valid(abandoned_lab):
+
 		abandoned_lab.close()
 		abandoned_lab.queue_free()
 
@@ -504,15 +831,18 @@ func _on_lab_finished():
 	get_tree().current_scene.return_to_map()
 
 
-func _on_mystery_finished():
+func _on_mystery_finished() -> void:
 
 	if is_instance_valid(mystery_room):
+
 		mystery_room.queue_free()
 
 	complete_current_room()
 
 	mystery_room = null
 
-	print("Mystery complete")
+	print(
+		"Mystery complete"
+	)
 
 	get_tree().current_scene.return_to_map()
