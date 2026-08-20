@@ -45,6 +45,7 @@ text = "EXIT 1"
 
 [node name="Exit2" parent="." unique_id=1184662847 instance=ExtResource("3_rve3k")]
 position = Vector2(168.225, 580.67)
+exit_id = 1
 
 [node name="Label" type="Label" parent="Exit2" unique_id=1322507641]
 offset_left = 42.760002

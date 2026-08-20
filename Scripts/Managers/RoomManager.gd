@@ -130,13 +130,13 @@ func create_room(
 func test_room_resource_battle() -> void:
 
 	var room: RoomResource = load(
-		"res://Data/Rooms/NormalBattle.tres"
+		"res://Data/Rooms/TestRoomA.tres"
 	)
 
 	if room == null:
 
 		push_error(
-			"RoomManager: Failed to load NormalBattle.tres."
+			"RoomManager: Failed to load TestRoomA.tres."
 		)
 
 		return
@@ -150,7 +150,8 @@ func test_room_resource_battle() -> void:
 	print("================================")
 
 	start_room(room)
-	
+
+
 # --------------------------------------------------
 # Start Room
 # --------------------------------------------------
@@ -277,6 +278,103 @@ func open_room_scene(room: RoomResource) -> void:
 			active_battle_room.name
 		)
 
+	# --------------------------------------------------
+	# Connect Room Exits
+	# --------------------------------------------------
+
+	connect_room_exits()
+
+	# --------------------------------------------------
+	# Disable Exits Until Room Is Complete
+	# --------------------------------------------------
+
+	set_room_exits_enabled(false)
+
+
+# ==================================================
+# Room Exits
+# ==================================================
+
+func connect_room_exits() -> void:
+
+	if active_room_scene == null:
+		push_error(
+			"RoomManager: Cannot connect exits without an active room scene."
+		)
+		return
+
+	var exits := active_room_scene.find_children(
+		"*",
+		"RoomExit",
+		true,
+		false
+	)
+
+	print("================================")
+	print("ROOM MANAGER: CONNECTING EXITS")
+	print("Found exits:", exits.size())
+	print("================================")
+
+	for exit in exits:
+
+		if not exit is RoomExit:
+			continue
+
+		if not exit.exit_entered.is_connected(
+			_on_room_exit_entered
+		):
+
+			exit.exit_entered.connect(
+				_on_room_exit_entered
+			)
+
+		print(
+			"Connected RoomExit:",
+			exit.name,
+			" Exit ID:",
+			exit.exit_id
+		)
+
+
+func set_room_exits_enabled(enabled: bool) -> void:
+
+	if active_room_scene == null:
+		return
+
+	var exits := active_room_scene.find_children(
+		"*",
+		"RoomExit",
+		true,
+		false
+	)
+
+	for exit in exits:
+
+		if exit is RoomExit:
+
+			exit.set_enabled(
+				enabled
+			)
+
+			print(
+				"RoomExit",
+				exit.exit_id,
+				"enabled:",
+				enabled
+			)
+
+
+func _on_room_exit_entered(exit_id: int) -> void:
+
+	print("================================")
+	print("ROOM MANAGER: ROOM EXIT ENTERED")
+	print("Exit ID:", exit_id)
+	print("================================")
+
+	select_room_exit(
+		exit_id
+	)
+
 
 # --------------------------------------------------
 # Complete Room
@@ -303,6 +401,12 @@ func complete_room() -> void:
 		"ROOM COMPLETED:",
 		current_room.room_name
 	)
+
+	# --------------------------------------------------
+	# Enable Room Exits
+	# --------------------------------------------------
+
+	set_room_exits_enabled(true)
 
 	GameEvents.room_completed.emit(
 		current_room
@@ -966,11 +1070,6 @@ func select_room_exit(exit_id: int) -> void:
 		)
 
 		return
-
-	print(
-		"Exit selected:",
-		exit_id
-	)
 
 	print(
 		"Next room:",

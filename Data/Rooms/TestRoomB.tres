@@ -2,9 +2,11 @@
 
 [ext_resource type="Script" uid="uid://0k05qgpjl5gm" path="res://Data/Rooms/RoomResource.gd" id="1_gukxi"]
 [ext_resource type="PackedScene" uid="uid://bmdklddw430wi" path="res://Scenes/Rooms/NormalBattleRoom.tscn" id="2_liert"]
+[ext_resource type="Resource" uid="uid://dqawa6cbu5snu" path="res://Data/Rooms/TestRoomD.tres" id="2_udxid"]
 
 [resource]
 script = ExtResource("1_gukxi")
 room_name = "Test Room B"
 room_scene = ExtResource("2_liert")
+next_rooms = Array[ExtResource("1_gukxi")]([ExtResource("2_udxid")])
 metadata/_custom_type_script = "uid://0k05qgpjl5gm"

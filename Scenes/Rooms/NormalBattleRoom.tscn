@@ -42,14 +42,3 @@ offset_top = 37.730003
 offset_right = 147.52
 offset_bottom = 95.46001
 text = "EXIT"
-
-[node name="Exit2" parent="." unique_id=1730805262 instance=ExtResource("3_yefhr")]
-position = Vector2(168.225, 580.67)
-exit_id = 1
-
-[node name="Label" type="Label" parent="Exit2" unique_id=905511667]
-offset_left = 42.760002
-offset_top = 37.730003
-offset_right = 147.52
-offset_bottom = 95.46001
-text = "EXIT 2"
