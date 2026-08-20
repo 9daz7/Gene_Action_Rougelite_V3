@@ -23,6 +23,12 @@ position = Vector2(945.305, 383.5)
 rotation = 0.0015685768
 shape = SubResource("RectangleShape2D_y2tb5")
 
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1191732503]
+position = Vector2(945.305, 539)
+rotation = -0.0015576184
+zoom = Vector2(2, 2)
+drag_vertical_offset = -1.0
+
 [node name="InteractionPrompt" parent="." unique_id=1894620983 instance=ExtResource("3_a6y7p")]
 offset_left = 904.0
 offset_top = 346.0
@@ -35,9 +41,3 @@ offset_bottom = 346.0
 position = Vector2(944.75, 381)
 rotation = -0.009292991
 shape = SubResource("CircleShape2D_a6y7p")
-
-[node name="Camera2D" type="Camera2D" parent="." unique_id=1191732503]
-position = Vector2(945.305, 539)
-rotation = -0.0015576184
-zoom = Vector2(2, 2)
-drag_vertical_offset = -1.0

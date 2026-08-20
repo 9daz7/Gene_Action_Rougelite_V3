@@ -277,9 +277,6 @@ func set_battle_active(
 				Node.PROCESS_MODE_INHERIT
 			)
 
-	if active:
+	if not active:
 
-		_disable_room_exits()
-
-	else:
 		enable_room_exits()

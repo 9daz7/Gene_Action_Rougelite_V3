@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="RoomResource" format=3 uid="uid://b0bkctmpgl5ef"]
+
+[ext_resource type="Script" uid="uid://0k05qgpjl5gm" path="res://Data/Rooms/RoomResource.gd" id="1_giqbh"]
+[ext_resource type="PackedScene" uid="uid://bmdklddw430wi" path="res://Scenes/Rooms/NormalBattleRoom.tscn" id="2_6dh71"]
+
+[resource]
+script = ExtResource("1_giqbh")
+room_name = "Test Room A"
+room_scene = ExtResource("2_6dh71")
+metadata/_custom_type_script = "uid://0k05qgpjl5gm"

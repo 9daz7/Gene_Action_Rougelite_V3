@@ -1,0 +1,66 @@
+[gd_scene format=3 uid="uid://b515mi4n67ch4"]
+
+[ext_resource type="Script" uid="uid://bd4c5xvt4q8t" path="res://Scenes/Rooms/NormalBattleRoom.gd" id="1_0fj0b"]
+[ext_resource type="Script" uid="uid://ckxjn41pglkmx" path="res://Scenes/Rooms/BattleTrigger.gd" id="2_05yg6"]
+[ext_resource type="PackedScene" uid="uid://s4vol5fxx17b" path="res://Scenes/Rooms/RoomExit.tscn" id="3_fji12"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gkajm"]
+size = Vector2(60, 60)
+
+[node name="NormalBattleRoom_3Exit" type="Node2D" unique_id=1919136388]
+script = ExtResource("1_0fj0b")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=807374136]
+offset_right = 1923.0
+offset_bottom = 1083.0
+color = Color(0, 0.27067333, 0.08999216, 1)
+
+[node name="PlayerSpawn" type="Marker2D" parent="." unique_id=2089369805]
+position = Vector2(-755, 578)
+
+[node name="BattleTrigger" type="Area2D" parent="." unique_id=1181056863]
+position = Vector2(180, 800)
+script = ExtResource("2_05yg6")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BattleTrigger" unique_id=1293923154]
+position = Vector2(0, 1)
+shape = SubResource("RectangleShape2D_gkajm")
+
+[node name="Label" type="Label" parent="BattleTrigger" unique_id=1070589995]
+offset_left = -26.0
+offset_top = -12.0
+offset_right = 29.0
+offset_bottom = 11.0
+text = "ENEMY"
+
+[node name="Exit1" parent="." unique_id=1730805262 instance=ExtResource("3_fji12")]
+position = Vector2(2.835, 580.67)
+
+[node name="Label" type="Label" parent="Exit1" unique_id=907257812]
+offset_left = 42.760002
+offset_top = 37.730003
+offset_right = 147.52
+offset_bottom = 95.46001
+text = "EXIT 1"
+
+[node name="Exit2" parent="." unique_id=839888796 instance=ExtResource("3_fji12")]
+position = Vector2(169.73, 580.67)
+exit_id = 1
+
+[node name="Label" type="Label" parent="Exit2" unique_id=1167546421]
+offset_left = 42.760002
+offset_top = 37.730003
+offset_right = 147.52
+offset_bottom = 95.46001
+text = "EXIT 2"
+
+[node name="Exit3" parent="." unique_id=473840370 instance=ExtResource("3_fji12")]
+position = Vector2(340.465, 580.67)
+exit_id = 2
+
+[node name="Label" type="Label" parent="Exit3" unique_id=1226089364]
+offset_left = 42.760002
+offset_top = 37.730003
+offset_right = 147.52
+offset_bottom = 95.46001
+text = "EXIT 3"

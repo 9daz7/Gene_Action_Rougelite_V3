@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://ctiu404ys0d4l"]
+
+[ext_resource type="Script" uid="uid://bd4c5xvt4q8t" path="res://Scenes/Rooms/NormalBattleRoom.gd" id="1_52dva"]
+
+[node name="TestRoomA" type="Node2D" unique_id=1186844015]
+script = ExtResource("1_52dva")
+
+[node name="Label" type="Label" parent="." unique_id=286726504]
+offset_left = 879.0
+offset_top = 443.0
+offset_right = 919.0
+offset_bottom = 466.0
+text = "A"

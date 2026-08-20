@@ -967,26 +967,28 @@ func select_room_exit(exit_id: int) -> void:
 
 		return
 
-		print(
-			"Exit selected:",
-			exit_id
-		)
+	print(
+		"Exit selected:",
+		exit_id
+	)
 
-		print(
-			"Next room:",
-			next_room.room_name
-		) 
+	print(
+		"Next room:",
+		next_room.room_name
+	) 
 
-		print(
-			"Next room type:",
-			next_room.room_type
-		)
+	print(
+		"Next room type:",
+		next_room.room_type
+	)
 
-		# --------------------------------------------------
-		# Start Next Room
-		# --------------------------------------------------
+	# --------------------------------------------------
+	# Start Next Room
+	# --------------------------------------------------
 
-		start_room( next_room )
+	start_room(
+		next_room
+	)
 
 
 # ==================================================
