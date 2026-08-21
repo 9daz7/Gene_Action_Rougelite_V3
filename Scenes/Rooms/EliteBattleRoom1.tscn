@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://qns4kwnrmqio"]
 
 [ext_resource type="Script" uid="uid://ckxjn41pglkmx" path="res://Scenes/Rooms/BattleTrigger.gd" id="1_eymx8"]
+[ext_resource type="Script" uid="uid://bd4c5xvt4q8t" path="res://Scenes/Rooms/NormalBattleRoom.gd" id="1_hl6lp"]
 [ext_resource type="PackedScene" uid="uid://s4vol5fxx17b" path="res://Scenes/Rooms/RoomExit.tscn" id="1_i5uf7"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_eymx8"]
@@ -25,7 +26,7 @@ size = Vector2(936.22504, 20)
 size = Vector2(416, 49.000008)
 
 [node name="EliteBattleRoom1" type="Node2D" unique_id=1420434405]
-script = ExtResource("1_eymx8")
+script = ExtResource("1_hl6lp")
 
 [node name="Background" type="ColorRect" parent="." unique_id=746460655]
 offset_right = 1920.0
