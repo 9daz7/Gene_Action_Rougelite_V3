@@ -129,27 +129,78 @@ func create_room(
 
 func test_room_resource_battle() -> void:
 
+	print("ROOM TEST: FUNCTION ENTERED")
+
+	print("ROOM TEST: ABOUT TO LOAD RESOURCE")
+
 	var room: RoomResource = load(
-		"res://Data/Rooms/TestRoomA.tres"
+		"res://Data/Rooms/NormalBattle_01.tres"
 	)
+
+	print("ROOM TEST: RESOURCE LOAD FINISHED")
 
 	if room == null:
 
 		push_error(
-			"RoomManager: Failed to load TestRoomA.tres."
+			"RoomManager: Failed to load NormalBattle_01.tres."
 		)
 
 		return
 
+	print(
+		"ROOM TEST: ROOM IS VALID"
+	)
+
+	print(
+		"ROOM TEST: NAME =",
+		room.room_name
+	)
+
+	print(
+		"ROOM TEST: TYPE =",
+		room.room_type
+	)
+
+	print(
+		"ROOM TEST: SCENE =",
+		room.room_scene
+	)
+
+	print(
+		"ROOM TEST: NEXT ROOMS =",
+		room.next_rooms.size()
+	)
+
 	room.completed = false
 
-	print("================================")
-	print("ROOM RESOURCE TEST")
-	print("Loaded:", room.room_name)
-	print("Type:", room.room_type)
-	print("================================")
+	print(
+		"ROOM TEST: ABOUT TO CALL start_room()"
+	)
 
 	start_room(room)
+
+	print(
+		"ROOM TEST: start_room() RETURNED"
+	)
+
+	#print("ROOM TEST: RESOURCE IS VALID")
+#
+	#room.completed = false
+#
+	#print("ROOM TEST: ROOM RESET")
+#
+	#print("================================")
+	#print("ROOM RESOURCE TEST")
+	#print("Loaded:", room.room_name)
+	#print("Type:", room.room_type)
+	#print("================================")
+#
+	#print("ROOM TEST: ABOUT TO START ROOM")
+#
+	#start_room(room)
+#
+#
+	#print("ROOM TEST: START ROOM RETURNED")
 
 
 # --------------------------------------------------
@@ -1085,7 +1136,8 @@ func select_room_exit(exit_id: int) -> void:
 	# Start Next Room
 	# --------------------------------------------------
 
-	start_room(
+	call_deferred(
+		"start_room",
 		next_room
 	)
 

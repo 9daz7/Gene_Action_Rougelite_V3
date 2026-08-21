@@ -228,10 +228,10 @@ metadata/_custom_type_script = "uid://csjgqa1kcrfgr"
 [node name="InteractionPrompt" type="Control" parent="UI" unique_id=1757099720]
 layout_mode = 3
 anchors_preset = 0
-offset_left = 922.0
-offset_top = 335.0
-offset_right = 962.0
-offset_bottom = 375.0
+offset_left = 941.0
+offset_top = 360.0
+offset_right = 981.0
+offset_bottom = 400.0
 script = ExtResource("5_y1qvb")
 metadata/_custom_type_script = "uid://dujrji3acqxot"
 

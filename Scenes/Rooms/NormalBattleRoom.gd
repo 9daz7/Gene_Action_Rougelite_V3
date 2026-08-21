@@ -267,13 +267,15 @@ func set_battle_active(
 
 		if active:
 
-			battle_trigger.set_process_mode(
+			battle_trigger.call_deferred(
+				"set_process_mode",
 				Node.PROCESS_MODE_DISABLED
 			)
 
 		else:
 
-			battle_trigger.set_process_mode(
+			battle_trigger.call_deferred(
+				"set_process_mode",
 				Node.PROCESS_MODE_INHERIT
 			)
 

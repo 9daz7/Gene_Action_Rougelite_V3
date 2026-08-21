@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="RoomResource" format=3 uid="uid://b7gmnu074h8ti"]
+
+[ext_resource type="Script" uid="uid://0k05qgpjl5gm" path="res://Data/Rooms/RoomResource.gd" id="1_xcblp"]
+[ext_resource type="Resource" uid="uid://jcu3o37frsco" path="res://Data/Rooms/EliteBattle_02.tres" id="2_cm5wv"]
+[ext_resource type="Resource" uid="uid://4438jumt2cec" path="res://Data/Rooms/NormalBattle_02.tres" id="3_0h6ri"]
+[ext_resource type="Resource" uid="uid://bei2yt4begh85" path="res://Data/Rooms/NormalBattle_03.tres" id="4_pwcuq"]
+[ext_resource type="PackedScene" uid="uid://b515mi4n67ch4" path="res://Scenes/Rooms/NormalBattleRoom_3Exit.tscn" id="5_bm6mo"]
+
+[resource]
+script = ExtResource("1_xcblp")
+room_scene = ExtResource("5_bm6mo")
+next_rooms = Array[ExtResource("1_xcblp")]([ExtResource("2_cm5wv"), ExtResource("3_0h6ri"), ExtResource("4_pwcuq")])
+metadata/_custom_type_script = "uid://0k05qgpjl5gm"

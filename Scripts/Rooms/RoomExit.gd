@@ -46,6 +46,8 @@ func interact() -> void:
 	if not player_in_range:
 		return
 
+	enabled = false
+
 	print("================================")
 	print("ROOM EXIT INTERACTED")
 	print("Exit ID:", exit_id)

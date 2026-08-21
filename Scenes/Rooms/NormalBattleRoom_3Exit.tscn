@@ -4,26 +4,127 @@
 [ext_resource type="Script" uid="uid://ckxjn41pglkmx" path="res://Scenes/Rooms/BattleTrigger.gd" id="2_05yg6"]
 [ext_resource type="PackedScene" uid="uid://s4vol5fxx17b" path="res://Scenes/Rooms/RoomExit.tscn" id="3_fji12"]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pqjnt"]
+size = Vector2(1960, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_npkn0"]
+size = Vector2(20, 1080)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gs0tk"]
+size = Vector2(20, 1080)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_oaf1g"]
+size = Vector2(1960, 20.25)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qwfpk"]
+size = Vector2(259, 69)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_agc68"]
+size = Vector2(790, 75)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gkajm"]
-size = Vector2(60, 60)
+size = Vector2(60, 240)
 
 [node name="NormalBattleRoom_3Exit" type="Node2D" unique_id=1919136388]
 script = ExtResource("1_0fj0b")
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=807374136]
-offset_right = 1923.0
-offset_bottom = 1083.0
+offset_right = 1920.0
+offset_bottom = 1080.0
 color = Color(0, 0.27067333, 0.08999216, 1)
 
+[node name="Background" type="Control" parent="." unique_id=1069192833]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Walls" type="Control" parent="Background" unique_id=1447426956]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="topWall" type="StaticBody2D" parent="Background/Walls" unique_id=1200391962]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Background/Walls/topWall" unique_id=1148961171]
+position = Vector2(960, -10)
+shape = SubResource("RectangleShape2D_pqjnt")
+
+[node name="RightWall" type="StaticBody2D" parent="Background/Walls" unique_id=997827504]
+position = Vector2(1936.39, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Background/Walls/RightWall" unique_id=1516288268]
+position = Vector2(-6.3900146, 540)
+shape = SubResource("RectangleShape2D_npkn0")
+
+[node name="LeftWall" type="StaticBody2D" parent="Background/Walls" unique_id=1490482208]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Background/Walls/LeftWall" unique_id=1023023493]
+position = Vector2(-10, 540)
+shape = SubResource("RectangleShape2D_gs0tk")
+
+[node name="BottomWall" type="StaticBody2D" parent="Background/Walls" unique_id=297110157]
+position = Vector2(0, 1084.25)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Background/Walls/BottomWall" unique_id=1923500414]
+position = Vector2(960, 5.875)
+shape = SubResource("RectangleShape2D_oaf1g")
+
+[node name="StaticBody2D5" type="StaticBody2D" parent="Background/Walls" unique_id=2017101205]
+position = Vector2(747.015, 17.555)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Background/Walls/StaticBody2D5" unique_id=248387993]
+position = Vector2(-86.515015, 17.945)
+shape = SubResource("RectangleShape2D_qwfpk")
+
+[node name="StaticBody2D6" type="StaticBody2D" parent="Background/Walls" unique_id=1097459053]
+position = Vector2(99.83, 332.765)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Background/Walls/StaticBody2D6" unique_id=1492345070]
+position = Vector2(296.16998, 21.734985)
+shape = SubResource("RectangleShape2D_agc68")
+
+[node name="ColorRect" type="ColorRect" parent="Background" unique_id=1538546739]
+layout_mode = 0
+offset_left = 95.0
+offset_top = 86.0
+offset_right = 873.0
+offset_bottom = 298.0
+color = Color(0.60784316, 0.43529412, 0, 1)
+
+[node name="ColorRect2" type="ColorRect" parent="Background" unique_id=1476224692]
+layout_mode = 0
+offset_left = 72.0
+offset_top = 825.0
+offset_right = 215.0
+offset_bottom = 1083.0
+color = Color(0.60784316, 0.43529412, 0, 1)
+
+[node name="ColorRect3" type="ColorRect" parent="Background" unique_id=676297268]
+layout_mode = 0
+offset_left = 73.0
+offset_top = 476.0
+offset_right = 1831.0
+offset_bottom = 911.0
+color = Color(0.60784316, 0.43529412, 0, 1)
+
+[node name="ColorRect4" type="ColorRect" parent="Background" unique_id=746781560]
+layout_mode = 0
+offset_left = 873.0
+offset_top = 56.0
+offset_right = 1830.0
+offset_bottom = 478.0
+color = Color(0.60784316, 0.43529412, 0, 1)
+
 [node name="PlayerSpawn" type="Marker2D" parent="." unique_id=2089369805]
-position = Vector2(-755, 578)
+position = Vector2(138, 1024)
 
 [node name="BattleTrigger" type="Area2D" parent="." unique_id=1181056863]
-position = Vector2(180, 800)
+position = Vector2(759.68, 214.585)
 script = ExtResource("2_05yg6")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BattleTrigger" unique_id=1293923154]
-position = Vector2(0, 1)
+position = Vector2(0, -21.585007)
 shape = SubResource("RectangleShape2D_gkajm")
 
 [node name="Label" type="Label" parent="BattleTrigger" unique_id=1070589995]
@@ -34,22 +135,34 @@ offset_bottom = 11.0
 text = "ENEMY"
 
 [node name="Exit1" parent="." unique_id=1730805262 instance=ExtResource("3_fji12")]
-position = Vector2(2.835, 580.67)
+position = Vector2(0, 284)
+rotation = -1.5707964
 
 [node name="Label" type="Label" parent="Exit1" unique_id=907257812]
 offset_left = 42.760002
 offset_top = 37.730003
-offset_right = 147.52
-offset_bottom = 95.46001
+offset_right = 101.0
+offset_bottom = 71.99999
 text = "EXIT 1"
 
 [node name="Exit2" parent="." unique_id=839888796 instance=ExtResource("3_fji12")]
-position = Vector2(169.73, 580.67)
+position = Vector2(105, 0)
 exit_id = 1
 
 [node name="Label" type="Label" parent="Exit2" unique_id=1167546421]
 offset_left = 42.760002
 offset_top = 37.730003
-offset_right = 147.52
-offset_bottom = 95.46001
+offset_right = 96.99999
+offset_bottom = 72.0
 text = "EXIT 2"
+
+[node name="Exit3" parent="." unique_id=1036239407 instance=ExtResource("3_fji12")]
+position = Vector2(297, -2)
+exit_id = 2
+
+[node name="Label" type="Label" parent="Exit3" unique_id=9751550]
+offset_left = 42.760002
+offset_top = 37.730003
+offset_right = 99.99999
+offset_bottom = 77.0
+text = "EXIT 3"
