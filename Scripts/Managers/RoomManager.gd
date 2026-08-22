@@ -31,10 +31,10 @@ class_name RoomManager
 
 
 const TREASURE_SCENE = preload("res://Scenes/Rooms/TreasureRoom.tscn")
-const MERCHANT_SCENE = preload("res://Scenes/Rooms/MerchantRoom.tscn")
-const REST_SCENE = preload("res://Scenes/Rooms/RestRoom.tscn")
-const ABANDONED_LAB_SCENE = preload("res://Scenes/Rooms/AbandonedLab.tscn")
-const MYSTERY_SCENE = preload("res://Scenes/Rooms/MysteryRoom.tscn")
+#const MERCHANT_SCENE = preload("res://Scenes/Rooms/MerchantRoom.tscn")
+#const REST_SCENE = preload("res://Scenes/Rooms/RestRoom.tscn")
+#const ABANDONED_LAB_SCENE = preload("res://Scenes/Rooms/AbandonedLab.tscn")
+#const MYSTERY_SCENE = preload("res://Scenes/Rooms/MysteryRoom.tscn")
 const REWARD_SCENE = preload("res://Scenes/Rooms/RewardRoom.tscn")
 
 
@@ -239,13 +239,19 @@ func start_room(room: RoomResource) -> void:
 			start_new_elite_room(room)
 
 		RoomResource.RoomType.REWARD:
-			print("Reward room selected.")
+			start_new_reward_room(room)
 
 		RoomResource.RoomType.SHOP:
-			print("Shop room selected.")
+			start_new_shop_room(room)
 
 		RoomResource.RoomType.EVENT:
-			print("Event room selected.")
+			start_new_event_room(room)
+
+		RoomResource.RoomType.REST:
+			start_new_rest_room(room)
+
+		RoomResource.RoomType.TREASURE:
+			start_new_treasure_room(room)
 
 		RoomResource.RoomType.BOSS:
 			start_new_boss_room(room)
@@ -253,7 +259,7 @@ func start_room(room: RoomResource) -> void:
 		_:
 			push_error(
 				"RoomManager: Unknown RoomResource type."
-			)
+		)
 
 
 # ==================================================
@@ -569,6 +575,70 @@ func start_new_boss_room(room: RoomResource) -> void:
 
 
 # ==================================================
+# Non-Battle Rooms
+# ==================================================
+
+func start_new_treasure_room(
+	room: RoomResource
+) -> void:
+
+	print("================================")
+	print("STARTING TREASURE ROOM")
+	print("Room:", room.room_name)
+	print("================================")
+
+	open_room_scene(room)
+
+
+func start_new_rest_room(
+	room: RoomResource
+) -> void:
+
+	print("================================")
+	print("STARTING REST ROOM")
+	print("Room:", room.room_name)
+	print("================================")
+
+	open_room_scene(room)
+
+
+func start_new_shop_room(
+	room: RoomResource
+) -> void:
+
+	print("================================")
+	print("STARTING SHOP ROOM")
+	print("Room:", room.room_name)
+	print("================================")
+
+	open_room_scene(room)
+
+
+func start_new_event_room(
+	room: RoomResource
+) -> void:
+
+	print("================================")
+	print("STARTING EVENT ROOM")
+	print("Room:", room.room_name)
+	print("================================")
+
+	open_room_scene(room)
+
+
+func start_new_reward_room(
+	room: RoomResource
+) -> void:
+
+	print("================================")
+	print("STARTING REWARD ROOM")
+	print("Room:", room.room_name)
+	print("================================")
+
+	open_room_scene(room)
+
+
+# ==================================================
 # Room Encounters
 # ==================================================
 
@@ -721,7 +791,7 @@ func open_shop(room: RoomData) -> void:
 
 	print("Opening merchant")
 
-	merchant_room = MERCHANT_SCENE.instantiate()
+	#merchant_room = MERCHANT_SCENE.instantiate()
 
 	get_tree().current_scene.add_child(
 		merchant_room
@@ -759,7 +829,7 @@ func open_rest(room: RoomData) -> void:
 
 	print("Opening rest room")
 
-	rest_room = REST_SCENE.instantiate()
+	#rest_room = REST_SCENE.instantiate()
 
 	get_tree().current_scene.add_child(
 		rest_room
@@ -786,7 +856,7 @@ func open_lab(room: RoomData) -> void:
 
 		return
 
-	abandoned_lab = ABANDONED_LAB_SCENE.instantiate()
+	#abandoned_lab = ABANDONED_LAB_SCENE.instantiate()
 
 	get_tree().current_scene.add_child(
 		abandoned_lab
@@ -810,7 +880,7 @@ func open_mystery(room: RoomData) -> void:
 
 	print("Opening a mystery room")
 
-	mystery_room = MYSTERY_SCENE.instantiate()
+	#mystery_room = MYSTERY_SCENE.instantiate()
 
 	get_tree().current_scene.add_child(
 		mystery_room

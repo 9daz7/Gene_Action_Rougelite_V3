@@ -99,13 +99,6 @@ interaction_text = "[E] Open Chest"
 position = Vector2(0.5, -0.5)
 shape = SubResource("RectangleShape2D_gs0tk")
 
-[node name="Label" type="Label" parent="TreasureInteractable" unique_id=91820388]
-offset_left = -23.755
-offset_top = -11.455
-offset_right = 20.245
-offset_bottom = 11.545
-text = "Chest"
-
 [node name="Exit1" parent="." unique_id=1730805262 instance=ExtResource("2_tqj88")]
 position = Vector2(671, -1)
 

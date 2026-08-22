@@ -1,5 +1,5 @@
 extends Control
-class_name TreasureRoom
+class_name TreasureRoom_UI
 
 
 # ==================================================
@@ -22,13 +22,13 @@ const REWARD_BUTTON = preload("res://Scenes/UI/RewardButton.tscn")
 
 @onready var reward_container = $CenterContainer/VBoxContainer/RewardContainer
 @onready var continue_button = $CenterContainer/VBoxContainer/ContinueButton
-@onready var run_manager = $"../Managers/RunManager"
 
 
 # ==================================================
 # Member Variables
 # ==================================================
 
+var run_manager: RunManager = null
 var selected_reward = null
 
 # ==================================================
@@ -36,9 +36,15 @@ var selected_reward = null
 # ==================================================
 
 
-func _ready():
+func _ready() -> void:
 
-	continue_button.pressed.connect(_on_continue_pressed)
+	if not continue_button.pressed.is_connected(
+		_on_continue_pressed
+	):
+
+		continue_button.pressed.connect(
+			_on_continue_pressed
+	)
 
 
 # ==================================================
@@ -46,9 +52,20 @@ func _ready():
 # ==================================================
 
 
-func open(manager:RunManager):
+func open(
+	manager: RunManager
+) -> void:
+
+	if manager == null:
+
+		push_error(
+			"TreasureRoom_UI: RunManager is missing."
+		)
+
+		return
 
 	run_manager = manager
+
 	show()
 
 	selected_reward = null
@@ -68,11 +85,10 @@ func close():
 # ==================================================
 
 
-func _create_test_rewards():
-
-	# eventually replace with generated treasure rewards.
+func _create_test_rewards() -> void:
 
 	for child in reward_container.get_children():
+
 		child.queue_free()
 
 	var rewards = [
@@ -101,7 +117,7 @@ func _create_test_rewards():
 		reward_container.add_child(button)
 
 
-func _select_reward(reward):
+func _select_reward(reward) -> void:
 
 	if selected_reward != null:
 		return
@@ -116,17 +132,21 @@ func _select_reward(reward):
 	continue_button.disabled = false
 
 
-func _on_continue_pressed():
+func _on_continue_pressed() -> void:
 
-	print("Treasure room completed")
+	if selected_reward == null:
+
+		return
+
+	print(
+		"Treasure room completed"
+	)
 
 	_apply_reward()
 
-	run_manager.save_manager.save_game(run_manager)
-
-	treasure_finished.emit(selected_reward)
-
-	queue_free()
+	treasure_finished.emit(
+		selected_reward
+	)
 
 
 # ==================================================
@@ -134,16 +154,39 @@ func _on_continue_pressed():
 # ==================================================
 
 
-func _apply_reward():
+func _apply_reward() -> void:
 
 	if selected_reward == null:
 		return
 
-	if selected_reward.has("gold"):
-		
-		run_manager.gold += selected_reward.gold
+	if run_manager == null:
 
-	print(
-		"Gold:",
-		run_manager.gold
+		push_error(
+			"TreasureRoom_UI: RunManager is missing."
+		)
+
+		return
+
+	# --------------------------------------------------
+	# Run Gold
+	# --------------------------------------------------
+
+	var gold_amount: int = int(
+		selected_reward.get("gold", 0)
 	)
+
+	if gold_amount > 0:
+
+		run_manager.add_gold(
+			gold_amount
+		)
+
+		print(
+			"Treasure gold gained:",
+			gold_amount
+		)
+
+		print(
+			"Run gold:",
+			run_manager.gold
+		)

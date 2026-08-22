@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="RoomResource" format=3 uid="uid://iv1oqax85bga"]
+
+[ext_resource type="Script" uid="uid://0k05qgpjl5gm" path="res://Data/Rooms/RoomResource(old).gd" id="1_ts3bv"]
+[ext_resource type="PackedScene" uid="uid://rv1p4yai180l" path="res://Scenes/Rooms/TreasureRoom.tscn" id="2_54c0t"]
+
+[resource]
+script = ExtResource("1_ts3bv")
+room_type = 7
+room_name = "Treasure Room"
+room_scene = ExtResource("2_54c0t")
+metadata/_custom_type_script = "uid://0k05qgpjl5gm"
