@@ -78,6 +78,8 @@ func _ready():
 		gene_database
 	)
 
+	run_manager.load_room_pools()
+
 	_create_lab_hub()
 
 

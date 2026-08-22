@@ -26,6 +26,20 @@ var current_run_map: RunMapResource = null
 
 
 # ==================================================
+# Room Pools
+# ==================================================
+
+var battle_rooms: Array[RoomResource] = []
+var elite_rooms: Array[RoomResource] = []
+
+var treasure_rooms: Array[RoomResource] = []
+var shop_rooms: Array[RoomResource] = []
+var rest_rooms: Array[RoomResource] = []
+var event_rooms: Array[RoomResource] = []
+var lab_rooms: Array[RoomResource] = []
+
+
+# ==================================================
 # Run State
 # ==================================================
 
@@ -84,9 +98,387 @@ func _ready():
 
 
 # ==================================================
+# Room Pool Setup
+# ==================================================
+
+func load_room_pools() -> void:
+
+	print("================================")
+	print("LOADING ROOM POOLS")
+	print("================================")
+
+	battle_rooms.clear()
+	elite_rooms.clear()
+
+	treasure_rooms.clear()
+	shop_rooms.clear()
+	rest_rooms.clear()
+	event_rooms.clear()
+	lab_rooms.clear()
+
+	# --------------------------------------------------
+	# Battle Rooms
+	# --------------------------------------------------
+
+	_add_room_to_pool(
+		battle_rooms,
+		"res://Data/Rooms/NormalBattle_01.tres"
+	)
+
+	_add_room_to_pool(
+		battle_rooms,
+		"res://Data/Rooms/NormalBattle_02.tres"
+	)
+
+	_add_room_to_pool(
+		battle_rooms,
+		"res://Data/Rooms/NormalBattle_03.tres"
+	)
+
+	# --------------------------------------------------
+	# Elite Rooms
+	# --------------------------------------------------
+
+	_add_room_to_pool(
+		elite_rooms,
+		"res://Data/Rooms/EliteBattle_01.tres"
+	)
+
+	_add_room_to_pool(
+		elite_rooms,
+		"res://Data/Rooms/EliteBattle_02.tres"
+	)
+
+	# --------------------------------------------------
+	# Treasure Rooms
+	# --------------------------------------------------
+
+	_add_room_to_pool(
+		treasure_rooms,
+		"res://Data/Rooms/Treasure_01.tres"
+	)
+
+	# --------------------------------------------------
+	# Shop Rooms
+	# --------------------------------------------------
+
+	_add_room_to_pool(
+		shop_rooms,
+		"res://Data/Rooms/Merchant_01.tres"
+	)
+
+
+	# --------------------------------------------------
+	# Rest Rooms
+	# --------------------------------------------------
+
+	_add_room_to_pool(
+		rest_rooms,
+		"res://Data/Rooms/Rest_01.tres"
+	)
+
+	# --------------------------------------------------
+	# Event Rooms
+	# --------------------------------------------------
+
+	_add_room_to_pool(
+		event_rooms,
+		"res://Data/Rooms/Event_01.tres"
+	)
+
+
+	# --------------------------------------------------
+	# Lab Rooms
+	# --------------------------------------------------
+
+	_add_room_to_pool(
+		lab_rooms,
+		"res://Data/Rooms/AbandonedLab_01.tres"
+	)
+
+	# --------------------------------------------------
+	# Debug
+	# --------------------------------------------------
+
+	print(
+		"Battle rooms:",
+		battle_rooms.size()
+	)
+
+	print(
+		"Elite rooms:",
+		elite_rooms.size()
+	)
+
+	print(
+		"Treasure rooms:",
+		treasure_rooms.size()
+	)
+
+	print(
+		"Shop rooms:",
+		shop_rooms.size()
+	)
+
+	print(
+		"Rest rooms:",
+		rest_rooms.size()
+	)
+
+	print(
+		"Event rooms:",
+		event_rooms.size()
+	)
+
+	print(
+		"Lab rooms:",
+		lab_rooms.size()
+	)
+
+	print("================================")
+	print("ROOM POOLS LOADED")
+	print("================================")
+
+
+func _add_room_to_pool(
+	pool: Array[RoomResource],
+	path: String
+) -> void:
+
+	print(
+		"Loading room:",
+		path
+	)
+
+	var room := load(
+		path
+	) as RoomResource
+
+	if room == null:
+
+		push_error(
+			"RunManager: Failed to load room: "
+			+ path
+		)
+
+		return
+
+	pool.append(
+		room
+	)
+
+	print(
+		"Added room:",
+		room.room_name,
+		" Type:",
+		room.room_type
+	)
+
+
+# ==================================================
+# Room Selection
+# ==================================================
+
+func get_random_room(
+	pool: Array[RoomResource]
+) -> RoomResource:
+
+	if pool.is_empty():
+
+		push_error(
+			"RunManager: Cannot select from empty room pool."
+		)
+
+		return null
+
+	return pool.pick_random()
+
+
+# ==================================================
 # Run Map Test
 # ==================================================
 
+#func create_run_map() -> void:
+#
+	#print("================================")
+	#print("CREATING TEST RUN MAP")
+	#print("================================")
+#
+	## --------------------------------------------------
+	## Load Rooms
+	## --------------------------------------------------
+#
+	#var battle := load(
+		#"res://Data/Rooms/NormalBattle_01.tres"
+	#) as RoomResource
+#
+	#var treasure := load(
+		#"res://Data/Rooms/Treasure_01.tres"
+	#) as RoomResource
+#
+	#var shop := load(
+		#"res://Data/Rooms/Merchant_01.tres"
+	#) as RoomResource
+#
+	#var event := load(
+		#"res://Data/Rooms/Event_01.tres"
+	#) as RoomResource
+#
+	#var lab := load(
+		#"res://Data/Rooms/AbandonedLab_01.tres"
+	#) as RoomResource
+#
+#var battle := get_random_room(
+	#battle_rooms
+#)
+#
+#var treasure := get_random_room(
+	#treasure_rooms
+#)
+#
+#var shop := get_random_room(
+	#shop_rooms
+#)
+#
+#var event := get_random_room(
+	#event_rooms
+#)
+#
+#var lab := get_random_room(
+	#lab_rooms
+#)
+	## --------------------------------------------------
+	## Validate Rooms
+	## --------------------------------------------------
+#
+	#if battle == null:
+		#push_error(
+			#"RunManager: Failed to load NormalBattle_01."
+		#)
+		#return
+#
+	#if treasure == null:
+		#push_error(
+			#"RunManager: Failed to load Treasure_01."
+		#)
+		#return
+#
+	#if shop == null:
+		#push_error(
+			#"RunManager: Failed to load Merchant_01."
+		#)
+		#return
+#
+	#if event == null:
+		#push_error(
+			#"RunManager: Failed to load Event_01."
+		#)
+		#return
+#
+	#if lab == null:
+		#push_error(
+			#"RunManager: Failed to load AbandonedLab_01."
+		#)
+		#return
+#
+	## --------------------------------------------------
+	## Reset Room State
+	## --------------------------------------------------
+#
+	#battle.completed = false
+	#treasure.completed = false
+	#shop.completed = false
+	#event.completed = false
+	#lab.completed = false
+#
+	## --------------------------------------------------
+	## Build Graph
+	## --------------------------------------------------
+#
+	#battle.next_rooms = [
+		#treasure,
+		#shop
+	#]
+#
+	#treasure.next_rooms = [
+		#event
+	#]
+#
+	#shop.next_rooms = [
+		#event
+	#]
+#
+	#event.next_rooms = [
+		#lab
+	#]
+#
+	#lab.next_rooms = []
+#
+	## --------------------------------------------------
+	## Create Run Map
+	## --------------------------------------------------
+#
+	#current_run_map = RunMapResource.new()
+#
+	#current_run_map.start_room = battle
+#
+	#current_run_map.rooms = [
+		#battle,
+		#treasure,
+		#shop,
+		#event,
+		#lab
+	#]
+#
+	#current_run_map.current_room = battle
+#
+	## --------------------------------------------------
+	## Debug
+	## --------------------------------------------------
+#
+	#print("RUN MAP CREATED")
+#
+	#print(
+		#"Start:",
+		#current_run_map.start_room.room_name
+	#)
+#
+	#print(
+		#"Total rooms:",
+		#current_run_map.rooms.size()
+	#)
+#
+	#print(
+		#"Battle exits:",
+		#battle.next_rooms.size()
+	#)
+#
+	#print(
+		#"Treasure exits:",
+		#treasure.next_rooms.size()
+	#)
+#
+	#print(
+		#"Shop exits:",
+		#shop.next_rooms.size()
+	#)
+#
+	#print(
+		#"Event exits:",
+		#event.next_rooms.size()
+	#)
+#
+	#print("================================")
+	#print("STARTING RUN MAP")
+	#print("================================")
+#
+	## --------------------------------------------------
+	## Start First Room
+	## --------------------------------------------------
+#
+	#room_manager.start_room(
+		#current_run_map.start_room
+	#)
 func create_run_map() -> void:
 
 	print("================================")
@@ -94,65 +486,115 @@ func create_run_map() -> void:
 	print("================================")
 
 	# --------------------------------------------------
-	# Load Rooms
+	# Make sure pools exist
 	# --------------------------------------------------
 
-	var battle := load(
-		"res://Data/Rooms/NormalBattle_01.tres"
-	) as RoomResource
+	if battle_rooms.is_empty():
 
-	var treasure := load(
-		"res://Data/Rooms/Treasure_01.tres"
-	) as RoomResource
+		push_error(
+			"RunManager: Battle room pool is empty."
+		)
 
-	var shop := load(
-		"res://Data/Rooms/Merchant_01.tres"
-	) as RoomResource
+		return
 
-	var event := load(
-		"res://Data/Rooms/Event_01.tres"
-	) as RoomResource
+	if treasure_rooms.is_empty():
 
-	var lab := load(
-		"res://Data/Rooms/AbandonedLab_01.tres"
-	) as RoomResource
+		push_error(
+			"RunManager: Treasure room pool is empty."
+		)
+
+		return
+
+	if shop_rooms.is_empty():
+
+		push_error(
+			"RunManager: Shop room pool is empty."
+		)
+
+		return
+
+	if event_rooms.is_empty():
+
+		push_error(
+			"RunManager: Event room pool is empty."
+		)
+
+	if lab_rooms.is_empty():
+
+		push_error(
+			"RunManager: Lab room pool is empty."
+		)
+
+		return
+
 
 	# --------------------------------------------------
-	# Validate Rooms
+	# Test Room Selection
 	# --------------------------------------------------
+
+	var battle := get_random_room(
+		battle_rooms
+	)
+
+	var treasure := get_random_room(
+		treasure_rooms
+	)
+
+	var shop := get_random_room(
+		shop_rooms
+	)
+
+	var event := get_random_room(
+		event_rooms
+	)
+
+	var lab := get_random_room(
+		lab_rooms
+	)
 
 	if battle == null:
-		push_error(
-			"RunManager: Failed to load NormalBattle_01."
-		)
 		return
 
 	if treasure == null:
-		push_error(
-			"RunManager: Failed to load Treasure_01."
-		)
 		return
 
 	if shop == null:
-		push_error(
-			"RunManager: Failed to load Merchant_01."
-		)
 		return
 
 	if event == null:
-		push_error(
-			"RunManager: Failed to load Event_01."
-		)
 		return
 
 	if lab == null:
-		push_error(
-			"RunManager: Failed to load AbandonedLab_01."
-		)
 		return
 
+	print(
+		"Selected battle:",
+		battle.room_name
+	)
+
+	print(
+		"Selected treasure:",
+		treasure.room_name
+	)
+
+	print(
+		"Selected shop:",
+		shop.room_name
+	)
+
+	print(
+		"Selected event:",
+		event.room_name
+	)
+
+	print(
+		"Selected lab:",
+		lab.room_name
+	)
+
+
 	# --------------------------------------------------
-	# Reset Room State
+	# Build Test Graph
 	# --------------------------------------------------
 
 	battle.completed = false
@@ -160,10 +602,6 @@ func create_run_map() -> void:
 	shop.completed = false
 	event.completed = false
 	lab.completed = false
-
-	# --------------------------------------------------
-	# Build Graph
-	# --------------------------------------------------
 
 	battle.next_rooms = [
 		treasure,
@@ -184,6 +622,7 @@ func create_run_map() -> void:
 
 	lab.next_rooms = []
 
+
 	# --------------------------------------------------
 	# Create Run Map
 	# --------------------------------------------------
@@ -202,54 +641,14 @@ func create_run_map() -> void:
 
 	current_run_map.current_room = battle
 
-	# --------------------------------------------------
-	# Debug
-	# --------------------------------------------------
-
-	print("RUN MAP CREATED")
-
-	print(
-		"Start:",
-		current_run_map.start_room.room_name
-	)
-
-	print(
-		"Total rooms:",
-		current_run_map.rooms.size()
-	)
-
-	print(
-		"Battle exits:",
-		battle.next_rooms.size()
-	)
-
-	print(
-		"Treasure exits:",
-		treasure.next_rooms.size()
-	)
-
-	print(
-		"Shop exits:",
-		shop.next_rooms.size()
-	)
-
-	print(
-		"Event exits:",
-		event.next_rooms.size()
-	)
 
 	print("================================")
-	print("STARTING RUN MAP")
+	print("RUN MAP CREATED FROM ROOM POOLS")
 	print("================================")
-
-	# --------------------------------------------------
-	# Start First Room
-	# --------------------------------------------------
 
 	room_manager.start_room(
 		current_run_map.start_room
 	)
-
 
 # ==================================================
 # Run Control
