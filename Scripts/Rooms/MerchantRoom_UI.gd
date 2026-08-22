@@ -1,5 +1,5 @@
 extends Control
-class_name MerchantRoom
+class_name MerchantRoom_UI
 
 
 # ==================================================

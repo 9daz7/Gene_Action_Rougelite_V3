@@ -1,0 +1,144 @@
+[gd_scene format=3 uid="uid://jyb661mcndj1"]
+
+[ext_resource type="Script" uid="uid://csjgqa1kcrfgr" path="res://Scripts/Hub/Interactable.gd" id="1_e24ay"]
+[ext_resource type="Script" uid="uid://bu7nfpxvt4mn8" path="res://Scenes/Rooms/EventRoom.gd" id="1_eom5e"]
+[ext_resource type="PackedScene" uid="uid://s4vol5fxx17b" path="res://Scenes/Rooms/RoomExit.tscn" id="2_eom5e"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2xp5k"]
+size = Vector2(1960, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ii4i1"]
+size = Vector2(20, 1080)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_e3s1t"]
+size = Vector2(20, 1080)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vhie6"]
+size = Vector2(1960, 20.25)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gs0tk"]
+size = Vector2(147, 68.000015)
+
+[node name="EventRoom" type="Node2D" unique_id=968076610]
+script = ExtResource("1_eom5e")
+exits_available_on_entry = false
+
+[node name="Background" type="ColorRect" parent="." unique_id=728203324]
+offset_right = 1919.0
+offset_bottom = 1080.0
+color = Color(0, 0.27058825, 0.09019608, 1)
+
+[node name="Environment" type="Control" parent="." unique_id=326479783]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Walls" type="Control" parent="Environment" unique_id=1105652397]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="topWall" type="StaticBody2D" parent="Environment/Walls" unique_id=205051284]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Walls/topWall" unique_id=189231850]
+position = Vector2(960, -10)
+shape = SubResource("RectangleShape2D_2xp5k")
+
+[node name="RightWall" type="StaticBody2D" parent="Environment/Walls" unique_id=1957217854]
+position = Vector2(1936.39, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Walls/RightWall" unique_id=1864878681]
+position = Vector2(-6.3900146, 540)
+shape = SubResource("RectangleShape2D_ii4i1")
+
+[node name="LeftWall" type="StaticBody2D" parent="Environment/Walls" unique_id=1159548436]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Walls/LeftWall" unique_id=1227741111]
+position = Vector2(-10, 540)
+shape = SubResource("RectangleShape2D_e3s1t")
+
+[node name="BottomWall" type="StaticBody2D" parent="Environment/Walls" unique_id=232301542]
+position = Vector2(0, 1084.25)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Walls/BottomWall" unique_id=1495767150]
+position = Vector2(960, 5.875)
+shape = SubResource("RectangleShape2D_vhie6")
+
+[node name="ColorRect" type="ColorRect" parent="Environment" unique_id=1740579559]
+layout_mode = 0
+offset_left = 882.0
+offset_top = 830.0
+offset_right = 1038.0
+offset_bottom = 1079.0
+color = Color(0.60784316, 0.43529412, 0, 1)
+
+[node name="ColorRect2" type="ColorRect" parent="Environment" unique_id=1084535695]
+layout_mode = 0
+offset_left = 551.0
+offset_top = 139.0
+offset_right = 1364.0
+offset_bottom = 835.0
+color = Color(0.60784316, 0.43529412, 0, 1)
+
+[node name="ColorRect3" type="ColorRect" parent="Environment" unique_id=2146496186]
+layout_mode = 0
+offset_left = 665.0
+offset_top = 2.0
+offset_right = 1256.0
+offset_bottom = 140.0
+color = Color(0.60784316, 0.43529412, 0, 1)
+
+[node name="PlayerSpawn" type="Marker2D" parent="." unique_id=9468852]
+position = Vector2(960, 1041)
+
+[node name="EventInteractable" type="Area2D" parent="." unique_id=2116193710]
+position = Vector2(959.645, 312.475)
+script = ExtResource("1_e24ay")
+interaction_text = "[E] Interact"
+metadata/_custom_type_script = "uid://csjgqa1kcrfgr"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EventInteractable" unique_id=927729224]
+position = Vector2(-0.14501953, 0.5249939)
+shape = SubResource("RectangleShape2D_gs0tk")
+
+[node name="Label" type="Label" parent="EventInteractable" unique_id=1824057095]
+offset_left = -22.64502
+offset_top = -12.475006
+offset_right = 27.35498
+offset_bottom = 10.524994
+text = "EVENT"
+
+[node name="Exit1" parent="." unique_id=1730805262 instance=ExtResource("2_eom5e")]
+position = Vector2(671, -1)
+
+[node name="Label" type="Label" parent="Exit1" unique_id=888219047]
+offset_left = 42.760002
+offset_top = 37.730003
+offset_right = 101.0
+offset_bottom = 71.99999
+text = "EXIT 1"
+
+[node name="Exit2" parent="." unique_id=108783798 instance=ExtResource("2_eom5e")]
+visible = false
+position = Vector2(891, -2)
+exit_id = 1
+
+[node name="Label" type="Label" parent="Exit2" unique_id=15616270]
+offset_left = 42.760002
+offset_top = 37.730003
+offset_right = 96.99999
+offset_bottom = 72.0
+text = "EXIT 2"
+
+[node name="Exit3" parent="." unique_id=1136693393 instance=ExtResource("2_eom5e")]
+visible = false
+position = Vector2(1097, -1)
+exit_id = 2
+
+[node name="Label" type="Label" parent="Exit3" unique_id=188352534]
+offset_left = 42.760002
+offset_top = 37.730003
+offset_right = 99.99999
+offset_bottom = 77.0
+text = "EXIT 3"

@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bcyx6hrhtswqo"]
 
-[ext_resource type="Script" uid="uid://1cfkdqbqp6uq" path="res://Scripts/Rooms/MerchantRoom.gd" id="1_07jtf"]
+[ext_resource type="Script" uid="uid://1cfkdqbqp6uq" path="res://Scripts/Rooms/MerchantRoom_UI.gd" id="1_07jtf"]
 
 [node name="MerchantRoom" type="Control" unique_id=2012566311]
 layout_mode = 3
