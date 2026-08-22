@@ -1,11 +1,13 @@
 [gd_resource type="Resource" script_class="RoomResource" format=3 uid="uid://xcqc0og10sh6"]
 
-[ext_resource type="Script" uid="uid://0k05qgpjl5gm" path="res://Data/Rooms/RoomResource(old).gd" id="1_ec82b"]
+[ext_resource type="Script" uid="uid://0k05qgpjl5gm" path="res://Data/Rooms/RoomResource.gd" id="1_ec82b"]
 [ext_resource type="PackedScene" uid="uid://jyb661mcndj1" path="res://Scenes/Rooms/EventRoom.tscn" id="2_0iocg"]
+[ext_resource type="Resource" uid="uid://7hcejjqiu7l" path="res://Data/Rooms/AbandonedLab.tres" id="2_m6cgh"]
 
 [resource]
 script = ExtResource("1_ec82b")
 room_type = 4
 room_name = "Event Room"
 room_scene = ExtResource("2_0iocg")
+next_rooms = Array[ExtResource("1_ec82b")]([ExtResource("2_m6cgh")])
 metadata/_custom_type_script = "uid://0k05qgpjl5gm"

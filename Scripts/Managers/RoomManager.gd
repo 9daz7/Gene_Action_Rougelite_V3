@@ -238,6 +238,9 @@ func start_room(room: RoomResource) -> void:
 		RoomResource.RoomType.ELITE:
 			start_new_elite_room(room)
 
+		RoomResource.RoomType.LAB:
+			start_new_lab_room(room)
+
 		RoomResource.RoomType.REWARD:
 			start_new_reward_room(room)
 
@@ -514,6 +517,9 @@ func get_room_type_name(
 		RoomResource.RoomType.ELITE:
 			return "Elite"
 
+		RoomResource.RoomType.LAB:
+			return "Lab"
+
 		RoomResource.RoomType.REWARD:
 			return "Reward"
 
@@ -528,6 +534,40 @@ func get_room_type_name(
 
 		_:
 			return "Unknown"
+
+
+# ==================================================
+# Temporary Real Room Run Test
+# ==================================================
+
+func start_test_run() -> void:
+
+	print("================================")
+	print("STARTING REAL ROOM TEST RUN")
+	print("================================")
+
+	var starting_room: RoomResource = load(
+		"res://Data/Rooms/NormalBattle_01.tres"
+	)
+
+	if starting_room == null:
+
+		push_error(
+			"RoomManager: Failed to load NormalBattle_01.tres."
+		)
+
+		return
+
+	starting_room.completed = false
+
+	print(
+		"Starting room:",
+		starting_room.room_name
+	)
+
+	start_room(
+		starting_room
+	)
 
 
 # ==================================================
@@ -572,6 +612,18 @@ func start_new_boss_room(room: RoomResource) -> void:
 
 	open_room_scene(room)
 
+
+func start_new_lab_room(room: RoomResource) -> void:
+
+	print(
+		"Starting new RoomResource lab room:"
+	)
+
+	print(
+		room.room_name
+	)
+
+	open_room_scene(room)
 
 # ==================================================
 # Non-Battle Rooms

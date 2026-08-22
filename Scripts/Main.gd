@@ -238,8 +238,6 @@ func start_run():
 	print("MAIN START_RUN CALLED")
 	print("======================")
 
-	#GameEvents.run_started.emit()
-
 	if run_manager.current_animal_build == null:
 		print("ERROR: No animal build exists")
 		return
@@ -260,7 +258,7 @@ func start_run():
 	print("TESTING NEW ROOM RESOURCE SYSTEM")
 	print("================================")
 
-	room_manager.test_room_resource_battle()
+	room_manager.start_test_run()
 	#map_manager.generate_map()
 #
 	#hub_world.close()

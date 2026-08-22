@@ -14,7 +14,8 @@ enum RoomType {
 	EVENT,
 	BOSS,
 	REST,
-	TREASURE
+	TREASURE,
+	LAB
 }
 
 
@@ -32,6 +33,13 @@ enum RoomType {
 # ==================================================
 
 @export var room_scene: PackedScene
+
+
+# ==================================================
+# Room-Specific Data
+# ==================================================
+
+@export var lab_data: LabResource
 
 
 # ==================================================

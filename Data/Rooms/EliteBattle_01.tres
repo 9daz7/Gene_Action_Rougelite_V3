@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="RoomResource" format=3 uid="uid://dqawa6cbu5snu"]
 
-[ext_resource type="Script" uid="uid://0k05qgpjl5gm" path="res://Data/Rooms/RoomResource(old).gd" id="1_uml1p"]
+[ext_resource type="Script" uid="uid://0k05qgpjl5gm" path="res://Data/Rooms/RoomResource.gd" id="1_uml1p"]
 [ext_resource type="PackedScene" uid="uid://qns4kwnrmqio" path="res://Scenes/Rooms/EliteBattleRoom1.tscn" id="2_ce68h"]
 [ext_resource type="Resource" uid="uid://4438jumt2cec" path="res://Data/Rooms/NormalBattle_02.tres" id="2_elej4"]
 [ext_resource type="Resource" uid="uid://jcu3o37frsco" path="res://Data/Rooms/EliteBattle_02.tres" id="3_bbhfl"]

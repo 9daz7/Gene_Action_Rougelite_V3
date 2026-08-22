@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="RoomResource" format=3 uid="uid://4438jumt2cec"]
 
-[ext_resource type="Script" uid="uid://0k05qgpjl5gm" path="res://Data/Rooms/RoomResource(old).gd" id="1_yqh6u"]
+[ext_resource type="Script" uid="uid://0k05qgpjl5gm" path="res://Data/Rooms/RoomResource.gd" id="1_yqh6u"]
 [ext_resource type="PackedScene" uid="uid://cmorb7ku7gov2" path="res://Scenes/Rooms/NormalBattleRoom_2Exit.tscn" id="3_yqh6u"]
 
 [resource]

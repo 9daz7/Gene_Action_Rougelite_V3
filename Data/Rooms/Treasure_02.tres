@@ -1,9 +1,7 @@
-[gd_resource type="Resource" script_class="RoomResource" format=3 uid="uid://briyxb1suxyxw"]
+[gd_resource type="Resource" script_class="RoomResource" format=3 uid="uid://cs1omwpqyg13l"]
 
 [ext_resource type="Script" uid="uid://0k05qgpjl5gm" path="res://Data/Rooms/RoomResource.gd" id="1_m6tui"]
 
 [resource]
 script = ExtResource("1_m6tui")
-room_type = 7
-room_name = "Treaure"
 metadata/_custom_type_script = "uid://0k05qgpjl5gm"

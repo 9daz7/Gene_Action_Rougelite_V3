@@ -1,5 +1,5 @@
 extends Control
-class_name AbandonedLab
+class_name AbandonedLab_UI
 
 
 # ==================================================
@@ -37,14 +37,15 @@ signal lab_finished
 # Member Variables
 # ==================================================
 
-var battle_manager: BattleManager
+var battle_manager: BattleManager = null
 
-var lab_action_used := false
-var experiment_available := false
+var lab_action_used: bool = false
+var experiment_available: bool = false
 
-var critical_battle_complete := false
+var critical_battle_complete: bool = false
 
-var connected_to_battle := false
+var connected_to_battle: bool = false
+var lab_completed: bool = false
 
 
 # ==================================================
@@ -62,10 +63,31 @@ func _ready():
 # ==================================================
 
 
-func open(data:LabResource, manager:BattleManager):
+func open(
+	data: LabResource,
+	manager: BattleManager
+) -> void:
+
+	if data == null:
+
+		push_error(
+			"AbandonedLab_UI: LabResource is missing."
+		)
+
+		return
+
+	if manager == null:
+
+		push_error(
+			"AbandonedLab_UI: BattleManager is missing."
+		)
+
+		return
 
 	lab_data = data
 	battle_manager = manager
+
+	lab_completed = false
 
 	show()
 
@@ -77,9 +99,13 @@ func open(data:LabResource, manager:BattleManager):
 
 	if lab_data.lab_status == LabResource.LabStatus.CRITICAL:
 		
-		if not GameEvents.battle_won.is_connected(_on_experiment_won):
+		if not GameEvents.battle_won.is_connected(
+			_on_experiment_won
+		):
 			
-			GameEvents.battle_won.connect(_on_experiment_won)
+			GameEvents.battle_won.connect(
+				_on_experiment_won
+			)
 			
 			connected_to_battle = true
 	
@@ -105,6 +131,18 @@ func close():
 
 	print("Closing abandoned lab")
 
+	if connected_to_battle:
+
+		if GameEvents.battle_won.is_connected(
+			_on_experiment_won
+		):
+
+			GameEvents.battle_won.disconnect(
+				_on_experiment_won
+			)
+
+		connected_to_battle = false
+
 	lab_data = null
 	battle_manager = null
 
@@ -120,7 +158,7 @@ func close():
 # ==================================================
 
 
-func start_critical_lab():
+func start_critical_lab() -> void:
 
 	print("Critical containment failure")
 
@@ -131,9 +169,12 @@ func start_critical_lab():
 	battle_manager.start_critical_experiment()
 
 
-func _on_experiment_won(enemy):
+func _on_experiment_won(enemy) -> void:
 
 	print("AbandonedLab received battle win")
+
+	if lab_data == null:
+		return
 
 	if lab_data.lab_status != LabResource.LabStatus.CRITICAL:
 		
@@ -146,7 +187,7 @@ func _on_experiment_won(enemy):
 	critical_battle_won()
 
 
-func critical_battle_won():
+func critical_battle_won() -> void:
 
 	critical_battle_complete = true
 
@@ -157,6 +198,10 @@ func critical_battle_won():
 		# permanently complete lab
 	lab_data.lab_status = LabResource.LabStatus.STABLE
 
+	reset_buttons()
+
+	continue_button.disabled = false
+	
 	#if connected_to_battle:
 #
 		#if battle_manager.battle_won.is_connected(
@@ -169,10 +214,6 @@ func critical_battle_won():
 #
 #
 		#connected_to_battle = false
-
-	reset_buttons()
-
-	continue_button.disabled = false
 
 
 #func _on_continue_pressed():
@@ -304,39 +345,129 @@ func disable_operations():
 # ==================================================
 
 
-func _connect_buttons():
+func _connect_buttons() -> void:
 
-	edit_gene_button.pressed.connect(
-		func():
-			use_lab_action("edit_gene")
+	if not edit_gene_button.pressed.is_connected(
+		_on_edit_gene_pressed
+	):
+
+		edit_gene_button.pressed.connect(
+			_on_edit_gene_pressed
 	)
 
-	upgrade_gene_button.pressed.connect(
-		func():
-			use_lab_action("upgrade_gene")
+	if not upgrade_gene_button.pressed.is_connected(
+		_on_upgrade_gene_pressed
+	):
+
+		upgrade_gene_button.pressed.connect(
+			_on_upgrade_gene_pressed
 	)
 
-	extract_gene_button.pressed.connect(
-		func():
-			use_lab_action("extract_gene")
+	if not extract_gene_button.pressed.is_connected(
+		_on_extract_gene_pressed
+	):
+
+		extract_gene_button.pressed.connect(
+			_on_extract_gene_pressed
 	)
 
-	edit_mutagen_button.pressed.connect(
-		func():
-			use_lab_action("edit_mutagen")
+	if not edit_mutagen_button.pressed.is_connected(
+		_on_edit_mutagen_pressed
+	):
+
+		edit_mutagen_button.pressed.connect(
+			_on_edit_mutagen_pressed
 	)
 
-	upgrade_mutagen_button.pressed.connect(
-		func():
-			use_lab_action("upgrade_mutagen")
+	if not upgrade_mutagen_button.pressed.is_connected(
+		_on_upgrade_mutagen_pressed
+	):
+
+		upgrade_mutagen_button.pressed.connect(
+			_on_upgrade_mutagen_pressed
 	)
 
-	continue_button.pressed.connect(
+	if not continue_button.pressed.is_connected(
 		_on_continue_pressed
+	):
+
+		continue_button.pressed.connect(
+			_on_continue_pressed
 	)
 
 
-func _on_continue_pressed():
+func _on_edit_gene_pressed() -> void:
+
+	use_lab_action("edit_gene")
+
+
+func _on_upgrade_gene_pressed() -> void:
+
+	use_lab_action("upgrade_gene")
+
+
+func _on_extract_gene_pressed() -> void:
+
+	use_lab_action("extract_gene")
+
+
+func _on_edit_mutagen_pressed() -> void:
+
+	use_lab_action("edit_mutagen")
+
+
+func _on_upgrade_mutagen_pressed() -> void:
+
+	use_lab_action("upgrade_mutagen")
+
+#
+	#if not continue_button.pressed.is_connected(
+		#_on_continue_pressed
+	#):
+#
+		#continue_button.pressed.connect(
+			#_on_continue_pressed
+	#)
+#
+	#edit_gene_button.pressed.connect(
+		#func():
+			#use_lab_action("edit_gene")
+	#)
+#
+	#upgrade_gene_button.pressed.connect(
+		#func():
+			#use_lab_action("upgrade_gene")
+	#)
+#
+	#extract_gene_button.pressed.connect(
+		#func():
+			#use_lab_action("extract_gene")
+	#)
+#
+	#edit_mutagen_button.pressed.connect(
+		#func():
+			#use_lab_action("edit_mutagen")
+	#)
+#
+	#upgrade_mutagen_button.pressed.connect(
+		#func():
+			#use_lab_action("upgrade_mutagen")
+	#)
+#
+	#continue_button.pressed.connect(
+		#_on_continue_pressed
+	#)
+
+
+func _on_continue_pressed() -> void:
+
+	if lab_completed:
+
+		return
+
+	lab_completed = true
+
+	continue_button.disabled = true
 
 	print(
 		"Leaving laboratory"

@@ -1,13 +1,14 @@
 [gd_resource type="Resource" script_class="RoomResource" format=3 uid="uid://iv1oqax85bga"]
 
-[ext_resource type="Script" uid="uid://0k05qgpjl5gm" path="res://Data/Rooms/RoomResource(old).gd" id="1_ts3bv"]
+[ext_resource type="Script" uid="uid://0k05qgpjl5gm" path="res://Data/Rooms/RoomResource.gd" id="1_ts3bv"]
 [ext_resource type="PackedScene" uid="uid://rv1p4yai180l" path="res://Scenes/Rooms/TreasureRoom.tscn" id="2_54c0t"]
-[ext_resource type="Resource" uid="uid://cg6vfqgsm6058" path="res://Data/Rooms/RestRoom.tres" id="2_kpgn4"]
+[ext_resource type="Resource" uid="uid://cg6vfqgsm6058" path="res://Data/Rooms/Rest_01.tres" id="2_kpgn4"]
+[ext_resource type="Resource" uid="uid://xcqc0og10sh6" path="res://Data/Rooms/Event_01.tres" id="3_001wr"]
 
 [resource]
 script = ExtResource("1_ts3bv")
 room_type = 7
 room_name = "Treasure Room"
 room_scene = ExtResource("2_54c0t")
-next_rooms = Array[ExtResource("1_ts3bv")]([ExtResource("2_kpgn4")])
+next_rooms = Array[ExtResource("1_ts3bv")]([ExtResource("2_kpgn4"), ExtResource("3_001wr")])
 metadata/_custom_type_script = "uid://0k05qgpjl5gm"

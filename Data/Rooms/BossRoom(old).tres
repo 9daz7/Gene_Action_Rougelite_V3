@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="RoomResource" format=3 uid="uid://ur4qkuissgby"]
 
-[ext_resource type="Script" uid="uid://0k05qgpjl5gm" path="res://Data/Rooms/RoomResource(old).gd" id="1_7ejq2"]
+[ext_resource type="Script" uid="uid://0k05qgpjl5gm" path="res://Data/Rooms/RoomResource.gd" id="1_7ejq2"]
 
 [resource]
 script = ExtResource("1_7ejq2")

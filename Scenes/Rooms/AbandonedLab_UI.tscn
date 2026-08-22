@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://vcvodkd0sejl"]
 
-[ext_resource type="Script" uid="uid://bsviplmyt5raf" path="res://Scripts/Rooms/AbandonedLab.gd" id="1_k2oyl"]
+[ext_resource type="Script" uid="uid://bsviplmyt5raf" path="res://Scripts/Rooms/AbandonedLab_UI.gd" id="1_k2oyl"]
 
 [node name="AbandonedLab" type="Control" unique_id=930259330]
 layout_mode = 3
