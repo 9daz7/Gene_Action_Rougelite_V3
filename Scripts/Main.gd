@@ -258,20 +258,7 @@ func start_run():
 	print("TESTING NEW ROOM RESOURCE SYSTEM")
 	print("================================")
 
-	room_manager.start_test_run()
-	#map_manager.generate_map()
-#
-	#hub_world.close()
-	#lab_hub.hide()
-#
-	#map_ui.show()
-#
-	#map_ui.display_map(
-		#map_manager.current_map
-	#)
-#
-#
-	#print("Map displayed")
+	run_manager.create_run_map()
 
 
 func _on_room_entered(room: RoomData) -> void:

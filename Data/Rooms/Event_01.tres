@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://0k05qgpjl5gm" path="res://Data/Rooms/RoomResource.gd" id="1_ec82b"]
 [ext_resource type="PackedScene" uid="uid://jyb661mcndj1" path="res://Scenes/Rooms/EventRoom.tscn" id="2_0iocg"]
-[ext_resource type="Resource" uid="uid://7hcejjqiu7l" path="res://Data/Rooms/AbandonedLab.tres" id="2_m6cgh"]
+[ext_resource type="Resource" uid="uid://7hcejjqiu7l" path="res://Data/Rooms/AbandonedLab_01.tres" id="2_m6cgh"]
 
 [resource]
 script = ExtResource("1_ec82b")

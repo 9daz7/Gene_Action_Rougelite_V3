@@ -84,6 +84,174 @@ func _ready():
 
 
 # ==================================================
+# Run Map Test
+# ==================================================
+
+func create_run_map() -> void:
+
+	print("================================")
+	print("CREATING TEST RUN MAP")
+	print("================================")
+
+	# --------------------------------------------------
+	# Load Rooms
+	# --------------------------------------------------
+
+	var battle := load(
+		"res://Data/Rooms/NormalBattle_01.tres"
+	) as RoomResource
+
+	var treasure := load(
+		"res://Data/Rooms/Treasure_01.tres"
+	) as RoomResource
+
+	var shop := load(
+		"res://Data/Rooms/Merchant_01.tres"
+	) as RoomResource
+
+	var event := load(
+		"res://Data/Rooms/Event_01.tres"
+	) as RoomResource
+
+	var lab := load(
+		"res://Data/Rooms/AbandonedLab_01.tres"
+	) as RoomResource
+
+	# --------------------------------------------------
+	# Validate Rooms
+	# --------------------------------------------------
+
+	if battle == null:
+		push_error(
+			"RunManager: Failed to load NormalBattle_01."
+		)
+		return
+
+	if treasure == null:
+		push_error(
+			"RunManager: Failed to load Treasure_01."
+		)
+		return
+
+	if shop == null:
+		push_error(
+			"RunManager: Failed to load Merchant_01."
+		)
+		return
+
+	if event == null:
+		push_error(
+			"RunManager: Failed to load Event_01."
+		)
+		return
+
+	if lab == null:
+		push_error(
+			"RunManager: Failed to load AbandonedLab_01."
+		)
+		return
+
+	# --------------------------------------------------
+	# Reset Room State
+	# --------------------------------------------------
+
+	battle.completed = false
+	treasure.completed = false
+	shop.completed = false
+	event.completed = false
+	lab.completed = false
+
+	# --------------------------------------------------
+	# Build Graph
+	# --------------------------------------------------
+
+	battle.next_rooms = [
+		treasure,
+		shop
+	]
+
+	treasure.next_rooms = [
+		event
+	]
+
+	shop.next_rooms = [
+		event
+	]
+
+	event.next_rooms = [
+		lab
+	]
+
+	lab.next_rooms = []
+
+	# --------------------------------------------------
+	# Create Run Map
+	# --------------------------------------------------
+
+	current_run_map = RunMapResource.new()
+
+	current_run_map.start_room = battle
+
+	current_run_map.rooms = [
+		battle,
+		treasure,
+		shop,
+		event,
+		lab
+	]
+
+	current_run_map.current_room = battle
+
+	# --------------------------------------------------
+	# Debug
+	# --------------------------------------------------
+
+	print("RUN MAP CREATED")
+
+	print(
+		"Start:",
+		current_run_map.start_room.room_name
+	)
+
+	print(
+		"Total rooms:",
+		current_run_map.rooms.size()
+	)
+
+	print(
+		"Battle exits:",
+		battle.next_rooms.size()
+	)
+
+	print(
+		"Treasure exits:",
+		treasure.next_rooms.size()
+	)
+
+	print(
+		"Shop exits:",
+		shop.next_rooms.size()
+	)
+
+	print(
+		"Event exits:",
+		event.next_rooms.size()
+	)
+
+	print("================================")
+	print("STARTING RUN MAP")
+	print("================================")
+
+	# --------------------------------------------------
+	# Start First Room
+	# --------------------------------------------------
+
+	room_manager.start_room(
+		current_run_map.start_room
+	)
+
+
+# ==================================================
 # Run Control
 # ==================================================
 

@@ -536,38 +536,38 @@ func get_room_type_name(
 			return "Unknown"
 
 
-# ==================================================
-# Temporary Real Room Run Test
-# ==================================================
-
-func start_test_run() -> void:
-
-	print("================================")
-	print("STARTING REAL ROOM TEST RUN")
-	print("================================")
-
-	var starting_room: RoomResource = load(
-		"res://Data/Rooms/NormalBattle_01.tres"
-	)
-
-	if starting_room == null:
-
-		push_error(
-			"RoomManager: Failed to load NormalBattle_01.tres."
-		)
-
-		return
-
-	starting_room.completed = false
-
-	print(
-		"Starting room:",
-		starting_room.room_name
-	)
-
-	start_room(
-		starting_room
-	)
+## ==================================================
+## Temporary Real Room Run Test
+## ==================================================
+#
+#func start_test_run() -> void:
+#
+	#print("================================")
+	#print("STARTING REAL ROOM TEST RUN")
+	#print("================================")
+#
+	#var starting_room: RoomResource = load(
+		#"res://Data/Rooms/NormalBattle_01.tres"
+	#)
+#
+	#if starting_room == null:
+#
+		#push_error(
+			#"RoomManager: Failed to load NormalBattle_01.tres."
+		#)
+#
+		#return
+#
+	#starting_room.completed = false
+#
+	#print(
+		#"Starting room:",
+		#starting_room.room_name
+	#)
+#
+	#start_room(
+		#starting_room
+	#)
 
 
 # ==================================================
