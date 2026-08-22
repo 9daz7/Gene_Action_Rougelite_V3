@@ -89,6 +89,7 @@ offset_bottom = 140.0
 color = Color(0.60784316, 0.43529412, 0, 1)
 
 [node name="PlayerSpawn" type="Marker2D" parent="." unique_id=446746740]
+position = Vector2(960, 1041)
 
 [node name="TreasureInteractable" type="Area2D" parent="." unique_id=785780207]
 position = Vector2(950, 300)
@@ -117,6 +118,7 @@ offset_bottom = 71.99999
 text = "EXIT 1"
 
 [node name="Exit2" parent="." unique_id=788615247 instance=ExtResource("2_tqj88")]
+visible = false
 position = Vector2(891, -2)
 exit_id = 1
 
@@ -128,6 +130,7 @@ offset_bottom = 72.0
 text = "EXIT 2"
 
 [node name="Exit3" parent="." unique_id=518593206 instance=ExtResource("2_tqj88")]
+visible = false
 position = Vector2(1097, -1)
 exit_id = 2
 

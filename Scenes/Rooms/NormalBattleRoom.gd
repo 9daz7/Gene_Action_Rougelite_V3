@@ -241,6 +241,8 @@ func set_battle_active(
 				Node.PROCESS_MODE_DISABLED
 			)
 
+			_disable_room_exits()
+
 		else:
 
 			battle_trigger.call_deferred(

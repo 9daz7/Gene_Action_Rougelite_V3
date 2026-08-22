@@ -35,6 +35,7 @@ size = Vector2(279, 60)
 
 [node name="NormalBattleRoom_2Exit" type="Node2D" unique_id=1163109503]
 script = ExtResource("1_fljp1")
+exits_available_on_entry = false
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=1597000870]
 offset_right = 1920.0

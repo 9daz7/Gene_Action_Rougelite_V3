@@ -336,16 +336,15 @@ func open_room_scene(room: RoomResource) -> void:
 		)
 
 	# --------------------------------------------------
-	# Connect Room Exits
+	# RoomWorld handles its own exits
 	# --------------------------------------------------
 
-	connect_room_exits()
+	if active_room_scene is RoomWorld:
 
-	# --------------------------------------------------
-	# Disable Exits Until Room Is Complete
-	# --------------------------------------------------
-
-	set_room_exits_enabled(false)
+		print(
+			"Exits available on entry:",
+			active_room_scene.exits_available_on_entry
+		)
 
 
 # ==================================================
@@ -1155,14 +1154,6 @@ func select_room_exit(exit_id: int) -> void:
 
 		push_error(
 			"RoomManager: Cannot select exit without current room."
-		)
-
-		return
-
-	if not current_room.completed:
-
-		print(
-			"RoomManager: Current room is not completed."
 		)
 
 		return

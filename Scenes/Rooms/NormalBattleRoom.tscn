@@ -27,6 +27,7 @@ size = Vector2(60, 195.85999)
 
 [node name="NormalBattleRoom_1" type="Node2D" unique_id=1973370823]
 script = ExtResource("1_av6k5")
+exits_available_on_entry = false
 
 [node name="Background" type="ColorRect" parent="." unique_id=1723921837]
 offset_top = -1.0

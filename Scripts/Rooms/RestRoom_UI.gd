@@ -1,5 +1,5 @@
 extends Control
-class_name RestRoom
+class_name RestRoom_UI
 
 
 # ==================================================
@@ -21,9 +21,8 @@ signal rest_finished
 # Member Variables
 # ==================================================
 
-var run_manager: RunManager
-
-var healed := false
+var run_manager: RunManager = null
+var healed: bool = false
 
 
 # ==================================================
@@ -31,14 +30,22 @@ var healed := false
 # ==================================================
 
 
-func _ready():
+func _ready() -> void:
 
-	heal_button.pressed.connect(
+	if not heal_button.pressed.is_connected(
 		_heal_pressed
+	):
+
+		heal_button.pressed.connect(
+			_heal_pressed
 	)
 
-	leave_button.pressed.connect(
+	if not leave_button.pressed.is_connected(
 		_leave_pressed
+	):
+
+		leave_button.pressed.connect(
+			_leave_pressed
 	)
 
 
@@ -47,7 +54,17 @@ func _ready():
 # ==================================================
 
 
-func open(manager:RunManager):
+func open(
+	manager: RunManager
+) -> void:
+
+	if manager == null:
+
+		push_error(
+			"RestRoom_UI: RunManager is missing."
+		)
+
+		return
 
 	run_manager = manager
 
@@ -64,32 +81,45 @@ func close():
 
 
 # ==================================================
-# Private Functions
+# Rest
 # ==================================================
 
 
-func _heal_pressed():
+func _heal_pressed() -> void:
 
 	if healed:
 		return
 
 	if run_manager == null:
-		print("ERROR: RunManager not found")
+		push_error(
+			"RestRoom_UI: RunManager is missing."
+		)
+
 		return
 
-	var heal_amount = int(run_manager.max_hp * 0.35)
+	var heal_amount: int = int(
+		run_manager.max_hp * 0.35
+	)
 
-	run_manager.heal_player(heal_amount)
+	run_manager.heal_player(
+		heal_amount
+	)
 
 	healed = true
 
-	print("Rest healed player")
+	print(
+		"Rest healed player for:",
+		heal_amount
+	)
 
 	heal_button.disabled = true
 
 
-func _leave_pressed():
+# ==================================================
+# Leave
+# ==================================================
+
+
+func _leave_pressed() -> void:
 
 	rest_finished.emit()
-
-	queue_free()
