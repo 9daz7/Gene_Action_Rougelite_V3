@@ -7,7 +7,8 @@
 
 [resource]
 script = ExtResource("1_ya6ex")
-room_name = "Test Room A"
+room_name = "Battle Room A"
 room_scene = ExtResource("4_ya6ex")
+exit_count = 2
 next_rooms = Array[ExtResource("1_ya6ex")]([ExtResource("3_ya6ex"), ExtResource("3_2ovlc")])
 metadata/_custom_type_script = "uid://0k05qgpjl5gm"

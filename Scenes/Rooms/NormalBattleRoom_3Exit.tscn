@@ -17,13 +17,13 @@ size = Vector2(20, 1080)
 size = Vector2(1960, 20.25)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qwfpk"]
-size = Vector2(259, 69)
+size = Vector2(225.5, 67.5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_agc68"]
-size = Vector2(790, 75)
+size = Vector2(862, 54.5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gkajm"]
-size = Vector2(60, 240)
+size = Vector2(60, 238)
 
 [node name="NormalBattleRoom_3Exit" type="Node2D" unique_id=1919136388]
 script = ExtResource("1_0fj0b")
@@ -75,68 +75,75 @@ shape = SubResource("RectangleShape2D_oaf1g")
 position = Vector2(747.015, 17.555)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Background/Walls/StaticBody2D5" unique_id=248387993]
-position = Vector2(-86.515015, 17.945)
+position = Vector2(-35.515015, 23.695)
 shape = SubResource("RectangleShape2D_qwfpk")
 
 [node name="StaticBody2D6" type="StaticBody2D" parent="Background/Walls" unique_id=1097459053]
 position = Vector2(99.83, 332.765)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Background/Walls/StaticBody2D6" unique_id=1492345070]
-position = Vector2(296.16998, 21.734985)
+position = Vector2(329.16998, 80.984985)
 shape = SubResource("RectangleShape2D_agc68")
+
+[node name="StaticBody2D7" type="StaticBody2D" parent="Background/Walls" unique_id=1604329787]
+position = Vector2(747.015, 17.555)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Background/Walls/StaticBody2D7" unique_id=211528569]
+position = Vector2(0.23498535, 331.945)
+shape = SubResource("RectangleShape2D_qwfpk")
 
 [node name="ColorRect" type="ColorRect" parent="Background" unique_id=1538546739]
 layout_mode = 0
-offset_left = 95.0
-offset_top = 86.0
-offset_right = 873.0
-offset_bottom = 298.0
+offset_left = 98.0
+offset_top = 89.0
+offset_right = 876.0
+offset_bottom = 301.0
 color = Color(0.60784316, 0.43529412, 0, 1)
 
 [node name="ColorRect2" type="ColorRect" parent="Background" unique_id=1476224692]
 layout_mode = 0
-offset_left = 72.0
+offset_left = 889.0
 offset_top = 825.0
-offset_right = 215.0
+offset_right = 1032.0
 offset_bottom = 1083.0
 color = Color(0.60784316, 0.43529412, 0, 1)
 
 [node name="ColorRect3" type="ColorRect" parent="Background" unique_id=676297268]
 layout_mode = 0
-offset_left = 73.0
-offset_top = 476.0
-offset_right = 1831.0
-offset_bottom = 911.0
+offset_left = 439.0
+offset_top = 464.0
+offset_right = 1500.0
+offset_bottom = 909.0
 color = Color(0.60784316, 0.43529412, 0, 1)
 
 [node name="ColorRect4" type="ColorRect" parent="Background" unique_id=746781560]
 layout_mode = 0
 offset_left = 873.0
 offset_top = 56.0
-offset_right = 1830.0
-offset_bottom = 478.0
+offset_right = 1832.0
+offset_bottom = 468.0
 color = Color(0.60784316, 0.43529412, 0, 1)
 
 [node name="PlayerSpawn" type="Marker2D" parent="." unique_id=2089369805]
-position = Vector2(138, 1024)
+position = Vector2(962, 1026)
 
 [node name="BattleTrigger" type="Area2D" parent="." unique_id=1181056863]
-position = Vector2(759.68, 214.585)
+position = Vector2(712, 214)
 script = ExtResource("2_05yg6")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BattleTrigger" unique_id=1293923154]
-position = Vector2(0, -21.585007)
+position = Vector2(1, -18)
 shape = SubResource("RectangleShape2D_gkajm")
 
 [node name="Label" type="Label" parent="BattleTrigger" unique_id=1070589995]
-offset_left = -26.0
-offset_top = -12.0
-offset_right = 29.0
-offset_bottom = 11.0
+offset_left = -25.0
+offset_top = -25.0
+offset_right = 30.0
+offset_bottom = -2.0
 text = "ENEMY"
 
 [node name="Exit1" parent="." unique_id=1730805262 instance=ExtResource("3_fji12")]
-position = Vector2(0, 284)
+position = Vector2(6, 265)
 rotation = -1.5707964
 
 [node name="Label" type="Label" parent="Exit1" unique_id=907257812]
@@ -147,7 +154,7 @@ offset_bottom = 71.99999
 text = "EXIT 1"
 
 [node name="Exit2" parent="." unique_id=839888796 instance=ExtResource("3_fji12")]
-position = Vector2(105, 0)
+position = Vector2(217, -1)
 exit_id = 1
 
 [node name="Label" type="Label" parent="Exit2" unique_id=1167546421]
@@ -158,7 +165,8 @@ offset_bottom = 72.0
 text = "EXIT 2"
 
 [node name="Exit3" parent="." unique_id=1036239407 instance=ExtResource("3_fji12")]
-position = Vector2(297, -2)
+position = Vector2(369, 386)
+rotation = 3.1415927
 exit_id = 2
 
 [node name="Label" type="Label" parent="Exit3" unique_id=9751550]

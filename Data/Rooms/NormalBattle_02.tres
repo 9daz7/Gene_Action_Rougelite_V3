@@ -5,6 +5,7 @@
 
 [resource]
 script = ExtResource("1_yqh6u")
-room_name = "Test Room B"
+room_name = "Battle Room B"
 room_scene = ExtResource("3_yqh6u")
+exit_count = 2
 metadata/_custom_type_script = "uid://0k05qgpjl5gm"
