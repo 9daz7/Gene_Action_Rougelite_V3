@@ -118,6 +118,7 @@ offset_bottom = 71.99999
 text = "EXIT 1"
 
 [node name="Exit2" parent="." unique_id=2051542745 instance=ExtResource("1_6y63p")]
+visible = false
 position = Vector2(891, -2)
 exit_id = 1
 
@@ -129,6 +130,7 @@ offset_bottom = 72.0
 text = "EXIT 2"
 
 [node name="Exit3" parent="." unique_id=1907427015 instance=ExtResource("1_6y63p")]
+visible = false
 position = Vector2(1097, -1)
 exit_id = 2
 

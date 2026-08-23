@@ -8,4 +8,5 @@ script = ExtResource("1_8th11")
 room_type = 1
 room_name = "Elite Battle"
 room_scene = ExtResource("2_ted0o")
+exit_count = 3
 metadata/_custom_type_script = "uid://0k05qgpjl5gm"

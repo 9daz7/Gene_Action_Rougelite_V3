@@ -8,4 +8,5 @@ script = ExtResource("1_2mcid")
 room_type = 8
 room_name = "Abandoned Lab"
 room_scene = ExtResource("2_2mcid")
+exit_count = 3
 metadata/_custom_type_script = "uid://0k05qgpjl5gm"

@@ -29,14 +29,15 @@ var current_run_map: RunMapResource = null
 # Room Pools
 # ==================================================
 
-var battle_rooms: Array[RoomResource] = []
-var elite_rooms: Array[RoomResource] = []
-
-var treasure_rooms: Array[RoomResource] = []
-var shop_rooms: Array[RoomResource] = []
-var rest_rooms: Array[RoomResource] = []
-var event_rooms: Array[RoomResource] = []
-var lab_rooms: Array[RoomResource] = []
+var room_pools: Dictionary = {}
+#var battle_rooms: Array[RoomResource] = []
+#var elite_rooms: Array[RoomResource] = []
+#
+#var treasure_rooms: Array[RoomResource] = []
+#var shop_rooms: Array[RoomResource] = []
+#var rest_rooms: Array[RoomResource] = []
+#var event_rooms: Array[RoomResource] = []
+#var lab_rooms: Array[RoomResource] = []
 
 
 # ==================================================
@@ -101,147 +102,235 @@ func _ready():
 # Room Pool Setup
 # ==================================================
 
+func initialize_room_pools() -> void:
+
+	room_pools = {
+		RoomResource.RoomType.BATTLE: {
+			1: [],
+			2: [],
+			3: []
+		},
+
+		RoomResource.RoomType.ELITE: {
+			1: [],
+			2: [],
+			3: []
+		},
+
+		RoomResource.RoomType.REWARD: {
+			1: [],
+			2: [],
+			3: []
+		},
+
+		RoomResource.RoomType.SHOP: {
+			1: [],
+			2: [],
+			3: []
+		},
+
+		RoomResource.RoomType.EVENT: {
+			1: [],
+			2: [],
+			3: []
+		},
+
+		RoomResource.RoomType.REST: {
+			1: [],
+			2: [],
+			3: []
+		},
+
+		RoomResource.RoomType.TREASURE: {
+			1: [],
+			2: [],
+			3: []
+		},
+
+		RoomResource.RoomType.LAB: {
+			1: [],
+			2: [],
+			3: []
+		},
+	}
+
+
 func load_room_pools() -> void:
 
 	print("================================")
 	print("LOADING ROOM POOLS")
 	print("================================")
 
-	battle_rooms.clear()
-	elite_rooms.clear()
+	initialize_room_pools()
 
-	treasure_rooms.clear()
-	shop_rooms.clear()
-	rest_rooms.clear()
-	event_rooms.clear()
-	lab_rooms.clear()
-
-	# --------------------------------------------------
+	# ==================================================
 	# Battle Rooms
-	# --------------------------------------------------
+	# ==================================================
 
 	_add_room_to_pool(
-		battle_rooms,
+		"res://Data/Rooms/NormalBattle_00.tres"
+	)
+
+	_add_room_to_pool(
 		"res://Data/Rooms/NormalBattle_01.tres"
 	)
 
 	_add_room_to_pool(
-		battle_rooms,
 		"res://Data/Rooms/NormalBattle_02.tres"
 	)
 
 	_add_room_to_pool(
-		battle_rooms,
 		"res://Data/Rooms/NormalBattle_03.tres"
 	)
 
-	# --------------------------------------------------
+	_add_room_to_pool(
+		"res://Data/Rooms/NormalBattle_04.tres"
+	)
+
+	# ==================================================
 	# Elite Rooms
-	# --------------------------------------------------
+	# ==================================================
 
 	_add_room_to_pool(
-		elite_rooms,
 		"res://Data/Rooms/EliteBattle_01.tres"
 	)
 
 	_add_room_to_pool(
-		elite_rooms,
 		"res://Data/Rooms/EliteBattle_02.tres"
 	)
 
-	# --------------------------------------------------
+	# ==================================================
 	# Treasure Rooms
-	# --------------------------------------------------
+	# ==================================================
 
 	_add_room_to_pool(
-		treasure_rooms,
 		"res://Data/Rooms/Treasure_01.tres"
 	)
 
-	# --------------------------------------------------
+	_add_room_to_pool(
+		"res://Data/Rooms/Treasure_02.tres"
+	)
+
+	# ==================================================
 	# Shop Rooms
-	# --------------------------------------------------
+	# ==================================================
 
 	_add_room_to_pool(
-		shop_rooms,
 		"res://Data/Rooms/Merchant_01.tres"
 	)
 
 
-	# --------------------------------------------------
+	# ==================================================
 	# Rest Rooms
-	# --------------------------------------------------
+	# ==================================================
 
 	_add_room_to_pool(
-		rest_rooms,
 		"res://Data/Rooms/Rest_01.tres"
 	)
 
-	# --------------------------------------------------
+	# ==================================================
 	# Event Rooms
-	# --------------------------------------------------
+	# ==================================================
 
 	_add_room_to_pool(
-		event_rooms,
 		"res://Data/Rooms/Event_01.tres"
 	)
 
+	_add_room_to_pool(
+		"res://Data/Rooms/Event_02.tres"
+	)
 
-	# --------------------------------------------------
+	# ==================================================
 	# Lab Rooms
-	# --------------------------------------------------
+	# ==================================================
 
 	_add_room_to_pool(
-		lab_rooms,
 		"res://Data/Rooms/AbandonedLab_01.tres"
 	)
 
-	# --------------------------------------------------
-	# Debug
-	# --------------------------------------------------
+	# ==================================================
+	# Print Pool Summary
+	# ==================================================
 
-	print(
-		"Battle rooms:",
-		battle_rooms.size()
-	)
-
-	print(
-		"Elite rooms:",
-		elite_rooms.size()
-	)
-
-	print(
-		"Treasure rooms:",
-		treasure_rooms.size()
-	)
-
-	print(
-		"Shop rooms:",
-		shop_rooms.size()
-	)
-
-	print(
-		"Rest rooms:",
-		rest_rooms.size()
-	)
-
-	print(
-		"Event rooms:",
-		event_rooms.size()
-	)
-
-	print(
-		"Lab rooms:",
-		lab_rooms.size()
-	)
+	print_pool_summary()
 
 	print("================================")
 	print("ROOM POOLS LOADED")
 	print("================================")
 
 
+func print_pool_summary() -> void:
+
+	print("================================")
+	print("ROOM POOL SUMMARY")
+	print("================================")
+
+	for type in room_pools.keys():
+
+		print(
+			"Room Type:",
+			get_room_type_name(type)
+		)
+
+		for exit_count in room_pools[type].keys():
+
+			var pool: Array = (
+				room_pools[type][exit_count]
+			)
+
+			print(
+				"  Exits:",
+				exit_count,
+				" Rooms:",
+				pool.size()
+			)
+
+			for room in pool:
+
+				print(
+					"    -",
+					room.room_name
+				)
+
+
+func get_room_type_name(
+	room_type: RoomResource.RoomType
+) -> String:
+
+	match room_type:
+
+		RoomResource.RoomType.BATTLE:
+			return "Battle"
+
+		RoomResource.RoomType.ELITE:
+			return "Elite"
+
+		RoomResource.RoomType.REWARD:
+			return "Reward"
+
+		RoomResource.RoomType.SHOP:
+			return "Shop"
+
+		RoomResource.RoomType.EVENT:
+			return "Event"
+
+		RoomResource.RoomType.BOSS:
+			return "Boss"
+
+		RoomResource.RoomType.REST:
+			return "Rest"
+
+		RoomResource.RoomType.TREASURE:
+			return "Treasure"
+
+		RoomResource.RoomType.LAB:
+			return "Lab"
+
+		_:
+			return "Unknown"
+
+
 func _add_room_to_pool(
-	pool: Array[RoomResource],
 	path: String
 ) -> void:
 
@@ -263,7 +352,30 @@ func _add_room_to_pool(
 
 		return
 
-	pool.append(
+	var type := room.room_type
+	var exits := room.exit_count
+
+	if not room_pools.has(type):
+
+		push_error(
+			"RunManager: No pool exists for room type: "
+			+ str(type)
+		)
+
+		return
+
+	if not room_pools[type].has(exits):
+
+		push_error(
+			"RunManager: Invalid exit count "
+			+ str(exits)
+			+ " for room: "
+			+ room.room_name
+		)
+
+		return
+
+	room_pools[type][exits].append(
 		room
 	)
 
@@ -271,7 +383,9 @@ func _add_room_to_pool(
 		"Added room:",
 		room.room_name,
 		" Type:",
-		room.room_type
+		type,
+		" Exits:",
+		exits
 	)
 
 
@@ -280,13 +394,40 @@ func _add_room_to_pool(
 # ==================================================
 
 func get_random_room(
-	pool: Array[RoomResource]
+	room_type: RoomResource.RoomType,
+	exit_count: int
 ) -> RoomResource:
+
+	if not room_pools.has(room_type):
+
+		push_error(
+			"RunManager: No room pool for type: "
+			+ str(room_type)
+		)
+
+		return null
+
+	if not room_pools[room_type].has(exit_count):
+
+		push_error(
+			"RunManager: No room pool for exit count: "
+			+ str(exit_count)
+		)
+
+		return null
+
+	var pool: Array = (
+		room_pools[room_type][exit_count]
+	)
 
 	if pool.is_empty():
 
 		push_error(
-			"RunManager: Cannot select from empty room pool."
+			"RunManager: Empty pool for "
+			+ get_room_type_name(room_type)
+			+ " with "
+			+ str(exit_count)
+			+ " exits."
 		)
 
 		return null

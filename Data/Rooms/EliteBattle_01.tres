@@ -11,5 +11,6 @@ script = ExtResource("1_uml1p")
 room_type = 1
 room_name = "Elite Battle"
 room_scene = ExtResource("2_ce68h")
+exit_count = 3
 next_rooms = Array[ExtResource("1_uml1p")]([ExtResource("3_j6uua"), ExtResource("3_bbhfl"), ExtResource("2_elej4")])
 metadata/_custom_type_script = "uid://0k05qgpjl5gm"
