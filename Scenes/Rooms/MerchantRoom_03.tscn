@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://cnxxm68s6fbqa"]
 
-[ext_resource type="PackedScene" uid="uid://s4vol5fxx17b" path="res://Scenes/Rooms/RoomExit.tscn" id="1_07jtf"]
-[ext_resource type="Script" uid="uid://cfrn7ky83lcue" path="res://Scenes/Rooms/MerchantRoom.gd" id="1_ul78d"]
-[ext_resource type="Script" uid="uid://csjgqa1kcrfgr" path="res://Scripts/Hub/Interactable.gd" id="2_358dd"]
+[ext_resource type="Script" uid="uid://cfrn7ky83lcue" path="res://Scenes/Rooms/MerchantRoom.gd" id="1_hdyc1"]
+[ext_resource type="Script" uid="uid://csjgqa1kcrfgr" path="res://Scripts/Hub/Interactable.gd" id="2_ioswg"]
+[ext_resource type="PackedScene" uid="uid://s4vol5fxx17b" path="res://Scenes/Rooms/RoomExit.tscn" id="3_umv3v"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ul78d"]
 size = Vector2(1960, 20)
@@ -19,8 +19,8 @@ size = Vector2(1960, 20.25)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gs0tk"]
 size = Vector2(128.14001, 297)
 
-[node name="MerchantRoom" type="Node2D" unique_id=10948662]
-script = ExtResource("1_ul78d")
+[node name="MerchantRoom_03" type="Node2D" unique_id=10948662]
+script = ExtResource("1_hdyc1")
 
 [node name="Background" type="ColorRect" parent="." unique_id=1085618750]
 offset_right = 1919.0
@@ -93,7 +93,7 @@ position = Vector2(960, 1041)
 
 [node name="MerchantInteractable" type="Area2D" parent="." unique_id=1839492680]
 position = Vector2(640.86, 414.14)
-script = ExtResource("2_358dd")
+script = ExtResource("2_ioswg")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="MerchantInteractable" unique_id=1835757172]
 position = Vector2(54.070007, -9.640015)
@@ -107,7 +107,7 @@ offset_bottom = 62.859985
 rotation = -1.5707964
 text = "MERCHANT"
 
-[node name="Exit1" parent="." unique_id=1730805262 instance=ExtResource("1_07jtf")]
+[node name="Exit1" parent="." unique_id=1730805262 instance=ExtResource("3_umv3v")]
 position = Vector2(671, -1)
 
 [node name="Label" type="Label" parent="Exit1" unique_id=297160380]
@@ -117,8 +117,7 @@ offset_right = 101.0
 offset_bottom = 71.99999
 text = "EXIT 1"
 
-[node name="Exit2" parent="." unique_id=1445365781 instance=ExtResource("1_07jtf")]
-visible = false
+[node name="Exit2" parent="." unique_id=1445365781 instance=ExtResource("3_umv3v")]
 position = Vector2(891, -2)
 exit_id = 1
 
@@ -129,8 +128,7 @@ offset_right = 96.99999
 offset_bottom = 72.0
 text = "EXIT 2"
 
-[node name="Exit3" parent="." unique_id=1691202088 instance=ExtResource("1_07jtf")]
-visible = false
+[node name="Exit3" parent="." unique_id=1691202088 instance=ExtResource("3_umv3v")]
 position = Vector2(1097, -1)
 exit_id = 2
 

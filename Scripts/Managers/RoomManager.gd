@@ -30,7 +30,7 @@ class_name RoomManager
 # ==================================================
 
 
-const TREASURE_SCENE = preload("res://Scenes/Rooms/TreasureRoom.tscn")
+const TREASURE_SCENE = preload("res://Scenes/Rooms/TreasureRoom_01.tscn")
 #const MERCHANT_SCENE = preload("res://Scenes/Rooms/MerchantRoom.tscn")
 #const REST_SCENE = preload("res://Scenes/Rooms/RestRoom.tscn")
 #const ABANDONED_LAB_SCENE = preload("res://Scenes/Rooms/AbandonedLab.tscn")
@@ -45,6 +45,8 @@ const REWARD_SCENE = preload("res://Scenes/Rooms/RewardRoom.tscn")
 
 var current_room: RoomResource = null
 var active_room_scene: Node = null
+var current_run_node: RunMapNode = null
+
 
 # --------------------------------------------------
 # temporary Map System
@@ -123,84 +125,45 @@ func create_room(
 
 	return room
 
-# --------------------------------------------------
-# Temporary RoomResource Test
-# --------------------------------------------------
 
-func test_room_resource_battle() -> void:
+# ==================================================
+# Start Run Map Node
+# ==================================================
 
-	print("ROOM TEST: FUNCTION ENTERED")
+func start_room_node(
+	node: RunMapNode
+) -> void:
 
-	print("ROOM TEST: ABOUT TO LOAD RESOURCE")
-
-	var room: RoomResource = load(
-		"res://Data/Rooms/NormalBattle_01.tres"
-	)
-
-	print("ROOM TEST: RESOURCE LOAD FINISHED")
-
-	if room == null:
+	if node == null:
 
 		push_error(
-			"RoomManager: Failed to load NormalBattle_01.tres."
+			"RoomManager: Cannot start null RunMapNode."
 		)
 
 		return
 
-	print(
-		"ROOM TEST: ROOM IS VALID"
+	if node.room == null:
+
+		push_error(
+			"RoomManager: RunMapNode has no RoomResource."
+		)
+
+		return
+
+	current_run_node = node
+	current_room = node.room
+
+	print("================================")
+	print("ROOM MANAGER: STARTING MAP NODE")
+	print("Room:", node.room.room_name)
+	print("Layer:", node.layer)
+	print("Node:", node.index)
+	print("Next paths:", node.next_nodes.size())
+	print("================================")
+
+	start_room(
+		node.room
 	)
-
-	print(
-		"ROOM TEST: NAME =",
-		room.room_name
-	)
-
-	print(
-		"ROOM TEST: TYPE =",
-		room.room_type
-	)
-
-	print(
-		"ROOM TEST: SCENE =",
-		room.room_scene
-	)
-
-	print(
-		"ROOM TEST: NEXT ROOMS =",
-		room.next_rooms.size()
-	)
-
-	room.completed = false
-
-	print(
-		"ROOM TEST: ABOUT TO CALL start_room()"
-	)
-
-	start_room(room)
-
-	print(
-		"ROOM TEST: start_room() RETURNED"
-	)
-
-	#print("ROOM TEST: RESOURCE IS VALID")
-#
-	#room.completed = false
-#
-	#print("ROOM TEST: ROOM RESET")
-#
-	#print("================================")
-	#print("ROOM RESOURCE TEST")
-	#print("Loaded:", room.room_name)
-	#print("Type:", room.room_type)
-	#print("================================")
-#
-	#print("ROOM TEST: ABOUT TO START ROOM")
-#
-	#start_room(room)
-#
-#
-	#print("ROOM TEST: START ROOM RETURNED")
 
 
 # --------------------------------------------------
@@ -231,6 +194,9 @@ func start_room(room: RoomResource) -> void:
 	print("================================")
 
 	match room.room_type:
+
+		RoomResource.RoomType.START:
+			open_room_scene(room)
 
 		RoomResource.RoomType.BATTLE:
 			open_room_scene(room)
@@ -511,6 +477,9 @@ func get_room_type_name(
 
 	match room_type:
 
+		RoomResource.RoomType.START:
+			return "Start"
+
 		RoomResource.RoomType.BATTLE:
 			return "Battle"
 
@@ -532,42 +501,14 @@ func get_room_type_name(
 		RoomResource.RoomType.BOSS:
 			return "Boss"
 
+		RoomResource.RoomType.REST:
+			return "Rest"
+
+		RoomResource.RoomType.TREASURE:
+			return "Treasure"
+
 		_:
 			return "Unknown"
-
-
-## ==================================================
-## Temporary Real Room Run Test
-## ==================================================
-#
-#func start_test_run() -> void:
-#
-	#print("================================")
-	#print("STARTING REAL ROOM TEST RUN")
-	#print("================================")
-#
-	#var starting_room: RoomResource = load(
-		#"res://Data/Rooms/NormalBattle_01.tres"
-	#)
-#
-	#if starting_room == null:
-#
-		#push_error(
-			#"RoomManager: Failed to load NormalBattle_01.tres."
-		#)
-#
-		#return
-#
-	#starting_room.completed = false
-#
-	#print(
-		#"Starting room:",
-		#starting_room.room_name
-	#)
-#
-	#start_room(
-		#starting_room
-	#)
 
 
 # ==================================================
@@ -1199,60 +1140,168 @@ func select_room_exit(exit_id: int) -> void:
 	print("================================")
 	print("ROOM MANAGER: EXIT SELECTED")
 	print("Exit ID:", exit_id)
-	print("Current Room:", current_room)
 	print("================================")
 
-	if current_room == null:
+	# ==================================================
+	# Validate Current Node
+	# ==================================================
+
+	if current_run_node == null:
 
 		push_error(
-			"RoomManager: Cannot select exit without current room."
+			"RoomManager: No current RunMapNode."
 		)
 
 		return
 
-	print(
-		"Exit selected:",
-		exit_id
-	)
 
-	# --------------------------------------------------
-	# Get Next Room
-	# --------------------------------------------------
+	# ==================================================
+	# Validate Exit
+	# ==================================================
 
-	var next_room: RoomResource = (
-		current_room.get_next_room(
-			exit_id
+	if exit_id < 0:
+
+		push_error(
+			"RoomManager: Invalid exit ID."
 		)
-	)
 
-	if next_room == null:
+		return
+
+	if exit_id >= current_run_node.next_nodes.size():
 
 		push_error(
 			"RoomManager: Exit "
 			+ str(exit_id)
-			+ " has no connected room."
+			+ " has no generated path."
 		)
 
 		return
 
+	# ==================================================
+	# Get Next Node
+	# ==================================================
+
+	var next_node: RunMapNode = (
+		current_run_node.next_nodes[exit_id]
+	)
+
+	if next_node == null:
+
+		push_error(
+			"RoomManager: Generated path is null."
+		)
+
+		return
+
+
+	if next_node.room == null:
+
+		push_error(
+			"RoomManager: Next node has no room."
+		)
+
+		return
+
+
 	print(
 		"Next room:",
-		next_room.room_name
-	) 
+		next_node.room.room_name
+	)
 
 	print(
 		"Next room type:",
-		next_room.room_type
+		next_node.room.room_type
 	)
 
-	# --------------------------------------------------
+	print(
+		"Next layer:",
+		next_node.layer
+	)
+
+
+	# ==================================================
+	# Advance Run Map
+	# ==================================================
+
+	current_run_node.visited = true
+	current_run_node.completed = true
+
+	current_run_node = next_node
+
+	current_run_node.visited = true
+
+	current_room = current_run_node.room
+
+
+	# ==================================================
 	# Start Next Room
-	# --------------------------------------------------
+	# ==================================================
 
 	call_deferred(
-		"start_room",
-		next_room
+		"start_room_node",
+		current_run_node
 	)
+
+
+#func validate_run_graph() -> bool:
+#
+	#if current_run_map == null:
+#
+		#push_error(
+			#"RunManager: No generated run map."
+		#)
+#
+		#return false
+#
+#
+	#for node in current_run_map.all_nodes:
+#
+		#if node.room == null:
+#
+			#push_error(
+				#"RunManager: Node has no room."
+			#)
+#
+			#return false
+#
+#
+		#if node.next_nodes.size() != (
+			#node.room.exit_count
+		#):
+#
+			#push_error(
+				#"RunManager: Exit mismatch in "
+				#+ node.room.room_name
+				#+ " | Physical exits: "
+				#+ str(node.room.exit_count)
+				#+ " | Generated paths: "
+				#+ str(node.next_nodes.size())
+			#)
+#
+			#return false
+#
+#
+		## --------------------------------------------------
+		## Non-start nodes must have a previous path
+		## --------------------------------------------------
+#
+		#if node.layer > 0:
+#
+			#if node.previous_nodes.is_empty():
+#
+				#push_error(
+					#"RunManager: Orphan node: "
+					#+ node.room.room_name
+				#)
+#
+				#return false
+#
+#
+	#print(
+		#"RUN GRAPH VALIDATION PASSED"
+	#)
+#
+	#return true
 
 
 # ==================================================

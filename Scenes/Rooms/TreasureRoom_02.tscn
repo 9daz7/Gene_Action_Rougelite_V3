@@ -1,0 +1,129 @@
+[gd_scene format=3 uid="uid://djlek7c7g5wp8"]
+
+[ext_resource type="Script" uid="uid://bibq228ockpbw" path="res://Scenes/Rooms/TreasureRoom.gd" id="1_2tajy"]
+[ext_resource type="Script" uid="uid://csjgqa1kcrfgr" path="res://Scripts/Hub/Interactable.gd" id="1_r8nym"]
+[ext_resource type="PackedScene" uid="uid://s4vol5fxx17b" path="res://Scenes/Rooms/RoomExit.tscn" id="2_2tajy"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1nfwj"]
+size = Vector2(1960, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gd3dt"]
+size = Vector2(20, 1080)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rjyyx"]
+size = Vector2(20, 1080)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1ihdt"]
+size = Vector2(1960, 20.25)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_d2s0v"]
+size = Vector2(177, 65)
+
+[node name="TreasureRoom02" type="Node2D" unique_id=1918055012]
+script = ExtResource("1_2tajy")
+
+[node name="Background" type="ColorRect" parent="." unique_id=527877281]
+offset_right = 1919.0
+offset_bottom = 1080.0
+color = Color(0, 0.27058825, 0.09019608, 1)
+
+[node name="Environment" type="Control" parent="." unique_id=685062304]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Walls" type="Control" parent="Environment" unique_id=242307304]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="topWall" type="StaticBody2D" parent="Environment/Walls" unique_id=848476324]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Walls/topWall" unique_id=1651667424]
+position = Vector2(960, -10)
+shape = SubResource("RectangleShape2D_1nfwj")
+
+[node name="RightWall" type="StaticBody2D" parent="Environment/Walls" unique_id=150161738]
+position = Vector2(1936.39, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Walls/RightWall" unique_id=442435525]
+position = Vector2(-6.3900146, 540)
+shape = SubResource("RectangleShape2D_gd3dt")
+
+[node name="LeftWall" type="StaticBody2D" parent="Environment/Walls" unique_id=1044507697]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Walls/LeftWall" unique_id=1270868160]
+position = Vector2(-10, 540)
+shape = SubResource("RectangleShape2D_rjyyx")
+
+[node name="BottomWall" type="StaticBody2D" parent="Environment/Walls" unique_id=1618323751]
+position = Vector2(0, 1084.25)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Walls/BottomWall" unique_id=1471442870]
+position = Vector2(960, 5.875)
+shape = SubResource("RectangleShape2D_1ihdt")
+
+[node name="ColorRect" type="ColorRect" parent="Environment" unique_id=809024401]
+layout_mode = 0
+offset_left = 882.0
+offset_top = 830.0
+offset_right = 1038.0
+offset_bottom = 1079.0
+color = Color(0.60784316, 0.43529412, 0, 1)
+
+[node name="ColorRect2" type="ColorRect" parent="Environment" unique_id=999334021]
+layout_mode = 0
+offset_left = 551.0
+offset_top = 139.0
+offset_right = 1364.0
+offset_bottom = 835.0
+color = Color(0.60784316, 0.43529412, 0, 1)
+
+[node name="ColorRect3" type="ColorRect" parent="Environment" unique_id=1649628355]
+layout_mode = 0
+offset_left = 665.0
+offset_top = 2.0
+offset_right = 1256.0
+offset_bottom = 140.0
+color = Color(0.60784316, 0.43529412, 0, 1)
+
+[node name="PlayerSpawn" type="Marker2D" parent="." unique_id=547209272]
+position = Vector2(960, 1041)
+
+[node name="TreasureInteractable" type="Area2D" parent="." unique_id=1313536324]
+position = Vector2(950, 300)
+script = ExtResource("1_r8nym")
+interaction_text = "[E] Open Chest"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TreasureInteractable" unique_id=1788696882]
+position = Vector2(0.5, -0.5)
+shape = SubResource("RectangleShape2D_d2s0v")
+
+[node name="Label" type="Label" parent="TreasureInteractable" unique_id=1857653698]
+offset_left = -23.755
+offset_top = -11.455
+offset_right = 20.245
+offset_bottom = 11.545
+text = "Chest"
+
+[node name="Exit1" parent="." unique_id=1730805262 instance=ExtResource("2_2tajy")]
+position = Vector2(745, -3)
+
+[node name="Label" type="Label" parent="Exit1" unique_id=1728643423]
+offset_left = 42.760002
+offset_top = 37.730003
+offset_right = 101.0
+offset_bottom = 71.99999
+text = "EXIT 1"
+
+[node name="Exit2" parent="." unique_id=1409132463 instance=ExtResource("2_2tajy")]
+position = Vector2(1055, -2)
+exit_id = 1
+
+[node name="Label" type="Label" parent="Exit2" unique_id=1539178315]
+offset_left = 42.760002
+offset_top = 37.730003
+offset_right = 96.99999
+offset_bottom = 72.0
+text = "EXIT 2"

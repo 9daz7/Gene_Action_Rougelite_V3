@@ -1,8 +1,6 @@
 [gd_resource type="Resource" script_class="RoomResource" format=3 uid="uid://b0bkctmpgl5ef"]
 
 [ext_resource type="Script" uid="uid://0k05qgpjl5gm" path="res://Data/Rooms/RoomResource.gd" id="1_ya6ex"]
-[ext_resource type="Resource" uid="uid://dyv15c4n6ooj5" path="res://Data/Rooms/Merchant_01.tres" id="3_2ovlc"]
-[ext_resource type="Resource" uid="uid://iv1oqax85bga" path="res://Data/Rooms/Treasure_01.tres" id="3_ya6ex"]
 [ext_resource type="PackedScene" uid="uid://bmdklddw430wi" path="res://Scenes/Rooms/NormalBattleRoom.tscn" id="4_ya6ex"]
 
 [resource]
@@ -10,5 +8,4 @@ script = ExtResource("1_ya6ex")
 room_name = "Battle Room A"
 room_scene = ExtResource("4_ya6ex")
 exit_count = 2
-next_rooms = Array[ExtResource("1_ya6ex")]([ExtResource("3_ya6ex"), ExtResource("3_2ovlc")])
 metadata/_custom_type_script = "uid://0k05qgpjl5gm"

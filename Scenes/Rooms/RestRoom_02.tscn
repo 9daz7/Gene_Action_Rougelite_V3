@@ -1,0 +1,127 @@
+[gd_scene format=3 uid="uid://pp5tcxqmnwp7"]
+
+[ext_resource type="Script" uid="uid://csjgqa1kcrfgr" path="res://Scripts/Hub/Interactable.gd" id="1_cv4a4"]
+[ext_resource type="PackedScene" uid="uid://s4vol5fxx17b" path="res://Scenes/Rooms/RoomExit.tscn" id="2_xwmvk"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_l4adf"]
+size = Vector2(1960, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_exnwc"]
+size = Vector2(20, 1080)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2xd7u"]
+size = Vector2(20, 1080)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cfdih"]
+size = Vector2(1960, 20.25)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gxh7b"]
+size = Vector2(48.375, 68.155)
+
+[node name="RestRoom02" type="Node2D" unique_id=1116014682]
+
+[node name="Background" type="ColorRect" parent="." unique_id=833982622]
+offset_right = 1920.0
+offset_bottom = 1080.0
+color = Color(0, 0.27058825, 0.09019608, 1)
+
+[node name="Environment" type="Control" parent="." unique_id=210189617]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Walls" type="Control" parent="Environment" unique_id=2112463519]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="topWall" type="StaticBody2D" parent="Environment/Walls" unique_id=795388762]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Walls/topWall" unique_id=701193687]
+position = Vector2(960, -10)
+shape = SubResource("RectangleShape2D_l4adf")
+
+[node name="RightWall" type="StaticBody2D" parent="Environment/Walls" unique_id=1775671408]
+position = Vector2(1936.39, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Walls/RightWall" unique_id=2140483639]
+position = Vector2(-6.3900146, 540)
+shape = SubResource("RectangleShape2D_exnwc")
+
+[node name="LeftWall" type="StaticBody2D" parent="Environment/Walls" unique_id=634152819]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Walls/LeftWall" unique_id=924474813]
+position = Vector2(-10, 540)
+shape = SubResource("RectangleShape2D_2xd7u")
+
+[node name="BottomWall" type="StaticBody2D" parent="Environment/Walls" unique_id=890853913]
+position = Vector2(0, 1084.25)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Walls/BottomWall" unique_id=2141486902]
+position = Vector2(960, 5.875)
+shape = SubResource("RectangleShape2D_cfdih")
+
+[node name="ColorRect" type="ColorRect" parent="Environment" unique_id=1414474283]
+layout_mode = 0
+offset_left = 882.0
+offset_top = 830.0
+offset_right = 1038.0
+offset_bottom = 1079.0
+color = Color(0.60784316, 0.43529412, 0, 1)
+
+[node name="ColorRect2" type="ColorRect" parent="Environment" unique_id=1926093757]
+layout_mode = 0
+offset_left = 551.0
+offset_top = 139.0
+offset_right = 1364.0
+offset_bottom = 835.0
+color = Color(0.60784316, 0.43529412, 0, 1)
+
+[node name="ColorRect3" type="ColorRect" parent="Environment" unique_id=722662516]
+layout_mode = 0
+offset_left = 665.0
+offset_top = 2.0
+offset_right = 1256.0
+offset_bottom = 140.0
+color = Color(0.60784316, 0.43529412, 0, 1)
+
+[node name="PlayerSpawn" type="Marker2D" parent="." unique_id=1052446100]
+position = Vector2(960, 1041)
+
+[node name="RestInteractable" type="Area2D" parent="." unique_id=1411387232]
+position = Vector2(1033.25, 339.69)
+script = ExtResource("1_cv4a4")
+interaction_text = "[E] To Rest"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RestInteractable" unique_id=1982172887]
+position = Vector2(-0.25, 0.30999756)
+shape = SubResource("RectangleShape2D_gxh7b")
+
+[node name="Label" type="Label" parent="RestInteractable" unique_id=1345244585]
+offset_left = -16.25
+offset_top = -13.690002
+offset_right = 23.75
+offset_bottom = 9.309998
+text = "Bed"
+
+[node name="Exit1" parent="." unique_id=1730805262 instance=ExtResource("2_xwmvk")]
+position = Vector2(715, -2)
+
+[node name="Label" type="Label" parent="Exit1" unique_id=1234992011]
+offset_left = 42.760002
+offset_top = 37.730003
+offset_right = 101.0
+offset_bottom = 71.99999
+text = "EXIT 1"
+
+[node name="Exit2" parent="." unique_id=1007245368 instance=ExtResource("2_xwmvk")]
+position = Vector2(1060, 0)
+exit_id = 1
+
+[node name="Label" type="Label" parent="Exit2" unique_id=430415731]
+offset_left = 42.760002
+offset_top = 37.730003
+offset_right = 96.99999
+offset_bottom = 72.0
+text = "EXIT 2"

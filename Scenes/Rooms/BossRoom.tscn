@@ -1,0 +1,107 @@
+[gd_scene format=3 uid="uid://bbwjv1y63e8ee"]
+
+[ext_resource type="Script" uid="uid://ckxjn41pglkmx" path="res://Scenes/Rooms/BattleTrigger.gd" id="1_3dok0"]
+[ext_resource type="Script" uid="uid://d04yxlv6k5nwt" path="res://Scenes/Rooms/BossRoom.gd" id="1_o2v85"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_o2v85"]
+size = Vector2(1960, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5oxym"]
+size = Vector2(20, 1080)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ghifo"]
+size = Vector2(20, 1080)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_md2jo"]
+size = Vector2(1960, 20.25)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cvs70"]
+size = Vector2(303, 195.85999)
+
+[node name="BossRoom" type="Node2D" unique_id=2090528488]
+script = ExtResource("1_o2v85")
+
+[node name="Background" type="ColorRect" parent="." unique_id=1333133523]
+offset_top = -1.0
+offset_right = 1921.0
+offset_bottom = 1081.0
+color = Color(0, 0.27067333, 0.08999216, 1)
+
+[node name="Environment" type="Control" parent="." unique_id=747793329]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Walls" type="Control" parent="Environment" unique_id=1239932921]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="topWall" type="StaticBody2D" parent="Environment/Walls" unique_id=597546403]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Walls/topWall" unique_id=1356756834]
+position = Vector2(960, -10)
+shape = SubResource("RectangleShape2D_o2v85")
+
+[node name="RightWall" type="StaticBody2D" parent="Environment/Walls" unique_id=685709668]
+position = Vector2(1936.39, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Walls/RightWall" unique_id=1236309839]
+position = Vector2(-6.3900146, 540)
+shape = SubResource("RectangleShape2D_5oxym")
+
+[node name="LeftWall" type="StaticBody2D" parent="Environment/Walls" unique_id=1991195728]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Walls/LeftWall" unique_id=2120027621]
+position = Vector2(-10, 540)
+shape = SubResource("RectangleShape2D_ghifo")
+
+[node name="BottomWall" type="StaticBody2D" parent="Environment/Walls" unique_id=1164058858]
+position = Vector2(0, 1084.25)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Walls/BottomWall" unique_id=1989517324]
+position = Vector2(960, 5.875)
+shape = SubResource("RectangleShape2D_md2jo")
+
+[node name="ColorRect" type="ColorRect" parent="Environment" unique_id=1368411058]
+layout_mode = 0
+offset_left = 882.0
+offset_top = 830.0
+offset_right = 1038.0
+offset_bottom = 1079.0
+color = Color(0.60784316, 0.43529412, 0, 1)
+
+[node name="ColorRect2" type="ColorRect" parent="Environment" unique_id=2056951036]
+layout_mode = 0
+offset_left = 551.0
+offset_top = 139.0
+offset_right = 1364.0
+offset_bottom = 835.0
+color = Color(0.60784316, 0.43529412, 0, 1)
+
+[node name="ColorRect3" type="ColorRect" parent="Environment" unique_id=846531820]
+layout_mode = 0
+offset_left = 665.0
+offset_top = 2.0
+offset_right = 1256.0
+offset_bottom = 140.0
+color = Color(0.60784316, 0.43529412, 0, 1)
+
+[node name="PlayerSpawn" type="Marker2D" parent="." unique_id=1424753300]
+position = Vector2(960, 1041)
+
+[node name="BattleTrigger" type="Area2D" parent="." unique_id=1330212766]
+position = Vector2(957.06494, 455.86)
+script = ExtResource("1_3dok0")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BattleTrigger" unique_id=94292792]
+position = Vector2(-0.5649414, -66.92999)
+shape = SubResource("RectangleShape2D_cvs70")
+
+[node name="Label" type="Label" parent="BattleTrigger" unique_id=1474177753]
+offset_left = -26.064941
+offset_top = -77.859985
+offset_right = 28.935059
+offset_bottom = -54.859985
+text = "BOSS"

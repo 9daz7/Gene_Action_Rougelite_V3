@@ -1,0 +1,153 @@
+[gd_scene format=3 uid="uid://7xdepobvdgf6"]
+
+[ext_resource type="PackedScene" uid="uid://s4vol5fxx17b" path="res://Scenes/Rooms/RoomExit.tscn" id="1_f2pv3"]
+[ext_resource type="Script" uid="uid://b2bidkyfosx8g" path="res://Scripts/Rooms/StartRoom.gd" id="1_v6om5"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_k6rwk"]
+size = Vector2(1940, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_to00y"]
+size = Vector2(20, 1099)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jdcm5"]
+size = Vector2(1960, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wnwmx"]
+size = Vector2(20, 1080)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_n6gj8"]
+size = Vector2(307.375, 413.75)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_f1bbp"]
+size = Vector2(306.5, 419.27246)
+
+[node name="StartRoom" type="Node2D" unique_id=1698741255]
+script = ExtResource("1_v6om5")
+
+[node name="Background" type="ColorRect" parent="." unique_id=1798911196]
+offset_top = -1.0
+offset_right = 1921.0
+offset_bottom = 1081.0
+color = Color(0, 0.27067333, 0.08999216, 1)
+
+[node name="environment" type="Control" parent="." unique_id=1004407879]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="walls" type="Control" parent="environment" unique_id=1859671724]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="top wall" type="StaticBody2D" parent="environment/walls" unique_id=561044738]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="environment/walls/top wall" unique_id=1663700110]
+position = Vector2(971, -10)
+shape = SubResource("RectangleShape2D_k6rwk")
+
+[node name="leftwall" type="StaticBody2D" parent="environment/walls" unique_id=1201953253]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="environment/walls/leftwall" unique_id=2071428929]
+position = Vector2(-10, 530.5)
+shape = SubResource("RectangleShape2D_to00y")
+
+[node name="bottomwall" type="StaticBody2D" parent="environment/walls" unique_id=370028133]
+position = Vector2(-10, 1090)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="environment/walls/bottomwall" unique_id=531534655]
+position = Vector2(970, 0)
+shape = SubResource("RectangleShape2D_jdcm5")
+
+[node name="rightwall" type="StaticBody2D" parent="environment/walls" unique_id=1259966246]
+position = Vector2(1931, 11)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="environment/walls/rightwall" unique_id=1562715074]
+position = Vector2(0, 530)
+shape = SubResource("RectangleShape2D_wnwmx")
+
+[node name="door wall left" type="StaticBody2D" parent="environment/walls" unique_id=1620824308]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="environment/walls/door wall left" unique_id=554380817]
+z_index = 1
+position = Vector2(1420.3125, 180)
+shape = SubResource("RectangleShape2D_n6gj8")
+
+[node name="door wall right" type="StaticBody2D" parent="environment/walls" unique_id=1170439732]
+position = Vector2(1352, 306.91)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="environment/walls/door wall right" unique_id=1803540441]
+z_index = 1
+position = Vector2(66.75, 579.45374)
+shape = SubResource("RectangleShape2D_f1bbp")
+
+[node name="ColorRect" type="ColorRect" parent="environment" unique_id=1078500773]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 466.0
+offset_right = 307.0
+offset_bottom = 600.0
+color = Color(0.60733163, 0.4368924, 3.85046e-07, 1)
+
+[node name="ColorRect2" type="ColorRect" parent="environment" unique_id=1741998943]
+layout_mode = 0
+offset_left = 1248.0
+offset_top = 403.0
+offset_right = 1587.0
+offset_bottom = 663.0
+color = Color(0.60733163, 0.4368924, 3.85046e-07, 1)
+
+[node name="ColorRect3" type="ColorRect" parent="environment" unique_id=2085872150]
+layout_mode = 0
+offset_left = 1582.0
+offset_top = 331.0
+offset_right = 1814.0
+offset_bottom = 731.0
+color = Color(0.60733163, 0.4368924, 3.85046e-07, 1)
+
+[node name="ColorRect4" type="ColorRect" parent="environment" unique_id=1836450651]
+layout_mode = 0
+offset_left = 306.0
+offset_top = 228.0
+offset_right = 1252.0
+offset_bottom = 850.0
+color = Color(0.60733163, 0.4368924, 3.85046e-07, 1)
+
+[node name="PlayerSpawn" type="Marker2D" parent="." unique_id=1389922717]
+position = Vector2(64, 530)
+
+[node name="RoamingEnemies" type="Node" parent="." unique_id=733122698]
+
+[node name="Exit1" parent="." unique_id=1730805262 instance=ExtResource("1_f2pv3")]
+position = Vector2(1625, 235)
+
+[node name="Label" type="Label" parent="Exit1" unique_id=414330992]
+offset_left = 42.760002
+offset_top = 37.730003
+offset_right = 101.0
+offset_bottom = 71.99999
+text = "EXIT 1"
+
+[node name="Exit2" parent="." unique_id=647262181 instance=ExtResource("1_f2pv3")]
+position = Vector2(1780, 821)
+rotation = 3.1415927
+exit_id = 1
+
+[node name="Label" type="Label" parent="Exit2" unique_id=2051465922]
+offset_left = 42.760002
+offset_top = 37.730003
+offset_right = 96.99999
+offset_bottom = 72.0
+text = "EXIT 2"
+
+[node name="Exit3" parent="." unique_id=951408626 instance=ExtResource("1_f2pv3")]
+visible = false
+position = Vector2(1906, 471)
+rotation = 1.5707964
+exit_id = 2
+
+[node name="Label" type="Label" parent="Exit3" unique_id=1135011330]
+offset_left = 42.760002
+offset_top = 37.730003
+offset_right = 99.99999
+offset_bottom = 77.0
+text = "EXIT 3"

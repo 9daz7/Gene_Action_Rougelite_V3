@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://rv1p4yai180l"]
 
-[ext_resource type="Script" uid="uid://csjgqa1kcrfgr" path="res://Scripts/Hub/Interactable.gd" id="1_ccq0g"]
-[ext_resource type="Script" uid="uid://bibq228ockpbw" path="res://Scenes/Rooms/TreasureRoom.gd" id="1_tqj88"]
-[ext_resource type="PackedScene" uid="uid://s4vol5fxx17b" path="res://Scenes/Rooms/RoomExit.tscn" id="2_tqj88"]
+[ext_resource type="Script" uid="uid://bibq228ockpbw" path="res://Scenes/Rooms/TreasureRoom.gd" id="1_to4lq"]
+[ext_resource type="Script" uid="uid://csjgqa1kcrfgr" path="res://Scripts/Hub/Interactable.gd" id="2_suwrf"]
+[ext_resource type="PackedScene" uid="uid://s4vol5fxx17b" path="res://Scenes/Rooms/RoomExit.tscn" id="3_hrqp1"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ibr62"]
 size = Vector2(1960, 20)
@@ -19,8 +19,8 @@ size = Vector2(1960, 20.25)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gs0tk"]
 size = Vector2(177, 65)
 
-[node name="TreasureRoom" type="Node2D" unique_id=2142122985]
-script = ExtResource("1_tqj88")
+[node name="TreasureRoom_03" type="Node2D" unique_id=2142122985]
+script = ExtResource("1_to4lq")
 
 [node name="Background" type="ColorRect" parent="." unique_id=999063352]
 offset_right = 1919.0
@@ -93,7 +93,7 @@ position = Vector2(960, 1041)
 
 [node name="TreasureInteractable" type="Area2D" parent="." unique_id=785780207]
 position = Vector2(950, 300)
-script = ExtResource("1_ccq0g")
+script = ExtResource("2_suwrf")
 interaction_text = "[E] Open Chest"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TreasureInteractable" unique_id=1619677765]
@@ -107,7 +107,7 @@ offset_right = 20.245
 offset_bottom = 11.545
 text = "Chest"
 
-[node name="Exit1" parent="." unique_id=1730805262 instance=ExtResource("2_tqj88")]
+[node name="Exit1" parent="." unique_id=1730805262 instance=ExtResource("3_hrqp1")]
 position = Vector2(671, -1)
 
 [node name="Label" type="Label" parent="Exit1" unique_id=1140946623]
@@ -117,8 +117,8 @@ offset_right = 101.0
 offset_bottom = 71.99999
 text = "EXIT 1"
 
-[node name="Exit2" parent="." unique_id=788615247 instance=ExtResource("2_tqj88")]
-position = Vector2(891, -2)
+[node name="Exit2" parent="." unique_id=788615247 instance=ExtResource("3_hrqp1")]
+position = Vector2(887, -1)
 exit_id = 1
 
 [node name="Label" type="Label" parent="Exit2" unique_id=961450220]
@@ -128,8 +128,7 @@ offset_right = 96.99999
 offset_bottom = 72.0
 text = "EXIT 2"
 
-[node name="Exit3" parent="." unique_id=518593206 instance=ExtResource("2_tqj88")]
-visible = false
+[node name="Exit3" parent="." unique_id=518593206 instance=ExtResource("3_hrqp1")]
 position = Vector2(1097, -1)
 exit_id = 2
 

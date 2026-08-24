@@ -7,6 +7,7 @@ class_name RoomResource
 # ==================================================
 
 enum RoomType {
+	START,
 	BATTLE,
 	ELITE,
 	REWARD,
@@ -40,7 +41,7 @@ enum RoomType {
 # ==================================================
 
 @export_range(
-	1,
+	0,
 	3,
 	1
 ) var exit_count: int = 1

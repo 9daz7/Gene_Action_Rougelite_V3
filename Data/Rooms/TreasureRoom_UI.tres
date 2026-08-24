@@ -4,6 +4,6 @@
 
 [resource]
 script = ExtResource("1_m6tui")
-room_type = 7
+room_type = 8
 room_name = "Treaure"
 metadata/_custom_type_script = "uid://0k05qgpjl5gm"

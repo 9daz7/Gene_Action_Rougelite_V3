@@ -1,9 +1,12 @@
 [gd_resource type="Resource" script_class="RoomResource" format=3 uid="uid://5wvbp5vbnra8"]
 
 [ext_resource type="Script" uid="uid://0k05qgpjl5gm" path="res://Data/Rooms/RoomResource.gd" id="1_txepd"]
+[ext_resource type="PackedScene" uid="uid://bbwjv1y63e8ee" path="res://Scenes/Rooms/BossRoom.tscn" id="2_cvycw"]
 
 [resource]
 script = ExtResource("1_txepd")
-room_type = 5
+room_type = 6
 room_name = "Boss Battle"
+room_scene = ExtResource("2_cvycw")
+exit_count = 0
 metadata/_custom_type_script = "uid://0k05qgpjl5gm"
