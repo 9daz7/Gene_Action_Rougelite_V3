@@ -40,3 +40,14 @@ func get_layer(
 		return []
 
 	return layers[layer_index]
+
+
+func get_current_layer() -> Array:
+
+	if current_node == null:
+
+		return []
+
+	return get_layer(
+		current_node.layer
+	)

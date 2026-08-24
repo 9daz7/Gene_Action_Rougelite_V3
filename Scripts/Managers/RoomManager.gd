@@ -153,6 +153,18 @@ func start_room_node(
 	current_run_node = node
 	current_room = node.room
 
+	if map_manager != null:
+
+		#if map_manager.run_map != run_manager.current_run_map:
+#
+			#map_manager.set_run_map(
+				#run_manager.current_run_map
+			#)
+
+		map_manager.set_current_node(
+			node
+		)
+
 	print("================================")
 	print("ROOM MANAGER: STARTING MAP NODE")
 	print("Room:", node.room.room_name)
@@ -408,28 +420,36 @@ func _on_room_exit_entered(exit_id: int) -> void:
 func complete_room() -> void:
 
 	if current_room == null:
+
 		push_error(
 			"RoomManager: No active RoomResource to complete."
 		)
+
 		return
 
 	if current_room.completed:
+
 		print(
 			"RoomManager: Room already completed:",
 			current_room.room_name
 		)
+
 		return
 
 	current_room.completed = true
+
+	if current_run_node != null:
+
+		current_run_node.completed = true
+
+	if map_manager != null:
+
+		map_manager.mark_current_node_complete()
 
 	print(
 		"ROOM COMPLETED:",
 		current_room.room_name
 	)
-
-	# --------------------------------------------------
-	# Enable Room Exits
-	# --------------------------------------------------
 
 	set_room_exits_enabled(true)
 
@@ -1226,16 +1246,33 @@ func select_room_exit(exit_id: int) -> void:
 	current_run_node.visited = true
 	current_run_node.completed = true
 
-	current_run_node = next_node
+	var previous_node := current_run_node
 
+	current_run_node = next_node
 	current_run_node.visited = true
 
 	current_room = current_run_node.room
 
 
+	if map_manager != null:
+
+		map_manager.set_current_node(
+			current_run_node
+		)
+
 	# ==================================================
 	# Start Next Room
 	# ==================================================
+
+	print(
+	"Leaving node:",
+	previous_node.get_id()
+)
+
+	print(
+		"Entering node:",
+		current_run_node.get_id()
+	)
 
 	call_deferred(
 		"start_room_node",

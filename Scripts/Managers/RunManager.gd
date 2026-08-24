@@ -890,6 +890,14 @@ func create_run_map() -> void:
 		current_run_map.start_node
 	)
 
+	var map_manager: MapManager = get_node(
+		"../MapManager"
+	)
+
+	map_manager.set_run_map(
+		current_run_map
+	)
+
 	print(
 		"Starting room:",
 		current_run_map.current_node.room.room_name
@@ -1057,7 +1065,6 @@ func _duplicate_room_template(
 		return null
 
 	room.completed = false
-	room.next_rooms.clear()
 
 	return room
 

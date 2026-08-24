@@ -57,9 +57,11 @@ func connect_to(
 ) -> void:
 
 	if node == null:
+
 		return
 
 	if next_nodes.has(node):
+
 		return
 
 	next_nodes.append(
@@ -71,3 +73,12 @@ func connect_to(
 		node.previous_nodes.append(
 			self
 	)
+
+
+# ==================================================
+# Identification
+# ==================================================
+
+func get_id() -> String:
+
+	return str(layer) + "_" + str(index)

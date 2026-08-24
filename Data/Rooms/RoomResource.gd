@@ -59,29 +59,3 @@ enum RoomType {
 # ==================================================
 
 @export var completed: bool = false
-
-
-# ==================================================
-# Room Connections
-# ==================================================
-
-@export var next_rooms: Array[RoomResource] = []
-
-
-# ==================================================
-# Room Connections
-# ==================================================
-
-func get_next_room(
-	exit_id: int
-) -> RoomResource:
-
-	if exit_id < 0:
-
-		return null
-
-	if exit_id >= next_rooms.size():
-
-		return null
-
-	return next_rooms[exit_id]
