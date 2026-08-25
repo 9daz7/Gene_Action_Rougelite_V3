@@ -17,6 +17,13 @@ var run_map: RunMapResource = null
 
 
 # ==================================================
+# Map View
+# ==================================================
+
+var map_view_range: int = 0
+
+
+# ==================================================
 # Current Node
 # ==================================================
 
@@ -138,46 +145,6 @@ func get_visited_nodes() -> Array[RunMapNode]:
 
 
 # ==================================================
-# Node Visibility
-# ==================================================
-
-func is_node_visible(
-	node: RunMapNode
-) -> bool:
-
-	if node == null:
-		return false
-
-	# ==================================================
-	# Current room
-	# ==================================================
-
-	if node == current_node:
-
-		return true
-
-	# ==================================================
-	# Previously visited
-	# ==================================================
-
-	if node.visited:
-
-		return true
-
-	# ==================================================
-	# Immediate exits
-	# ==================================================
-
-	if current_node != null:
-
-		if node in current_node.next_nodes:
-
-			return true
-
-	return false
-
-
-# ==================================================
 # Room Type Visibility
 # ==================================================
 
@@ -216,6 +183,86 @@ func mark_current_node_complete() -> void:
 	current_node.completed = true
 
 	map_updated.emit()
+
+
+# ==================================================
+# Map View Upgrade
+# ==================================================
+
+
+func increase_map_view_range() -> void:
+
+	map_view_range += 1
+
+	print(
+		"Map view range increased to:",
+		map_view_range
+	)
+
+	map_updated.emit()
+
+
+# ==================================================
+# Node Visibility
+# ==================================================
+
+
+func is_node_visible(
+	node: RunMapNode
+) -> bool:
+
+	if node == null:
+
+		return false
+
+	if current_node == null:
+
+		return false
+
+	# ==================================================
+	# Completed / current layers
+	# ==================================================
+
+	if node.layer <= current_node.layer:
+
+		return true
+
+	# ==================================================
+	# Future layers within map-view ranges
+	# ==================================================
+
+	var layer_difference := (
+		node.layer
+		- current_node.layer
+	)
+
+	return layer_difference <= map_view_range
+
+
+func is_node_type_visible(
+	node: RunMapNode
+) -> bool:
+
+	if node == null:
+
+		return false
+
+	if current_node == null:
+
+		return false
+
+	# Completed/current nodes always reveal their type.
+
+	if node.layer <= current_node.layer:
+
+		return true
+
+	var layer_difference := (
+		node.layer
+		- current_node.layer
+	)
+
+	return layer_difference <= map_view_range
 
 
 # ==================================================

@@ -181,6 +181,12 @@ func _draw() -> void:
 
 		for node in layer:
 
+			if not map_manager.is_node_visible(
+				node
+			):
+
+				continue
+
 			_draw_node(
 				node
 			)
@@ -196,6 +202,12 @@ func _draw_connections(
 
 	for node in run_map.all_nodes:
 
+		if not map_manager.is_node_visible(
+			node
+		):
+
+			continue
+
 		var start_position := (
 			_get_node_position(node)
 		)
@@ -203,6 +215,7 @@ func _draw_connections(
 		for next_node in node.next_nodes:
 
 			if next_node == null:
+
 				continue
 
 			var end_position := (
@@ -246,6 +259,10 @@ func _draw_node(
 		color
 	)
 
+	# ==================================================
+	# Current Node Marker
+	# ==================================================
+
 	if node == map_manager.current_node:
 
 		draw_arc(
@@ -259,29 +276,37 @@ func _draw_node(
 			true
 		)
 
-	var room_name := (
-		node.room.room_name
-		if node.room != null
-		else "Unknown"
-	)
+	# ==================================================
+	# Room Type
+	# ==================================================
 
-	var text_position := (
-		position
-		+ Vector2(
-			-node_radius * 2.5,
-			node_radius + 35.0
+	if map_manager.is_node_type_visible(
+		node
+	):
+
+		var room_name := (
+			node.room.room_name
+			if node.room != null
+			else "Unknown"
 		)
-	)
 
-	draw_string(
-		ThemeDB.fallback_font,
-		text_position,
-		room_name,
-		HORIZONTAL_ALIGNMENT_CENTER,
-		node_radius * 5.0,
-		18,
-		Color.WHITE
-	)
+		var text_position := (
+			position
+			+ Vector2(
+				-node_radius * 2.5,
+				node_radius + 35.0
+			)
+		)
+
+		draw_string(
+			ThemeDB.fallback_font,
+			text_position,
+			room_name,
+			HORIZONTAL_ALIGNMENT_CENTER,
+			node_radius * 5.0,
+			18,
+			Color.WHITE
+		)
 
 
 # ==================================================
@@ -348,8 +373,9 @@ func _get_node_position(
 		)
 
 	var y := (
-		map_margin.y
-		+ layer * layer_spacing
+	size.y
+	- map_margin.y
+	-  layer * layer_spacing
 	)
 
 	return Vector2(
