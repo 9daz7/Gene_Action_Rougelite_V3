@@ -15,6 +15,7 @@ var room: RoomResource = null
 
 var layer: int = 0
 var index: int = 0
+var column: int = 0
 
 
 # ==================================================
@@ -40,12 +41,14 @@ var previous_nodes: Array[RunMapNode] = []
 func _init(
 	room_resource: RoomResource,
 	layer_index: int,
-	node_index: int
+	node_index: int,
+	column_index: int = 0
 ) -> void:
 
 	room = room_resource
 	layer = layer_index
 	index = node_index
+	column = column_index
 
 
 # ==================================================

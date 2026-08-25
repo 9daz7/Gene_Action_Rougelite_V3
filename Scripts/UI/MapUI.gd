@@ -44,6 +44,15 @@ var visible_map := false
 
 
 # ==================================================
+# Scroll
+# ==================================================
+
+@export var scroll_speed: float = 80.0
+
+var scroll_offset_y: float = 0.0
+
+
+# ==================================================
 # Initialization
 # ==================================================
 
@@ -53,6 +62,8 @@ func _ready() -> void:
 	hide()
 
 	visible_map = false
+
+	clip_contents = true
 
 	if map_manager != null:
 
@@ -72,6 +83,10 @@ func _ready() -> void:
 func _unhandled_input(
 	event: InputEvent
 ) -> void:
+
+	# ==================================================
+	# Keyboard
+	# ==================================================
 
 	if event is InputEventKey:
 
@@ -96,6 +111,96 @@ func _unhandled_input(
 			get_viewport().set_input_as_handled()
 
 			return
+
+	# ==================================================
+	# Mouse Wheel
+	# ==================================================
+
+	if not visible_map:
+		return
+
+	if event is InputEventMouseButton:
+
+		if not event.pressed:
+			return
+
+		if event.button_index == MOUSE_BUTTON_WHEEL_UP:
+
+			scroll_offset_y -= scroll_speed
+
+			_clamp_scroll()
+
+			queue_redraw()
+
+			get_viewport().set_input_as_handled()
+
+			return
+
+		if event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+
+			scroll_offset_y += scroll_speed
+
+			_clamp_scroll()
+
+			queue_redraw()
+
+			get_viewport().set_input_as_handled()
+
+			return
+
+
+func _clamp_scroll() -> void:
+
+	if map_manager == null:
+		return
+
+	if map_manager.run_map == null:
+		scroll_offset_y = 0.0
+		return
+
+	if map_manager.run_map.layers.is_empty():
+		scroll_offset_y = 0.0
+		return
+
+
+	# ==================================================
+	# Map Bounds
+	# ==================================================
+
+	var layer_count: int = (
+		map_manager.run_map.layers.size()
+	)
+
+	var first_layer_y: float = (
+		size.y
+		- map_margin.y
+	)
+
+	var last_layer_y: float = (
+		first_layer_y
+		- (layer_count - 1) * layer_spacing
+	)
+
+	# ==================================================
+	# Desired Screen Bounds
+	# ==================================================
+
+	var min_scroll: float = (
+		last_layer_y
+		- (size.y - map_margin.y)
+	)
+
+	var max_scroll: float = (
+		first_layer_y
+		- map_margin.y
+	)
+
+
+	scroll_offset_y = clamp(
+		scroll_offset_y,
+		min_scroll,
+		max_scroll
+	)
 
 
 # ==================================================
@@ -123,14 +228,6 @@ func open_map() -> void:
 
 		return
 
-	if not map_manager.scanner_enabled:
-
-		print(
-			"SCANNER UNAVAILABLE"
-		)
-
-		return
-
 	if map_manager.run_map == null:
 
 		print(
@@ -142,6 +239,50 @@ func open_map() -> void:
 	visible_map = true
 
 	show()
+
+	_center_on_current_node()
+
+	queue_redraw()
+
+
+func _center_on_current_node() -> void:
+
+	if map_manager == null:
+		return
+
+	if map_manager.run_map == null:
+		return
+
+	if map_manager.current_node == null:
+		return
+
+
+	var node := map_manager.current_node
+
+	# ==================================================
+	# Position without scrolling
+	# ==================================================
+
+	var base_y: float = (
+		size.y
+		- map_margin.y
+		- node.layer * layer_spacing
+	)
+
+
+	# ==================================================
+	# Center current node in the scanner
+	# ==================================================
+
+	var target_y: float = (
+		size.y * 0.5
+	)
+
+	scroll_offset_y = (
+		base_y - target_y
+	)
+
+	_clamp_scroll()
 
 	queue_redraw()
 
@@ -159,9 +300,19 @@ func close_map() -> void:
 
 func _on_map_updated() -> void:
 
+	if map_manager == null:
+		return
+
+	if map_manager.current_node == null:
+		return
+
 	if visible_map:
 
-		queue_redraw()
+		_center_on_current_node()
+
+	else:
+
+		_clamp_scroll()
 
 
 # ==================================================
@@ -398,6 +549,8 @@ func _get_node_position(
 		size.y
 		- map_margin.y
 		- layer * layer_spacing
+		- scroll_offset_y
+
 	)
 
 	return Vector2(

@@ -26,6 +26,13 @@ var current_run_map: RunMapResource = null
 
 
 # ==================================================
+# World
+# ==================================================
+
+var current_world: int = 1
+
+
+# ==================================================
 # Room Pools
 # ==================================================
 
@@ -723,33 +730,566 @@ func validate_run_graph() -> bool:
 	return true
 
 
+# ==================================================
+# World Layer Sizes
+# ==================================================
+
+
+func get_world_layer_sizes() -> Array[int]:
+
+	match current_world:
+
+		1:
+			return [
+				1,
+				2,
+				4,
+				5,
+				5,
+				4,
+				3,
+				2,
+				1
+			]
+
+		_:
+			return [
+				1,
+				randi_range(2, 3),
+				randi_range(3, 5),
+				randi_range(4, 5),
+				randi_range(4, 5),
+				randi_range(3, 5),
+				randi_range(3, 4),
+				2,
+				1
+			]
+
+
+# ==================================================
+# Room Pool Availability
+# ==================================================
+
+func _has_room_with_exit_count(
+	room_type: RoomResource.RoomType,
+	exit_count: int
+) -> bool:
+
+	if not room_pools.has(room_type):
+
+		return false
+
+	if not room_pools[room_type].has(exit_count):
+
+		return false
+
+	var pool: Array = (
+		room_pools[room_type][exit_count]
+	)
+
+	return not pool.is_empty()
+
+
+# ==================================================
+# Create Room For Node
+# ==================================================
+
+func _create_room_for_node(
+	node: RunMapNode,
+	total_layers: int
+) -> RoomResource:
+
+	if node == null:
+
+		return null
+
+	var required_exit_count : int = (
+		node.next_nodes.size()
+	)
+
+	# ==================================================
+	# Start
+	# ==================================================
+
+	if node.layer == 0:
+
+		return _duplicate_room_template(
+			get_random_room(
+				RoomResource.RoomType.START,
+				2
+			)
+		)
+
+	# ==================================================
+	# Boss
+	# ==================================================
+
+	if node.layer == total_layers - 1:
+
+		return _duplicate_room_template(
+			_get_random_boss_room()
+		)
+
+	# ==================================================
+	# Guaranteed Rest Room
+	# ==================================================
+
+	if node.layer == total_layers - 2:
+
+		return _duplicate_room_template(
+			get_random_room(
+				RoomResource.RoomType.REST,
+				required_exit_count
+			)
+		)
+
+	# ==================================================
+	# World 1 Tutorial
+	# ==================================================
+
+	if current_world == 1:
+
+		return _create_world_one_room(
+			node,
+			required_exit_count,
+			total_layers
+		)
+
+	# ==================================================
+	# World 2+
+	# ==================================================
+
+	return _create_procedural_world_room(
+		node,
+		required_exit_count,
+		total_layers
+	)
+
+
+# ==================================================
+# World 1 Room Selection
+# ==================================================
+
+func _create_world_one_room(
+	node: RunMapNode,
+	exit_count: int,
+	total_layers: int
+) -> RoomResource:
+
+	if node.layer == 1:
+
+		return _duplicate_room_template(
+			get_random_room(
+				RoomResource.RoomType.BATTLE,
+				exit_count
+			)
+		)
+
+	# ==================================================
+	# Layer 2 = treasure / shop / battle
+	# ==================================================
+
+	if node.layer == 2:
+
+		var candidates: Array[RoomResource.RoomType] = []
+
+		# --------------------------------------------------
+		# Battle
+		# --------------------------------------------------
+
+		if _has_room_with_exit_count(
+			RoomResource.RoomType.BATTLE,
+			exit_count
+		):
+
+			# 40 weight units
+			for i in range(40):
+				candidates.append(
+					RoomResource.RoomType.BATTLE
+				)
+
+
+		# --------------------------------------------------
+		# Treasure
+		# --------------------------------------------------
+
+		if _has_room_with_exit_count(
+			RoomResource.RoomType.TREASURE,
+			exit_count
+		):
+
+			# 30 weight units
+			for i in range(30):
+				candidates.append(
+					RoomResource.RoomType.TREASURE
+				)
+
+
+		# --------------------------------------------------
+		# Shop
+		# --------------------------------------------------
+
+		if _has_room_with_exit_count(
+			RoomResource.RoomType.SHOP,
+			exit_count
+		):
+
+			# 30 weight units
+			for i in range(30):
+				candidates.append(
+					RoomResource.RoomType.SHOP
+				)
+
+
+		if candidates.is_empty():
+
+			push_error(
+				"RunManager: No World 1 room available for "
+				+ str(exit_count)
+				+ " exits."
+			)
+
+			return null
+
+
+		var selected_type: RoomResource.RoomType = (
+			candidates.pick_random()
+		)
+
+		return _duplicate_room_template(
+			get_random_room(
+				selected_type,
+				exit_count
+			)
+		)
+
+	var room_type := (
+		_get_random_world_one_type(
+			node.layer,
+			total_layers,
+			exit_count
+		)
+	)
+
+	return _duplicate_room_template(
+		get_random_room(
+			room_type,
+			exit_count
+		)
+	)
+
+
+# ==================================================
+# World 1 Type
+# ==================================================
+
+func _get_random_world_one_type(
+	layer_index: int,
+	total_layers: int,
+	exit_count: int
+) -> RoomResource.RoomType:
+
+	var candidates: Array[RoomResource.RoomType] = []
+
+	# --------------------------------------------------
+	# Battle
+	# --------------------------------------------------
+
+	if _has_room_with_exit_count(
+		RoomResource.RoomType.BATTLE,
+		exit_count
+	):
+
+		candidates.append(
+			RoomResource.RoomType.BATTLE
+		)
+
+
+	# --------------------------------------------------
+	# Event
+	# --------------------------------------------------
+
+	if _has_room_with_exit_count(
+		RoomResource.RoomType.EVENT,
+		exit_count
+	):
+
+		candidates.append(
+			RoomResource.RoomType.EVENT
+		)
+
+	# --------------------------------------------------
+	# Treasure
+	# --------------------------------------------------
+
+	if _has_room_with_exit_count(
+		RoomResource.RoomType.TREASURE,
+		exit_count
+	):
+
+		candidates.append(
+			RoomResource.RoomType.TREASURE
+		)
+
+	# --------------------------------------------------
+	# Shop
+	# --------------------------------------------------
+
+	if _has_room_with_exit_count(
+		RoomResource.RoomType.SHOP,
+		exit_count
+	):
+
+		candidates.append(
+			RoomResource.RoomType.SHOP
+		)
+
+
+	if candidates.is_empty():
+
+		return RoomResource.RoomType.BATTLE
+
+
+	return candidates.pick_random()
+
+
+# ==================================================
+# Procedural World Room
+# ==================================================
+
+func _create_procedural_world_room(
+	node: RunMapNode,
+	exit_count: int,
+	total_layers: int
+) -> RoomResource:
+
+	var roll := randf()
+
+	# ==================================================
+	# 10% Elite
+	# ==================================================
+
+	if roll < 0.10:
+
+		var elite := get_random_room(
+			RoomResource.RoomType.ELITE,
+			exit_count
+		)
+
+		if elite != null:
+
+			return _duplicate_room_template(
+				elite
+			)
+
+	# ==================================================
+	# 45% Normal Battle
+	# ==================================================
+
+	if roll < 0.55:
+
+		var battle := get_random_room(
+			RoomResource.RoomType.BATTLE,
+			exit_count
+		)
+
+		if battle != null:
+
+			return _duplicate_room_template(
+				battle
+			)
+
+	# ==================================================
+	# 45% Non-Battle
+	# ==================================================
+
+	var non_battle_type := (
+		_choose_non_battle_type(
+			node.layer,
+			total_layers,
+			exit_count
+		)
+	)
+
+	var non_battle := get_random_room(
+		non_battle_type,
+		exit_count
+	)
+
+	if non_battle != null:
+
+		return _duplicate_room_template(
+			non_battle
+		)
+
+	# ==================================================
+	# Fallback to Battle
+	# ==================================================
+
+	return _duplicate_room_template(
+		get_random_room(
+			RoomResource.RoomType.BATTLE,
+			exit_count
+		)
+	)
+
+
+# ==================================================
+# Non-Battle Type Selection
+# ==================================================
+
+func _choose_non_battle_type(
+	layer_index: int,
+	total_layers: int,
+	exit_count: int
+) -> RoomResource.RoomType:
+
+	var candidates: Array[RoomResource.RoomType] = []
+
+	var possible_types := [
+		RoomResource.RoomType.TREASURE,
+		RoomResource.RoomType.EVENT,
+		RoomResource.RoomType.SHOP,
+		RoomResource.RoomType.REST
+	]
+
+	for room_type in possible_types:
+
+		if not room_pools.has(room_type):
+
+			continue
+
+		if not room_pools[room_type].has(exit_count):
+
+			continue
+
+		if room_pools[room_type][exit_count].is_empty():
+
+			continue
+
+		candidates.append(
+			room_type
+		)
+	if candidates.is_empty():
+
+		push_error(
+			"RunManager: No non-battle room supports "
+			+ str(exit_count)
+			+ " exits."
+		)
+
+		return RoomResource.RoomType.BATTLE
+
+	var middle_start := int(
+		total_layers * 0.35
+	)
+
+	var middle_end := int(
+		total_layers * 0.65
+	)
+
+	var is_middle := (
+		layer_index >= middle_start
+		and
+		layer_index <= middle_end
+	)
+
+	var roll := randf()
+
+	if is_middle:
+
+		if roll < 0.55 and (
+			RoomResource.RoomType.TREASURE in candidates
+		):
+
+			return RoomResource.RoomType.TREASURE
+
+		if roll < 0.75 and (
+			RoomResource.RoomType.EVENT in candidates
+		):
+
+			return RoomResource.RoomType.EVENT
+
+		if roll < 0.90 and (
+			RoomResource.RoomType.SHOP in candidates
+		):
+
+			return RoomResource.RoomType.SHOP
+
+	else:
+
+		if roll < 0.35 and (
+			RoomResource.RoomType.EVENT in candidates
+		):
+
+			return RoomResource.RoomType.EVENT
+
+		if roll < 0.60 and (
+			RoomResource.RoomType.SHOP in candidates
+		):
+
+			return RoomResource.RoomType.SHOP
+
+		if roll < 0.80 and (
+			RoomResource.RoomType.TREASURE in candidates
+		):
+
+			return RoomResource.RoomType.TREASURE
+
+	return candidates.pick_random()
+
+
+# ==================================================
+# Layer Column
+# ==================================================
+
+func get_layer_column(
+	node_index: int,
+	layer_size: int
+) -> int:
+
+	match layer_size:
+
+		1:
+			return 2
+
+		2:
+			return node_index + 1
+
+		3:
+			return node_index + 1
+
+		4:
+			return node_index
+
+		5:
+			return node_index
+
+		_:
+			return node_index
+
+
+# ==================================================
+# Create Run Map
+# ==================================================
+
+
 func create_run_map() -> void:
 
 	print("================================")
 	print("GENERATING RUN MAP")
+	print("World:", current_world)
 	print("================================")
 
 	current_run_map = RunMapResource.new()
 
-	# --------------------------------------------------
-	# Layer Structure
-	# --------------------------------------------------
+	var layer_sizes := (
+		get_world_layer_sizes()
+	)
 
-	var layer_sizes := [
-		1,
-		2,
-		4,
-		5,
-		5,
-		4,
-		3,
-		2,
-		1
-	]
-
-	# --------------------------------------------------
-	# Create Layers
-	# --------------------------------------------------
+	# ==================================================
+	# Create graph nodes without choosing rooms yet
+	# ==================================================
 
 	for layer_index in range(
 		layer_sizes.size()
@@ -765,37 +1305,16 @@ func create_run_map() -> void:
 			layer_size
 		):
 
-			var next_layer_size := 0
-
-			if layer_index < layer_sizes.size() - 1:
-
-				next_layer_size = (
-					layer_sizes[layer_index + 1]
-				)
-
-			var room := _create_layer_room(
-				layer_index,
+			var column: int = get_layer_column(
 				node_index,
-				layer_size,
-				next_layer_size
+				layer_size
 			)
 
-			if room == null:
-
-				push_error(
-					"RunManager: Failed to create "
-					+ "room for layer "
-					+ str(layer_index)
-					+ " node "
-					+ str(node_index)
-				)
-
-				return
-
 			var node := RunMapNode.new(
-				room,
+				null,
 				layer_index,
-				node_index
+				node_index,
+				column
 			)
 
 			layer_nodes.append(
@@ -810,10 +1329,9 @@ func create_run_map() -> void:
 			layer_nodes
 		)
 
-
-	# --------------------------------------------------
+	# ==================================================
 	# Start Node
-	# --------------------------------------------------
+	# ==================================================
 
 	current_run_map.start_node = (
 		current_run_map.layers[0][0]
@@ -823,10 +1341,9 @@ func create_run_map() -> void:
 		current_run_map.start_node
 	)
 
-
-	# --------------------------------------------------
-	# Connect Layers
-	# --------------------------------------------------
+	# ==================================================
+	# Connect Graph
+	# ==================================================
 
 	for layer_index in range(
 		current_run_map.layers.size() - 1
@@ -839,6 +1356,23 @@ func create_run_map() -> void:
 		var next_layer: Array = (
 			current_run_map.layers[layer_index + 1]
 		)
+
+		# ==================================================
+		# The start room is handled separately.
+		# ==================================================
+
+		if layer_index == 0:
+
+			_connect_start_layer(
+				current_layer,
+				next_layer
+			)
+
+			continue
+
+		# ==================================================
+		# Normal procedural layers
+		# ==================================================
 
 		var connected := _connect_graph_layers(
 			current_layer,
@@ -855,6 +1389,40 @@ func create_run_map() -> void:
 			)
 
 			return
+
+	# ==================================================
+	# Assign Rooms After Connections Exist
+	# ==================================================
+
+	for layer_index in range(
+		current_run_map.layers.size()
+	):
+
+		var layer: Array = (
+			current_run_map.layers[layer_index]
+		)
+
+		for node in layer:
+
+			var room := (
+				_create_room_for_node(
+					node,
+					layer_sizes.size()
+				)
+			)
+
+			if room == null:
+
+				push_error(
+					"RunManager: Failed to assign room to node "
+					+ str(node.index)
+					+ " in layer "
+					+ str(node.layer)
+				)
+
+				return
+
+			node.room = room
 
 	# ==================================================
 	# Print Graph
@@ -875,7 +1443,7 @@ func create_run_map() -> void:
 		return
 
 	# ==================================================
-	# Start Run At Starting Node
+	# Start Run
 	# ==================================================
 
 	if current_run_map.start_node == null:
@@ -898,6 +1466,7 @@ func create_run_map() -> void:
 		current_run_map
 	)
 
+	map_manager.scanner_view_range = 0
 	map_manager.enable_scanner()
 
 	print(
@@ -1071,6 +1640,100 @@ func _duplicate_room_template(
 	return room
 
 
+func can_connect_nodes(
+	from_node: RunMapNode,
+	to_node: RunMapNode
+) -> bool:
+
+	if from_node == null:
+		return false
+
+	if to_node == null:
+		return false
+
+	# Must move exactly one layer forward.
+
+	if to_node.layer != from_node.layer + 1:
+		return false
+
+	# ==================================================
+	# Maximum horizontal movement is one column.
+	# ==================================================
+
+	if abs(
+		to_node.column - from_node.column
+	) > 1:
+
+		return false
+
+	return true
+
+
+# ==================================================
+# Connect Start Layer
+# ==================================================
+
+func _connect_start_layer(
+	start_layer: Array,
+	next_layer: Array
+) -> void:
+
+	if start_layer.is_empty():
+		return
+
+	if next_layer.is_empty():
+		return
+
+	var start_node: RunMapNode = (
+		start_layer[0]
+	)
+
+	# ==================================================
+	# Prefer the two nodes closest to the center.
+	# ==================================================
+
+	var candidates: Array[RunMapNode] = []
+
+	for node in next_layer:
+
+		if can_connect_nodes(
+			start_node,
+			node
+		):
+
+			candidates.append(
+				node
+			)
+
+	candidates.sort_custom(
+		func(a: RunMapNode, b: RunMapNode) -> bool:
+
+			return abs(
+				a.column - start_node.column
+			) < abs(
+				b.column - start_node.column
+			)
+	)
+
+	var connection_count: int = min(
+		2,
+		candidates.size()
+	)
+
+	for index in range(
+		connection_count
+	):
+
+		start_node.connect_to(
+			candidates[index]
+		)
+
+
+# ==================================================
+# Connect Graph Layers
+# ==================================================
+
+
 func _connect_graph_layers(
 	current_layer: Array,
 	next_layer: Array
@@ -1082,110 +1745,141 @@ func _connect_graph_layers(
 	if next_layer.is_empty():
 		return false
 
-	# ==================================================
-	# Calculate Path Capacity
-	# ==================================================
-
-	var total_paths := 0
-
-	for node in current_layer:
-
-		total_paths += (
-			node.room.exit_count
-		)
+	const MAX_CONNECTIONS: int = 3
 
 	# ==================================================
-	# Validate Capacity
+	# Give every next-layer node at least one parent
 	# ==================================================
 
-	if total_paths < next_layer.size():
+	for parent in current_layer:
 
-		push_error(
-			"RunManager: Not enough outgoing paths "
-			+ "to connect every node in next layer."
-		)
+		var candidates: Array[RunMapNode] = []
 
-		return false
+		for next_node in next_layer:
 
-	# ==================================================
-	# next node parent check
-	# ==================================================
+			if not can_connect_nodes(
+				parent,
+				next_node
+			):
 
-	for next_index in range(
-		next_layer.size()
-	):
+				continue
 
-		var next_node: RunMapNode = (
-			next_layer[next_index]
-		)
+			if not parent.next_nodes.has(
+				next_node
+			):
 
-		var parent_index := (
-			next_index % current_layer.size()
-		)
-
-		var parent: RunMapNode = (
-			current_layer[parent_index]
-		)
-
-		if parent.next_nodes.size() >= (
-			parent.room.exit_count
-		):
-
-			# Find another parent with space.
-			var found_parent := false
-
-			for candidate in current_layer:
-
-				if candidate.next_nodes.size() < (
-					candidate.room.exit_count
-				):
-
-					parent = candidate
-					found_parent = true
-					break
-
-			if not found_parent:
-
-				push_error(
-					"RunManager: Failed to assign parent."
+				candidates.append(
+					next_node
 				)
 
-				return false
+		if candidates.is_empty():
+
+			push_error(
+				"RunManager: No legal path from "
+				+ "layer "
+				+ str(parent.layer)
+				+ " column "
+				+ str(parent.column)
+			)
+
+			return false
+
+		var selected: RunMapNode = (
+			candidates.pick_random()
+		)
 
 		parent.connect_to(
+			selected
+		)
+
+	# ==================================================
+	# Prefer the parent with fewer connections.
+	# ==================================================
+
+	for next_node in next_layer:
+
+		if not next_node.previous_nodes.is_empty():
+
+			continue
+
+		var candidates: Array[RunMapNode] = []
+
+		for parent in current_layer:
+
+			if parent.next_nodes.size() >= MAX_CONNECTIONS:
+
+				continue
+
+			if not can_connect_nodes(
+				parent,
+				next_node
+			):
+
+				continue
+
+			candidates.append(
+				parent
+			)
+
+		if candidates.is_empty():
+
+			push_error(
+				"RunManager: Could not assign parent to node "
+				+ str(next_node.index)
+				+ " in layer "
+				+ str(next_node.layer)
+				+ " column "
+				+ str(next_node.column)
+			)
+
+			return false
+
+		var selected_parent: RunMapNode = (
+			candidates.pick_random()
+		)
+
+		selected_parent.connect_to(
 			next_node
 		)
 
-	# ==================================================
-	# Fill Remaining Exits
-	# ==================================================
-	
 	for parent in current_layer:
 
-		while parent.next_nodes.size() < (
-			parent.room.exit_count
+		while (
+			parent.next_nodes.size()
+			<
+			MAX_CONNECTIONS
 		):
 
 			var candidates: Array[RunMapNode] = []
 
 			for next_node in next_layer:
 
-				if not parent.next_nodes.has(
+				if parent.next_nodes.has(
 					next_node
 				):
 
-					candidates.append(
-						next_node
-					)
+					continue
+
+				if not can_connect_nodes(
+					parent,
+					next_node
+				):
+
+					continue
+
+				candidates.append(
+					next_node
+				)
 
 			if candidates.is_empty():
 
-				push_error(
-					"RunManager: Could not fill all "
-					+ "room exits."
-				)
+				break
 
-				return false
+			# 50% chance of creating another branch.
+
+			if randf() > 0.50:
+
+				break
 
 			var selected: RunMapNode = (
 				candidates.pick_random()
@@ -1228,6 +1922,8 @@ func print_run_graph() -> void:
 			print(
 				"Node:",
 				node.index,
+				"| Column:",
+				node.column,
 				"| Room:",
 				node.room.room_name,
 				"| Type:",
@@ -1245,6 +1941,8 @@ func print_run_graph() -> void:
 					next_node.layer,
 					" Node ",
 					next_node.index,
+					" Column ",
+					next_node.column,
 					" (",
 					next_node.room.room_name,
 					")"
