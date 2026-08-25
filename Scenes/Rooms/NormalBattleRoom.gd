@@ -10,6 +10,13 @@ class_name NormalBattleRoom
 
 
 # ==================================================
+# Roaming Enemies
+# ==================================================
+
+var roaming_enemies: Array[RoamingEnemy] = []
+
+
+# ==================================================
 # Initialization
 # ==================================================
 
@@ -23,7 +30,7 @@ func _ready() -> void:
 	print("================================")
 
 	_connect_battle_trigger()
-
+	_connect_roaming_enemies()
 
 
 # ==================================================
@@ -67,6 +74,70 @@ func _on_battle_trigger_entered() -> void:
 	set_player_controls(false)
 
 	room_manager.start_room_battle()
+
+
+func _connect_roaming_enemies() -> void:
+
+	roaming_enemies.clear()
+
+	var enemies := find_children(
+		"*",
+		"RoamingEnemy",
+		true,
+		false
+	)
+
+	for enemy in enemies:
+
+		if not enemy is RoamingEnemy:
+			continue
+
+		roaming_enemies.append(
+			enemy
+		)
+
+		if not enemy.encounter_requested.is_connected(
+			_on_roaming_enemy_encounter
+		):
+
+			enemy.encounter_requested.connect(
+				_on_roaming_enemy_encounter
+			)
+
+	print(
+		"Roaming enemies found:",
+		roaming_enemies.size()
+	)
+
+
+func _on_roaming_enemy_encounter(
+	enemy: RoamingEnemy
+) -> void:
+
+	if enemy == null:
+		return
+
+	print("================================")
+	print("NORMAL BATTLE ROOM: ROAMING ENCOUNTER")
+	print("Enemy:", enemy.name)
+	print("================================")
+
+	set_player_controls(
+		false
+	)
+
+	print(
+		"RoomPlayer controls:",
+		false
+	)
+
+	# --------------------------------------------------
+	# Temporary test
+	# --------------------------------------------------
+
+	print(
+		"ROAMING ENCOUNTER DETECTION TEST PASSED"
+	)
 
 
 # ==================================================
