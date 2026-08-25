@@ -22,6 +22,7 @@ extends Node
 @onready var reward_manager = $Managers/RewardManager
 @onready var save_manager = $Managers/SaveManager
 
+
 # ==================================================
 # World
 # ==================================================
@@ -34,6 +35,7 @@ extends Node
 const LAB_HUB_SCENE = preload(
 	"res://Scenes/LabHub/LabHub.tscn"
 )
+
 
 # ==================================================
 # State
@@ -189,7 +191,8 @@ func open_lab_hub() -> void:
 	print("OPENING LAB HUB")
 	print("================================")
 
-	map_ui.hide()
+	map_manager.disable_scanner()
+	map_ui.close_map()
 
 	hub_world.close()
 
@@ -262,6 +265,14 @@ func start_run():
 
 	run_manager.create_run_map()
 
+	# ==================================================
+	# Enable Scanner
+	# ==================================================
+
+	map_manager.enable_scanner()
+
+	map_ui.close_map()
+
 
 func _on_room_entered(room: RoomData) -> void:
 
@@ -326,7 +337,8 @@ func open_victory_screen():
 
 	await get_tree().create_timer(0.0).timeout
 
-	#current_room = null
+	map_manager.disable_scanner()
+	map_ui.close_map()
 
 	var enemy_reward := PermanentProgressionManager.reward_enemy_defeats(
 		run_manager.enemies_defeated
@@ -339,15 +351,14 @@ func open_victory_screen():
 
 	run_manager.reset_run()
 
-	map_ui.hide()
-
 	open_lab_hub()
 
 
 func _on_battle_lost():
+
 	print("Run failed")
 
-	#current_room = null
+	map_manager.disable_scanner()
 
 	var enemy_reward := PermanentProgressionManager.reward_enemy_defeats(
 		run_manager.enemies_defeated
@@ -379,11 +390,12 @@ func finish_run():
 	run_manager.reset_run()
 
 
-func return_to_map():
-	print("Returning to map")
+func return_to_map() -> void:
 
-	map_ui.display_map(
-		map_manager.current_map
-	)
+	print("Returning to Scanner")
 
-	map_ui.show()
+	if not map_manager.scanner_enabled:
+
+		return
+
+	map_ui.open_map()

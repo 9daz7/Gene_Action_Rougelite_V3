@@ -123,6 +123,22 @@ func open_map() -> void:
 
 		return
 
+	if not map_manager.scanner_enabled:
+
+		print(
+			"SCANNER UNAVAILABLE"
+		)
+
+		return
+
+	if map_manager.run_map == null:
+
+		print(
+			"SCANNER HAS NO ACTIVE RUN MAP"
+		)
+
+		return
+
 	visible_map = true
 
 	show()
@@ -215,6 +231,12 @@ func _draw_connections(
 		for next_node in node.next_nodes:
 
 			if next_node == null:
+
+				continue
+
+			if not map_manager.is_node_visible(
+				next_node
+			):
 
 				continue
 
@@ -373,9 +395,9 @@ func _get_node_position(
 		)
 
 	var y := (
-	size.y
-	- map_margin.y
-	-  layer * layer_spacing
+		size.y
+		- map_margin.y
+		- layer * layer_spacing
 	)
 
 	return Vector2(

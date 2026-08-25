@@ -898,6 +898,8 @@ func create_run_map() -> void:
 		current_run_map
 	)
 
+	map_manager.enable_scanner()
+
 	print(
 		"Starting room:",
 		current_run_map.current_node.room.room_name

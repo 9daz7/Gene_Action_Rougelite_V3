@@ -17,17 +17,18 @@ var run_map: RunMapResource = null
 
 
 # ==================================================
-# Map View
-# ==================================================
-
-var map_view_range: int = 0
-
-
-# ==================================================
 # Current Node
 # ==================================================
 
 var current_node: RunMapNode = null
+
+
+# ==================================================
+# Scanner State
+# ==================================================
+
+var scanner_enabled: bool = false
+var scanner_view_range: int = 0
 
 
 # ==================================================
@@ -37,6 +38,25 @@ var current_node: RunMapNode = null
 func _ready() -> void:
 
 	print("MAP MANAGER READY")
+
+
+
+func enable_scanner() -> void:
+
+	scanner_enabled = true
+
+	print("SCANNER ENABLED")
+
+	map_updated.emit()
+
+
+func disable_scanner() -> void:
+
+	scanner_enabled = false
+
+	print("SCANNER DISABLED")
+
+	map_updated.emit()
 
 
 # ==================================================
@@ -186,17 +206,17 @@ func mark_current_node_complete() -> void:
 
 
 # ==================================================
-# Map View Upgrade
+# Scanner Upgrades
 # ==================================================
 
 
-func increase_map_view_range() -> void:
+func increase_scanner_view_range() -> void:
 
-	map_view_range += 1
+	scanner_view_range += 1
 
 	print(
 		"Map view range increased to:",
-		map_view_range
+		scanner_view_range
 	)
 
 	map_updated.emit()
@@ -210,6 +230,10 @@ func increase_map_view_range() -> void:
 func is_node_visible(
 	node: RunMapNode
 ) -> bool:
+
+	if not scanner_enabled:
+
+		return false
 
 	if node == null:
 
@@ -228,7 +252,7 @@ func is_node_visible(
 		return true
 
 	# ==================================================
-	# Future layers within map-view ranges
+	# Future scan range
 	# ==================================================
 
 	var layer_difference := (
@@ -236,12 +260,16 @@ func is_node_visible(
 		- current_node.layer
 	)
 
-	return layer_difference <= map_view_range
+	return layer_difference <= scanner_view_range
 
 
 func is_node_type_visible(
 	node: RunMapNode
 ) -> bool:
+
+	if not scanner_enabled:
+
+		return false
 
 	if node == null:
 
@@ -251,18 +279,24 @@ func is_node_type_visible(
 
 		return false
 
-	# Completed/current nodes always reveal their type.
+	# ==================================================
+	# Completed/current  layers
+	# ==================================================
 
 	if node.layer <= current_node.layer:
 
 		return true
+
+	# ==================================================
+	# Future scan range
+	# ==================================================
 
 	var layer_difference := (
 		node.layer
 		- current_node.layer
 	)
 
-	return layer_difference <= map_view_range
+	return layer_difference <= scanner_view_range
 
 
 # ==================================================
