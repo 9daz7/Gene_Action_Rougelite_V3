@@ -701,6 +701,27 @@ func start_room_battle() -> void:
 
 
 # ==================================================
+# Roaming Battle
+# ==================================================
+
+func start_roaming_battle(
+	enemy_resource: EnemyResource
+) -> void:
+
+	if battle_manager == null:
+
+		push_error(
+			"RoomManager: BattleManager is missing."
+		)
+
+		return
+
+	battle_manager.start_roaming_battle(
+		enemy_resource
+	)
+
+
+# ==================================================
 # Legacy Map Room Compatibility (temp)
 # ==================================================
 
@@ -1117,17 +1138,25 @@ func _on_battle_won() -> void:
 		"RoomManager: Battle won"
 	)
 
-	# --------------------------------------------------
-	# New RoomResource path
-	# --------------------------------------------------
+	# ==================================================
+	# Roaming battle
+	# ==================================================
+
+	if battle_manager.roaming_battle:
+
+		print(
+			"RoomManager: Roaming battle victory."
+		)
+
+		return
+
+	# ==================================================
+	# Normal room battle
+	# ==================================================
 
 	if current_room != null:
 
 		complete_room()
-
-	# --------------------------------------------------
-	# Legacy map path
-	# --------------------------------------------------
 
 	else:
 

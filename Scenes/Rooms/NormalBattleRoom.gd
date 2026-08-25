@@ -17,6 +17,13 @@ var roaming_enemies: Array[RoamingEnemy] = []
 
 
 # ==================================================
+# Roaming Enemy State
+# ==================================================
+
+var active_roaming_enemy: RoamingEnemy = null
+
+
+# ==================================================
 # Initialization
 # ==================================================
 
@@ -31,6 +38,14 @@ func _ready() -> void:
 
 	_connect_battle_trigger()
 	_connect_roaming_enemies()
+
+	if not GameEvents.battle_finished.is_connected(
+		_on_roaming_battle_finished
+	):
+
+		GameEvents.battle_finished.connect(
+			_on_roaming_battle_finished
+	)
 
 
 # ==================================================
@@ -117,6 +132,19 @@ func _on_roaming_enemy_encounter(
 	if enemy == null:
 		return
 
+	if active_roaming_enemy != null:
+		return
+
+	if enemy.enemy_data == null:
+
+		push_error(
+			"NormalBattleRoom: Roaming enemy has no EnemyResource."
+		)
+
+		return
+
+	active_roaming_enemy = enemy
+
 	print("================================")
 	print("NORMAL BATTLE ROOM: ROAMING ENCOUNTER")
 	print("Enemy:", enemy.name)
@@ -126,9 +154,8 @@ func _on_roaming_enemy_encounter(
 		false
 	)
 
-	print(
-		"RoomPlayer controls:",
-		false
+	room_manager.start_roaming_battle(
+		enemy.enemy_data
 	)
 
 	# --------------------------------------------------
@@ -138,6 +165,50 @@ func _on_roaming_enemy_encounter(
 	print(
 		"ROAMING ENCOUNTER DETECTION TEST PASSED"
 	)
+
+
+func _on_roaming_battle_finished(
+	result
+) -> void:
+
+	if active_roaming_enemy == null:
+		return
+
+	print("================================")
+	print("ROAMING BATTLE FINISHED")
+	print("Result:", result)
+	print("================================")
+
+	if result == "win":
+
+		print(
+			"Roaming enemy defeated:",
+			active_roaming_enemy.enemy_data.enemy_name
+		)
+
+		if is_instance_valid(
+			active_roaming_enemy
+		):
+
+			active_roaming_enemy.queue_free()
+
+		active_roaming_enemy = null
+
+		set_player_controls(
+			true
+		)
+
+		print(
+			"ROAMING ENCOUNTER COMPLETE"
+		)
+
+	elif result == "lose":
+
+		active_roaming_enemy = null
+
+		print(
+			"ROAMING ENCOUNTER LOST"
+		)
 
 
 # ==================================================

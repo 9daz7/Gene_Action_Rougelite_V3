@@ -76,6 +76,8 @@ var enemies: Array[EnemyAnimal] = []
 var current_battle_type = null
 var critical_experiment := false
 
+var roaming_battle: bool = false
+
 
 # ==================================================
 # Initialization
@@ -159,6 +161,9 @@ func start_critical_experiment():
 func start_battle(
 	room_type = RoomData.RoomType.ENEMY
 ):
+
+	roaming_battle = false
+
 	# temp
 	battle_number += 1
 
@@ -208,6 +213,58 @@ func start_battle(
 
 	enemies = spawner.spawn_enemies(
 		enemy_resources
+	)
+
+	initialize_battle()
+
+
+# ==================================================
+# Roaming Enemy Battle
+# ==================================================
+
+func start_roaming_battle(
+	enemy_resource: EnemyResource
+) -> void:
+
+	print("================================")
+	print("STARTING ROAMING ENEMY BATTLE")
+	print("================================")
+
+	if enemy_resource == null:
+
+		push_error(
+			"BattleManager: Roaming enemy resource is missing."
+		)
+
+		return
+
+	roaming_battle = true
+	critical_experiment = false
+
+	current_battle_type = (
+		RoomData.RoomType.ENEMY
+	)
+
+	enemies.clear()
+
+	if spawner == null:
+
+		push_error(
+			"BattleManager: BattleSpawner missing."
+		)
+
+		roaming_battle = false
+
+		return
+
+	await create_battle_scene()
+
+	player = spawner.spawn_player()
+
+	enemies = spawner.spawn_enemies(
+		[
+			enemy_resource
+		]
 	)
 
 	initialize_battle()
@@ -558,6 +615,8 @@ func end_battle():
 
 	current_battle = null
 	player = null
+
+	roaming_battle = false
 
 	if turn_manager:
 		turn_manager.reset()

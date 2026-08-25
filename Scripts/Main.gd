@@ -300,6 +300,14 @@ func _on_battle_won(enemy):
 		open_victory_screen()
 		return
 
+	# roaming battles
+	if battle_manager.roaming_battle:
+		print(
+			"MAIN: Roaming battle victory. "
+			+ "Skipping normal room rewards."
+		)
+		return
+
 	# critical experiment
 	if battle_manager.critical_experiment:
 		print("Skipping rewards: critical experiment")
