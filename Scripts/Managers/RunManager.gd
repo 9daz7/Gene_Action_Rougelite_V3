@@ -55,6 +55,13 @@ var enemies_defeated: int = 0
 
 
 # ==================================================
+# Run Mutagens
+# ==================================================
+
+var run_mutagens: Array[MutagenResource] = []
+
+
+# ==================================================
 # Current Animal
 # ==================================================
 
@@ -1985,6 +1992,32 @@ func start_run():
 
 	player_hp = max_hp
 
+	run_mutagens.clear()
+
+	# ==================================================
+	# TEST MUTAGENS
+	# ==================================================
+
+	var electric_guard := load(
+		"res://Data/Mutagens/ElectricGuard.tres"
+	) as MutagenResource
+
+	if electric_guard != null:
+
+		add_mutagen(
+			electric_guard
+		)
+
+	#var burning_fang := load(
+		#"res://Data/Mutagens/BurningFangsMutagen.tres"
+	#) as MutagenResource
+#
+	#if burning_fang != null:
+#
+		#add_mutagen(
+			#burning_fang
+		#)
+
 	GameEvents.hp_changed.emit(
 		player_hp,
 		max_hp
@@ -2010,6 +2043,8 @@ func reset_run() -> void:
 	gold = 0
 	player_hp = max_hp
 	run_active = false
+
+	run_mutagens.clear()
 
 	enemies_defeated = 0
 
@@ -2167,6 +2202,45 @@ func add_gold(amount:int):
 		" Total:",
 		gold
 	)
+
+
+func add_mutagen(
+	mutagen: MutagenResource
+) -> bool:
+
+	if mutagen == null:
+		return false
+
+	if run_mutagens.has(mutagen):
+		return false
+
+	run_mutagens.append(
+		mutagen
+	)
+
+	print(
+		"Mutagen added:",
+		mutagen.mutagen_name
+	)
+
+	return true
+
+
+func remove_mutagen(
+	mutagen: MutagenResource
+) -> bool:
+
+	if mutagen == null:
+		return false
+
+	if not run_mutagens.has(mutagen):
+		return false
+
+	run_mutagens.erase(
+		mutagen
+	)
+
+	return true
 
 
 func heal_player(amount:int):

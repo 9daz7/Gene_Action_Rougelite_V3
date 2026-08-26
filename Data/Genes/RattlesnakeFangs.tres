@@ -5,11 +5,9 @@
 [ext_resource type="Script" uid="uid://cykpuveioj0q4" path="res://Scripts/Genes/Effects/PassiveEffects.gd" id="3_hv4v7"]
 [ext_resource type="Resource" uid="uid://bk4tdmsrim677" path="res://Data/Moves/PoisonBite.tres" id="3_mteun"]
 [ext_resource type="Script" uid="uid://cnlwwn0eoa0pn" path="res://Scripts/Genes/GeneResource.gd" id="4_mteun"]
-[ext_resource type="Resource" uid="uid://vtk6mofqp0h3" path="res://Resources/PassiveEffects/VenomGladsPassive.tres" id="5_gx3dt"]
 
 [resource]
 script = ExtResource("4_mteun")
 gene_name = "Rattlesnake Fangs"
-passive_effects = Array[ExtResource("3_hv4v7")]([ExtResource("5_gx3dt")])
 move_pool = Array[ExtResource("2_tky13")]([ExtResource("3_mteun")])
 metadata/_custom_type_script = "uid://cnlwwn0eoa0pn"

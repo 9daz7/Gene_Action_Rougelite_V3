@@ -193,6 +193,12 @@ func start_player_turn():
 	if check_battle_end():
 		return
 
+	if player.consume_stun():
+
+		end_turn()
+
+		return
+
 	GameEvents.turn_changed.emit(
 		current_state
 	)
@@ -671,6 +677,9 @@ func resolve_turn(
 				return
 
 			if actor.hp <= 0:
+				continue
+
+			if actor.consume_stun():
 				continue
 
 		# ------------------------------------------------

@@ -8,19 +8,7 @@ class_name PlayerAnimal
 func start_battle():
 	print("Player ready")
 
-# ==================================================
-# Targeting
-# ==================================================
-#
-#func get_opponents() -> Array:
-	#if turn_manager == null:
-		#return []
-#
-	#return turn_manager.enemies
-#
-#func get_team_members() -> Array:
-	#return [self]
-	#
+
 # ==================================================
 # Initialization
 # ==================================================
@@ -35,13 +23,15 @@ func initialize_player(manager:RunManager):
 func take_damage(
 	amount:int,
 	attacker:AnimalBase = null,
-	is_status_damage:bool = false
+	is_status_damage: bool = false,
+	move: MoveResource = null
 ):
 
 	super.take_damage(
 		amount,
 		attacker,
-		is_status_damage
+		is_status_damage,
+		move
 	)
 
 	if run_manager:

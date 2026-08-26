@@ -7,6 +7,7 @@ enum Type
 	POISON,
 	BLEED,
 	BURN,
+	ELECTRIC,
 	HEAL,
 	SPEED_UP,
 	SPEED_DOWN,
@@ -259,6 +260,41 @@ func process_turn(target: AnimalBase):
 			target.take_status_damage(
 				damage,
 			)
+
+		Type.ELECTRIC:
+
+			var damage := 1
+
+			BattleLog.add_message(
+				"%s took %d electric damage!" % [
+					target.name,
+					damage
+				]
+			)
+
+			target.take_status_damage(
+				damage
+			)
+
+			if not target.is_alive():
+				return
+
+	# ==================================================
+	# 25% Stun Chance
+	# ==================================================
+
+			if randf() < 0.25:
+
+				target.stunned = true
+
+				BattleLog.add_message(
+					"%s was stunned!" % target.name
+				)
+
+				print(
+					target.name,
+					" was stunned by Electric."
+				)
 
 		Type.HEAL:
 

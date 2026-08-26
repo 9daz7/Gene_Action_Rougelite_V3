@@ -31,6 +31,7 @@ func initialize(resource: AnimalResource):
 	
 	setup_basic_moves()
 
+
 # ==================================================
 # Team / Targeting
 # ==================================================
@@ -127,6 +128,14 @@ var slot_capacity := {
 	GeneResource.SlotType.LIMBS: 2,
 	GeneResource.SlotType.GLANDS: 2
 }
+
+
+func get_run_mutagens() -> Array[MutagenResource]:
+
+	if run_manager == null:
+		return []
+
+	return run_manager.run_mutagens
 
 
 func add_gene(gene: GeneResource) -> bool:
@@ -535,7 +544,14 @@ func tick_status_effects():
 func get_attack() -> int:
 
 	var value = base_attack + attack_modifier
-	
+
+	for mutagen in get_run_mutagens():
+
+		if mutagen == null:
+			continue
+
+		value += mutagen.attack_bonus
+
 	for slot in gene_slots:
 
 		for gene in gene_slots[slot]:
@@ -556,6 +572,13 @@ func get_attack() -> int:
 func get_max_hp() -> int:
 
 	var value = base_hp
+
+	for mutagen in get_run_mutagens():
+
+		if mutagen == null:
+			continue
+
+		value += mutagen.hp_bonus
 
 	for slot in gene_slots:
 
@@ -578,6 +601,13 @@ func get_max_hp() -> int:
 func get_speed() -> int:
 
 	var value = base_speed + speed_modifier
+
+	for mutagen in get_run_mutagens():
+
+		if mutagen == null:
+			continue
+
+		value += mutagen.speed_bonus
 
 	for slot in gene_slots:
 		for gene in gene_slots[slot]:
@@ -603,6 +633,13 @@ func get_accuracy() -> int:
 
 	var value = base_accuracy + accuracy_modifier
 
+	for mutagen in get_run_mutagens():
+
+		if mutagen == null:
+			continue
+
+		value += mutagen.accuracy_bonus
+
 	for slot in gene_slots:
 		
 		for gene in gene_slots[slot]:
@@ -621,9 +658,16 @@ func get_accuracy() -> int:
 
 
 func get_evasion() -> int:
-	
+
 	var value = base_evasion + evasion_modifier
-	
+
+	for mutagen in get_run_mutagens():
+
+		if mutagen == null:
+			continue
+
+		value += mutagen.evasion_bonus
+
 	for slot in gene_slots:
 		for gene in gene_slots[slot]:
 			value += gene.evasion_bonus
@@ -641,7 +685,14 @@ func get_evasion() -> int:
 func get_armor() -> int:
 
 	var value = base_armor + defense_modifier
-	
+
+	for mutagen in get_run_mutagens():
+
+		if mutagen == null:
+			continue
+
+		value += mutagen.armor_bonus
+
 	for slot in gene_slots:
 		for gene in gene_slots[slot]:
 			value += gene.armor_bonus
@@ -660,12 +711,23 @@ func get_critical_chance() -> int:
 
 	var chance: int = critical_modifier
 
+	for mutagen in get_run_mutagens():
+
+		if mutagen == null:
+			continue
+
+		chance += mutagen.crit_bonus
+
 	print(
 		"CRIT CHECK:",
 		name,
 		" base:",
 		critical_modifier
 	)
+
+	# ==================================================
+	# Genes
+	# ==================================================
 
 	for slot in gene_slots:
 
@@ -683,6 +745,10 @@ func get_critical_chance() -> int:
 
 			chance += gene.critical_bonus
 
+	# ==================================================
+	# Passive Effects
+	# ==================================================
+
 	for passive in passive_effects:
 
 		chance = passive.modify_critical_chance(
@@ -696,6 +762,67 @@ func get_critical_chance() -> int:
 	)
 
 	return chance
+
+
+func get_mutagen_damage_bonus(
+	move: MoveResource
+) -> int:
+
+	if move == null:
+		return 0
+
+	var bonus := 0
+
+	for mutagen in get_run_mutagens():
+
+		if mutagen == null:
+			continue
+
+		if mutagen.affects_move(move):
+
+			bonus += mutagen.damage_bonus
+
+	return bonus
+
+
+func apply_mutagen_move_effects(
+	move: MoveResource,
+	target: AnimalBase
+) -> void:
+
+	if move == null:
+		return
+
+	if target == null:
+		return
+
+	for mutagen in get_run_mutagens():
+
+		if mutagen == null:
+			continue
+
+		if not mutagen.affects_move(move):
+			continue
+
+		for effect in mutagen.added_effects:
+
+			if effect == null:
+				continue
+
+			var new_effect: StatusEffect = (
+				effect.duplicate()
+			)
+
+			target.apply_status_effect(
+				new_effect
+			)
+
+			print(
+				"Mutagen applied:",
+				mutagen.mutagen_name,
+				" ->",
+				effect.effect_name
+			)
 
 
 func modify_attack(amount:int):
@@ -753,6 +880,8 @@ func setup_player_hp(manager):
 
 var is_protecting := false
 
+var stunned: bool = false
+
 # 60% damage reduction
 var protect_reduction := 0.6
 
@@ -760,7 +889,8 @@ var protect_reduction := 0.6
 func take_damage(
 	amount:int,
 	attacker:AnimalBase = null,
-	is_status_damage:bool = false
+	is_status_damage:bool = false,
+	move: MoveResource = null
 ):
 
 	print("")
@@ -835,6 +965,25 @@ func take_damage(
 		0,
 		get_max_hp()
 	)
+
+	# ==================================================
+	# Protect Mutagens
+	# ==================================================
+
+	if (
+		not is_status_damage
+		and
+		attacker != null
+		and
+		move != null
+		and
+		is_protecting
+	):
+
+		trigger_protect_mutagens(
+			attacker,
+			move
+		)
 
 	print(
 		name,
@@ -1040,7 +1189,6 @@ func get_current_hp() -> int:
 
 func reset_turn_state():
 
-	# temporary effects expire here
 	is_protecting = false
 
 
@@ -1055,6 +1203,25 @@ func activate_protect():
 
 func clear_protect():
 	is_protecting = false
+
+
+func consume_stun() -> bool:
+
+	if not stunned:
+		return false
+
+	stunned = false
+
+	print(
+		name,
+		" is stunned and cannot act."
+	)
+
+	BattleLog.add_message(
+		"%s is stunned and cannot move!" % name
+	)
+
+	return true
 
 
 # ==================================================
@@ -1191,6 +1358,61 @@ func trigger_passive_event(
 					self,
 					data
 				)
+
+
+func trigger_protect_mutagens(
+	attacker: AnimalBase,
+	move: MoveResource
+) -> void:
+
+	if attacker == null:
+		return
+
+	if move == null:
+		return
+
+	if not is_protecting:
+		return
+
+	if move.damage_type != (
+		MoveResource.DamageType.PHYSICAL
+	):
+
+		return
+
+	for mutagen in get_run_mutagens():
+
+		if mutagen == null:
+			continue
+
+		if not mutagen.triggers_on_physical_hit_while_protected:
+			continue
+
+		# ==================================================
+		# Apply Mutagen Effects
+		# ==================================================
+
+		for effect in mutagen.added_effects:
+
+			if effect == null:
+				continue
+
+			var new_effect: StatusEffect = (
+				effect.duplicate(true)
+			)
+
+			attacker.apply_status_effect(
+				new_effect
+			)
+
+			print(
+				"Protect Mutagen:",
+				mutagen.mutagen_name,
+				" applied:",
+				new_effect.effect_name,
+				"to:",
+				attacker.name
+			)
 
 
 # ==================================================

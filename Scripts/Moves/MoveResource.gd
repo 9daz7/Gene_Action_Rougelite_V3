@@ -151,6 +151,11 @@ func execute_on_target(
 				user
 			)
 
+			#user.apply_mutagen_move_effects(
+				#self,
+				#user
+			#)
+
 
 		MoveEffectType.DAMAGE:
 
@@ -168,6 +173,11 @@ func execute_on_target(
 				false
 			)
 
+			user.apply_mutagen_move_effects(
+				self,
+				target
+			)
+
 
 		MoveEffectType.HYBRID:
 
@@ -183,6 +193,11 @@ func execute_on_target(
 				user,
 				target,
 				true
+			)
+
+			user.apply_mutagen_move_effects(
+				self,
+				target
 			)
 
 
@@ -286,8 +301,12 @@ func execute_damage(
 	# ==========================================
 	# Damage
 	# ==========================================
-	
+
 	var damage = user.calculate_move_damage(
+		self
+	)
+
+	damage += user.get_mutagen_damage_bonus(
 		self
 	)
 
@@ -350,7 +369,9 @@ func execute_damage(
 
 	target.take_damage(
 		damage,
-		user
+		user,
+		false,
+		self
 	)
 
 	# ==========================================

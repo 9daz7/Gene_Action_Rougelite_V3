@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="MutagenResource" format=3 uid="uid://dtvbbnxcp5smp"]
+
+[ext_resource type="Script" uid="uid://cedh0hgwqddn4" path="res://Resources/StatusEffect.gd" id="1_2smk8"]
+[ext_resource type="Resource" uid="uid://yxxu1o4616xt" path="res://Resources/StatusEffects/Burn.tres" id="2_2raad"]
+[ext_resource type="Script" uid="uid://cps66j48fyqt5" path="res://Scripts/Resources/MutagenResource.gd" id="2_54y06"]
+
+[resource]
+script = ExtResource("2_54y06")
+mutagen_name = "Burning Fangs"
+mutagen_type = 1
+affected_move_names = Array[String](["Bite"])
+added_effects = Array[ExtResource("1_2smk8")]([ExtResource("2_2raad")])
+metadata/_custom_type_script = "uid://cps66j48fyqt5"
