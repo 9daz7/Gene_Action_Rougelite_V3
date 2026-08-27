@@ -12,6 +12,9 @@ extends Node
 @onready var run_manager: RunManager = $Managers/RunManager
 @onready var battle_spawner = $Managers/BattleSpawner
 
+@onready var mutagen_database: MutagenDatabase = $Managers/MutagenDatabase
+@onready var run_mutagen_manager: RunMutagenManager = $Managers/RunMutagenManager
+
 @onready var battle_root: Node = $World/BattleRoot
 
 #@onready var battle_manager = $Managers/BattleManager
@@ -81,6 +84,8 @@ func _ready():
 	)
 
 	run_manager.load_room_pools()
+
+	mutagen_database.initialize()
 
 	_create_lab_hub()
 

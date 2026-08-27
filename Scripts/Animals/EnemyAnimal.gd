@@ -4,6 +4,8 @@ class_name EnemyAnimal
 
 @export var enemy_data: EnemyResource
 
+@onready var enemy_sprite: Sprite2D = $EnemySprite
+
 var enemy_index:int = 0
 
 var last_move: MoveResource = null
@@ -34,19 +36,11 @@ func start_battle():
 
 		add_move(move)
 
-
-#func get_opponents() -> Array:
-	#if turn_manager == null:
-		#return []
-#
-	#return [turn_manager.player]
-
-
-#func get_team_members() -> Array:
-	#if turn_manager == null:
-		#return []
-#
-	#return turn_manager.enemies
+	if enemy_data.sprite:
+		enemy_sprite.texture = enemy_data.sprite
+		print("SPRITE LOADED: ", enemy_data.sprite.resource_path)
+	else:
+		print("NO SPRITE ASSIGNED TO: ", enemy_data.enemy_name)
 
 
 func choose_action(player:AnimalBase) -> MoveResource:
@@ -73,39 +67,6 @@ func choose_action(player:AnimalBase) -> MoveResource:
 	last_move = chosen_move
 
 	return chosen_move
-
-	#var chosen_move: MoveResource
-	#
-	#match enemy_data.ai_type:
-#
-		#EnemyResource.AIType.BASIC:
-			#chosen_move = choose_basic_move(moves)
-#
-#
-		#EnemyResource.AIType.AGGRESSIVE:
-			#chosen_move = choose_aggressive_move(moves)
-#
-#
-		#EnemyResource.AIType.DEFENSIVE:
-			#chosen_move = choose_defensive_move(moves)
-#
-#
-		#EnemyResource.AIType.TACTICAL:
-			#chosen_move = choose_tactical_move(moves, player)
-#
-#
-		#_:
-			#chosen_move = get_best_move(player,moves)
-#
-	#print(
-		#name,
-		#" chose ",
-		#chosen_move.move_name
-	#)
-#
-	#last_move = chosen_move
-#
-	#return chosen_move
 
 
 func get_best_move(

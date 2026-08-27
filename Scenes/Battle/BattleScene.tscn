@@ -16,11 +16,15 @@ position = Vector2(1145, 818)
 [node name="EnemyContainer" type="Node2D" parent="." unique_id=2143289975]
 
 [node name="EnemySpawn1" type="Marker2D" parent="EnemyContainer" unique_id=1878053277]
-position = Vector2(563, 256)
+z_index = 12
+position = Vector2(944, 211)
 
 [node name="EnemySpawn2" type="Marker2D" parent="EnemyContainer" unique_id=955968079]
-position = Vector2(1301, 256)
+z_index = 12
+position = Vector2(1317, 229)
 
 [node name="EnemySpawn3" type="Marker2D" parent="EnemyContainer" unique_id=1411174731]
+z_index = 12
+position = Vector2(580, 224)
 
 [node name="BattleUI" parent="." unique_id=1277132647 instance=ExtResource("2_jaxsk")]

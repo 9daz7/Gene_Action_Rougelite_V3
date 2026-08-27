@@ -4,9 +4,13 @@
 [ext_resource type="Resource" uid="uid://cxemne4dnlwhj" path="res://Data/Enemies/Normal/Wolf.tres" id="2_nh118"]
 
 [node name="EnemyAnimal" type="CharacterBody2D" unique_id=34476420]
+z_index = 4
 script = ExtResource("1_fbirj")
 enemy_data = ExtResource("2_nh118")
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1577365520]
+[node name="EnemySprite" type="Sprite2D" parent="." unique_id=1577365520]
+z_index = 2
+scale = Vector2(0.05, 0.05)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1364075243]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=448095217]
+z_index = 2

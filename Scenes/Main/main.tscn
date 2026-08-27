@@ -9,6 +9,8 @@
 [ext_resource type="Script" uid="uid://cwwpo4n5rbema" path="res://Scripts/SaveManager.gd" id="5_hfg1r"]
 [ext_resource type="Script" uid="uid://hlp51b3uy82k" path="res://Scripts/Managers/RewardManager.gd" id="5_xlvfx"]
 [ext_resource type="Script" uid="uid://cgn7bx0im6o1g" path="res://Scripts/Managers/MapManager.gd" id="6_hryqi"]
+[ext_resource type="Script" uid="uid://dns5urucc3qs8" path="res://Scripts/Managers/RunMutagenManager.gd" id="6_wliom"]
+[ext_resource type="Script" uid="uid://dp476n1iocl1b" path="res://Scripts/Managers/MutagenDatabase.gd" id="7_2ok46"]
 [ext_resource type="Script" uid="uid://bbfr6ua0f4fu" path="res://Scripts/Managers/RoomManager.gd" id="8_hfg1r"]
 [ext_resource type="PackedScene" uid="uid://duo7vnk5nhe3f" path="res://Scenes/UI/GeneLoadoutScreen.tscn" id="8_imbg2"]
 [ext_resource type="PackedScene" uid="uid://c77fp71r8tcxd" path="res://Scenes/UI/MapUI.tscn" id="9_imbg2"]
@@ -31,6 +33,12 @@ script = ExtResource("3_2a143")
 
 [node name="RunManager" type="Node" parent="Managers" unique_id=1223530463]
 script = ExtResource("2_5yls4")
+
+[node name="RunMutagenManager" type="Node" parent="Managers" unique_id=141137896]
+script = ExtResource("6_wliom")
+
+[node name="MutagenDatabase" type="Node" parent="Managers" unique_id=486981803]
+script = ExtResource("7_2ok46")
 
 [node name="SaveManager" type="Node" parent="Managers" unique_id=1870900078]
 script = ExtResource("5_hfg1r")

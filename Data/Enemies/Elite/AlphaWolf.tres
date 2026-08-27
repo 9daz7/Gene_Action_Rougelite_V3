@@ -7,6 +7,7 @@
 [ext_resource type="Resource" uid="uid://drakyvl6jwh0f" path="res://Data/Moves/Ferocious bite.tres" id="4_oq5mc"]
 [ext_resource type="Resource" uid="uid://dssodq4lr1182" path="res://Data/Moves/Protect.tres" id="5_5werd"]
 [ext_resource type="Resource" uid="uid://bjcqdkaq6oa1o" path="res://Data/Genes/WolfFangs.tres" id="7_hsgvl"]
+[ext_resource type="Texture2D" uid="uid://btha0go4fr6sq" path="res://Assets/Sprites/enemypng.png" id="8_hsgvl"]
 
 [resource]
 script = ExtResource("2_yk136")
@@ -20,3 +21,4 @@ base_speed = 16
 starting_genes = Array[ExtResource("1_06xb4")]([ExtResource("7_hsgvl")])
 moves = Array[ExtResource("3_0sn7n")]([ExtResource("3_5werd"), ExtResource("5_5werd"), ExtResource("4_oq5mc")])
 drop_gene_pool = Array[ExtResource("1_06xb4")]([ExtResource("7_hsgvl")])
+sprite = ExtResource("8_hsgvl")

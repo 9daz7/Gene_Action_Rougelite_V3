@@ -7,6 +7,7 @@
 [ext_resource type="Resource" uid="uid://cfsalnn48dv3f" path="res://Data/Moves/Bite.tres" id="4_fwl11"]
 [ext_resource type="Resource" uid="uid://dssodq4lr1182" path="res://Data/Moves/Protect.tres" id="5_8dbvl"]
 [ext_resource type="Resource" uid="uid://bwi7mtlkrcgxw" path="res://Data/Moves/Shell smash.tres" id="6_d6mba"]
+[ext_resource type="Texture2D" uid="uid://btha0go4fr6sq" path="res://Assets/Sprites/enemypng.png" id="8_fwl11"]
 
 [resource]
 script = ExtResource("3_gtqhu")
@@ -17,4 +18,5 @@ defense = 2.5
 starting_genes = Array[ExtResource("1_tx14v")]([ExtResource("2_unqf8")])
 moves = Array[ExtResource("2_xmye6")]([ExtResource("4_fwl11"), ExtResource("5_8dbvl"), ExtResource("6_d6mba")])
 drop_gene_pool = Array[ExtResource("1_tx14v")]([ExtResource("2_unqf8")])
+sprite = ExtResource("8_fwl11")
 metadata/_custom_type_script = "uid://byxi3hsf2x8dx"

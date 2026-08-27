@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="MutagenResource" format=3 uid="uid://c3iqto64t22r8"]
+
+[ext_resource type="Script" uid="uid://cedh0hgwqddn4" path="res://Resources/StatusEffect.gd" id="1_im3nh"]
+[ext_resource type="Script" uid="uid://cps66j48fyqt5" path="res://Scripts/Resources/MutagenResource.gd" id="2_03kok"]
+
+[resource]
+script = ExtResource("2_03kok")
+tags = Array[int]([0, 11])
+mutagen_name = "Healing Boost"
+description = "Currently does nothing.
+"
+mutagen_family = 5
+metadata/_custom_type_script = "uid://cps66j48fyqt5"

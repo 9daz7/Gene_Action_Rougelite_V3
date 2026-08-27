@@ -7,6 +7,7 @@
 [ext_resource type="Resource" uid="uid://dssodq4lr1182" path="res://Data/Moves/Protect.tres" id="4_2kc6e"]
 [ext_resource type="Resource" uid="uid://bk4tdmsrim677" path="res://Data/Moves/PoisonBite.tres" id="5_81s2l"]
 [ext_resource type="Resource" uid="uid://cwx5oe7wgvv3y" path="res://Data/Genes/RattlesnakeFangs.tres" id="7_2kc6e"]
+[ext_resource type="Texture2D" uid="uid://btha0go4fr6sq" path="res://Assets/Sprites/enemypng.png" id="8_81s2l"]
 
 [resource]
 script = ExtResource("3_47fc4")
@@ -17,4 +18,5 @@ base_speed = 12
 starting_genes = Array[ExtResource("1_lm88q")]([ExtResource("7_2kc6e")])
 moves = Array[ExtResource("2_lm88q")]([ExtResource("3_6ntmi"), ExtResource("4_2kc6e"), ExtResource("5_81s2l")])
 drop_gene_pool = Array[ExtResource("1_lm88q")]([ExtResource("7_2kc6e")])
+sprite = ExtResource("8_81s2l")
 metadata/_custom_type_script = "uid://byxi3hsf2x8dx"

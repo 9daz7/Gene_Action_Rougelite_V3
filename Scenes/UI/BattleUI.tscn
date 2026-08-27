@@ -39,6 +39,13 @@ corner_radius_bottom_left = 7
 [node name="BattleUI" type="CanvasLayer" unique_id=1908710870]
 script = ExtResource("1_o21vf")
 
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1532523359]
+visible = false
+z_index = -10
+offset_right = 1920.0
+offset_bottom = 1080.0
+color = Color(0.16206557, 0.1620656, 0.16206557, 1)
+
 [node name="PlayerPanel" type="Panel" parent="." unique_id=1121659238]
 offset_top = 539.0
 offset_right = 1920.0

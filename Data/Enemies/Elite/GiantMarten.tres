@@ -7,6 +7,7 @@
 [ext_resource type="Resource" uid="uid://dssodq4lr1182" path="res://Data/Moves/Protect.tres" id="4_3d1gm"]
 [ext_resource type="Resource" uid="uid://b63650onw8qfj" path="res://Data/Genes/MartensRage.tres" id="4_s4w7u"]
 [ext_resource type="Resource" uid="uid://deobyt5he5kb8" path="res://Data/Moves/Quick strike.tres" id="5_fxhr2"]
+[ext_resource type="Texture2D" uid="uid://btha0go4fr6sq" path="res://Assets/Sprites/enemypng.png" id="8_3d1gm"]
 
 [resource]
 script = ExtResource("2_i4ky3")
@@ -19,3 +20,4 @@ base_speed = 17
 starting_genes = Array[ExtResource("1_wvkqo")]([ExtResource("4_s4w7u")])
 moves = Array[ExtResource("2_i2cj7")]([ExtResource("3_lq1ka"), ExtResource("4_3d1gm"), ExtResource("5_fxhr2")])
 drop_gene_pool = Array[ExtResource("1_wvkqo")]([ExtResource("4_s4w7u")])
+sprite = ExtResource("8_3d1gm")

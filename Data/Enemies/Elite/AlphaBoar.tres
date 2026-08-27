@@ -7,6 +7,7 @@
 [ext_resource type="Resource" uid="uid://dssodq4lr1182" path="res://Data/Moves/Protect.tres" id="4_s2l6d"]
 [ext_resource type="Resource" uid="uid://b1eti45dqkuo7" path="res://Data/Moves/Rage.tres" id="5_v6x3d"]
 [ext_resource type="Resource" uid="uid://fkdeujyg7eca" path="res://Data/Genes/BoarSkinGene.tres" id="7_oqte2"]
+[ext_resource type="Texture2D" uid="uid://btha0go4fr6sq" path="res://Assets/Sprites/enemypng.png" id="8_ax2ji"]
 
 [resource]
 script = ExtResource("2_epcwc")
@@ -19,3 +20,4 @@ base_speed = 12
 starting_genes = Array[ExtResource("1_dglqv")]([ExtResource("7_oqte2")])
 moves = Array[ExtResource("2_6cwd0")]([ExtResource("3_ax2ji"), ExtResource("4_s2l6d"), ExtResource("5_v6x3d")])
 drop_gene_pool = Array[ExtResource("1_dglqv")]([ExtResource("7_oqte2")])
+sprite = ExtResource("8_ax2ji")

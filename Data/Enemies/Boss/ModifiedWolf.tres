@@ -8,6 +8,7 @@
 [ext_resource type="Resource" uid="uid://dssodq4lr1182" path="res://Data/Moves/Protect.tres" id="4_c0gng"]
 [ext_resource type="Resource" uid="uid://drakyvl6jwh0f" path="res://Data/Moves/Ferocious bite.tres" id="5_kd3m8"]
 [ext_resource type="Resource" uid="uid://73ylas6rloet" path="res://Data/Moves/Outspeed.tres" id="6_pko1q"]
+[ext_resource type="Texture2D" uid="uid://btha0go4fr6sq" path="res://Assets/Sprites/enemypng.png" id="8_c0gng"]
 
 [resource]
 script = ExtResource("2_qy50x")
@@ -20,3 +21,4 @@ base_attack = 10
 base_speed = 20
 starting_genes = Array[ExtResource("1_0tryu")]([ExtResource("4_0edjg")])
 moves = Array[ExtResource("2_58ojf")]([ExtResource("3_a7s3f"), ExtResource("4_c0gng"), ExtResource("5_kd3m8"), ExtResource("6_pko1q")])
+sprite = ExtResource("8_c0gng")

@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://bnmm0xqkm6atb" path="res://Scripts/Moves/MoveResource.gd" id="4_hcwok"]
 [ext_resource type="Resource" uid="uid://8fymemyaaa2m" path="res://Data/Moves/attack.tres" id="5_rj8qa"]
 [ext_resource type="Resource" uid="uid://dssodq4lr1182" path="res://Data/Moves/Protect.tres" id="6_qxp71"]
+[ext_resource type="Texture2D" uid="uid://btha0go4fr6sq" path="res://Assets/Sprites/enemypng.png" id="7_hcwok"]
 
 [resource]
 script = ExtResource("2_2u4da")
@@ -19,4 +20,5 @@ base_speed = 15
 starting_genes = Array[ExtResource("1_dripw")]([ExtResource("2_8wmfx")])
 moves = Array[ExtResource("4_hcwok")]([ExtResource("5_rj8qa"), ExtResource("6_qxp71")])
 drop_gene_pool = Array[ExtResource("1_dripw")]([ExtResource("2_8wmfx")])
+sprite = ExtResource("7_hcwok")
 metadata/_custom_type_script = "uid://byxi3hsf2x8dx"

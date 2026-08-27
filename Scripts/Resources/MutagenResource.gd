@@ -13,6 +13,55 @@ enum MutagenType {
 
 
 # ==================================================
+# Mutagen Families
+# ==================================================
+
+enum MutagenFamily {
+	ATTACK = 0,
+	DEFENSE = 1,
+	SPEED = 2,
+	CRITICAL = 3,
+	HP = 4,
+	HEALING = 5,
+	EVASION = 6,
+	REWARDS = 7,
+	BITE = 8,
+	PROTECT = 9,
+	FIRE = 10,
+	ELECTRIC = 11,
+	POISON = 12,
+	BLEED = 13,
+	OTHER = 14
+}
+
+
+# ==================================================
+# Mutagen Tags
+# ==================================================
+
+enum MutagenTag {
+	STAT,
+	BITE,
+	PROTECT,
+	MOVE,
+	ELECTRIC,
+	FIRE,
+	POISON,
+	BLEED,
+	SPEED,
+	ATTACK,
+	DEFENSE,
+	HP,
+	CRITICAL,
+	HEALING,
+	EVASION,
+	REWARDS
+}
+
+@export var tags: Array[MutagenTag] = []
+
+
+# ==================================================
 # Information
 # ==================================================
 
@@ -20,6 +69,7 @@ enum MutagenType {
 @export_multiline var description: String = ""
 
 @export var mutagen_type: MutagenType = MutagenType.STAT
+@export var mutagen_family: MutagenFamily = MutagenFamily.OTHER
 
 
 # ==================================================
@@ -85,3 +135,63 @@ func affects_move(
 		return false
 
 	return move.move_name in affected_move_names
+
+
+func get_family_name() -> String:
+
+	match int(mutagen_family):
+
+		0:
+			return "Attack"
+
+		1:
+			return "Defense"
+
+		2:
+			return "Speed"
+
+		3:
+			return "Critical"
+
+		4:
+			return "Health"
+
+		5:
+			return "Healing"
+
+		6:
+			return "Evasion"
+
+		7:
+			return "Rewards"
+
+		8:
+			return "Bite"
+
+		9:
+			return "Protect"
+
+		10:
+			return "Fire"
+
+		11:
+			return "Electric"
+
+		12:
+			return "Poison"
+
+		13:
+			return "Bleed"
+
+		14:
+			return "Other"
+
+		_:
+			return "Other"
+
+
+func has_tag(
+	tag: MutagenTag
+) -> bool:
+
+	return tag in tags

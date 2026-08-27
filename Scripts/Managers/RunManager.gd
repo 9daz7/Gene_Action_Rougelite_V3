@@ -10,6 +10,10 @@ class_name RunManager
 	"../RoomManager"
 )
 
+@onready var run_mutagen_manager: RunMutagenManager = get_node(
+	"../RunMutagenManager"
+)
+
 
 # ==================================================
 # Dependencies
@@ -1998,15 +2002,17 @@ func start_run():
 	# TEST MUTAGENS
 	# ==================================================
 
-	var electric_guard := load(
-		"res://Data/Mutagens/ElectricGuard.tres"
-	) as MutagenResource
-
-	if electric_guard != null:
-
-		add_mutagen(
-			electric_guard
-		)
+	#var electric_guard := load(
+		#"res://Data/Mutagens/ElectricGuard.tres"
+	#) as MutagenResource
+#
+	#if electric_guard != null:
+#
+		#if run_mutagen_manager != null:
+#
+			#run_mutagen_manager.add_mutagen(
+				#electric_guard
+			#)
 
 	#var burning_fang := load(
 		#"res://Data/Mutagens/BurningFangsMutagen.tres"
@@ -2049,6 +2055,10 @@ func reset_run() -> void:
 	enemies_defeated = 0
 
 	current_animal_build = null
+
+	if run_mutagen_manager != null:
+
+		run_mutagen_manager.reset()
 
 	GameEvents.gold_changed.emit(gold)
 
