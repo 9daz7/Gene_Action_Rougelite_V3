@@ -11,6 +11,10 @@ class_name RoomManager
 @onready var run_manager = $"../RunManager"
 @onready var save_manager = $"../SaveManager"
 
+@onready var run_mutagen_manager: RunMutagenManager = get_node(
+	"../RunMutagenManager"
+)
+
 # --------------------------------------------------
 # Temporary Map Dependency
 # --------------------------------------------------
