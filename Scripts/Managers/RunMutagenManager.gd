@@ -7,6 +7,10 @@ class_name RunMutagenManager
 )
 
 
+@onready var run_manager: RunManager = get_node(
+	"../RunManager"
+)
+
 # ==================================================
 # Settings
 # ==================================================
@@ -67,7 +71,7 @@ func get_family_weight(
 		if mutagen == null:
 			continue
 
-		if mutagen.family == family:
+		if mutagen.mutagen_family == family:
 
 			weight += MATCHING_TAG_WEIGHT
 
@@ -450,8 +454,17 @@ func get_mutagens_by_family(
 
 		return []
 
+	if run_manager == null:
+
+		push_error(
+			"RunMutagenManager: RunManager is missing."
+		)
+
+		return []
+
 	return mutagen_database.get_mutagens_by_family(
-		family
+		family,
+		run_manager.current_world
 	)
 
 
@@ -518,9 +531,17 @@ func get_available_families() -> Array[MutagenResource.MutagenFamily]:
 	if mutagen_database == null:
 		return families
 
+	var current_world: int = run_manager.current_world
+
 	for mutagen in mutagen_database.all_mutagens:
 
 		if mutagen == null:
+			continue
+
+		if not mutagen.is_available_in_world(
+			current_world
+		):
+
 			continue
 
 		if mutagen.mutagen_family not in families:
@@ -572,24 +593,82 @@ func choose_weighted_mutagen_family() -> MutagenResource.MutagenFamily:
 	return families.back()
 
 
+func owns_mutagen_id(
+	mutagen_id: String
+) -> bool:
+
+	if mutagen_id.is_empty():
+		return false
+
+	for mutagen in equipped_mutagens:
+
+		if mutagen == null:
+			continue
+
+		if mutagen.mutagen_id == mutagen_id:
+
+			return true
+
+	return false
+
+
+func is_mutagen_eligible(
+	mutagen: MutagenResource
+) -> bool:
+
+	if mutagen == null:
+		return false
+
+	# World restriction
+	if run_manager == null:
+		return false
+
+	if not mutagen.is_available_in_world(
+		run_manager.current_world
+	):
+
+		return false
+
+	# Required previous Mutagen
+	if not mutagen.required_mutagen_id.is_empty():
+
+		if not owns_mutagen_id(
+			mutagen.required_mutagen_id
+		):
+
+			return false
+
+	return true
+
+
 func generate_mutagen_choices(
 	family: MutagenResource.MutagenFamily
 ) -> Array[MutagenResource]:
 
-	var candidates: Array[MutagenResource] = (
-		get_mutagens_by_family(
-			family
-		)
-	)
+	var candidates: Array[MutagenResource] = []
 
-	if candidates.is_empty():
+	if mutagen_database == null:
 
-		print(
-			"No Mutagens available for family:",
-			family
+		push_error(
+			"RunMutagenManager: MutagenDatabase is missing."
 		)
 
-		return []
+		return candidates
+
+	for mutagen in mutagen_database.all_mutagens:
+
+		if mutagen == null:
+			continue
+
+		if mutagen.mutagen_family != family:
+			continue
+
+		if not is_mutagen_eligible(mutagen):
+			continue
+
+		candidates.append(
+			mutagen
+		)
 
 	candidates.shuffle()
 

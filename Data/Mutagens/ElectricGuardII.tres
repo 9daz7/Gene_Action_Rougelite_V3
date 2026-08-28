@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="MutagenResource" format=3 uid="uid://ls7mar3fcoh4"]
+
+[ext_resource type="Script" uid="uid://cedh0hgwqddn4" path="res://Resources/StatusEffect.gd" id="1_d0we1"]
+[ext_resource type="Resource" uid="uid://mlo8okvc104q" path="res://Resources/StatusEffects/Electric.tres" id="2_7uvxi"]
+[ext_resource type="Script" uid="uid://cps66j48fyqt5" path="res://Scripts/Resources/MutagenResource.gd" id="2_51cht"]
+
+[resource]
+script = ExtResource("2_51cht")
+tier = 2
+required_mutagen = "Electric_Guard_1"
+mutagen_id = "Electric_Guard_2"
+tags = Array[int]([2, 4])
+mutagen_name = "Electric Guard II"
+mutagen_type = 1
+mutagen_family = 11
+affected_move_names = Array[String](["Protect"])
+added_effects = Array[ExtResource("1_d0we1")]([ExtResource("2_7uvxi")])
+metadata/_custom_type_script = "uid://cps66j48fyqt5"

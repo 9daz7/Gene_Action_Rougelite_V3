@@ -2,31 +2,74 @@ extends Node
 class_name RewardManager
 
 
-@onready var run_manager = $"../RunManager"
-@onready var gene_database = $"../GeneDatabase"
+# ==================================================
+# Managers
+# ==================================================
 
-@export var all_mutagens: Array[MutagenResource] = []
+@onready var run_manager: RunManager = $"../RunManager"
+
+@onready var gene_database: GeneDatabase = $"../GeneDatabase"
+
+@onready var run_mutagen_manager: RunMutagenManager = (
+	$"../RunMutagenManager"
+)
+
+@onready var save_manager: SaveManager = $"../SaveManager"
 
 
-func generate_rewards(enemy: EnemyAnimal):
+# ==================================================
+# Reward Generation
+# ==================================================
 
-	var rewards = RewardData.new()
+func generate_rewards(
+	enemy: EnemyAnimal
+) -> RewardData:
 
-	# gold reward
+	var rewards := RewardData.new()
+
+	# ==================================================
+	# Gold
+	# ==================================================
+
 	rewards.gold = generate_gold(
 		enemy.enemy_data.enemy_type
 	)
 
-	# enemy specific gene
+	# ==================================================
+	# Gene
+	# ==================================================
+
 	rewards.gene_choices = generate_enemy_genes(enemy)
 
-	# Other rewards
+	# ==================================================
+	# Mutagen
+	# ==================================================
+
+	rewards.mutagen_choices = generate_mutagen_rewards()
+
+	# ==================================================
+	# Other Resources
+	# ==================================================
+
 	rewards.resources = generate_resources(enemy.enemy_data.enemy_type)
 
 	print("Rewards generated:")
 
 	for gene in rewards.gene_choices:
 		print("Gene:", gene.gene_name)
+
+	for mutagen in rewards.mutagen_choices:
+
+		print(
+			"Mutagen:",
+			mutagen.mutagen_name,
+			"| Family:",
+			mutagen.get_family_name(),
+			"| Tier:",
+			mutagen.tier
+		)
+
+	print("================================")
 
 	return rewards
 
@@ -127,19 +170,125 @@ func generate_resources(enemy_type: EnemyResource.EnemyType) -> Array:
 	return resources
 
 
-func generate_mutagens(room_type: int) -> Array[MutagenResource]:
-	if (
-		room_type != RoomData.RoomType.BOSS
-		and room_type != RoomData.RoomType.ELITE
-		and room_type != RoomData.RoomType.ABANDONED_LAB
-	):
+# ==================================================
+# Mutagen Rewards
+# ==================================================
+
+func generate_mutagen_rewards() -> Array[MutagenResource]:
+
+	if run_mutagen_manager == null:
+
+		push_error(
+			"RewardManager: RunMutagenManager is missing."
+		)
+
 		return []
 
-	var choices := all_mutagens.duplicate()
+	# ==================================================
+	# Choose one family
+	# ==================================================
 
-	choices.shuffle()
+	var family := (
+		run_mutagen_manager.choose_weighted_mutagen_family()
+	)
 
-	return choices.slice(
-		0,
-		min(3, choices.size())
+	print(
+		"Mutagen reward family:",
+		run_mutagen_manager.get_mutagen_family_name(
+			family
+		)
+	)
+
+	# ==================================================
+	# Generate three choices
+	# ==================================================
+
+	var choices := (
+		run_mutagen_manager.generate_mutagen_choices(
+			family
+		)
+	)
+
+	return choices
+
+
+func apply_reward(
+	reward
+) -> void:
+
+	if reward == null:
+
+		print(
+			"No reward selected"
+		)
+
+		return
+
+	# ==================================================
+	# Gene
+	# ==================================================
+
+	if reward is GeneResource:
+
+		var added: bool = (
+			PermanentProgressionManager.add_gene(
+				reward
+			)
+		)
+
+		if added:
+
+			save_manager.save_game(
+				PermanentProgressionManager
+			)
+
+			print(
+				"Permanent gene reward added:",
+				reward.gene_name
+			)
+
+		else:
+
+			print(
+				"Could not add gene reward:",
+				reward.gene_name
+			)
+
+		return
+
+	# ==================================================
+	# Mutagen
+	# ==================================================
+
+	if reward is MutagenResource:
+
+		var added_mutagen: bool = (
+			run_mutagen_manager.add_mutagen(
+				reward
+			)
+		)
+
+		if added_mutagen:
+
+			print(
+				"Run Mutagen added:",
+				reward.mutagen_name
+			)
+
+		else:
+
+			print(
+				"Could not add Mutagen:",
+				reward.mutagen_name
+			)
+
+		return
+
+	# ==================================================
+	# Unknown
+	# ==================================================
+
+	print(
+		"Unknown reward type:",
+		reward
 	)

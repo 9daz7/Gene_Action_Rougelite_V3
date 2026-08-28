@@ -2,7 +2,11 @@ extends Resource
 class_name RewardData
 
 
-var gold := 0
+# ==================================================
+# Rewards
+# ==================================================
+
+var gold: int = 0
 
 var resources: Array = []
 

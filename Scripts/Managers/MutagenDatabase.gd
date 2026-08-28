@@ -118,7 +118,8 @@ func _add_mutagen(
 # ==================================================
 
 func get_mutagens_by_family(
-	family: MutagenResource.MutagenFamily
+	family: MutagenResource.MutagenFamily,
+	world: int
 ) -> Array[MutagenResource]:
 
 	var results: Array[MutagenResource] = []
@@ -128,11 +129,15 @@ func get_mutagens_by_family(
 		if mutagen == null:
 			continue
 
-		if mutagen.mutagen_family == family:
+		if mutagen.mutagen_family != family:
+			continue
 
-			results.append(
-				mutagen
-			)
+		if not mutagen.is_available_in_world(world):
+			continue
+
+		results.append(
+			mutagen
+		)
 
 	return results
 

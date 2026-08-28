@@ -13,6 +13,37 @@ enum MutagenType {
 
 
 # ==================================================
+# Mutagen Tier
+# ==================================================
+
+enum MutagenTier {
+	TIER_1 = 1,
+	TIER_2 = 2,
+	TIER_3 = 3
+}
+
+@export var tier: MutagenTier = MutagenTier.TIER_1
+
+
+# ==================================================
+# Upgrade Chain
+# ==================================================
+
+@export var required_mutagen: String = ""
+
+@export var mutagen_id: String = ""
+@export var required_mutagen_id: String = ""
+
+
+# ==================================================
+# World Availability
+# ==================================================
+
+@export var minimum_world: int = 1
+@export var maximum_world: int = 2
+
+
+# ==================================================
 # Mutagen Families
 # ==================================================
 
@@ -188,6 +219,17 @@ func get_family_name() -> String:
 
 		_:
 			return "Other"
+
+
+func is_available_in_world(
+	world: int
+) -> bool:
+
+	return (
+		world >= minimum_world
+		and
+		world <= maximum_world
+	)
 
 
 func has_tag(
