@@ -21,7 +21,7 @@ signal reward_finished(reward)
 
 @onready var reward_container = $CenterContainer/VBoxContainer/RewardContainer
 @onready var continue_button = $CenterContainer/VBoxContainer/ContinueButton
-
+@onready var skip_button = $CenterContainer/VBoxContainer/SkipButton
 
 # ==================================================
 # Member Variables
@@ -40,6 +40,10 @@ func _ready():
 		_on_continue_pressed
 	)
 
+	skip_button.pressed.connect(
+		_on_skip_pressed
+	)
+
 
 # ==================================================
 # Public Functions
@@ -53,19 +57,113 @@ func open(rewards):
 	selected_reward = null
 
 	for child in reward_container.get_children():
+
 		child.queue_free()
 
-	if rewards!= null:
-		
+	var columns := HBoxContainer.new()
+
+	columns.name = "RewardColumns"
+
+	columns.size_flags_horizontal = (
+		Control.SIZE_EXPAND_FILL
+	)
+
+	reward_container.add_child(
+		columns
+	)
+
+	# ==================================================
+	# Gene Column
+	# ==================================================
+
+	var gene_column := VBoxContainer.new()
+
+	gene_column.name = "GeneColumn"
+
+	gene_column.size_flags_horizontal = (
+		Control.SIZE_EXPAND_FILL
+	)
+
+	columns.add_child(
+		gene_column
+	)
+
+	var gene_title := Label.new()
+
+	gene_title.text = "GENES"
+
+	gene_title.horizontal_alignment = (
+		HORIZONTAL_ALIGNMENT_CENTER
+	)
+
+	gene_column.add_child(
+		gene_title
+	)
+
+	# ==================================================
+	# Mutagen Column
+	# ==================================================
+
+	var mutagen_column := VBoxContainer.new()
+
+	mutagen_column.name = "MutagenColumn"
+
+	mutagen_column.size_flags_horizontal = (
+		Control.SIZE_EXPAND_FILL
+	)
+
+	columns.add_child(
+		mutagen_column
+	)
+
+	var mutagen_title := Label.new()
+
+	mutagen_title.text = "MUTAGENS"
+
+	mutagen_title.horizontal_alignment = (
+		HORIZONTAL_ALIGNMENT_CENTER
+	)
+
+	mutagen_column.add_child(
+		mutagen_title
+	)
+
+	# ==================================================
+	# Populate
+	# ==================================================
+
+	if rewards != null:
+
 		_create_gene_buttons(
-			rewards.gene_choices
+			rewards.gene_choices,
+			gene_column
 		)
 
 		_create_mutagen_buttons(
-			rewards.mutagen_choices
+			rewards.mutagen_choices,
+			mutagen_column
 		)
 
 	continue_button.disabled = true
+
+	#show()
+#
+	#selected_reward = null
+#
+	#for child in reward_container.get_children():
+		#child.queue_free()
+#
+	#if rewards!= null:
+		#
+		#_create_gene_buttons(
+			#rewards.gene_choices
+		#)
+#
+		#_create_mutagen_buttons(
+			#rewards.mutagen_choices
+		#)
+#
+	#continue_button.disabled = true
 
 
 func close():
@@ -150,12 +248,9 @@ func close():
 
 
 func _create_gene_buttons(
-	rewards: Array[GeneResource]
+	rewards: Array[GeneResource],
+	parent: Container
 ) -> void:
-
-	print("================================")
-	print("CREATING GENE REWARDS")
-	print("================================")
 
 	for reward in rewards:
 
@@ -167,11 +262,6 @@ func _create_gene_buttons(
 		)
 
 		if button_scene == null:
-
-			push_error(
-				"RewardRoom: Failed to load RewardButton.tscn"
-			)
-
 			return
 
 		var button = button_scene.instantiate()
@@ -188,28 +278,18 @@ func _create_gene_buttons(
 
 		button.pressed.connect(
 			func():
-				_select_reward(
-					reward
-				)
+				_select_reward(reward)
 		)
 
-		reward_container.add_child(
+		parent.add_child(
 			button
 		)
 
-	print(
-		"Gene rewards:",
-		rewards.size()
-	)
-
 
 func _create_mutagen_buttons(
-	rewards: Array[MutagenResource]
+	rewards: Array[MutagenResource],
+	parent: Container
 ) -> void:
-
-	print("================================")
-	print("CREATING MUTAGEN REWARDS")
-	print("================================")
 
 	for reward in rewards:
 
@@ -221,11 +301,6 @@ func _create_mutagen_buttons(
 		)
 
 		if button_scene == null:
-
-			push_error(
-				"RewardRoom: Failed to load RewardButton.tscn"
-			)
-
 			return
 
 		var button = button_scene.instantiate()
@@ -242,19 +317,12 @@ func _create_mutagen_buttons(
 
 		button.pressed.connect(
 			func():
-				_select_reward(
-					reward
-				)
+				_select_reward(reward)
 		)
 
-		reward_container.add_child(
+		parent.add_child(
 			button
 		)
-
-	print(
-		"Mutagen rewards:",
-		rewards.size()
-	)
 
 
 func _select_reward(
@@ -271,13 +339,22 @@ func _select_reward(
 		_get_reward_name(reward)
 	)
 
-	for button in reward_container.get_children():
+	# Disable every reward button
+	var columns := reward_container.get_node_or_null(
+		"RewardColumns"
+	)
 
-		button.disabled = true
+	if columns != null:
+
+		for column in columns.get_children():
+
+			for child in column.get_children():
+
+				if child is Button:
+
+					child.disabled = true
 
 	continue_button.disabled = false
-
-
 func _get_reward_name(
 	reward
 ) -> String:
@@ -312,4 +389,17 @@ func _on_continue_pressed() -> void:
 
 	reward_finished.emit(
 		selected_reward
+	)
+
+
+func _on_skip_pressed() -> void:
+
+	print(
+		"Player skipped reward."
+	)
+
+	selected_reward = null
+
+	reward_finished.emit(
+		null
 	)

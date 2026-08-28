@@ -6,9 +6,8 @@
 
 [resource]
 script = ExtResource("2_51cht")
-tier = 2
-required_mutagen = "Electric_Guard_1"
-mutagen_id = "Electric_Guard_2"
+required_mutagen = "electric_guard_1"
+mutagen_id = "electric_guard_2"
 tags = Array[int]([2, 4])
 mutagen_name = "Electric Guard II"
 mutagen_type = 1

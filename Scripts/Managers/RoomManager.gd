@@ -1053,11 +1053,15 @@ func _on_reward_finished(reward) -> void:
 	print("================================")
 
 
-func apply_reward(reward) -> void:
+func apply_reward(
+	reward
+) -> void:
 
 	if reward == null:
 
-		print("No reward selected")
+		print(
+			"No reward selected"
+		)
 
 		return
 
@@ -1066,9 +1070,18 @@ func apply_reward(reward) -> void:
 		reward
 	)
 
+	print(
+		"Reward runtime class:",
+		reward.get_class()
+	)
+
+	print(
+		"Reward script:",
+		reward.get_script()
+	)
 
 	# ==================================================
-	# Gene Reward
+	# Gene
 	# ==================================================
 
 	if reward is GeneResource:
@@ -1099,16 +1112,50 @@ func apply_reward(reward) -> void:
 
 		return
 
+	# ==================================================
+	# Mutagen
+	# ==================================================
+
+	if reward is MutagenResource:
+
+		if run_mutagen_manager == null:
+
+			push_error(
+				"RoomManager: RunMutagenManager is missing."
+			)
+
+			return
+
+		var added_mutagen: bool = (
+			run_mutagen_manager.add_mutagen(
+				reward
+			)
+		)
+
+		if added_mutagen:
+
+			print(
+				"RUN MUTAGEN ADDED:",
+				reward.mutagen_name
+			)
+
+		else:
+
+			print(
+				"COULD NOT ADD MUTAGEN:",
+				reward.mutagen_name
+			)
+
+		return
 
 	# ==================================================
-	# Unknown Reward
+	# Unknown
 	# ==================================================
 
 	print(
 		"Unknown reward type:",
 		reward
 	)
-
 
 # ==================================================
 # Battle Completion

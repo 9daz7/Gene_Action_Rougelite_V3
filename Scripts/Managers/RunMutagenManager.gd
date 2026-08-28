@@ -655,6 +655,10 @@ func generate_mutagen_choices(
 
 		return candidates
 
+	# ==================================================
+	# Find eligible Mutagens
+	# ==================================================
+
 	for mutagen in mutagen_database.all_mutagens:
 
 		if mutagen == null:
@@ -663,14 +667,25 @@ func generate_mutagen_choices(
 		if mutagen.mutagen_family != family:
 			continue
 
-		if not is_mutagen_eligible(mutagen):
+		if not is_mutagen_eligible(
+			mutagen
+		):
+
 			continue
 
 		candidates.append(
 			mutagen
 		)
 
+	# ==================================================
+	# Randomize
+	# ==================================================
+
 	candidates.shuffle()
+
+	# ==================================================
+	# Pick up to 3
+	# ==================================================
 
 	var choices: Array[MutagenResource] = []
 

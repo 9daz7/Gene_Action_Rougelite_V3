@@ -28,3 +28,7 @@ layout_mode = 2
 [node name="ContinueButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=714000022]
 layout_mode = 2
 text = "Continue"
+
+[node name="SkipButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=245677742]
+layout_mode = 2
+text = "SKIP"

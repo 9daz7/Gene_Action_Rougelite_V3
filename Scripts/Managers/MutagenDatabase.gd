@@ -35,14 +35,29 @@ func load_mutagens() -> void:
 
 	all_mutagens.clear()
 
+	# ==================================================
+	# Electric
+	# ==================================================
+
+	_add_mutagen(
+		"res://Data/Mutagens/ElectricGuardI.tres"
+	)
+
+	_add_mutagen(
+		"res://Data/Mutagens/ElectricGuardII.tres"
+	)
+
+	_add_mutagen(
+		"res://Data/Mutagens/ElectricGuardIII.tres"
+	)
+
+
+
 	_add_mutagen(
 		"res://Data/Mutagens/BurningFangs.tres"
 	)
 
-	_add_mutagen(
-		"res://Data/Mutagens/ElectricGuard.tres"
-	)
-	
+
 	_add_mutagen(
 		"res://Data/Mutagens/EnhancedVision.tres"
 	)

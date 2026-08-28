@@ -6,9 +6,8 @@
 
 [resource]
 script = ExtResource("2_ukmcl")
-tier = 3
-required_mutagen = "Electric_Guard_2"
-mutagen_id = "Electric_guard_3"
+required_mutagen = "electric_guard_2"
+mutagen_id = "electric_guard_3"
 tags = Array[int]([2, 4])
 mutagen_name = "Electric Guard III"
 mutagen_type = 1
