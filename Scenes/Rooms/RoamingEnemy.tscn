@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://deuudtgda4sb6"]
+
+[ext_resource type="Script" uid="uid://bgjguuyk7wqsb" path="res://Scenes/Rooms/RoamingEnemy.gd" id="1_dtxt5"]
+[ext_resource type="Resource" uid="uid://nn80qa376q5" path="res://Data/Enemies/Normal/Boar.tres" id="2_p28er"]
+[ext_resource type="Texture2D" uid="uid://s5nq1sb1o64w" path="res://Assets/Sprites/Animals/Green/walk.png" id="3_yaiqb"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gs0tk"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_uvx57"]
+radius = 75.0
+height = 212.0
+
+[node name="RoamingEnemy" type="CharacterBody2D" unique_id=1998266480]
+position = Vector2(712, 666)
+script = ExtResource("1_dtxt5")
+enemy_data = ExtResource("2_p28er")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2022754867]
+texture = ExtResource("3_yaiqb")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=861676463]
+shape = SubResource("RectangleShape2D_gs0tk")
+
+[node name="DetectionArea2D" type="Area2D" parent="." unique_id=212621777]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea2D" unique_id=1273917979]
+position = Vector2(1, 33)
+shape = SubResource("CapsuleShape2D_uvx57")

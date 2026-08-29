@@ -88,6 +88,38 @@ texture = ExtResource("3_va13n")
 position = Vector2(595, 548)
 texture = ExtResource("3_va13n")
 
+[node name="ColorRect" type="ColorRect" parent="World/Ground" unique_id=1161722296]
+z_index = -1
+offset_left = 651.0
+offset_top = 331.0
+offset_right = 1211.0
+offset_bottom = 574.0
+color = Color(0.60784316, 0.43529412, 0, 1)
+
+[node name="ColorRect2" type="ColorRect" parent="World/Ground" unique_id=348215714]
+z_index = -1
+offset_left = 1042.563
+offset_top = 90.65398
+offset_right = 1160.1196
+offset_bottom = 362.6789
+rotation = 0.39618975
+color = Color(0.60784316, 0.43529412, 0, 1)
+
+[node name="ColorRect3" type="ColorRect" parent="World/Ground" unique_id=845008681]
+z_index = -1
+offset_left = 834.72205
+offset_top = 517.7985
+offset_right = 1006.07654
+offset_bottom = 1057.3
+rotation = 0.26529005
+color = Color(0.60784316, 0.43529412, 0, 1)
+
+[node name="ColorRect" type="ColorRect" parent="World" unique_id=278969131]
+z_index = -5
+offset_right = 1924.0
+offset_bottom = 1082.0
+color = Color(0, 0.27058825, 0.09019608, 1)
+
 [node name="Environment" type="Node2D" parent="." unique_id=1399107644]
 
 [node name="AnimalLab" parent="." unique_id=1259764970 instance=ExtResource("4_txqr2")]
