@@ -6,9 +6,9 @@
 [resource]
 script = ExtResource("2_iat1b")
 mutagen_id = "Enhanced_vision_1"
-tags = Array[int]([0, 4])
+tags = Array[int]([0, 12])
 mutagen_name = "Enhanced Vision"
-mutagen_family = 11
+mutagen_family = 3
 crit_bonus = 5
 critical_bonus_for_move = 5
 accuracy_bonus_for_move = 5

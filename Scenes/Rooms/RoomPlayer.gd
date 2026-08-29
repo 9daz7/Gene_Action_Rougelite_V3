@@ -8,6 +8,18 @@ class_name RoomPlayer
 
 @export var move_speed: float = 200.0
 
+@export var sprint_speed: float = 300.0
+@export var crouch_speed: float = 100.0
+
+
+# ==================================================
+# Detection
+# ==================================================
+
+@export var normal_detection_multiplier: float = 1.0
+@export var sprint_detection_multiplier: float = 1.5
+@export var crouch_detection_multiplier: float = 0.5
+
 
 # ==================================================
 # Camera
@@ -31,6 +43,11 @@ var nearby_interactable: Interactable = null
 
 var controls_enabled: bool = true
 
+var is_sprinting: bool = false
+var is_crouching: bool = false
+
+var detection_multiplier: float = 1.0
+
 
 # ==================================================
 # Initialization
@@ -53,6 +70,8 @@ func _ready() -> void:
 
 		interaction_prompt.hide_prompt()
 
+	_update_movement_state()
+
 
 # ==================================================
 # Physics
@@ -61,10 +80,31 @@ func _ready() -> void:
 func _physics_process(_delta: float) -> void:
 
 	if not controls_enabled:
+
 		velocity = Vector2.ZERO
+
+		is_sprinting = false
+		is_crouching = false
+
+		_update_movement_state()
+
+		print(
+			"Movement | Sprint:",
+			is_sprinting,
+			" Crouch:",
+			is_crouching,
+			" Speed:",
+			_get_current_move_speed()
+		)
+
 		_hide_interaction_prompt()
+
 		return
-		
+
+	# ==================================================
+	# Movement Input
+	# ==================================================
+
 	var direction := Input.get_vector(
 		"move_left",
 		"move_right",
@@ -72,11 +112,80 @@ func _physics_process(_delta: float) -> void:
 		"move_down"
 	)
 
-	velocity = direction * move_speed
+	# ==================================================
+	# Sprint / Crouch
+	# ==================================================
+
+	is_sprinting = (
+		Input.is_action_pressed("sprint")
+		and
+		direction != Vector2.ZERO
+	)
+
+	is_crouching = (
+		Input.is_action_pressed("crouch")
+		and
+		not is_sprinting
+	)
+
+	_update_movement_state()
+
+	# ==================================================
+	# Move
+	# ==================================================
+
+	velocity = direction * _get_current_move_speed()
 
 	move_and_slide()	
 
 	_handle_interaction()
+
+
+# ==================================================
+# Movement State
+# ==================================================
+
+func _update_movement_state() -> void:
+
+	if is_sprinting:
+
+		detection_multiplier = (
+			sprint_detection_multiplier
+		)
+
+	elif is_crouching:
+
+		detection_multiplier = (
+			crouch_detection_multiplier
+		)
+
+	else:
+
+		detection_multiplier = (
+			normal_detection_multiplier
+		)
+
+
+func _get_current_move_speed() -> float:
+
+	if is_sprinting:
+
+		return sprint_speed
+
+	if is_crouching:
+
+		return crouch_speed
+
+	return move_speed
+
+
+# ==================================================
+# Detection
+# ==================================================
+
+func get_detection_multiplier() -> float:
+
+	return detection_multiplier
 
 
 # ==================================================
@@ -145,6 +254,11 @@ func set_controls_enabled(
 	if not enabled:
 
 		velocity = Vector2.ZERO
+
+		is_sprinting = false
+		is_crouching = false
+
+		_update_movement_state()
 
 		_hide_interaction_prompt()
 

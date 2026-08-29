@@ -7,10 +7,10 @@
 [resource]
 script = ExtResource("2_54y06")
 mutagen_id = "burning_fang_1"
-tags = Array[int]([1, 4])
+tags = Array[int]([1, 5])
 mutagen_name = "Burning Fangs"
 mutagen_type = 1
-mutagen_family = 11
+mutagen_family = 10
 affected_move_names = Array[String](["Bite"])
 added_effects = Array[ExtResource("1_2smk8")]([ExtResource("2_2raad")])
 metadata/_custom_type_script = "uid://cps66j48fyqt5"

@@ -30,6 +30,13 @@ signal encounter_requested(enemy)
 
 
 # ==================================================
+# Detection Settings
+# ==================================================
+
+@export var detection_radius: float = 180.0
+
+
+# ==================================================
 # State
 # ==================================================
 
@@ -52,7 +59,6 @@ func _ready() -> void:
 
 	_choose_next_wander()
 
-
 	var detection_area := get_node_or_null(
 		"DetectionArea2D"
 	)
@@ -65,18 +71,13 @@ func _ready() -> void:
 
 		return
 
-	if not detection_area.body_entered.is_connected(
-		_on_detection_body_entered
-	):
-
-		detection_area.body_entered.connect(
-			_on_detection_body_entered
-	)
+	detection_area.monitoring = true
 
 
 # ==================================================
-# Process
+# Detection
 # ==================================================
+
 
 func _physics_process(
 	delta: float
@@ -95,25 +96,28 @@ func _physics_process(
 	if not is_wandering:
 
 		velocity = Vector2.ZERO
-		return
 
-	var direction := (
-		global_position.direction_to(
-			wander_target
+	else:
+
+		var direction := (
+			global_position.direction_to(
+				wander_target
+			)
 		)
-	)
 
-	velocity = direction * move_speed
+		velocity = direction * move_speed
 
-	_update_detection_direction()
+		_update_detection_direction()
 
-	move_and_slide()
+		move_and_slide()
 
-	if global_position.distance_to(
-		wander_target
-	) < 8.0:
+		if global_position.distance_to(
+			wander_target
+		) < 8.0:
 
-		_choose_next_wander()
+			_choose_next_wander()
+
+	_check_player_detection()
 
 
 # ==================================================
@@ -157,6 +161,10 @@ func _choose_next_wander() -> void:
 	wander_target = spawn_position + offset
 
 
+# ==================================================
+# Detection Direction
+# ==================================================
+
 func _update_detection_direction() -> void:
 
 	if velocity.length() < 1.0:
@@ -174,18 +182,53 @@ func _update_detection_direction() -> void:
 	)
 
 
-# ==================================================
-# Detection
-# ==================================================
-
-func _on_detection_body_entered(
-	body: Node
-) -> void:
+func _check_player_detection() -> void:
 
 	if encountered:
 		return
 
-	if not body is RoomPlayer:
+	var detection_area := get_node_or_null(
+		"DetectionArea2D"
+	)
+
+	if detection_area == null:
+		return
+
+	var bodies: Array[Node2D] = (
+		detection_area.get_overlapping_bodies()
+	)
+
+	for body in bodies:
+
+		if not body is RoomPlayer:
+			continue
+
+		var player := body as RoomPlayer
+
+		var effective_radius := (
+			detection_radius
+			* player.get_detection_multiplier()
+		)
+
+		var distance := (
+			global_position.distance_to(
+				player.global_position
+			)
+		)
+
+		if distance > effective_radius:
+			continue
+
+		_start_encounter(player)
+
+		return
+
+
+func _start_encounter(
+	player: RoomPlayer
+) -> void:
+
+	if encountered:
 		return
 
 	encountered = true
@@ -194,6 +237,12 @@ func _on_detection_body_entered(
 
 	print("================================")
 	print("ROAMING ENEMY DETECTED PLAYER")
+	print("Distance:", global_position.distance_to(
+		player.global_position
+	))
+	print("Detection multiplier:", player.get_detection_multiplier())
 	print("================================")
 
-	encounter_requested.emit(self)
+	encounter_requested.emit(
+		self
+	)

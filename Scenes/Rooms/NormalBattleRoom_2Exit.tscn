@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bd4c5xvt4q8t" path="res://Scenes/Rooms/NormalBattleRoom.gd" id="1_fljp1"]
 [ext_resource type="Script" uid="uid://ckxjn41pglkmx" path="res://Scenes/Rooms/BattleTrigger.gd" id="2_j0p5l"]
+[ext_resource type="PackedScene" uid="uid://deuudtgda4sb6" path="res://Scenes/Rooms/RoamingEnemy.tscn" id="2_rve3k"]
 [ext_resource type="PackedScene" uid="uid://s4vol5fxx17b" path="res://Scenes/Rooms/RoomExit.tscn" id="3_rve3k"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gs0tk"]
@@ -166,6 +167,11 @@ color = Color(0.60784316, 0.43529412, 0, 1)
 
 [node name="PlayerSpawn" type="Marker2D" parent="." unique_id=1097697864]
 position = Vector2(1444, 1018)
+
+[node name="enemies" type="Node2D" parent="." unique_id=761487066]
+
+[node name="RoamingEnemy" parent="enemies" unique_id=1998266480 instance=ExtResource("2_rve3k")]
+position = Vector2(257, 551)
 
 [node name="BattleTrigger" type="Area2D" parent="." unique_id=582788059]
 position = Vector2(948.985, 292.925)
