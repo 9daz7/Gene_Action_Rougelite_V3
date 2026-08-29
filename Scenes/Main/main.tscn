@@ -16,6 +16,7 @@
 [ext_resource type="PackedScene" uid="uid://c77fp71r8tcxd" path="res://Scenes/UI/MapUI.tscn" id="9_imbg2"]
 [ext_resource type="PackedScene" uid="uid://cedb6l4k7ejsf" path="res://Scenes/Hub/HubWorld.tscn" id="11_vk4q2"]
 [ext_resource type="PackedScene" uid="uid://behj6glwxh240" path="res://Scenes/LabHub/LabHub.tscn" id="12_4e4y2"]
+[ext_resource type="Script" uid="uid://cmha305puw7iq" path="res://Scenes/UI/PauseMenu.gd" id="17_koken"]
 
 [node name="Main" type="Node" unique_id=1435261983]
 script = ExtResource("1_qw60k")
@@ -90,11 +91,219 @@ anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="PauseMenu" type="Control" parent="UI" unique_id=39544824]
+[node name="PauseMenu" type="Control" parent="UI" unique_id=314436742]
 layout_mode = 3
 anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_left = 200.0
+offset_top = 100.0
+offset_right = 1740.0
+offset_bottom = 977.0
+script = ExtResource("17_koken")
+
+[node name="Dimmer" type="ColorRect" parent="UI/PauseMenu" unique_id=729393985]
+layout_mode = 0
+offset_right = 1540.0
+offset_bottom = 876.0
+color = Color(0.29411766, 0.29411766, 0.29411766, 0.44705883)
+
+[node name="MainPanel" type="PanelContainer" parent="UI/PauseMenu" unique_id=1916313229]
+layout_mode = 0
+offset_left = 19.0
+offset_top = 23.0
+offset_right = 1515.0
+offset_bottom = 857.0
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/PauseMenu/MainPanel" unique_id=1425639155]
+layout_mode = 2
+
+[node name="MainContainer" type="HBoxContainer" parent="UI/PauseMenu/MainPanel/MarginContainer" unique_id=1712173571]
+layout_mode = 2
+
+[node name="OptionsPanel" type="PanelContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer" unique_id=40404171]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/OptionsPanel" unique_id=839899098]
+layout_mode = 2
+
+[node name="OptionsColumn" type="VBoxContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/OptionsPanel/MarginContainer" unique_id=253571414]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+
+[node name="OptionsTitle" type="Label" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/OptionsPanel/MarginContainer/OptionsColumn" unique_id=384106000]
+custom_minimum_size = Vector2(0, 35)
+layout_mode = 2
+text = "Options"
+
+[node name="ResumeButton" type="Button" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/OptionsPanel/MarginContainer/OptionsColumn" unique_id=946604694]
+custom_minimum_size = Vector2(0, 35)
+layout_mode = 2
+text = "Resume
+"
+
+[node name="SettingsButton" type="Button" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/OptionsPanel/MarginContainer/OptionsColumn" unique_id=1358105362]
+custom_minimum_size = Vector2(0, 35)
+layout_mode = 2
+text = "Settings
+"
+
+[node name="ReturnHomeButton" type="Button" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/OptionsPanel/MarginContainer/OptionsColumn" unique_id=1533270307]
+custom_minimum_size = Vector2(0, 35)
+layout_mode = 2
+text = "Return Home
+"
+
+[node name="ReturnMenuButton" type="Button" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/OptionsPanel/MarginContainer/OptionsColumn" unique_id=1991729117]
+custom_minimum_size = Vector2(0, 35)
+layout_mode = 2
+text = "Return to Menu"
+
+[node name="BuildPanel" type="PanelContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer" unique_id=862678142]
+custom_minimum_size = Vector2(1090.205, 0)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel" unique_id=966467369]
+layout_mode = 2
+
+[node name="BuildContainer" type="HBoxContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer" unique_id=1851110999]
+layout_mode = 2
+
+[node name="AnimalSection" type="VBoxContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer" unique_id=412292075]
+custom_minimum_size = Vector2(280, 0)
+layout_mode = 2
+
+[node name="BuildTitle" type="Label" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/AnimalSection" unique_id=572772411]
+layout_mode = 2
+
+[node name="AnimalSprite" type="TextureRect" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/AnimalSection" unique_id=1933009317]
+layout_mode = 2
+
+[node name="AnimalName" type="Label" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/AnimalSection" unique_id=77380393]
+layout_mode = 2
+
+[node name="StatsSection" type="VBoxContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/AnimalSection" unique_id=895672354]
+layout_mode = 2
+
+[node name="StatsTitle" type="Label" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/AnimalSection/StatsSection" unique_id=175125268]
+layout_mode = 2
+
+[node name="HPLabel" type="Label" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/AnimalSection/StatsSection" unique_id=522062091]
+layout_mode = 2
+
+[node name="AttackLabel" type="Label" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/AnimalSection/StatsSection" unique_id=1020098572]
+layout_mode = 2
+
+[node name="SpeedLabel" type="Label" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/AnimalSection/StatsSection" unique_id=480450516]
+layout_mode = 2
+
+[node name="ArmorLabel" type="Label" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/AnimalSection/StatsSection" unique_id=631280383]
+layout_mode = 2
+
+[node name="AccuracyLabel" type="Label" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/AnimalSection/StatsSection" unique_id=118092153]
+layout_mode = 2
+
+[node name="EvasionLabel" type="Label" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/AnimalSection/StatsSection" unique_id=1739336857]
+layout_mode = 2
+
+[node name="CriticalLabel" type="Label" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/AnimalSection/StatsSection" unique_id=1393070839]
+layout_mode = 2
+
+[node name="GeneSection" type="VBoxContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer" unique_id=1051803747]
+custom_minimum_size = Vector2(193.875, 0)
+layout_mode = 2
+
+[node name="GeneTitle" type="Label" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection" unique_id=767804471]
+layout_mode = 2
+
+[node name="GeneColumn" type="VBoxContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection" unique_id=781125794]
+layout_mode = 2
+
+[node name="MouthLabel" type="Label" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn" unique_id=1340257047]
+layout_mode = 2
+
+[node name="MouthSlot1" type="PanelContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn" unique_id=666815301]
+layout_mode = 2
+
+[node name="MouthSlot2" type="PanelContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn" unique_id=1444176956]
+layout_mode = 2
+
+[node name="SkinLabel" type="Label" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn" unique_id=1207634832]
+layout_mode = 2
+
+[node name="SkinSlot1" type="PanelContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn" unique_id=1852499779]
+layout_mode = 2
+
+[node name="SkinSlot2" type="PanelContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn" unique_id=1459781209]
+layout_mode = 2
+
+[node name="MuscleLabel" type="Label" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn" unique_id=1708779255]
+layout_mode = 2
+
+[node name="MuscleSlot1" type="PanelContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn" unique_id=2084715753]
+layout_mode = 2
+
+[node name="MuscleSlot2" type="PanelContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn" unique_id=945867529]
+layout_mode = 2
+
+[node name="ClawLabel" type="Label" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn" unique_id=1031634779]
+layout_mode = 2
+
+[node name="ClawSlot1" type="PanelContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn" unique_id=1664286428]
+layout_mode = 2
+
+[node name="ClawSlot2" type="PanelContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn" unique_id=330920970]
+layout_mode = 2
+
+[node name="LimbsLabel" type="Label" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn" unique_id=441877389]
+layout_mode = 2
+
+[node name="LimbsSlot1" type="PanelContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn" unique_id=663594519]
+layout_mode = 2
+
+[node name="LimbsSlot2" type="PanelContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn" unique_id=378093144]
+layout_mode = 2
+
+[node name="GlandsLabel" type="Label" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn" unique_id=1569231980]
+layout_mode = 2
+
+[node name="GlandsSlot1" type="PanelContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn" unique_id=1952196121]
+layout_mode = 2
+
+[node name="GlandsSlot2" type="PanelContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn" unique_id=1676662106]
+layout_mode = 2
+
+[node name="MutagenSection" type="VBoxContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer" unique_id=22079750]
+custom_minimum_size = Vector2(225.655, 0)
+layout_mode = 2
+
+[node name="LabeMutagenTitlel" type="Label" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/MutagenSection" unique_id=948140424]
+layout_mode = 2
+
+[node name="Mutagen1" type="PanelContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/MutagenSection" unique_id=1363337882]
+layout_mode = 2
+
+[node name="Mutagen2" type="PanelContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/MutagenSection" unique_id=361964019]
+layout_mode = 2
+
+[node name="Mutagen3" type="PanelContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/MutagenSection" unique_id=705336275]
+layout_mode = 2
+
+[node name="Mutagen4" type="PanelContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/MutagenSection" unique_id=473613992]
+layout_mode = 2
+
+[node name="Mutagen5" type="PanelContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/MutagenSection" unique_id=1191208858]
+layout_mode = 2
+
+[node name="Mutagen6" type="PanelContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/MutagenSection" unique_id=1866882602]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/MutagenSection" unique_id=973972688]
+layout_mode = 2
+
+[node name="ReserveLabel" type="Label" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/MutagenSection/HBoxContainer" unique_id=1433385094]
+layout_mode = 2
+
+[node name="ReserveMutagen" type="PanelContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/MutagenSection/HBoxContainer" unique_id=23057094]
+layout_mode = 2
 
 [node name="Transition" type="Control" parent="UI" unique_id=1850224517]
 layout_mode = 3

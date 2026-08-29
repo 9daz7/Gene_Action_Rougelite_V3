@@ -88,15 +88,6 @@ func _physics_process(_delta: float) -> void:
 
 		_update_movement_state()
 
-		print(
-			"Movement | Sprint:",
-			is_sprinting,
-			" Crouch:",
-			is_crouching,
-			" Speed:",
-			_get_current_move_speed()
-		)
-
 		_hide_interaction_prompt()
 
 		return

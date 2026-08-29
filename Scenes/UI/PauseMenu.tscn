@@ -1,0 +1,192 @@
+[gd_scene format=3 uid="uid://dc856frcke3by"]
+
+[ext_resource type="Script" uid="uid://cmha305puw7iq" path="res://Scenes/UI/PauseMenu.gd" id="1_eod5q"]
+
+[node name="PauseMenu" type="Control" unique_id=1036657722]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_eod5q")
+
+[node name="Dimmer" type="ColorRect" parent="." unique_id=42077603]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="MainPanel" type="PanelContainer" parent="." unique_id=1716503450]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="MarginContainer" type="MarginContainer" parent="MainPanel" unique_id=1420033994]
+layout_mode = 2
+
+[node name="MainContainer" type="HBoxContainer" parent="MainPanel" unique_id=367326971]
+layout_mode = 2
+
+[node name="OptionsPanel" type="PanelContainer" parent="MainPanel/MainContainer" unique_id=1400067165]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MainPanel/MainContainer/OptionsPanel" unique_id=1568820304]
+layout_mode = 2
+
+[node name="OptionsColumn" type="VBoxContainer" parent="MainPanel/MainContainer/OptionsPanel/MarginContainer" unique_id=574156381]
+layout_mode = 2
+
+[node name="OptionsTitle" type="Label" parent="MainPanel/MainContainer/OptionsPanel/MarginContainer/OptionsColumn" unique_id=497700191]
+layout_mode = 2
+
+[node name="ResumeButton" type="Button" parent="MainPanel/MainContainer/OptionsPanel/MarginContainer/OptionsColumn" unique_id=1868690151]
+layout_mode = 2
+
+[node name="SettingsButton" type="Button" parent="MainPanel/MainContainer/OptionsPanel/MarginContainer/OptionsColumn" unique_id=254789171]
+layout_mode = 2
+
+[node name="ReturnHomeButton" type="Button" parent="MainPanel/MainContainer/OptionsPanel/MarginContainer/OptionsColumn" unique_id=1506716214]
+layout_mode = 2
+
+[node name="ReturnMenuButton" type="Button" parent="MainPanel/MainContainer/OptionsPanel/MarginContainer/OptionsColumn" unique_id=608464835]
+layout_mode = 2
+
+[node name="BuildPanel" type="PanelContainer" parent="MainPanel/MainContainer" unique_id=1869693236]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MainPanel/MainContainer/BuildPanel" unique_id=687780434]
+layout_mode = 2
+
+[node name="BuildContainer" type="HBoxContainer" parent="MainPanel/MainContainer/BuildPanel/MarginContainer" unique_id=1152209366]
+layout_mode = 2
+
+[node name="AnimalSection" type="VBoxContainer" parent="MainPanel/MainContainer/BuildPanel/MarginContainer/BuildContainer" unique_id=131061561]
+layout_mode = 2
+
+[node name="BuildTitle" type="Label" parent="MainPanel/MainContainer/BuildPanel/MarginContainer/BuildContainer/AnimalSection" unique_id=1636207517]
+layout_mode = 2
+
+[node name="AnimalSprite" type="TextureRect" parent="MainPanel/MainContainer/BuildPanel/MarginContainer/BuildContainer/AnimalSection" unique_id=325084256]
+layout_mode = 2
+
+[node name="AnimalName" type="Label" parent="MainPanel/MainContainer/BuildPanel/MarginContainer/BuildContainer/AnimalSection" unique_id=1214112041]
+layout_mode = 2
+
+[node name="StatsSection" type="VBoxContainer" parent="MainPanel/MainContainer/BuildPanel/MarginContainer/BuildContainer/AnimalSection" unique_id=638959330]
+layout_mode = 2
+
+[node name="StatsTitle" type="Label" parent="MainPanel/MainContainer/BuildPanel/MarginContainer/BuildContainer/AnimalSection/StatsSection" unique_id=729578266]
+layout_mode = 2
+
+[node name="HPLabel" type="Label" parent="MainPanel/MainContainer/BuildPanel/MarginContainer/BuildContainer/AnimalSection/StatsSection" unique_id=960082379]
+layout_mode = 2
+
+[node name="AttackLabel" type="Label" parent="MainPanel/MainContainer/BuildPanel/MarginContainer/BuildContainer/AnimalSection/StatsSection" unique_id=1311234538]
+layout_mode = 2
+
+[node name="SpeedLabel" type="Label" parent="MainPanel/MainContainer/BuildPanel/MarginContainer/BuildContainer/AnimalSection/StatsSection" unique_id=1624889272]
+layout_mode = 2
+
+[node name="ArmorLabel" type="Label" parent="MainPanel/MainContainer/BuildPanel/MarginContainer/BuildContainer/AnimalSection/StatsSection" unique_id=1401005384]
+layout_mode = 2
+
+[node name="AccuracyLabel" type="Label" parent="MainPanel/MainContainer/BuildPanel/MarginContainer/BuildContainer/AnimalSection/StatsSection" unique_id=1006928486]
+layout_mode = 2
+
+[node name="EvasionLabel" type="Label" parent="MainPanel/MainContainer/BuildPanel/MarginContainer/BuildContainer/AnimalSection/StatsSection" unique_id=1327278578]
+layout_mode = 2
+
+[node name="CriticalLabel" type="Label" parent="MainPanel/MainContainer/BuildPanel/MarginContainer/BuildContainer/AnimalSection/StatsSection" unique_id=1023059753]
+layout_mode = 2
+
+[node name="GeneSection" type="VBoxContainer" parent="MainPanel/MainContainer/BuildPanel/MarginContainer/BuildContainer" unique_id=681500059]
+layout_mode = 2
+
+[node name="GeneTitle" type="Label" parent="MainPanel/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection" unique_id=690553057]
+layout_mode = 2
+
+[node name="GeneColumn" type="VBoxContainer" parent="MainPanel/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection" unique_id=490199724]
+layout_mode = 2
+
+[node name="MouthLabel" type="Label" parent="MainPanel/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn" unique_id=683818642]
+layout_mode = 2
+
+[node name="MouthSlot1" type="PanelContainer" parent="MainPanel/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn" unique_id=828546484]
+layout_mode = 2
+
+[node name="MouthSlot2" type="PanelContainer" parent="MainPanel/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn" unique_id=1787916161]
+layout_mode = 2
+
+[node name="SkinLabel" type="Label" parent="MainPanel/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn" unique_id=1925117864]
+layout_mode = 2
+
+[node name="SkinSlot1" type="PanelContainer" parent="MainPanel/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn" unique_id=748938814]
+layout_mode = 2
+
+[node name="SkinSlot2" type="PanelContainer" parent="MainPanel/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn" unique_id=1032015172]
+layout_mode = 2
+
+[node name="MuscleLabel" type="Label" parent="MainPanel/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn" unique_id=1681873594]
+layout_mode = 2
+
+[node name="MuscleSlot1" type="PanelContainer" parent="MainPanel/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn" unique_id=378926495]
+layout_mode = 2
+
+[node name="MuscleSlot2" type="PanelContainer" parent="MainPanel/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn" unique_id=2008635323]
+layout_mode = 2
+
+[node name="ClawLabel" type="Label" parent="MainPanel/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn" unique_id=15552943]
+layout_mode = 2
+
+[node name="ClawSlot1" type="PanelContainer" parent="MainPanel/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn" unique_id=1493909736]
+layout_mode = 2
+
+[node name="ClawSlot2" type="PanelContainer" parent="MainPanel/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn" unique_id=732584675]
+layout_mode = 2
+
+[node name="LimbsLabel" type="Label" parent="MainPanel/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn" unique_id=2008523470]
+layout_mode = 2
+
+[node name="LimbsSlot1" type="PanelContainer" parent="MainPanel/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn" unique_id=877303005]
+layout_mode = 2
+
+[node name="LimbsSlot2" type="PanelContainer" parent="MainPanel/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn" unique_id=321595903]
+layout_mode = 2
+
+[node name="GlandsLabel" type="Label" parent="MainPanel/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn" unique_id=911143614]
+layout_mode = 2
+
+[node name="GlandsSlot1" type="PanelContainer" parent="MainPanel/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn" unique_id=1490282522]
+layout_mode = 2
+
+[node name="GlandsSlot2" type="PanelContainer" parent="MainPanel/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn" unique_id=798738435]
+layout_mode = 2
+
+[node name="MutagenSection" type="VBoxContainer" parent="MainPanel/MainContainer/BuildPanel/MarginContainer/BuildContainer" unique_id=1989845332]
+layout_mode = 2
+
+[node name="LabeMutagenTitlel" type="Label" parent="MainPanel/MainContainer/BuildPanel/MarginContainer/BuildContainer/MutagenSection" unique_id=1836571998]
+layout_mode = 2
+
+[node name="Mutagen1" type="PanelContainer" parent="MainPanel/MainContainer/BuildPanel/MarginContainer/BuildContainer/MutagenSection" unique_id=1801907609]
+layout_mode = 2
+
+[node name="Mutagen2" type="PanelContainer" parent="MainPanel/MainContainer/BuildPanel/MarginContainer/BuildContainer/MutagenSection" unique_id=1123366327]
+layout_mode = 2
+
+[node name="Mutagen3" type="PanelContainer" parent="MainPanel/MainContainer/BuildPanel/MarginContainer/BuildContainer/MutagenSection" unique_id=447735030]
+layout_mode = 2
+
+[node name="Mutagen4" type="PanelContainer" parent="MainPanel/MainContainer/BuildPanel/MarginContainer/BuildContainer/MutagenSection" unique_id=486801672]
+layout_mode = 2
+
+[node name="Mutagen5" type="PanelContainer" parent="MainPanel/MainContainer/BuildPanel/MarginContainer/BuildContainer/MutagenSection" unique_id=1883934198]
+layout_mode = 2
+
+[node name="Mutagen6" type="PanelContainer" parent="MainPanel/MainContainer/BuildPanel/MarginContainer/BuildContainer/MutagenSection" unique_id=366532608]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MainPanel/MainContainer/BuildPanel/MarginContainer/BuildContainer/MutagenSection" unique_id=1069695014]
+layout_mode = 2
+
+[node name="ReserveLabel" type="Label" parent="MainPanel/MainContainer/BuildPanel/MarginContainer/BuildContainer/MutagenSection/HBoxContainer" unique_id=682530456]
+layout_mode = 2
+
+[node name="ReserveMutagen" type="PanelContainer" parent="MainPanel/MainContainer/BuildPanel/MarginContainer/BuildContainer/MutagenSection/HBoxContainer" unique_id=944658512]
+layout_mode = 2
