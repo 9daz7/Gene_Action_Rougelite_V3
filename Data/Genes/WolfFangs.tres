@@ -9,6 +9,7 @@
 [resource]
 script = ExtResource("4_poi5u")
 gene_name = "Wolf fangs"
+description = "wolf fangs"
 attack_bonus = 2
 accuracy_bonus = 2
 move_pool = Array[ExtResource("2_a835o")]([ExtResource("3_a835o")])

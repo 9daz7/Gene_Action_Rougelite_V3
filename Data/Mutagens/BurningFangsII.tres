@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="MutagenResource" format=3 uid="uid://bq4iv0ld3nvjd"]
+
+[ext_resource type="Script" uid="uid://cedh0hgwqddn4" path="res://Resources/StatusEffect.gd" id="1_8sejm"]
+[ext_resource type="Resource" uid="uid://yxxu1o4616xt" path="res://Resources/StatusEffects/Burn.tres" id="2_1bxkb"]
+[ext_resource type="Script" uid="uid://cps66j48fyqt5" path="res://Scripts/Resources/MutagenResource.gd" id="2_wyw02"]
+
+[resource]
+script = ExtResource("2_wyw02")
+mutagen_id = "burning_fangs_2"
+required_mutagen_id = "burning_fangs_1"
+tags = Array[int]([1, 5])
+mutagen_name = "Burning Fangs"
+mutagen_family = 10
+added_effects = Array[ExtResource("1_8sejm")]([ExtResource("2_1bxkb")])
+metadata/_custom_type_script = "uid://cps66j48fyqt5"

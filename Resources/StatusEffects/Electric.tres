@@ -6,7 +6,8 @@
 script = ExtResource("1_24thg")
 effect_name = "Electric"
 type = 3
-power = 1
+power = 4
+duration = 1
 can_stack = false
 max_stacks = 1
 refresh_duration = false

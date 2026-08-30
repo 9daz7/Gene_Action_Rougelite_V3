@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="StatusEffect" format=3 uid="uid://c5ibwqunlphue"]
+
+[ext_resource type="Script" uid="uid://cedh0hgwqddn4" path="res://Resources/StatusEffect.gd" id="1_ded15"]
+
+[resource]
+script = ExtResource("1_ded15")
+effect_name = "Static"
+type = 3
+power = 1
+can_stack = false
+max_stacks = 1
+refresh_duration = false
+stack_power = false
+metadata/_custom_type_script = "uid://cedh0hgwqddn4"

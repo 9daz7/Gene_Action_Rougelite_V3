@@ -8,6 +8,7 @@
 [resource]
 script = ExtResource("1_uj1fw")
 gene_name = "tiger stregth"
+description = "tiger strength"
 rarity = 2
 slot_type = 2
 attack_bonus = 3

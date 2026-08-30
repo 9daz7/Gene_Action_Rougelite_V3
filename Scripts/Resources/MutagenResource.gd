@@ -26,10 +26,17 @@ enum MutagenTier {
 
 
 # ==================================================
+# Tier Progression
+# ==================================================
+
+@export var requires_previous_tier: bool = true
+
+
+# ==================================================
 # Upgrade Chain
 # ==================================================
 
-@export var required_mutagen: String = ""
+#@export var required_mutagen: String = ""
 
 @export var mutagen_id: String = ""
 @export var required_mutagen_id: String = ""

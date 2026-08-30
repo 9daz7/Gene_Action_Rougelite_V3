@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="MutagenResource" format=3 uid="uid://ckjocjuuirifb"]
+
+[ext_resource type="Script" uid="uid://cedh0hgwqddn4" path="res://Resources/StatusEffect.gd" id="1_xaaxv"]
+[ext_resource type="Script" uid="uid://cps66j48fyqt5" path="res://Scripts/Resources/MutagenResource.gd" id="2_jgu7r"]
+
+[resource]
+script = ExtResource("2_jgu7r")
+mutagen_id = "enhanced_vision_2"
+required_mutagen_id = "enhanced_vision_1"
+tags = Array[int]([0, 12])
+mutagen_name = "Enhanced Vision"
+mutagen_family = 3
+crit_bonus = 5
+critical_bonus_for_move = 5
+accuracy_bonus_for_move = 8
+metadata/_custom_type_script = "uid://cps66j48fyqt5"

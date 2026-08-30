@@ -541,33 +541,32 @@ func _set_gene_slot(
 		true
 	)
 
-	slot.mouse_filter = Control.MOUSE_FILTER_STOP
-
 	var label := slot.get_node_or_null(
 		"Label"
-	)
+	) as Label
 
 	if label == null:
 
-		label = Label.new()
-
-		slot.add_child(
-			label
+		push_error(
+			"PauseMenu: Gene slot has no Label: "
+			+ slot.name
 		)
 
+		return
+
+	print(
+		"GENE TOOLTIP SET | Name:",
+		gene.gene_name,
+		" | Tooltip:",
+		_get_gene_tooltip(gene),
+		" | Resource:",
+		gene
+	)
+
 	label.text = gene.gene_name
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
-	label.horizontal_alignment = (
-		HORIZONTAL_ALIGNMENT_CENTER
-	)
-
-	label.vertical_alignment = (
-		VERTICAL_ALIGNMENT_CENTER
-	)
-
-	label.autowrap_mode = (
-		TextServer.AUTOWRAP_WORD_SMART
-	)
+	slot.mouse_filter = Control.MOUSE_FILTER_STOP
 
 	slot.tooltip_text = _get_gene_tooltip(
 		gene
@@ -582,12 +581,17 @@ func _get_gene_tooltip(
 	gene: GeneResource
 ) -> String:
 
+	if gene == null:
+		return "Empty gene slot."
+
 	var text := gene.gene_name
 
-	if not gene.description.is_empty():
+	if "description" in gene:
 
-		text += "\n\n"
-		text += gene.description
+		if not str(gene.description).is_empty():
+
+			text += "\n\n"
+			text += str(gene.description)
 
 	return text
 
@@ -678,33 +682,32 @@ func _set_mutagen_slot(
 		true
 	)
 
-	slot.mouse_filter = Control.MOUSE_FILTER_STOP
-
 	var label := slot.get_node_or_null(
 		"Label"
-	)
+	) as Label
 
 	if label == null:
 
-		label = Label.new()
-
-		slot.add_child(
-			label
+		push_error(
+			"PauseMenu: Mutagen slot has no Label: "
+			+ slot.name
 		)
 
+		return
+
+	print(
+		"MUTAGEN TOOLTIP SET | Name:",
+		mutagen.mutagen_name,
+		" | Tooltip:",
+		_get_mutagen_tooltip(mutagen),
+		" | Resource:",
+		mutagen
+	)
+
 	label.text = mutagen.mutagen_name
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
-	label.horizontal_alignment = (
-		HORIZONTAL_ALIGNMENT_CENTER
-	)
-
-	label.vertical_alignment = (
-		VERTICAL_ALIGNMENT_CENTER
-	)
-
-	label.autowrap_mode = (
-		TextServer.AUTOWRAP_WORD_SMART
-	)
+	slot.mouse_filter = Control.MOUSE_FILTER_STOP
 
 	slot.tooltip_text = _get_mutagen_tooltip(
 		mutagen
@@ -719,28 +722,23 @@ func _get_mutagen_tooltip(
 	mutagen: MutagenResource
 ) -> String:
 
-	var text := (
-		mutagen.mutagen_name
-	)
+	if mutagen == null:
+		return "Empty Mutagen slot."
+
+	var text := mutagen.mutagen_name
 
 	text += "\n"
-	text += (
-		"Family: "
-		+ mutagen.get_family_name()
-	)
+	text += "Family: " + mutagen.get_family_name()
 
 	text += "\n"
-	text += (
-		"Tier: "
-		+ str(
-			int(mutagen.tier)
-		)
-	)
+	text += "Tier: " + str(int(mutagen.tier))
 
-	if not mutagen.description.is_empty():
+	if "description" in mutagen:
 
-		text += "\n\n"
-		text += mutagen.description
+		if not str(mutagen.description).is_empty():
+
+			text += "\n\n"
+			text += str(mutagen.description)
 
 	return text
 
@@ -765,7 +763,7 @@ func _clear_slot(
 
 	var label := slot.get_node_or_null(
 		"Label"
-	)
+	) as Label
 
 	if label != null:
 

@@ -7,7 +7,8 @@
 
 [resource]
 script = ExtResource("1_bfbuq")
-gene_name = "Honey Badger anger"
+gene_name = "Honey Badger Poison Defense"
+description = "HB poison defense"
 slot_type = 1
 attack_bonus = 2
 hp_bonus = 1

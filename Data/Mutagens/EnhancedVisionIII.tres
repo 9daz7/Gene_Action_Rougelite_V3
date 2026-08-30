@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="MutagenResource" format=3 uid="uid://rf4imm0tc4og"]
+
+[ext_resource type="Script" uid="uid://cedh0hgwqddn4" path="res://Resources/StatusEffect.gd" id="1_1qo0m"]
+[ext_resource type="Script" uid="uid://cps66j48fyqt5" path="res://Scripts/Resources/MutagenResource.gd" id="2_f1kwa"]
+
+[resource]
+script = ExtResource("2_f1kwa")
+mutagen_id = "enhanced_vision_3"
+required_mutagen_id = "enhanced_vision_2"
+tags = Array[int]([0, 12])
+mutagen_name = "Enhanced Visison"
+description = "Crit Bonus 10%
+"
+mutagen_family = 3
+crit_bonus = 10
+critical_bonus_for_move = 10
+accuracy_bonus_for_move = 12
+metadata/_custom_type_script = "uid://cps66j48fyqt5"

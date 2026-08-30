@@ -9,6 +9,7 @@
 [resource]
 script = ExtResource("4_ab6vp")
 gene_name = "Turtle shell"
+description = "turtle shell"
 slot_type = 1
 passive_effects = Array[ExtResource("3_46b4n")]([ExtResource("4_lby6w")])
 metadata/_custom_type_script = "uid://cnlwwn0eoa0pn"

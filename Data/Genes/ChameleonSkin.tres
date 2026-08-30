@@ -8,6 +8,7 @@
 [resource]
 script = ExtResource("4_r2h3n")
 gene_name = "Chameleon Skin"
+description = "chameleon skin"
 rarity = 1
 slot_type = 1
 evasion_bonus = 15

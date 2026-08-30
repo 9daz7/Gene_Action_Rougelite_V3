@@ -9,6 +9,7 @@
 [resource]
 script = ExtResource("1_x756j")
 gene_name = "Boar skin"
+description = "boar skin"
 slot_type = 1
 hp_bonus = 1
 defense_bonus = 3

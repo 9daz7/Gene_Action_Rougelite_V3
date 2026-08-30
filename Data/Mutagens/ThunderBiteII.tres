@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="MutagenResource" format=3 uid="uid://xubqmxa6oh20"]
+
+[ext_resource type="Script" uid="uid://cedh0hgwqddn4" path="res://Resources/StatusEffect.gd" id="1_3kbrf"]
+[ext_resource type="Resource" uid="uid://mlo8okvc104q" path="res://Resources/StatusEffects/Electric.tres" id="2_6x7yk"]
+[ext_resource type="Script" uid="uid://cps66j48fyqt5" path="res://Scripts/Resources/MutagenResource.gd" id="2_7q4ot"]
+
+[resource]
+script = ExtResource("2_7q4ot")
+mutagen_id = "thunder_bite_2"
+required_mutagen_id = "thunder_bite_1"
+tags = Array[int]([1, 4])
+mutagen_name = "Thunder Bite"
+mutagen_type = 1
+mutagen_family = 11
+affected_move_names = Array[String](["Bite"])
+added_effects = Array[ExtResource("1_3kbrf")]([ExtResource("2_6x7yk")])
+metadata/_custom_type_script = "uid://cps66j48fyqt5"

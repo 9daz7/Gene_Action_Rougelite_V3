@@ -11,6 +11,7 @@
 [resource]
 script = ExtResource("1_duhdq")
 gene_name = "Cheetah speed"
+description = "cheetah speed"
 rarity = 2
 slot_type = 4
 defense_bonus = -1

@@ -531,6 +531,9 @@ func get_available_families() -> Array[MutagenResource.MutagenFamily]:
 	if mutagen_database == null:
 		return families
 
+	if run_manager == null:
+		return families
+
 	var current_world: int = run_manager.current_world
 
 	for mutagen in mutagen_database.all_mutagens:
@@ -538,11 +541,29 @@ func get_available_families() -> Array[MutagenResource.MutagenFamily]:
 		if mutagen == null:
 			continue
 
+		# ------------------------------------------
+		# World restriction
+		# ------------------------------------------
+
 		if not mutagen.is_available_in_world(
 			current_world
 		):
 
 			continue
+
+		# ------------------------------------------
+		# Eligibility restriction
+		# ------------------------------------------
+
+		if not is_mutagen_eligible(
+			mutagen
+		):
+
+			continue
+
+		# ------------------------------------------
+		# Add family once
+		# ------------------------------------------
 
 		if mutagen.mutagen_family not in families:
 
@@ -567,11 +588,19 @@ func choose_weighted_mutagen_family() -> MutagenResource.MutagenFamily:
 
 	var total_weight: float = 0.0
 
+	# ==================================================
+	# Calculate Total Weight
+	# ==================================================
+
 	for family in families:
 
 		total_weight += get_family_weight(
 			family
 		)
+
+	# ==================================================
+	# Weighted Roll
+	# ==================================================
 
 	var roll := randf_range(
 		0.0,
@@ -593,6 +622,10 @@ func choose_weighted_mutagen_family() -> MutagenResource.MutagenFamily:
 	return families.back()
 
 
+# ==================================================
+# Mutagen Progression
+# ==================================================
+
 func owns_mutagen_id(
 	mutagen_id: String
 ) -> bool:
@@ -606,7 +639,11 @@ func owns_mutagen_id(
 			continue
 
 		if mutagen.mutagen_id == mutagen_id:
+			return true
 
+	if reserve_mutagen != null:
+
+		if reserve_mutagen.mutagen_id == mutagen_id:
 			return true
 
 	return false
@@ -619,9 +656,13 @@ func is_mutagen_eligible(
 	if mutagen == null:
 		return false
 
-	# World restriction
 	if run_manager == null:
 		return false
+
+
+	# ==================================================
+	# World Restriction
+	# ==================================================
 
 	if not mutagen.is_available_in_world(
 		run_manager.current_world
@@ -629,7 +670,20 @@ func is_mutagen_eligible(
 
 		return false
 
-	# Required previous Mutagen
+	# ==================================================
+	# Already Owned
+	# ==================================================
+
+	if owns_mutagen_id(
+		mutagen.mutagen_id
+	):
+
+		return false
+
+	# ==================================================
+	# Required Previous Mutagen
+	# ==================================================
+
 	if not mutagen.required_mutagen_id.is_empty():
 
 		if not owns_mutagen_id(
@@ -641,55 +695,40 @@ func is_mutagen_eligible(
 	return true
 
 
+# ==================================================
+# Generate Mutagen Choices
+# ==================================================
 func generate_mutagen_choices(
 	family: MutagenResource.MutagenFamily
 ) -> Array[MutagenResource]:
 
-	var candidates: Array[MutagenResource] = []
-
-	if mutagen_database == null:
-
-		push_error(
-			"RunMutagenManager: MutagenDatabase is missing."
+	var candidates: Array[MutagenResource] = (
+		get_mutagens_by_family(
+			family
 		)
+	)
 
-		return candidates
+	var available_choices: Array[MutagenResource] = []
 
-	# ==================================================
-	# Find eligible Mutagens
-	# ==================================================
-
-	for mutagen in mutagen_database.all_mutagens:
+	for mutagen in candidates:
 
 		if mutagen == null:
-			continue
-
-		if mutagen.mutagen_family != family:
 			continue
 
 		if not is_mutagen_eligible(
 			mutagen
 		):
-
 			continue
 
-		candidates.append(
+		available_choices.append(
 			mutagen
 		)
 
-	# ==================================================
-	# Randomize
-	# ==================================================
-
-	candidates.shuffle()
-
-	# ==================================================
-	# Pick up to 3
-	# ==================================================
+	available_choices.shuffle()
 
 	var choices: Array[MutagenResource] = []
 
-	for mutagen in candidates:
+	for mutagen in available_choices:
 
 		if choices.size() >= 3:
 			break
@@ -699,7 +738,70 @@ func generate_mutagen_choices(
 		)
 
 	return choices
-
+	
+#func generate_mutagen_choices(
+	#family: MutagenResource.MutagenFamily
+#) -> Array[MutagenResource]:
+#
+	#var candidates: Array[MutagenResource] = (
+		#get_mutagens_by_family(
+			#family
+		#)
+	#)
+#
+	#if candidates.is_empty():
+#
+		#print(
+			#"No Mutagens available for family:",
+			#get_mutagen_family_name(family)
+		#)
+#
+		#return []
+#
+	## ==================================================
+	## Filter
+	## ==================================================
+#
+	#var available_choices: Array[MutagenResource] = []
+#
+	#for mutagen in candidates:
+#
+		#if mutagen == null:
+			#continue
+#
+		#if not is_mutagen_eligible(
+			#mutagen
+		#):
+#
+			#continue
+#
+		#available_choices.append(
+			#mutagen
+		#)
+#
+	## ==================================================
+	## Randomize
+	## ==================================================
+#
+	#available_choices.shuffle()
+#
+	## ==================================================
+	## Pick Up To Three
+	## ==================================================
+#
+	#var choices: Array[MutagenResource] = []
+#
+	#for mutagen in available_choices:
+#
+		#if choices.size() >= 3:
+			#break
+#
+		#choices.append(
+			#mutagen
+		#)
+#
+	#return choices
+#
 
 # ==================================================
 # Run Reset

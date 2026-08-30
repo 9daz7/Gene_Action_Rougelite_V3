@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="MutagenResource" format=3 uid="uid://b0pttgrev0b32"]
+
+[ext_resource type="Script" uid="uid://cedh0hgwqddn4" path="res://Resources/StatusEffect.gd" id="1_fmo5x"]
+[ext_resource type="Script" uid="uid://cps66j48fyqt5" path="res://Scripts/Resources/MutagenResource.gd" id="2_tdy1o"]
+
+[resource]
+script = ExtResource("2_tdy1o")
+requires_previous_tier = false
+mutagen_id = "evasion_1"
+tags = Array[int]([0, 14])
+mutagen_name = "Evasion"
+description = "evasion"
+mutagen_family = 6
+evasion_bonus = 3
+metadata/_custom_type_script = "uid://cps66j48fyqt5"

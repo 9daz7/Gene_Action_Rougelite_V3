@@ -10,6 +10,7 @@
 [resource]
 script = ExtResource("5_g4dlh")
 gene_name = "Marten anger"
+description = "Marten rage"
 slot_cost = 0
 passive_effects = Array[ExtResource("4_1ber5")]([ExtResource("5_qqtxa")])
 move_pool = Array[ExtResource("2_qqtxa")]([ExtResource("3_j3cvw")])

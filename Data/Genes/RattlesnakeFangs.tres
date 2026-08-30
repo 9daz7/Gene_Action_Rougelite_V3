@@ -9,5 +9,6 @@
 [resource]
 script = ExtResource("4_mteun")
 gene_name = "Rattlesnake Fangs"
+description = "Snake fangs"
 move_pool = Array[ExtResource("2_tky13")]([ExtResource("3_mteun")])
 metadata/_custom_type_script = "uid://cnlwwn0eoa0pn"
