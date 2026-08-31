@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="MutagenResource" format=3 uid="uid://ed62v7rovapw"]
+
+[ext_resource type="Script" uid="uid://cedh0hgwqddn4" path="res://Resources/StatusEffect.gd" id="1_fe50m"]
+[ext_resource type="Script" uid="uid://cps66j48fyqt5" path="res://Scripts/Resources/MutagenResource.gd" id="2_foxw4"]
+
+[resource]
+script = ExtResource("2_foxw4")
+mutagen_family = 2
+mutagen_name = "Godspeed I"
+metadata/_custom_type_script = "uid://cps66j48fyqt5"

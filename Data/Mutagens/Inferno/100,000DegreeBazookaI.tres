@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="MutagenResource" format=3 uid="uid://bqfthrcisby80"]
+
+[ext_resource type="Script" uid="uid://cedh0hgwqddn4" path="res://Resources/StatusEffect.gd" id="1_sfahw"]
+[ext_resource type="Resource" uid="uid://yxxu1o4616xt" path="res://Resources/StatusEffects/Burn.tres" id="2_p6aml"]
+[ext_resource type="Script" uid="uid://cps66j48fyqt5" path="res://Scripts/Resources/MutagenResource.gd" id="3_qh1qq"]
+
+[resource]
+script = ExtResource("3_qh1qq")
+mutagen_type = 1
+tier = 3
+requires_previous_tier = false
+mutagen_id = "100_degree_bazooka_1"
+mutagen_family = 1
+required_families = Array[int]([1])
+tags = Array[int]([0, 8, 12])
+mutagen_name = "100,000 Degree Bazooka I"
+description = "The user applies heat to their arm before using the bazooka technique."
+attack_bonus = 4
+added_effects = Array[ExtResource("1_sfahw")]([ExtResource("2_p6aml")])
+metadata/_custom_type_script = "uid://cps66j48fyqt5"

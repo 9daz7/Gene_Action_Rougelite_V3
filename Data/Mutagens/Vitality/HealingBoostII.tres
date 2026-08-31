@@ -8,6 +8,6 @@ script = ExtResource("2_0om3k")
 mutagen_id = "healing_boost_2"
 required_mutagen_id = "healing_boost_1"
 mutagen_family = 6
-mutagen_name = "Healing Boost"
+mutagen_name = "Healing Boost II"
 description = "Healing Boost"
 metadata/_custom_type_script = "uid://cps66j48fyqt5"

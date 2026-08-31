@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="MutagenResource" format=3 uid="uid://bdkqlutrbscmp"]
+
+[ext_resource type="Script" uid="uid://cedh0hgwqddn4" path="res://Resources/StatusEffect.gd" id="1_chje5"]
+[ext_resource type="Script" uid="uid://cps66j48fyqt5" path="res://Scripts/Resources/MutagenResource.gd" id="2_cyfwq"]
+
+[resource]
+script = ExtResource("2_cyfwq")
+requires_previous_tier = false
+mutagen_id = "golden_experience_1"
+mutagen_family = 6
+mutagen_name = "Golden Experience I"
+metadata/_custom_type_script = "uid://cps66j48fyqt5"

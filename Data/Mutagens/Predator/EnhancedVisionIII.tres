@@ -8,7 +8,7 @@ script = ExtResource("2_f1kwa")
 mutagen_id = "enhanced_vision_3"
 required_mutagen_id = "enhanced_vision_2"
 mutagen_family = 4
-mutagen_name = "Enhanced Visison"
+mutagen_name = "Enhanced Visison III"
 description = "Crit Bonus 10%
 "
 crit_bonus = 10

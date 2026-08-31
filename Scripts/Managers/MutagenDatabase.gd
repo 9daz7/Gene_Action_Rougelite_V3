@@ -36,22 +36,28 @@ func load_mutagens() -> void:
 	all_mutagens.clear()
 
 	# ==================================================
-	# Electric
+	# Feral
 	# ==================================================
 
 	_add_mutagen(
-		"res://Data/Mutagens/Storm/ElectricGuardI.tres"
+		"res://Data/Mutagens/Feral/MetallicaI.tres"
+	)
+
+	# ==================================================
+	# Inferno
+	# ==================================================
+
+	_add_mutagen(
+		"res://Data/Mutagens/Inferno/100,000DegreeBazookaI.tres"
 	)
 
 	_add_mutagen(
-		"res://Data/Mutagens/Srorm/ElectricGuardII.tres"
+		"res://Data/Mutagens/Inferno/100,000DegreeBazookaII.tres"
 	)
 
 	_add_mutagen(
-		"res://Data/Mutagens/Storm/ElectricGuardIII.tres"
+		"res://Data/Mutagens/Inferno/100,000DegreeBazookaIII.tres"
 	)
-
-
 
 	_add_mutagen(
 		"res://Data/Mutagens/Inferno/BurningFangsI.tres"
@@ -64,6 +70,26 @@ func load_mutagens() -> void:
 	_add_mutagen(
 		"res://Data/Mutagens/Inferno/BurningFangsIII.tres"
 	)
+
+	# ==================================================
+	# Instinct
+	# ==================================================
+
+	_add_mutagen(
+		"res://Data/Mutagens/Instinct/EvasionI.tres"
+	)
+
+	_add_mutagen(
+		"res://Data/Mutagens/Instinct/EvasionII.tres"
+	)
+
+	_add_mutagen(
+		"res://Data/Mutagens/Instinct/EvasionIII.tres"
+	)
+
+	# ==================================================
+	# Predator
+	# ==================================================
 
 	_add_mutagen(
 		"res://Data/Mutagens/Predator/EnhancedVisionI.tres"
@@ -78,27 +104,35 @@ func load_mutagens() -> void:
 	)
 
 	_add_mutagen(
-		"res://Data/Mutagens/Instinct/EvasionI.tres"
+		"res://Data/Mutagens/Predator/SogekinguI.tres"
 	)
 
 	_add_mutagen(
-		"res://Data/Mutagens/Instinct/EvasionII.tres"
+		"res://Data/Mutagens/Predator/SogekinguII.tres"
 	)
 
 	_add_mutagen(
-		"res://Data/Mutagens/Instinct/EvasionIII.tres"
+		"res://Data/Mutagens/Predator/SogekinguIII.tres"
+	)
+
+	# ==================================================
+	# Storm
+	# ==================================================
+
+	_add_mutagen(
+		"res://Data/Mutagens/Storm/ElectricGuardI.tres"
 	)
 
 	_add_mutagen(
-		"res://Data/Mutagens/Vitality/HealingBoostI.tres"
+		"res://Data/Mutagens/Srorm/ElectricGuardII.tres"
 	)
 
 	_add_mutagen(
-		"res://Data/Mutagens/Vitality/HealingBoostII.tres"
+		"res://Data/Mutagens/Storm/ElectricGuardIII.tres"
 	)
 
 	_add_mutagen(
-		"res://Data/Mutagens/Vitality/HealingBoostIII.tres"
+		"res://Data/Mutagens/Storm/GodSpeedI.tres"
 	)
 
 	_add_mutagen(
@@ -111,6 +145,38 @@ func load_mutagens() -> void:
 
 	_add_mutagen(
 		"res://Data/Mutagens/Storm/ThunderBiteIII.tres"
+	)
+
+	_add_mutagen(
+		"res://Data/Mutagens/Storm/ThunderThighsI.tres"
+	)
+
+	_add_mutagen(
+		"res://Data/Mutagens/Storm/ThunderThighsII.tres"
+	)
+
+	_add_mutagen(
+		"res://Data/Mutagens/Storm/ThunderThighsIII.tres"
+	)
+
+	# ==================================================
+	# Vitality
+	# ==================================================
+
+	_add_mutagen(
+		"res://Data/Mutagens/Vitality/GoldenExperience.tres"
+	)
+
+	_add_mutagen(
+		"res://Data/Mutagens/Vitality/HealingBoostI.tres"
+	)
+
+	_add_mutagen(
+		"res://Data/Mutagens/Vitality/HealingBoostII.tres"
+	)
+
+	_add_mutagen(
+		"res://Data/Mutagens/Vitality/HealingBoostIII.tres"
 	)
 
 	print(

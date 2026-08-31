@@ -8,7 +8,7 @@ script = ExtResource("2_8jslm")
 requires_previous_tier = false
 mutagen_id = "healing_boost_1"
 mutagen_family = 6
-mutagen_name = "Healing Boost"
+mutagen_name = "Healing Boost I"
 description = "Increases healing received from healing effects., Currently does nothing.
 "
 metadata/_custom_type_script = "uid://cps66j48fyqt5"

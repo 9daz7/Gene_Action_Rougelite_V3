@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="MutagenResource" format=3 uid="uid://3w2ed845qqsv"]
+
+[ext_resource type="Script" uid="uid://cedh0hgwqddn4" path="res://Resources/StatusEffect.gd" id="1_5cbfh"]
+[ext_resource type="Script" uid="uid://cps66j48fyqt5" path="res://Scripts/Resources/MutagenResource.gd" id="2_e6kyk"]
+
+[resource]
+script = ExtResource("2_e6kyk")
+tier = 3
+mutagen_family = 4
+description = "The one who declared war."
+accuracy_bonus = 10
+crit_bonus = 4
+critical_bonus_for_move = 4
+metadata/_custom_type_script = "uid://cps66j48fyqt5"

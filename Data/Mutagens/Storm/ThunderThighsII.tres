@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="MutagenResource" format=3 uid="uid://luvogrvg7nfg"]
+
+[ext_resource type="Script" uid="uid://cedh0hgwqddn4" path="res://Resources/StatusEffect.gd" id="1_lvipk"]
+[ext_resource type="Script" uid="uid://cps66j48fyqt5" path="res://Scripts/Resources/MutagenResource.gd" id="2_1cgle"]
+
+[resource]
+script = ExtResource("2_1cgle")
+mutagen_id = "thunder_thighs_2"
+required_mutagen_id = "thunder_thighs_1"
+required_families = Array[int]([2])
+tags = Array[int]([2])
+mutagen_name = "Thunder Thighs II"
+description = "Speed boost - 6%"
+speed_bonus = 6
+metadata/_custom_type_script = "uid://cps66j48fyqt5"

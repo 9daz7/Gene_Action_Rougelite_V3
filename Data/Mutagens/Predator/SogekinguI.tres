@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="MutagenResource" format=3 uid="uid://1eblu18sfu2l"]
+
+[ext_resource type="Script" uid="uid://cedh0hgwqddn4" path="res://Resources/StatusEffect.gd" id="1_78mon"]
+[ext_resource type="Script" uid="uid://cps66j48fyqt5" path="res://Scripts/Resources/MutagenResource.gd" id="2_k4nuy"]
+
+[resource]
+script = ExtResource("2_k4nuy")
+tier = 3
+requires_previous_tier = false
+mutagen_id = "sogekingu_1"
+mutagen_family = 4
+mutagen_name = "Sogekingu I"
+description = "The one who declared war."
+metadata/_custom_type_script = "uid://cps66j48fyqt5"
