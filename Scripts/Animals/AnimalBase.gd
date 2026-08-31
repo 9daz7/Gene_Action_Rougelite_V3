@@ -16,6 +16,7 @@ signal status_changed(animal)
 
 
 var run_manager: RunManager
+var run_mutagen_manager: RunMutagenManager
 var animal_resource: AnimalResource
 var turn_manager: TurnManager
 
@@ -132,10 +133,10 @@ var slot_capacity := {
 
 func get_run_mutagens() -> Array[MutagenResource]:
 
-	if run_manager == null:
+	if run_mutagen_manager == null:
 		return []
 
-	return run_manager.run_mutagens
+	return run_mutagen_manager.get_equipped_mutagens()
 
 
 func add_gene(gene: GeneResource) -> bool:
@@ -860,9 +861,17 @@ func calculate_hit_chance(target, move_accuracy: int) -> int:
 	return final_chance
 
 
-func setup_player_hp(manager):
+func setup_player_hp(
+	manager: RunManager
+):
 
 	run_manager = manager
+
+	if manager != null:
+
+		run_mutagen_manager = (
+			manager.run_mutagen_manager
+		)
 
 	hp = manager.player_hp
 
@@ -871,6 +880,11 @@ func setup_player_hp(manager):
 		hp,
 		"/",
 		manager.max_hp
+	)
+
+	print(
+		"Loaded run Mutagens:",
+		get_run_mutagens().size()
 	)
 
 
@@ -966,6 +980,24 @@ func take_damage(
 		get_max_hp()
 	)
 
+	print(
+		"PROTECT MUTAGEN DEBUG | Target:",
+		name,
+		"| Protect:",
+		is_protecting,
+		"| Attacker:",
+		attacker.name if attacker != null else "NULL",
+		"| Move:",
+		move.move_name if move != null else "NULL",
+		"| Damage Type:",
+		move.damage_type if move != null else "NULL",
+		"| Physical:",
+		(
+			move.damage_type
+			== MoveResource.DamageType.PHYSICAL
+		) if move != null else false
+	)
+
 	# ==================================================
 	# Protect Mutagens
 	# ==================================================
@@ -978,6 +1010,8 @@ func take_damage(
 		move != null
 		and
 		is_protecting
+		and
+		move.damage_type == MoveResource.DamageType.PHYSICAL
 	):
 
 		trigger_protect_mutagens(
@@ -1365,25 +1399,64 @@ func trigger_protect_mutagens(
 	move: MoveResource
 ) -> void:
 
+	print("===== PROTECT MUTAGEN DEBUG =====")
+
 	if attacker == null:
+
+		print("NO ATTACKER")
 		return
 
 	if move == null:
+
+		print("NO MOVE")
 		return
 
-	if not is_protecting:
-		return
+	print(
+		"Target:",
+		name
+	)
 
-	if move.damage_type != (
-		MoveResource.DamageType.PHYSICAL
-	):
+	print(
+		"Protected:",
+		is_protecting
+	)
 
-		return
+	print(
+		"Move:",
+		move.move_name
+	)
 
-	for mutagen in get_run_mutagens():
+	print(
+		"Damage Type:",
+		move.damage_type
+	)
+
+	print(
+		"Physical:",
+		move.damage_type
+		== MoveResource.DamageType.PHYSICAL
+	)
+
+	var mutagens := get_run_mutagens()
+
+	print(
+		"Mutagens found:",
+		mutagens.size()
+	)
+
+	for mutagen in mutagens:
 
 		if mutagen == null:
 			continue
+
+		print(
+			"Mutagen:",
+			mutagen.mutagen_name,
+			"| Trigger:",
+			mutagen.triggers_on_physical_hit_while_protected,
+			"| Effects:",
+			mutagen.added_effects.size()
+		)
 
 		if not mutagen.triggers_on_physical_hit_while_protected:
 			continue

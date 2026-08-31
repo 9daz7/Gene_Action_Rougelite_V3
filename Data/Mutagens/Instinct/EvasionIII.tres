@@ -7,8 +7,8 @@
 script = ExtResource("2_ngfua")
 mutagen_id = "evasion_3"
 required_mutagen_id = "evasion_2"
+mutagen_family = 7
 mutagen_name = "Evasion"
 description = "Evasion 10%"
-mutagen_family = 6
 evasion_bonus = 10
 metadata/_custom_type_script = "uid://cps66j48fyqt5"

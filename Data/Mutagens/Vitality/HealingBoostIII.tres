@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="MutagenResource" format=3 uid="uid://cb1xhtf6wwqaw"]
+
+[ext_resource type="Script" uid="uid://cedh0hgwqddn4" path="res://Resources/StatusEffect.gd" id="1_y1mf7"]
+[ext_resource type="Script" uid="uid://cps66j48fyqt5" path="res://Scripts/Resources/MutagenResource.gd" id="2_k2xvb"]
+
+[resource]
+script = ExtResource("2_k2xvb")
+mutagen_id = "healing_boost_3"
+required_mutagen_id = "healing_boost_2"
+mutagen_family = 6
+mutagen_name = "Healing Boost"
+description = "Healing Boost
+"
+metadata/_custom_type_script = "uid://cps66j48fyqt5"

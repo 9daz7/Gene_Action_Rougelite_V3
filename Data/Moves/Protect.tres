@@ -10,5 +10,5 @@ move_name = "Protect"
 effect_type = 1
 category = 1
 power = -1
-priority = 2
+priority = 10
 effect_target = 0

@@ -7,9 +7,8 @@
 script = ExtResource("2_tdy1o")
 requires_previous_tier = false
 mutagen_id = "evasion_1"
-tags = Array[int]([0, 14])
+mutagen_family = 7
 mutagen_name = "Evasion"
 description = "evasion"
-mutagen_family = 6
 evasion_bonus = 3
 metadata/_custom_type_script = "uid://cps66j48fyqt5"

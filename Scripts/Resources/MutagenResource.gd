@@ -7,9 +7,15 @@ class_name MutagenResource
 # ==================================================
 
 enum MutagenType {
-	STAT,
-	MOVE
+	STAT = 0,
+	ABILITY = 1,
+	TRIGGER = 2,
+	CONDITIONAL = 3,
+	TRANSFORMATION = 4,
+	DUO = 5
 }
+
+@export var mutagen_type: MutagenType = MutagenType.STAT
 
 
 # ==================================================
@@ -36,8 +42,6 @@ enum MutagenTier {
 # Upgrade Chain
 # ==================================================
 
-#@export var required_mutagen: String = ""
-
 @export var mutagen_id: String = ""
 @export var required_mutagen_id: String = ""
 
@@ -55,6 +59,32 @@ enum MutagenTier {
 # ==================================================
 
 enum MutagenFamily {
+	FERAL = 0,
+	INFERNO = 1,
+	STORM = 2,
+	VENOM = 3,
+	PREDATOR = 4,
+	CARAPACE = 5,
+	VITALITY = 6,
+	INSTINCT = 7,
+	SCAVENGER = 8
+}
+
+@export var mutagen_family: MutagenFamily = MutagenFamily.FERAL
+
+
+# ==================================================
+# Duo Requirements
+# ==================================================
+
+@export var required_families: Array[MutagenFamily] = []
+
+
+# ==================================================
+# Mutagen Tags
+# ==================================================
+
+enum MutagenTag {
 	ATTACK = 0,
 	DEFENSE = 1,
 	SPEED = 2,
@@ -63,37 +93,21 @@ enum MutagenFamily {
 	HEALING = 5,
 	EVASION = 6,
 	REWARDS = 7,
-	BITE = 8,
-	PROTECT = 9,
-	FIRE = 10,
-	ELECTRIC = 11,
-	POISON = 12,
-	BLEED = 13,
-	OTHER = 14
-}
 
+	FIRE = 8,
+	ELECTRIC = 9,
+	POISON = 10,
+	BLEED = 11,
 
-# ==================================================
-# Mutagen Tags
-# ==================================================
+	BURN = 12,
+	STATIC = 13,
+	SHOCK = 14,
 
-enum MutagenTag {
-	STAT,
-	BITE,
-	PROTECT,
-	MOVE,
-	ELECTRIC,
-	FIRE,
-	POISON,
-	BLEED,
-	SPEED,
-	ATTACK,
-	DEFENSE,
-	HP,
-	CRITICAL,
-	HEALING,
-	EVASION,
-	REWARDS
+	REGENERATION = 15,
+	THORNS = 16,
+	EXECUTE = 17,
+	CHAIN = 18,
+	GOLD = 19
 }
 
 @export var tags: Array[MutagenTag] = []
@@ -105,9 +119,6 @@ enum MutagenTag {
 
 @export var mutagen_name: String = ""
 @export_multiline var description: String = ""
-
-@export var mutagen_type: MutagenType = MutagenType.STAT
-@export var mutagen_family: MutagenFamily = MutagenFamily.OTHER
 
 
 # ==================================================
@@ -177,55 +188,37 @@ func affects_move(
 
 func get_family_name() -> String:
 
-	match int(mutagen_family):
+	match mutagen_family:
 
-		0:
-			return "Attack"
+		MutagenFamily.FERAL:
+			return "Feral"
 
-		1:
-			return "Defense"
+		MutagenFamily.INFERNO:
+			return "Inferno"
 
-		2:
-			return "Speed"
+		MutagenFamily.STORM:
+			return "Storm"
 
-		3:
-			return "Critical"
+		MutagenFamily.VENOM:
+			return "Venom"
 
-		4:
-			return "Health"
+		MutagenFamily.PREDATOR:
+			return "Predator"
 
-		5:
-			return "Healing"
+		MutagenFamily.CARAPACE:
+			return "Carapace"
 
-		6:
-			return "Evasion"
+		MutagenFamily.VITALITY:
+			return "Vitality"
 
-		7:
-			return "Rewards"
+		MutagenFamily.INSTINCT:
+			return "Instinct"
 
-		8:
-			return "Bite"
-
-		9:
-			return "Protect"
-
-		10:
-			return "Fire"
-
-		11:
-			return "Electric"
-
-		12:
-			return "Poison"
-
-		13:
-			return "Bleed"
-
-		14:
-			return "Other"
+		MutagenFamily.SCAVENGER:
+			return "Scavenger"
 
 		_:
-			return "Other"
+			return "Unknown"
 
 
 func is_available_in_world(

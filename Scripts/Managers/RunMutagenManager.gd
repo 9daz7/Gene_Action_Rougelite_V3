@@ -24,7 +24,7 @@ const MAX_RESERVE_MUTAGENS: int = 1
 # ==================================================
 
 const BASE_FAMILY_WEIGHT: float = 10.0
-const MATCHING_TAG_WEIGHT: float = 5.0
+const FAMILY_SYNERGY_WEIGHT: float = 5.0
 
 
 # ==================================================
@@ -73,85 +73,170 @@ func get_family_weight(
 
 		if mutagen.mutagen_family == family:
 
-			weight += MATCHING_TAG_WEIGHT
+			weight += FAMILY_SYNERGY_WEIGHT
 
 		for tag in mutagen.tags:
 
-			if _family_matches_tag(
+			var affinity: float = _family_tag_affinity(
 				family,
 				tag
-			):
+			)
 
-				weight += MATCHING_TAG_WEIGHT
+			weight += FAMILY_SYNERGY_WEIGHT * affinity
 
 	return weight
 
 
-func _family_matches_tag(
+func _family_tag_affinity(
 	family: MutagenResource.MutagenFamily,
 	tag: MutagenResource.MutagenTag
-) -> bool:
+) -> float:
 
 	match family:
 
-		MutagenResource.MutagenFamily.ATTACK:
+		MutagenResource.MutagenFamily.FERAL:
 
-			return tag == MutagenResource.MutagenTag.ATTACK
+			match tag:
+				MutagenResource.MutagenTag.ATTACK:
+					return 1.0
 
-		MutagenResource.MutagenFamily.DEFENSE:
+				MutagenResource.MutagenTag.BLEED:
+					return 1.0
 
-			return tag == MutagenResource.MutagenTag.DEFENSE
+				MutagenResource.MutagenTag.CRITICAL:
+					return 0.5
 
-		MutagenResource.MutagenFamily.SPEED:
+				_:
+					return 0.0
 
-			return tag == MutagenResource.MutagenTag.SPEED
+		MutagenResource.MutagenFamily.INFERNO:
 
-		MutagenResource.MutagenFamily.CRITICAL:
+			match tag:
+				MutagenResource.MutagenTag.FIRE:
+					return 1.0
 
-			return tag == MutagenResource.MutagenTag.CRITICAL
+				MutagenResource.MutagenTag.BURN:
+					return 1.0
 
-		MutagenResource.MutagenFamily.HP:
+				MutagenResource.MutagenTag.ATTACK:
+					return 0.5
 
-			return tag == MutagenResource.MutagenTag.HP
+				_:
+					return 0.0
 
-		MutagenResource.MutagenFamily.EVASION:
+		MutagenResource.MutagenFamily.STORM:
 
-			return tag == MutagenResource.MutagenTag.EVASION
+			match tag:
+				MutagenResource.MutagenTag.ELECTRIC:
+					return 1.0
 
-		MutagenResource.MutagenFamily.REWARDS:
+				MutagenResource.MutagenTag.STATIC:
+					return 1.0
 
-			return false
+				MutagenResource.MutagenTag.SPEED:
+					return 0.75
 
-		MutagenResource.MutagenFamily.BITE:
+				MutagenResource.MutagenTag.SHOCK:
+					return 0.5
 
-			return tag == MutagenResource.MutagenTag.BITE
+				_:
+					return 0.0
 
-		MutagenResource.MutagenFamily.PROTECT:
+		MutagenResource.MutagenFamily.VENOM:
 
-			return tag == MutagenResource.MutagenTag.PROTECT
+			match tag:
+				MutagenResource.MutagenTag.POISON:
+					return 1.0
 
-		MutagenResource.MutagenFamily.FIRE:
+				MutagenResource.MutagenTag.SHOCK:
+					return 0.25
 
-			return tag == MutagenResource.MutagenTag.FIRE
+				MutagenResource.MutagenTag.EVASION:
+					return 0.5
 
-		MutagenResource.MutagenFamily.ELECTRIC:
+				_:
+					return 0.0
 
-			return tag == MutagenResource.MutagenTag.ELECTRIC
+		MutagenResource.MutagenFamily.PREDATOR:
 
-		MutagenResource.MutagenFamily.POISON:
+			match tag:
+				MutagenResource.MutagenTag.CRITICAL:
+					return 1.0
 
-			return tag == MutagenResource.MutagenTag.POISON
+				MutagenResource.MutagenTag.EXECUTE:
+					return 1.0
 
-		MutagenResource.MutagenFamily.BLEED:
+				MutagenResource.MutagenTag.ATTACK:
+					return 0.5
 
-			return tag == MutagenResource.MutagenTag.BLEED
+				MutagenResource.MutagenTag.BLEED:
+					return 0.25
 
-		MutagenResource.MutagenFamily.HEALING:
+				_:
+					return 0.0
 
-			return false
+		MutagenResource.MutagenFamily.CARAPACE:
+
+			match tag:
+				MutagenResource.MutagenTag.DEFENSE:
+					return 1.0
+
+				MutagenResource.MutagenTag.THORNS:
+					return 1.0
+
+				MutagenResource.MutagenTag.HP:
+					return 0.5
+
+				_:
+					return 0.0
+
+		MutagenResource.MutagenFamily.VITALITY:
+
+			match tag:
+				MutagenResource.MutagenTag.HP:
+					return 1.0
+
+				MutagenResource.MutagenTag.HEALING:
+					return 1.0
+
+				MutagenResource.MutagenTag.REGENERATION:
+					return 1.0
+
+				MutagenResource.MutagenTag.DEFENSE:
+					return 0.25
+
+				_:
+					return 0.0
+
+		MutagenResource.MutagenFamily.INSTINCT:
+
+			match tag:
+				MutagenResource.MutagenTag.SPEED:
+					return 1.0
+
+				MutagenResource.MutagenTag.EVASION:
+					return 1.0
+
+				MutagenResource.MutagenTag.CRITICAL:
+					return 0.25
+
+				_:
+					return 0.0
+
+		MutagenResource.MutagenFamily.SCAVENGER:
+
+			match tag:
+				MutagenResource.MutagenTag.REWARDS:
+					return 1.0
+
+				MutagenResource.MutagenTag.GOLD:
+					return 1.0
+
+				_:
+					return 0.0
 
 		_:
-			return false
+			return 0.0
 
 
 # ==================================================
@@ -476,52 +561,37 @@ func get_mutagen_family_name(
 	family: MutagenResource.MutagenFamily
 ) -> String:
 
-	match int(family):
+	match family:
 
-		0:
-			return "Attack"
+		MutagenResource.MutagenFamily.FERAL:
+			return "Feral"
 
-		1:
-			return "Defense"
+		MutagenResource.MutagenFamily.INFERNO:
+			return "Inferno"
 
-		2:
-			return "Speed"
+		MutagenResource.MutagenFamily.STORM:
+			return "Storm"
 
-		3:
-			return "Critical"
+		MutagenResource.MutagenFamily.VENOM:
+			return "Venom"
 
-		4:
-			return "Health"
+		MutagenResource.MutagenFamily.PREDATOR:
+			return "Predator"
 
-		5:
-			return "Healing"
+		MutagenResource.MutagenFamily.CARAPACE:
+			return "Carapace"
 
-		6:
-			return "Evasion"
+		MutagenResource.MutagenFamily.VITALITY:
+			return "Vitality"
 
-		7:
-			return "Rewards"
+		MutagenResource.MutagenFamily.INSTINCT:
+			return "Instinct"
 
-		8:
-			return "Bite"
-
-		9:
-			return "Protect"
-
-		10:
-			return "Fire"
-
-		11:
-			return "Electric"
-
-		12:
-			return "Poison"
-
-		13:
-			return "Bleed"
+		MutagenResource.MutagenFamily.SCAVENGER:
+			return "Scavenger"
 
 		_:
-			return "Other"
+			return "Unknown"
 
 
 func get_available_families() -> Array[MutagenResource.MutagenFamily]:
@@ -584,7 +654,7 @@ func choose_weighted_mutagen_family() -> MutagenResource.MutagenFamily:
 			"RunMutagenManager: No Mutagen families available."
 		)
 
-		return MutagenResource.MutagenFamily.OTHER
+		return MutagenResource.MutagenFamily.FERAL
 
 	var total_weight: float = 0.0
 
@@ -693,6 +763,42 @@ func is_mutagen_eligible(
 			return false
 
 	return true
+
+
+# ==================================================
+# Duo Requirements
+# ==================================================
+
+	#if mutagen.mutagen_type == MutagenResource.MutagenType.DUO:
+#
+		#for required_family in mutagen.required_families:
+#
+			#var family_found: bool = false
+#
+			#for equipped in equipped_mutagens:
+#
+				#if equipped == null:
+					#continue
+#
+				#if equipped.mutagen_family == required_family:
+#
+					#family_found = true
+					#break
+#
+			#if not family_found:
+#
+				#if reserve_mutagen != null:
+#
+					#if (
+						#reserve_mutagen.mutagen_family
+						#== required_family
+					#):
+#
+						#family_found = true
+#
+			#if not family_found:
+#
+				#return false
 
 
 # ==================================================

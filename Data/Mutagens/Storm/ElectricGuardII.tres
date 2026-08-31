@@ -6,13 +6,12 @@
 
 [resource]
 script = ExtResource("2_51cht")
+mutagen_type = 1
 mutagen_id = "electric_guard_2"
 required_mutagen_id = "electric_guard_1"
-tags = Array[int]([2, 4])
+mutagen_family = 2
 mutagen_name = "Electric Guard II"
 description = "electric"
-mutagen_type = 1
-mutagen_family = 11
 affected_move_names = Array[String](["Protect"])
 triggers_on_physical_hit_while_protected = true
 added_effects = Array[ExtResource("1_d0we1")]([ExtResource("2_7uvxi")])

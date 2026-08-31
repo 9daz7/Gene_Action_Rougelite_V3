@@ -40,36 +40,78 @@ func load_mutagens() -> void:
 	# ==================================================
 
 	_add_mutagen(
-		"res://Data/Mutagens/ElectricGuardI.tres"
+		"res://Data/Mutagens/Storm/ElectricGuardI.tres"
 	)
 
 	_add_mutagen(
-		"res://Data/Mutagens/ElectricGuardII.tres"
+		"res://Data/Mutagens/Srorm/ElectricGuardII.tres"
 	)
 
 	_add_mutagen(
-		"res://Data/Mutagens/ElectricGuardIII.tres"
+		"res://Data/Mutagens/Storm/ElectricGuardIII.tres"
 	)
 
 
 
 	_add_mutagen(
-		"res://Data/Mutagens/BurningFangs.tres"
-	)
-
-
-	_add_mutagen(
-		"res://Data/Mutagens/EnhancedVision.tres"
+		"res://Data/Mutagens/Inferno/BurningFangsI.tres"
 	)
 
 	_add_mutagen(
-		"res://Data/Mutagens/Evasion.tres"
+		"res://Data/Mutagens/Inferno/BurningFangsII.tres"
 	)
 
 	_add_mutagen(
-		"res://Data/Mutagens/HealingBoost.tres"
+		"res://Data/Mutagens/Inferno/BurningFangsIII.tres"
 	)
 
+	_add_mutagen(
+		"res://Data/Mutagens/Predator/EnhancedVisionI.tres"
+	)
+
+	_add_mutagen(
+		"res://Data/Mutagens/Predator/EnhancedVisionII.tres"
+	)
+
+	_add_mutagen(
+		"res://Data/Mutagens/Predator/EnhancedVisionIII.tres"
+	)
+
+	_add_mutagen(
+		"res://Data/Mutagens/Instinct/EvasionI.tres"
+	)
+
+	_add_mutagen(
+		"res://Data/Mutagens/Instinct/EvasionII.tres"
+	)
+
+	_add_mutagen(
+		"res://Data/Mutagens/Instinct/EvasionIII.tres"
+	)
+
+	_add_mutagen(
+		"res://Data/Mutagens/Vitality/HealingBoostI.tres"
+	)
+
+	_add_mutagen(
+		"res://Data/Mutagens/Vitality/HealingBoostII.tres"
+	)
+
+	_add_mutagen(
+		"res://Data/Mutagens/Vitality/HealingBoostIII.tres"
+	)
+
+	_add_mutagen(
+		"res://Data/Mutagens/Storm/ThunderBiteI.tres"
+	)
+
+	_add_mutagen(
+		"res://Data/Mutagens/Storm/ThunderBiteII.tres"
+	)
+
+	_add_mutagen(
+		"res://Data/Mutagens/Storm/ThunderBiteIII.tres"
+	)
 
 	print(
 		"Total Mutagens:",
@@ -166,6 +208,9 @@ func get_mutagens_for_world(
 	for mutagen in all_mutagens:
 
 		if mutagen == null:
+			continue
+
+		if not mutagen.is_available_in_world(world):
 			continue
 
 		results.append(

@@ -6,10 +6,11 @@
 
 [resource]
 script = ExtResource("2_jkhld")
+mutagen_type = 1
 mutagen_id = "burning_fangs_3"
 required_mutagen_id = "burning_fangs_2"
+mutagen_family = 1
 tags = Array[int]([1, 5])
 mutagen_name = " Burning Fangs 3"
-mutagen_family = 10
 added_effects = Array[ExtResource("1_f0458")]([ExtResource("2_efmpb")])
 metadata/_custom_type_script = "uid://cps66j48fyqt5"
