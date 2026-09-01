@@ -124,7 +124,7 @@ func load_mutagens() -> void:
 	)
 
 	_add_mutagen(
-		"res://Data/Mutagens/Srorm/ElectricGuardII.tres"
+		"res://Data/Mutagens/Storm/ElectricGuardII.tres"
 	)
 
 	_add_mutagen(

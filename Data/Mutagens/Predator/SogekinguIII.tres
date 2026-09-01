@@ -6,9 +6,11 @@
 [resource]
 script = ExtResource("2_e6kyk")
 tier = 3
+mutagen_id = "sogekingu_3"
+required_mutagen_id = "sogekingu_2"
 mutagen_family = 4
+mutagen_name = "Sogekingu III"
 description = "The one who declared war."
-accuracy_bonus = 10
-crit_bonus = 4
-critical_bonus_for_move = 4
+accuracy_bonus = 18
+crit_bonus = 18
 metadata/_custom_type_script = "uid://cps66j48fyqt5"

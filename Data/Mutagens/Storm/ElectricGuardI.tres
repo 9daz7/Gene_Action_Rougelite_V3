@@ -10,6 +10,7 @@ mutagen_type = 1
 requires_previous_tier = false
 mutagen_id = "electric_guard_1"
 mutagen_family = 2
+tags = Array[int]([1, 9])
 mutagen_name = "Electric Guard I"
 description = "electric"
 affected_move_names = Array[String](["Protect"])
