@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="PotionResource" format=3 uid="uid://c8st40ngw4jf6"]
+
+[ext_resource type="Script" uid="uid://bmrrju4qqd6w3" path="res://Scripts/Resources/PotionResource.gd" id="1_ukqko"]
+
+[resource]
+script = ExtResource("1_ukqko")
+potion_name = "Large Health Potion"
+description = "Heals 30 HP points."
+duration = 0
+heal_amount = 30
+metadata/_custom_type_script = "uid://bmrrju4qqd6w3"

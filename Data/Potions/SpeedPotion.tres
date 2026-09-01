@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="PotionResource" format=3 uid="uid://csrmikraebodv"]
+
+[ext_resource type="Script" uid="uid://bmrrju4qqd6w3" path="res://Scripts/Resources/PotionResource.gd" id="1_7osjv"]
+
+[resource]
+script = ExtResource("1_7osjv")
+potion_name = "Speed Boost Potion"
+description = "Adds 10 speed points."
+potion_type = 1
+speed_bonus = 10
+metadata/_custom_type_script = "uid://bmrrju4qqd6w3"

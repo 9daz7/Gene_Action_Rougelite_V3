@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="PotionResource" format=3 uid="uid://cegyfnkotqyv3"]
+
+[ext_resource type="Script" uid="uid://bmrrju4qqd6w3" path="res://Scripts/Resources/PotionResource.gd" id="1_j8fim"]
+
+[resource]
+script = ExtResource("1_j8fim")
+potion_name = "Defense Boost Potion"
+description = "Adds 10 defense points."
+potion_type = 1
+defense_bonus = 10
+metadata/_custom_type_script = "uid://bmrrju4qqd6w3"

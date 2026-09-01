@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="PotionResource" format=3 uid="uid://dbfc71wksmfh3"]
+
+[ext_resource type="Script" uid="uid://bmrrju4qqd6w3" path="res://Scripts/Resources/PotionResource.gd" id="1_08cfj"]
+
+[resource]
+script = ExtResource("1_08cfj")
+potion_name = "Attack Boost Potion"
+description = "Adds 10 attack points."
+potion_type = 1
+attack_bonus = 10
+metadata/_custom_type_script = "uid://bmrrju4qqd6w3"

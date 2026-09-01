@@ -11,6 +11,7 @@
 [ext_resource type="Script" uid="uid://cgn7bx0im6o1g" path="res://Scripts/Managers/MapManager.gd" id="6_hryqi"]
 [ext_resource type="Script" uid="uid://dns5urucc3qs8" path="res://Scripts/Managers/RunMutagenManager.gd" id="6_wliom"]
 [ext_resource type="Script" uid="uid://dp476n1iocl1b" path="res://Scripts/Managers/MutagenDatabase.gd" id="7_2ok46"]
+[ext_resource type="Script" uid="uid://d4kb13ao82g53" path="res://Scripts/Managers/PotionDatabase.gd" id="8_es6iu"]
 [ext_resource type="Script" uid="uid://bbfr6ua0f4fu" path="res://Scripts/Managers/RoomManager.gd" id="8_hfg1r"]
 [ext_resource type="PackedScene" uid="uid://duo7vnk5nhe3f" path="res://Scenes/UI/GeneLoadoutScreen.tscn" id="8_imbg2"]
 [ext_resource type="PackedScene" uid="uid://c77fp71r8tcxd" path="res://Scenes/UI/MapUI.tscn" id="9_imbg2"]
@@ -40,6 +41,9 @@ script = ExtResource("6_wliom")
 
 [node name="MutagenDatabase" type="Node" parent="Managers" unique_id=486981803]
 script = ExtResource("7_2ok46")
+
+[node name="PotionDatabase" type="Node" parent="Managers" unique_id=1204112644]
+script = ExtResource("8_es6iu")
 
 [node name="SaveManager" type="Node" parent="Managers" unique_id=1870900078]
 script = ExtResource("5_hfg1r")

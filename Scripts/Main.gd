@@ -15,6 +15,8 @@ extends Node
 @onready var mutagen_database: MutagenDatabase = $Managers/MutagenDatabase
 @onready var run_mutagen_manager: RunMutagenManager = $Managers/RunMutagenManager
 
+@onready var potion_database: PotionDatabase = $Managers/PotionDatabase
+
 @onready var battle_root: Node = $World/BattleRoot
 
 #@onready var battle_manager = $Managers/BattleManager
