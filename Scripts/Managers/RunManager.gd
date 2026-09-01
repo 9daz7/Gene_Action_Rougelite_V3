@@ -73,6 +73,19 @@ var current_animal_build:AnimalBuildResource
 
 
 # ==================================================
+# Run Pocket
+# ==================================================
+
+var run_potion_pocket: Array[PotionResource] = [
+	null,
+	null,
+	null
+]
+
+const MAX_POTION_POCKET_SIZE: int = 3
+
+
+# ==================================================
 # Gene Collection
 # ==================================================
 
@@ -1962,6 +1975,98 @@ func print_run_graph() -> void:
 	print("================================")
 
 
+func add_potion_to_run(
+	potion: PotionResource
+) -> bool:
+
+	if potion == null:
+		return false
+
+	for i in range(
+		run_potion_pocket.size()
+	):
+
+		if run_potion_pocket[i] == null:
+
+			run_potion_pocket[i] = potion
+
+			print(
+				"Potion added to run slot:",
+				i,
+				"|",
+				potion.potion_name
+			)
+
+			return true
+
+	print(
+		"Run potion pocket full."
+	)
+
+	return false
+
+
+func remove_potion_from_run(
+	slot_index: int
+) -> PotionResource:
+
+	if slot_index < 0:
+		return null
+
+	if slot_index >= run_potion_pocket.size():
+		return null
+
+	var potion: PotionResource = (
+		run_potion_pocket[slot_index]
+	)
+
+	if potion == null:
+		return null
+
+	run_potion_pocket[slot_index] = null
+
+	print(
+		"Potion removed from run slot:",
+		slot_index,
+		"|",
+		potion.potion_name
+	)
+
+	return potion
+
+
+func has_run_potion(
+	potion: PotionResource
+) -> bool:
+
+	if potion == null:
+		return false
+
+	return potion in run_potion_pocket
+
+
+func get_run_potions() -> Array[PotionResource]:
+
+	return run_potion_pocket.duplicate()
+
+
+func get_potion_pocket_capacity() -> int:
+
+	return MAX_POTION_POCKET_SIZE
+
+
+func get_empty_potion_slot() -> int:
+
+	for i in range(
+		run_potion_pocket.size()
+	):
+
+		if run_potion_pocket[i] == null:
+			return i
+
+	return -1
+
+
 func start_run():
 
 	if current_animal_build == null:
@@ -2051,6 +2156,12 @@ func reset_run() -> void:
 	run_active = false
 
 	run_mutagens.clear()
+
+	run_potion_pocket = [
+		null,
+		null,
+		null
+	]
 
 	enemies_defeated = 0
 

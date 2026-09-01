@@ -18,6 +18,7 @@
 [ext_resource type="PackedScene" uid="uid://cedb6l4k7ejsf" path="res://Scenes/Hub/HubWorld.tscn" id="11_vk4q2"]
 [ext_resource type="PackedScene" uid="uid://behj6glwxh240" path="res://Scenes/LabHub/LabHub.tscn" id="12_4e4y2"]
 [ext_resource type="Script" uid="uid://cmha305puw7iq" path="res://Scenes/UI/PauseMenu.gd" id="17_koken"]
+[ext_resource type="Script" uid="uid://duadx32d3o12m" path="res://Scenes/Main/PotionStorageUI.gd" id="19_c4b4r"]
 
 [node name="Main" type="Node" unique_id=1435261983]
 script = ExtResource("1_qw60k")
@@ -399,6 +400,74 @@ layout_mode = 2
 
 [node name="ReserveMutagen" type="PanelContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/MutagenSection/ReserveRow" unique_id=23057094]
 layout_mode = 2
+
+[node name="PotionStorageUI" type="Control" parent="UI" unique_id=1311276389]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("19_c4b4r")
+
+[node name="CenterContainer" type="CenterContainer" parent="UI/PotionStorageUI" unique_id=1681502010]
+layout_mode = 0
+offset_left = 552.0
+offset_top = 317.0
+offset_right = 1366.0
+offset_bottom = 783.0
+
+[node name="PanelContainer" type="PanelContainer" parent="UI/PotionStorageUI/CenterContainer" unique_id=369353453]
+custom_minimum_size = Vector2(350, 400)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/PotionStorageUI/CenterContainer/PanelContainer" unique_id=1652315336]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="UI/PotionStorageUI/CenterContainer/PanelContainer/VBoxContainer" unique_id=1409086150]
+layout_mode = 2
+text = "Potion Storage"
+horizontal_alignment = 1
+
+[node name="Content" type="HBoxContainer" parent="UI/PotionStorageUI/CenterContainer/PanelContainer/VBoxContainer" unique_id=1805244550]
+layout_mode = 2
+
+[node name="StoragePanel" type="VBoxContainer" parent="UI/PotionStorageUI/CenterContainer/PanelContainer/VBoxContainer/Content" unique_id=522251419]
+custom_minimum_size = Vector2(114.555, 0)
+layout_mode = 2
+
+[node name="StorageTitle" type="Label" parent="UI/PotionStorageUI/CenterContainer/PanelContainer/VBoxContainer/Content/StoragePanel" unique_id=528813139]
+layout_mode = 2
+
+[node name="StorageList" type="VBoxContainer" parent="UI/PotionStorageUI/CenterContainer/PanelContainer/VBoxContainer/Content/StoragePanel" unique_id=1059594562]
+layout_mode = 2
+
+[node name="RunPanel" type="VBoxContainer" parent="UI/PotionStorageUI/CenterContainer/PanelContainer/VBoxContainer/Content" unique_id=1150437859]
+custom_minimum_size = Vector2(100, 200)
+layout_mode = 2
+
+[node name="RunTitle" type="Label" parent="UI/PotionStorageUI/CenterContainer/PanelContainer/VBoxContainer/Content/RunPanel" unique_id=1108738091]
+layout_mode = 2
+
+[node name="RunSlots" type="HBoxContainer" parent="UI/PotionStorageUI/CenterContainer/PanelContainer/VBoxContainer/Content/RunPanel" unique_id=122302522]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+
+[node name="Slot1" type="Button" parent="UI/PotionStorageUI/CenterContainer/PanelContainer/VBoxContainer/Content/RunPanel/RunSlots" unique_id=1180909512]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+
+[node name="Slot2" type="Button" parent="UI/PotionStorageUI/CenterContainer/PanelContainer/VBoxContainer/Content/RunPanel/RunSlots" unique_id=469297774]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+
+[node name="Slot3" type="Button" parent="UI/PotionStorageUI/CenterContainer/PanelContainer/VBoxContainer/Content/RunPanel/RunSlots" unique_id=1777126225]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+
+[node name="CloseButton" type="Button" parent="UI/PotionStorageUI/CenterContainer/PanelContainer/VBoxContainer" unique_id=88543817]
+layout_mode = 2
+text = "close"
 
 [node name="Transition" type="Control" parent="UI" unique_id=1850224517]
 layout_mode = 3
