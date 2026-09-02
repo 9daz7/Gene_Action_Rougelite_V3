@@ -13,8 +13,9 @@ class_name BossRoom
 # Initialization
 # ==================================================
 
-
 func _ready() -> void:
+
+	super._ready()
 
 	print("================================")
 	print("BOSS ROOM READY")
@@ -28,11 +29,11 @@ func _ready() -> void:
 
 		return
 
-	if not battle_trigger.battle_triggered.is_connected(
+	if not battle_trigger.player_entered.is_connected(
 		_on_battle_triggered
 	):
 
-		battle_trigger.battle_triggered.connect(
+		battle_trigger.player_entered.connect(
 			_on_battle_triggered
 		)
 

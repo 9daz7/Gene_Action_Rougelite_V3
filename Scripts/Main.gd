@@ -48,6 +48,7 @@ const LAB_HUB_SCENE = preload(
 # ==================================================
 
 var lab_hub: LabHub = null
+var returning_to_hub_after_battle: bool = false
 
 
 func _ready():
@@ -274,6 +275,23 @@ func start_run():
 	hub_world.close()
 	lab_hub.hide()
 
+	print("HubWorld visible after close:", hub_world.visible)
+	print("HubWorld process mode after close:", hub_world.process_mode)
+
+	var hub_player := hub_world.get_node_or_null("HubPlayer")
+
+	if hub_player != null:
+
+		print(
+			"HubPlayer visible after close:",
+			hub_player.visible
+		)
+
+		print(
+			"HubPlayer process mode after close:",
+			hub_player.process_mode
+		)
+
 	# ==================================================
 	# Enable Run Worlds
 	# ==================================================
@@ -421,6 +439,8 @@ func _on_battle_lost() -> void:
 	print("RUN FAILED")
 	print("================================")
 
+	returning_to_hub_after_battle = true
+
 	map_manager.disable_scanner()
 
 	PermanentProgressionManager.reward_enemy_defeats(
@@ -452,7 +472,20 @@ func _on_battle_cleanup_finished() -> void:
 	print("BATTLE CLEANUP FINISHED")
 	print("================================")
 
+	if not returning_to_hub_after_battle:
+
+		print(
+			"Battle cleanup complete. "
+			+ "Continuing current run."
+		)
+
+		return
+
+	returning_to_hub_after_battle = false
+
+	print("================================")
 	print("Returning to HubWorld")
+	print("================================")
 
 	hub_world.open()
 

@@ -36,10 +36,10 @@ size = Vector2(173, 169)
 size = Vector2(76, 68)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_oaf1g"]
-size = Vector2(72, 136)
+size = Vector2(58, 63)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qwfpk"]
-size = Vector2(85, 108)
+size = Vector2(100, 107)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vvpqm"]
 size = Vector2(1930, 10)
@@ -252,7 +252,7 @@ scale = Vector2(0.045, 0.045)
 texture = ExtResource("2_25iap")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ItemShop" unique_id=773131680]
-position = Vector2(691, 383)
+position = Vector2(700, 356.5)
 shape = SubResource("RectangleShape2D_oaf1g")
 
 [node name="Label" type="Label" parent="ItemShop" unique_id=638980062]
@@ -272,7 +272,7 @@ interaction_text = "[E] Buy Potions"
 metadata/_custom_type_script = "uid://csjgqa1kcrfgr"
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="ItemShop/Interactable" unique_id=659164548]
-position = Vector2(1.5, 19)
+position = Vector2(1, 18.5)
 shape = SubResource("RectangleShape2D_qwfpk")
 
 [node name="RunEntrance" type="Node2D" parent="." unique_id=1981127881]

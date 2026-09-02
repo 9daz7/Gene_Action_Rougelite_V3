@@ -17,12 +17,12 @@ signal battle_cleanup_finished
 
 
 const ENEMY_POOL = [
-	preload("res://Data/Enemies/Normal/Wolf.tres"),
-	preload("res://Data/Enemies/Normal/Boar.tres"),
+	#preload("res://Data/Enemies/Normal/Wolf.tres"),
+	#preload("res://Data/Enemies/Normal/Boar.tres"),
 	preload("res://Data/Enemies/Normal/Marten.tres"),
 	preload("res://Data/Enemies/Normal/Cheetah.tres"),
-	preload("res://Data/Enemies/Normal/SnappingTurtle.tres"),
-	preload("res://Data/Enemies/Normal/HoneyBadger.tres"),
+	#preload("res://Data/Enemies/Normal/SnappingTurtle.tres"),
+	#preload("res://Data/Enemies/Normal/HoneyBadger.tres"),
 	preload("res://Data/Enemies/Normal/Rattlesnake.tres")
 ]
 

@@ -42,6 +42,9 @@ var battle_sequence:BattleSequence
 
 var battle_finished := false
 
+# potion duration
+var active_potion_effects: Array[Dictionary] = []
+
 # Target Selection
 var pending_move: MoveResource
 var pending_enemy_moves:Array = []
@@ -185,6 +188,8 @@ func start_player_turn():
 	current_state = TurnState.PLAYER_TURN
 
 	print("Player turn")
+
+	_tick_potion_effects()
 
 	process_turn_start_effects(
 		player
@@ -798,9 +803,426 @@ func _execute_action(
 
 
 # ==================================================
-# Turn End
+# Item Use
 # ==================================================
 
+
+func use_player_potion(
+	slot_index: int
+) -> bool:
+
+	# ==================================================
+	# Validate turn
+	# ==================================================
+
+	if current_state != TurnState.PLAYER_TURN:
+
+		print(
+			"Cannot use potion. Not player turn."
+		)
+
+		return false
+
+	if battle_finished:
+
+		return false
+
+	# ==================================================
+	# Validate player.
+	# ==================================================
+
+	if player == null:
+
+		print(
+			"Cannot use potion. Player is missing."
+		)
+
+		return false
+
+	# ==================================================
+	# Get RunManager
+	# ==================================================
+
+	var run_manager: RunManager = player.run_manager
+
+	if run_manager == null:
+
+		print(
+			"Cannot use potion. RunManager is missing."
+		)
+
+		return false
+
+	# ==================================================
+	# Get potion from player's bag.
+	# ==================================================
+
+	var potions := run_manager.get_run_potions()
+
+	if slot_index < 0:
+		return false
+
+	if slot_index >= potions.size():
+		return false
+
+	var potion: PotionResource = potions[slot_index]
+
+	if potion == null:
+
+		print(
+			"No potion in slot:",
+			slot_index
+		)
+
+		return false
+
+	print("================================")
+	print("USING POTION")
+	print("Potion:", potion.potion_name)
+	print("Slot:", slot_index)
+	print("================================")
+
+	# ==================================================
+	# Apply healing.
+	# ==================================================
+
+	if potion.heal_amount > 0:
+
+		player.heal(
+			potion.heal_amount
+		)
+
+		print(
+			"Potion healed:",
+			potion.heal_amount
+		)
+
+	# ==================================================
+	# Apply temporary stat modifiers.
+	# ==================================================
+
+	if potion.attack_bonus != 0:
+
+		player.modify_attack(
+			potion.attack_bonus
+		)
+
+		_track_potion_stat(
+			"attack",
+			potion.attack_bonus,
+			potion.duration
+		)
+
+		print(
+			"Attack bonus:",
+			potion.attack_bonus,
+			"Duration:",
+			potion.duration
+		)
+
+	if potion.defense_bonus != 0:
+
+		player.modify_defense(
+			potion.defense_bonus
+		)
+
+		_track_potion_stat(
+			"defense",
+			potion.defense_bonus,
+			potion.duration
+		)
+
+		print(
+			"Defense bonus:",
+			potion.defense_bonus,
+			"Duration:",
+			potion.duration
+		)
+
+
+	if potion.speed_bonus != 0:
+
+		player.modify_speed(
+			potion.speed_bonus
+		)
+
+		_track_potion_stat(
+			"speed",
+			potion.speed_bonus,
+			potion.duration
+		)
+
+		print(
+			"Speed bonus:",
+			potion.speed_bonus,
+			"Duration:",
+			potion.duration
+		)
+
+	# ==================================================
+	# Consume Potion
+	# ==================================================
+
+	var consumed := run_manager.remove_potion_from_run(
+		slot_index
+	)
+
+	if consumed == null:
+
+		print(
+			"ERROR: Potion effect applied "
+			+ "but potion could not be removed."
+		)
+
+		return false
+
+	print(
+		"Potion consumed:",
+		consumed.potion_name
+	)
+
+	# ==================================================
+	# Update UI.
+	# ==================================================
+
+	GameEvents.status_changed.emit(
+		player,
+		enemies
+	)
+
+	# ==================================================
+	# Enemy Turn
+	# ==================================================
+
+	await _resolve_enemy_turn_after_item()
+
+	return true
+
+
+# ==================================================
+# Potion Effects
+# ==================================================
+
+
+func _track_potion_stat(
+	stat_name: String,
+	amount: int,
+	duration: int
+) -> void:
+
+	if amount == 0:
+		return
+
+	if duration <= 0:
+		return
+
+	active_potion_effects.append(
+		{
+			"stat": stat_name,
+			"amount": amount,
+			"turns": duration
+		}
+	)
+
+	print(
+		"Tracked potion effect:",
+		stat_name,
+		amount,
+		"for",
+		duration,
+		"turns"
+	)
+
+func _tick_potion_effects() -> void:
+
+	if player == null:
+		return
+
+	if active_potion_effects.is_empty():
+		return
+
+	for effect in active_potion_effects:
+
+		effect["turns"] -= 1
+
+	var expired: Array[Dictionary] = []
+
+	for effect in active_potion_effects:
+
+		print(
+			"POTION EFFECT:",
+			effect["stat"],
+			"Amount:",
+			effect["amount"],
+			"Turns remaining:",
+			effect["turns"]
+		)
+
+		if effect["turns"] <= 0:
+
+			expired.append(effect)
+
+	for effect in expired:
+
+		match effect["stat"]:
+
+			"attack":
+
+				player.modify_attack(
+					-effect["amount"]
+				)
+
+			"defense":
+
+				player.modify_defense(
+					-effect["amount"]
+				)
+
+			"speed":
+
+				player.modify_speed(
+					-effect["amount"]
+				)
+
+		active_potion_effects.erase(effect)
+
+		print(
+			"Potion effect expired:",
+			effect["stat"],
+			effect["amount"]
+		)
+
+
+func _resolve_enemy_turn_after_item() -> void:
+
+	if battle_finished:
+		return
+
+	if player == null:
+		return
+
+	# ==================================================
+	# Get Living Enemies
+	# ==================================================
+
+	var living_enemies: Array[EnemyAnimal] = []
+
+	for enemy in enemies:
+
+		if not is_instance_valid(enemy):
+			continue
+
+		if enemy.hp <= 0:
+			continue
+
+		living_enemies.append(enemy)
+
+	if living_enemies.is_empty():
+
+		check_battle_end()
+
+		return
+
+	# ==================================================
+	# Enemy Actions
+	# ==================================================
+
+	var enemy_actions: Array = []
+
+
+	for enemy in living_enemies:
+
+		var move := enemy.choose_action(player)
+
+		if move == null:
+			continue
+
+		enemy_actions.append(
+			{
+				"enemy": enemy,
+				"move": move
+			}
+		)
+
+		print(
+			enemy.name,
+			" selected after potion:",
+			move.move_name,
+			"Priority:",
+			move.priority,
+			"Speed:",
+			enemy.get_speed()
+		)
+
+	# ==================================================
+	# Enemy Turn
+	# ==================================================
+
+	current_state = TurnState.ENEMY_TURN
+
+	GameEvents.turn_changed.emit(
+		current_state
+	)
+
+	for data in enemy_actions:
+
+		if battle_finished:
+			return
+
+		var enemy: EnemyAnimal = data["enemy"]
+		var move: MoveResource = data["move"]
+
+		if not is_instance_valid(enemy):
+			continue
+
+		if enemy.hp <= 0:
+			continue
+
+		# ----------------------------------------------
+		# Enemy turn-start effects
+		# ----------------------------------------------
+
+		process_turn_start_effects(
+			enemy
+		)
+
+		if check_battle_end():
+			return
+
+		if enemy.hp <= 0:
+			continue
+
+		if enemy.consume_stun():
+			continue
+
+		# ----------------------------------------------
+		# Execute
+		# ----------------------------------------------
+
+		await _execute_action(
+			enemy,
+			move,
+			player
+		)
+
+	# ==================================================
+	# Battle Check
+	# ==================================================
+
+	if check_battle_end():
+		return
+
+
+	# ==================================================
+	# End Round
+	# ==================================================
+
+	end_turn()
+
+
+# ==================================================
+# Turn End
+# ==================================================
 
 func end_turn():
 
@@ -973,5 +1395,7 @@ func reset():
 	waiting_for_target = false
 
 	battle_finished = false
+
+	active_potion_effects.clear()
 
 	print("TurnManager references cleared")

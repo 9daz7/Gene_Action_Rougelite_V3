@@ -200,6 +200,7 @@ layout_mode = 2
 [node name="CloseButton" type="Button" parent="ItemBagPanel/VBoxContainer" unique_id=1583445247]
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
+text = "Close Item Bag"
 
 [node name="BattleLogPanel" type="PanelContainer" parent="." unique_id=1827975768]
 custom_minimum_size = Vector2(400, 250)

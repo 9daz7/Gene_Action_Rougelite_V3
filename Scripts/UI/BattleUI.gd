@@ -142,6 +142,15 @@ func _ready():
 			_on_target_selected
 		)
 
+	if not GameEvents.turn_changed.is_connected(
+		_on_turn_changed
+	):
+
+		GameEvents.turn_changed.connect(
+			_on_turn_changed
+		)
+
+
 func setup_enemy_ui(
 	enemies:Array[EnemyAnimal]
 ):
@@ -209,8 +218,17 @@ func _close_item_bag() -> void:
 
 	item_bag_panel.hide()
 
-	enable_moves()
+	if current_player == null:
+		return
 
+	if current_player.turn_manager == null:
+		return
+
+	if current_player.turn_manager.current_state == (
+		TurnManager.TurnState.PLAYER_TURN
+	):
+
+		enable_moves()
 
 
 func setup_names(
@@ -388,6 +406,15 @@ func _on_target_selected(
 	enable_moves()
 
 
+func _on_turn_changed(
+	new_state: TurnManager.TurnState
+) -> void:
+
+	if new_state != TurnManager.TurnState.PLAYER_TURN:
+
+		item_bag_panel.hide()
+
+
 func update_hp(
 	animal: AnimalBase,
 	current_hp:int,
@@ -463,6 +490,21 @@ func _setup_buttons():
 		_open_item_bag
 	)
 
+	potion_button_1.pressed.connect(
+		func():
+			_use_potion(0)
+	)
+
+	potion_button_2.pressed.connect(
+		func():
+			_use_potion(1)
+	)
+
+	potion_button_3.pressed.connect(
+		func():
+			_use_potion(2)
+	)
+
 	attack_button.pressed.connect(
 		func():
 
@@ -532,6 +574,56 @@ func _open_item_bag() -> void:
 	_refresh_item_bag()
 
 
+func _use_potion(slot_index: int) -> void:
+
+	print("================================")
+	print("BATTLE UI: USE POTION")
+	print("Slot:", slot_index)
+	print("================================")
+
+	if current_player == null:
+
+		print("No current player.")
+
+		return
+
+	if current_player.turn_manager == null:
+
+		print("Player has no TurnManager.")
+
+		return
+
+	var turn_manager: TurnManager = (
+		current_player.turn_manager
+	)
+
+	if turn_manager.current_state != (
+		TurnManager.TurnState.PLAYER_TURN
+	):
+
+		print(
+			"Cannot use potion. Current state:",
+			turn_manager.current_state
+		)
+
+		return
+
+	var success := await turn_manager.use_player_potion(
+		slot_index
+	)
+
+	if not success:
+
+		print(
+			"Potion use failed."
+		)
+
+		return
+
+	item_bag_panel.hide()
+	_refresh_item_bag()
+
+
 # ==================================================
 # Helpers
 # ==================================================
@@ -568,3 +660,6 @@ func _exit_tree():
 
 	if GameEvents.target_selected.is_connected(_on_target_selected):
 		GameEvents.target_selected.disconnect(_on_target_selected)
+
+	if GameEvents.turn_changed.is_connected(_on_turn_changed):
+		GameEvents.turn_changed.disconnect(_on_turn_changed)

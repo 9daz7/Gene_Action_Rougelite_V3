@@ -73,35 +73,63 @@ func setup(
 
 func open() -> void:
 
+	print("================================")
+	print("OPENING HUB WORLD")
+	print("================================")
+
 	is_open = true
 
 	process_mode = Node.PROCESS_MODE_INHERIT
 
 	show()
 
-	if animal_lab != null:
-		animal_lab.monitoring = true
+	var hub_player := get_node_or_null("HubPlayer")
 
-	print("HubWorld opened")
+	if hub_player != null:
+
+		hub_player.process_mode = Node.PROCESS_MODE_INHERIT
+		hub_player.show()
+
+		print("HubPlayer enabled and shown.")
+
+	if animal_lab != null:
+
+		animal_lab.monitoring = true
+		animal_lab.monitorable = true
+
+	print("HubWorld visible", visible)
 
 
 func close() -> void:
 
+	print("================================")
+	print("CLOSING HUB WORLD")
+	print("================================")
+
 	is_open = false
 
-	if animal_lab != null:
-		animal_lab.monitoring = false
+	process_mode = Node.PROCESS_MODE_DISABLED
+	hide()
 
 	var hub_player := get_node_or_null("HubPlayer")
 
-	if hub_player is HubPlayer:
-		hub_player.set_nearby_interactable(null)
+	if hub_player != null:
 
-	hide()
+		hub_player.process_mode = Node.PROCESS_MODE_DISABLED
+		hub_player.hide()
 
-	process_mode = Node.PROCESS_MODE_DISABLED
+		if hub_player is HubPlayer:
+			hub_player.set_nearby_interactable(null)
 
-	print("HubWorld closed")
+		print("HubPlayer disabled and hidden.")
+
+	if animal_lab != null:
+
+		animal_lab.monitoring = false
+		animal_lab.monitorable = false
+
+	print("HubWorld visible:", visible)
+	print("HubWorld process mode:", process_mode)
 
 
 # ==================================================
