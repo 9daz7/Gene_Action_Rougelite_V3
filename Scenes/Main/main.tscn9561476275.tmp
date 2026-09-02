@@ -1,0 +1,534 @@
+[gd_scene format=3 uid="uid://clikthhda4ilv"]
+
+[ext_resource type="Script" uid="uid://bnj7yu0fuav50" path="res://Scripts/Main.gd" id="1_qw60k"]
+[ext_resource type="Script" uid="uid://mvejoab1jhjx" path="res://Scripts/Managers/RunManager.gd" id="2_5yls4"]
+[ext_resource type="Script" uid="uid://dyciqvsf3mwgk" path="res://Scripts/Combat/BattleManager.gd" id="2_p6jpk"]
+[ext_resource type="Script" uid="uid://c7cp2g5ftrdc4" path="res://Scripts/Managers/TurnManager.gd" id="3_2a143"]
+[ext_resource type="Script" uid="uid://dwj06bhycsfbn" path="res://Scripts/Battle/BattleSpawner.gd" id="3_6t3k2"]
+[ext_resource type="Script" uid="uid://dlec22tbrybl3" path="res://Scripts/Genes/GeneDatabase.gd" id="4_p6jpk"]
+[ext_resource type="Script" uid="uid://cwwpo4n5rbema" path="res://Scripts/SaveManager.gd" id="5_hfg1r"]
+[ext_resource type="Script" uid="uid://hlp51b3uy82k" path="res://Scripts/Managers/RewardManager.gd" id="5_xlvfx"]
+[ext_resource type="Script" uid="uid://cgn7bx0im6o1g" path="res://Scripts/Managers/MapManager.gd" id="6_hryqi"]
+[ext_resource type="Script" uid="uid://dns5urucc3qs8" path="res://Scripts/Managers/RunMutagenManager.gd" id="6_wliom"]
+[ext_resource type="Script" uid="uid://dp476n1iocl1b" path="res://Scripts/Managers/MutagenDatabase.gd" id="7_2ok46"]
+[ext_resource type="Script" uid="uid://d4kb13ao82g53" path="res://Scripts/Managers/PotionDatabase.gd" id="8_es6iu"]
+[ext_resource type="Script" uid="uid://bbfr6ua0f4fu" path="res://Scripts/Managers/RoomManager.gd" id="8_hfg1r"]
+[ext_resource type="PackedScene" uid="uid://duo7vnk5nhe3f" path="res://Scenes/UI/GeneLoadoutScreen.tscn" id="8_imbg2"]
+[ext_resource type="PackedScene" uid="uid://c77fp71r8tcxd" path="res://Scenes/UI/MapUI.tscn" id="9_imbg2"]
+[ext_resource type="Script" uid="uid://b6376cidh46so" path="res://Scripts/Managers/PotionStorageManager.gd" id="9_tdwxr"]
+[ext_resource type="PackedScene" uid="uid://cedb6l4k7ejsf" path="res://Scenes/Hub/HubWorld.tscn" id="11_vk4q2"]
+[ext_resource type="PackedScene" uid="uid://behj6glwxh240" path="res://Scenes/LabHub/LabHub.tscn" id="12_4e4y2"]
+[ext_resource type="Script" uid="uid://cmha305puw7iq" path="res://Scenes/UI/PauseMenu.gd" id="17_koken"]
+[ext_resource type="Script" uid="uid://dewxe3hh4pbyt" path="res://Scenes/Main/ItemShopUI.gd" id="18_1t20g"]
+[ext_resource type="Script" uid="uid://duadx32d3o12m" path="res://Scenes/Main/PotionStorageUI.gd" id="19_c4b4r"]
+
+[node name="Main" type="Node" unique_id=1435261983]
+script = ExtResource("1_qw60k")
+
+[node name="Managers" type="Node" parent="." unique_id=1603099653]
+
+[node name="BattleManager" type="Node" parent="Managers" unique_id=991561839]
+script = ExtResource("2_p6jpk")
+
+[node name="BattleSpawner" type="Node" parent="Managers" unique_id=22936063]
+script = ExtResource("3_6t3k2")
+
+[node name="TurnManager" type="Node" parent="Managers" unique_id=655138578]
+script = ExtResource("3_2a143")
+
+[node name="RunManager" type="Node" parent="Managers" unique_id=1223530463]
+script = ExtResource("2_5yls4")
+
+[node name="RunMutagenManager" type="Node" parent="Managers" unique_id=141137896]
+script = ExtResource("6_wliom")
+
+[node name="MutagenDatabase" type="Node" parent="Managers" unique_id=486981803]
+script = ExtResource("7_2ok46")
+
+[node name="PotionDatabase" type="Node" parent="Managers" unique_id=1204112644]
+script = ExtResource("8_es6iu")
+
+[node name="PotionStorageManager" type="Node" parent="Managers" unique_id=385391173]
+script = ExtResource("9_tdwxr")
+
+[node name="SaveManager" type="Node" parent="Managers" unique_id=1870900078]
+script = ExtResource("5_hfg1r")
+
+[node name="RewardManager" type="Node" parent="Managers" unique_id=1080337531]
+script = ExtResource("5_xlvfx")
+
+[node name="MapManager" type="Node" parent="Managers" unique_id=270194661]
+script = ExtResource("6_hryqi")
+
+[node name="UIManager" type="Node" parent="Managers" unique_id=2111793402]
+
+[node name="GeneDatabase" type="Node" parent="Managers" unique_id=1652956824]
+script = ExtResource("4_p6jpk")
+
+[node name="RoomManager" type="Node" parent="Managers" unique_id=1024188299]
+script = ExtResource("8_hfg1r")
+
+[node name="World" type="Node2D" parent="." unique_id=903047276]
+
+[node name="HubWorld" parent="World" unique_id=636739777 instance=ExtResource("11_vk4q2")]
+
+[node name="BattleRoot" type="Node2D" parent="World" unique_id=252651737]
+
+[node name="MapRoot" type="Node2D" parent="World" unique_id=334794433]
+
+[node name="Effects" type="Node2D" parent="World" unique_id=510555822]
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=1736721601]
+
+[node name="MapUI" parent="UI" unique_id=701148956 instance=ExtResource("9_imbg2")]
+
+[node name="LabHub" parent="UI" unique_id=219335493 instance=ExtResource("12_4e4y2")]
+visible = false
+
+[node name="GeneLoadoutScreen" parent="UI" unique_id=38721201 instance=ExtResource("8_imbg2")]
+
+[node name="GeneRewardUI" type="Control" parent="UI" unique_id=1805312372]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="LabUI" type="Control" parent="UI" unique_id=204244767]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ItemShopUI" type="Control" parent="UI" unique_id=52332243]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("18_1t20g")
+
+[node name="CenterContainer" type="CenterContainer" parent="UI/ItemShopUI" unique_id=1112765790]
+layout_mode = 0
+offset_right = 1917.0
+offset_bottom = 1079.0
+
+[node name="PanelContainer" type="PanelContainer" parent="UI/ItemShopUI/CenterContainer" unique_id=604448786]
+custom_minimum_size = Vector2(400, 400)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/ItemShopUI/CenterContainer/PanelContainer" unique_id=856950202]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="UI/ItemShopUI/CenterContainer/PanelContainer/VBoxContainer" unique_id=230020124]
+layout_mode = 2
+text = "Item Shop"
+horizontal_alignment = 1
+
+[node name="HealthButton" type="Button" parent="UI/ItemShopUI/CenterContainer/PanelContainer/VBoxContainer" unique_id=439544642]
+layout_mode = 2
+text = "Health Potion"
+
+[node name="AttackButton" type="Button" parent="UI/ItemShopUI/CenterContainer/PanelContainer/VBoxContainer" unique_id=1666820809]
+layout_mode = 2
+text = "Attack Potion"
+
+[node name="DefenseButton" type="Button" parent="UI/ItemShopUI/CenterContainer/PanelContainer/VBoxContainer" unique_id=35956150]
+layout_mode = 2
+text = "Defense Potion"
+
+[node name="CloseButton" type="Button" parent="UI/ItemShopUI/CenterContainer/PanelContainer/VBoxContainer" unique_id=1209400965]
+layout_mode = 2
+text = "Close Shop"
+
+[node name="PauseMenu" type="Control" parent="UI" unique_id=314436742]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 200.0
+offset_top = 100.0
+offset_right = 1740.0
+offset_bottom = 977.0
+script = ExtResource("17_koken")
+
+[node name="Dimmer" type="ColorRect" parent="UI/PauseMenu" unique_id=729393985]
+layout_mode = 0
+offset_top = -38.115
+offset_right = 1540.0
+offset_bottom = 837.885
+mouse_filter = 2
+color = Color(0.29411766, 0.29411766, 0.29411766, 0.44705883)
+
+[node name="MainPanel" type="PanelContainer" parent="UI/PauseMenu" unique_id=1916313229]
+layout_mode = 0
+offset_left = 19.0
+offset_top = -16.26
+offset_right = 1515.0
+offset_bottom = 817.74
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/PauseMenu/MainPanel" unique_id=1425639155]
+layout_mode = 2
+
+[node name="MainContainer" type="HBoxContainer" parent="UI/PauseMenu/MainPanel/MarginContainer" unique_id=1712173571]
+layout_mode = 2
+
+[node name="OptionsPanel" type="PanelContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer" unique_id=40404171]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/OptionsPanel" unique_id=839899098]
+layout_mode = 2
+
+[node name="OptionsColumn" type="VBoxContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/OptionsPanel/MarginContainer" unique_id=253571414]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+
+[node name="OptionsTitle" type="Label" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/OptionsPanel/MarginContainer/OptionsColumn" unique_id=384106000]
+custom_minimum_size = Vector2(0, 35)
+layout_mode = 2
+text = "Options"
+
+[node name="ResumeButton" type="Button" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/OptionsPanel/MarginContainer/OptionsColumn" unique_id=946604694]
+custom_minimum_size = Vector2(0, 35)
+layout_mode = 2
+text = "Resume
+"
+
+[node name="SettingsButton" type="Button" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/OptionsPanel/MarginContainer/OptionsColumn" unique_id=1358105362]
+custom_minimum_size = Vector2(0, 35)
+layout_mode = 2
+text = "Settings
+"
+
+[node name="ReturnHomeButton" type="Button" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/OptionsPanel/MarginContainer/OptionsColumn" unique_id=1533270307]
+custom_minimum_size = Vector2(0, 35)
+layout_mode = 2
+text = "Return Home
+"
+
+[node name="ReturnMenuButton" type="Button" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/OptionsPanel/MarginContainer/OptionsColumn" unique_id=1991729117]
+custom_minimum_size = Vector2(0, 35)
+layout_mode = 2
+text = "Return to Menu"
+
+[node name="BuildPanel" type="PanelContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer" unique_id=862678142]
+custom_minimum_size = Vector2(1090.205, 0)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel" unique_id=966467369]
+layout_mode = 2
+
+[node name="BuildContainer" type="HBoxContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer" unique_id=1851110999]
+layout_mode = 2
+
+[node name="AnimalSection" type="VBoxContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer" unique_id=412292075]
+custom_minimum_size = Vector2(280, 0)
+layout_mode = 2
+
+[node name="BuildTitle" type="Label" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/AnimalSection" unique_id=572772411]
+layout_mode = 2
+
+[node name="AnimalSprite" type="TextureRect" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/AnimalSection" unique_id=1933009317]
+layout_mode = 2
+
+[node name="AnimalName" type="Label" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/AnimalSection" unique_id=77380393]
+layout_mode = 2
+
+[node name="StatsSection" type="VBoxContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/AnimalSection" unique_id=895672354]
+layout_mode = 2
+
+[node name="StatsTitle" type="Label" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/AnimalSection/StatsSection" unique_id=175125268]
+layout_mode = 2
+
+[node name="HPLabel" type="Label" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/AnimalSection/StatsSection" unique_id=522062091]
+layout_mode = 2
+
+[node name="AttackLabel" type="Label" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/AnimalSection/StatsSection" unique_id=1020098572]
+layout_mode = 2
+
+[node name="SpeedLabel" type="Label" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/AnimalSection/StatsSection" unique_id=480450516]
+layout_mode = 2
+
+[node name="ArmorLabel" type="Label" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/AnimalSection/StatsSection" unique_id=631280383]
+layout_mode = 2
+
+[node name="AccuracyLabel" type="Label" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/AnimalSection/StatsSection" unique_id=118092153]
+layout_mode = 2
+
+[node name="EvasionLabel" type="Label" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/AnimalSection/StatsSection" unique_id=1739336857]
+layout_mode = 2
+
+[node name="CriticalLabel" type="Label" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/AnimalSection/StatsSection" unique_id=1393070839]
+layout_mode = 2
+
+[node name="GeneSection" type="VBoxContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer" unique_id=1051803747]
+custom_minimum_size = Vector2(193.875, 0)
+layout_mode = 2
+
+[node name="GeneTitle" type="Label" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection" unique_id=767804471]
+layout_mode = 2
+
+[node name="GeneColumn" type="VBoxContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection" unique_id=781125794]
+layout_mode = 2
+
+[node name="MouthLabel" type="Label" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn" unique_id=1340257047]
+layout_mode = 2
+
+[node name="MouthSlot1" type="PanelContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn" unique_id=666815301]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn/MouthSlot1" unique_id=1934584345]
+layout_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MouthSlot2" type="PanelContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn" unique_id=1444176956]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn/MouthSlot2" unique_id=530836388]
+layout_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SkinLabel" type="Label" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn" unique_id=1207634832]
+layout_mode = 2
+
+[node name="SkinSlot1" type="PanelContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn" unique_id=1852499779]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn/SkinSlot1" unique_id=2045778409]
+layout_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SkinSlot2" type="PanelContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn" unique_id=1459781209]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn/SkinSlot2" unique_id=2104957613]
+layout_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MuscleLabel" type="Label" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn" unique_id=1708779255]
+layout_mode = 2
+
+[node name="MuscleSlot1" type="PanelContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn" unique_id=2084715753]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn/MuscleSlot1" unique_id=420447841]
+layout_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MuscleSlot2" type="PanelContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn" unique_id=945867529]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn/MuscleSlot2" unique_id=1531040871]
+layout_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ClawLabel" type="Label" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn" unique_id=1031634779]
+layout_mode = 2
+
+[node name="ClawsSlot1" type="PanelContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn" unique_id=1664286428]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn/ClawsSlot1" unique_id=1966267631]
+layout_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ClawsSlot2" type="PanelContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn" unique_id=330920970]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn/ClawsSlot2" unique_id=2028865200]
+layout_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LimbsLabel" type="Label" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn" unique_id=441877389]
+layout_mode = 2
+
+[node name="LimbsSlot1" type="PanelContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn" unique_id=663594519]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn/LimbsSlot1" unique_id=703819100]
+layout_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LimbsSlot2" type="PanelContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn" unique_id=378093144]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn/LimbsSlot2" unique_id=495434951]
+layout_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="GlandsLabel" type="Label" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn" unique_id=1569231980]
+layout_mode = 2
+
+[node name="GlandsSlot1" type="PanelContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn" unique_id=1952196121]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn/GlandsSlot1" unique_id=885859213]
+layout_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="GlandsSlot2" type="PanelContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn" unique_id=1676662106]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/GeneSection/GeneColumn/GlandsSlot2" unique_id=670460621]
+layout_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MutagenSection" type="VBoxContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer" unique_id=22079750]
+custom_minimum_size = Vector2(225.655, 0)
+layout_mode = 2
+
+[node name="MutagenTitle" type="Label" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/MutagenSection" unique_id=948140424]
+layout_mode = 2
+
+[node name="Mutagen1" type="PanelContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/MutagenSection" unique_id=1363337882]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/MutagenSection/Mutagen1" unique_id=837311784]
+layout_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Mutagen2" type="PanelContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/MutagenSection" unique_id=361964019]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/MutagenSection/Mutagen2" unique_id=1052151898]
+layout_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Mutagen3" type="PanelContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/MutagenSection" unique_id=705336275]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/MutagenSection/Mutagen3" unique_id=51768024]
+layout_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Mutagen4" type="PanelContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/MutagenSection" unique_id=473613992]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/MutagenSection/Mutagen4" unique_id=173495051]
+layout_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Mutagen5" type="PanelContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/MutagenSection" unique_id=1191208858]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/MutagenSection/Mutagen5" unique_id=2075909258]
+layout_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Mutagen6" type="PanelContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/MutagenSection" unique_id=1866882602]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/MutagenSection/Mutagen6" unique_id=348700964]
+layout_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ReserveRow" type="HBoxContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/MutagenSection" unique_id=973972688]
+layout_mode = 2
+
+[node name="ReserveLabel" type="Label" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/MutagenSection/ReserveRow" unique_id=1433385094]
+layout_mode = 2
+
+[node name="ReserveMutagen" type="PanelContainer" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/BuildPanel/MarginContainer/BuildContainer/MutagenSection/ReserveRow" unique_id=23057094]
+layout_mode = 2
+
+[node name="PotionStorageUI" type="Control" parent="UI" unique_id=1311276389]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("19_c4b4r")
+
+[node name="CenterContainer" type="CenterContainer" parent="UI/PotionStorageUI" unique_id=1681502010]
+layout_mode = 0
+offset_left = 1134.855
+offset_top = 780.55
+offset_right = 1508.71
+offset_bottom = 1068.55
+
+[node name="PanelContainer" type="PanelContainer" parent="UI/PotionStorageUI/CenterContainer" unique_id=369353453]
+custom_minimum_size = Vector2(350, 80)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/PotionStorageUI/CenterContainer/PanelContainer" unique_id=1652315336]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="UI/PotionStorageUI/CenterContainer/PanelContainer/VBoxContainer" unique_id=1409086150]
+layout_mode = 2
+text = "Potion Storage
+"
+horizontal_alignment = 1
+
+[node name="Content" type="HBoxContainer" parent="UI/PotionStorageUI/CenterContainer/PanelContainer/VBoxContainer" unique_id=1805244550]
+layout_mode = 2
+
+[node name="StoragePanel" type="VBoxContainer" parent="UI/PotionStorageUI/CenterContainer/PanelContainer/VBoxContainer/Content" unique_id=522251419]
+custom_minimum_size = Vector2(114.555, 0)
+layout_mode = 2
+
+[node name="StorageTitle" type="Label" parent="UI/PotionStorageUI/CenterContainer/PanelContainer/VBoxContainer/Content/StoragePanel" unique_id=528813139]
+layout_mode = 2
+text = "Storage"
+
+[node name="StorageList" type="VBoxContainer" parent="UI/PotionStorageUI/CenterContainer/PanelContainer/VBoxContainer/Content/StoragePanel" unique_id=1059594562]
+custom_minimum_size = Vector2(0, 162.88)
+layout_mode = 2
+
+[node name="RunPanel" type="VBoxContainer" parent="UI/PotionStorageUI/CenterContainer/PanelContainer/VBoxContainer/Content" unique_id=1150437859]
+custom_minimum_size = Vector2(100, 200)
+layout_mode = 2
+
+[node name="RunTitle" type="Label" parent="UI/PotionStorageUI/CenterContainer/PanelContainer/VBoxContainer/Content/RunPanel" unique_id=1108738091]
+layout_mode = 2
+text = "Run Pocket"
+
+[node name="RunSlots" type="HBoxContainer" parent="UI/PotionStorageUI/CenterContainer/PanelContainer/VBoxContainer/Content/RunPanel" unique_id=122302522]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+
+[node name="Slot1" type="Button" parent="UI/PotionStorageUI/CenterContainer/PanelContainer/VBoxContainer/Content/RunPanel/RunSlots" unique_id=1180909512]
+custom_minimum_size = Vector2(40, 60)
+layout_mode = 2
+
+[node name="Slot2" type="Button" parent="UI/PotionStorageUI/CenterContainer/PanelContainer/VBoxContainer/Content/RunPanel/RunSlots" unique_id=469297774]
+custom_minimum_size = Vector2(40, 60)
+layout_mode = 2
+
+[node name="Slot3" type="Button" parent="UI/PotionStorageUI/CenterContainer/PanelContainer/VBoxContainer/Content/RunPanel/RunSlots" unique_id=1777126225]
+custom_minimum_size = Vector2(40, 60)
+layout_mode = 2
+
+[node name="CloseButton" type="Button" parent="UI/PotionStorageUI/CenterContainer/PanelContainer/VBoxContainer" unique_id=88543817]
+layout_mode = 2
+text = "close"
+
+[node name="Transition" type="Control" parent="UI" unique_id=1850224517]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Audio" type="Node" parent="." unique_id=1494023738]
+
+[node name="Music" type="AudioStreamPlayer" parent="Audio" unique_id=889126413]
+
+[node name="SFX" type="Node" parent="Audio" unique_id=111965674]
