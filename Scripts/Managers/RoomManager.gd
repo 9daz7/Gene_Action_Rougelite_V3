@@ -660,10 +660,15 @@ func start_new_reward_room(
 
 func start_room_battle() -> void:
 
+	print("================================")
+	print("ROOM MANAGER: STARTING ROOM BATTLE")
+	print("================================")
+
+
 	if current_room == null:
 
 		push_error(
-			"RoomManager: Cannot start battle without current room."
+			"RoomManager: No current room."
 		)
 
 		return
@@ -671,15 +676,10 @@ func start_room_battle() -> void:
 	if battle_manager == null:
 
 		push_error(
-			"RoomManager: BattleManager is missing."
+			"RoomManager: BattleManager not found."
 		)
 
 		return
-
-	print("================================")
-	print("ROOM MANAGER: STARTING ROOM BATTLE")
-	print("Room:", current_room.room_name)
-	print("================================")
 
 	# --------------------------------------------------
 	# Lock current room
@@ -695,13 +695,38 @@ func start_room_battle() -> void:
 				true
 			)
 
-	# --------------------------------------------------
-	# Start battle
-	# --------------------------------------------------
+	match current_room.room_type:
 
-	battle_manager.start_battle(
-		RoomData.RoomType.ENEMY
-	)
+		RoomResource.RoomType.BATTLE:
+
+			print("Starting NORMAL battle")
+
+			battle_manager.start_battle(
+				RoomData.RoomType.ENEMY
+			)
+
+		RoomResource.RoomType.ELITE:
+
+			print("Starting ELITE battle")
+
+			battle_manager.start_battle(
+				RoomData.RoomType.ELITE
+			)
+
+		RoomResource.RoomType.BOSS:
+
+			print("Starting BOSS battle")
+
+			battle_manager.start_battle(
+				RoomData.RoomType.BOSS
+			)
+
+		_:
+
+			push_error(
+				"RoomManager: Room cannot start a battle: "
+				+ str(current_room.room_type)
+			)
 
 
 # ==================================================
@@ -1360,65 +1385,31 @@ func select_room_exit(exit_id: int) -> void:
 	)
 
 
-#func validate_run_graph() -> bool:
-#
-	#if current_run_map == null:
-#
-		#push_error(
-			#"RunManager: No generated run map."
-		#)
-#
-		#return false
-#
-#
-	#for node in current_run_map.all_nodes:
-#
-		#if node.room == null:
-#
-			#push_error(
-				#"RunManager: Node has no room."
-			#)
-#
-			#return false
-#
-#
-		#if node.next_nodes.size() != (
-			#node.room.exit_count
-		#):
-#
-			#push_error(
-				#"RunManager: Exit mismatch in "
-				#+ node.room.room_name
-				#+ " | Physical exits: "
-				#+ str(node.room.exit_count)
-				#+ " | Generated paths: "
-				#+ str(node.next_nodes.size())
-			#)
-#
-			#return false
-#
-#
-		## --------------------------------------------------
-		## Non-start nodes must have a previous path
-		## --------------------------------------------------
-#
-		#if node.layer > 0:
-#
-			#if node.previous_nodes.is_empty():
-#
-				#push_error(
-					#"RunManager: Orphan node: "
-					#+ node.room.room_name
-				#)
-#
-				#return false
-#
-#
-	#print(
-		#"RUN GRAPH VALIDATION PASSED"
-	#)
-#
-	#return true
+func close_active_room() -> void:
+
+	print("================================")
+	print("ROOM MANAGER: CLOSING ACTIVE ROOM")
+	print("================================")
+
+	if active_room_scene == null:
+
+		print("No active room scene.")
+
+		return
+
+	if is_instance_valid(active_room_scene):
+
+		print(
+			"Closing room:",
+			active_room_scene.name
+		)
+
+		active_room_scene.hide()
+		active_room_scene.process_mode = Node.PROCESS_MODE_DISABLED
+
+		active_room_scene.queue_free()
+
+	active_room_scene = null
 
 
 # ==================================================

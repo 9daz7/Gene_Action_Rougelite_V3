@@ -1,12 +1,43 @@
 [gd_resource type="Resource" script_class="RoomResource" format=3 uid="uid://5wvbp5vbnra8"]
 
+[ext_resource type="Script" uid="uid://d04yxlv6k5nwt" path="res://Scenes/Rooms/BossRoom.gd" id="1_nierm"]
 [ext_resource type="Script" uid="uid://0k05qgpjl5gm" path="res://Data/Rooms/RoomResource.gd" id="1_txepd"]
-[ext_resource type="PackedScene" uid="uid://bbwjv1y63e8ee" path="res://Scenes/Rooms/BossRoom.tscn" id="2_cvycw"]
+[ext_resource type="Script" uid="uid://ckxjn41pglkmx" path="res://Scenes/Rooms/BattleTrigger.gd" id="2_uoxo1"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_o2v85"]
+size = Vector2(1960, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5oxym"]
+size = Vector2(20, 1080)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ghifo"]
+size = Vector2(20, 1080)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_md2jo"]
+size = Vector2(1960, 20.25)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cvs70"]
+size = Vector2(303, 195.85999)
+
+[sub_resource type="PackedScene" id="PackedScene_nbh2a"]
+_bundled = {
+"conn_count": 0,
+"conns": PackedInt32Array(),
+"editable_instances": [],
+"id_paths": [PackedInt32Array(), PackedInt32Array(), PackedInt32Array(), PackedInt32Array(), PackedInt32Array(), PackedInt32Array(), PackedInt32Array(), PackedInt32Array(), PackedInt32Array(), PackedInt32Array(), PackedInt32Array(), PackedInt32Array(), PackedInt32Array(), PackedInt32Array(), PackedInt32Array(), PackedInt32Array(), PackedInt32Array(), PackedInt32Array()],
+"names": PackedStringArray("BossRoom", "Node2D", "script", "Background", "ColorRect", "offset_top", "offset_right", "offset_bottom", "color", "Environment", "Control", "layout_mode", "anchors_preset", "offset_right", "offset_bottom", "Walls", "Control", "anchors_preset", "offset_right", "offset_bottom", "topWall", "StaticBody2D", "CollisionShape2D", "CollisionShape2D", "position", "shape", "RightWall", "StaticBody2D", "position", "CollisionShape2D", "CollisionShape2D", "position", "shape", "LeftWall", "StaticBody2D", "CollisionShape2D", "CollisionShape2D", "position", "shape", "BottomWall", "StaticBody2D", "position", "CollisionShape2D", "CollisionShape2D", "position", "shape", "ColorRect", "ColorRect", "layout_mode", "offset_left", "offset_top", "offset_right", "offset_bottom", "color", "ColorRect2", "ColorRect", "layout_mode", "offset_left", "offset_top", "offset_right", "offset_bottom", "color", "ColorRect3", "ColorRect", "layout_mode", "offset_left", "offset_top", "offset_right", "offset_bottom", "color", "PlayerSpawn", "Marker2D", "position", "BattleTrigger", "Area2D", "position", "script", "CollisionShape2D", "CollisionShape2D", "position", "shape", "Label", "Label", "offset_left", "offset_top", "offset_right", "offset_bottom", "text"),
+"node_count": 19,
+"node_ids": PackedInt32Array(2090528488, 1333133523, 747793329, 1239932921, 597546403, 1356756834, 685709668, 1236309839, 1991195728, 2120027621, 1164058858, 1989517324, 1368411058, 2056951036, 846531820, 1424753300, 1330212766, 94292792, 1474177753),
+"node_paths": [NodePath("."), NodePath("."), NodePath("./Environment"), NodePath("./Environment/Walls"), NodePath("./Environment/Walls/topWall"), NodePath("./Environment/Walls"), NodePath("./Environment/Walls/RightWall"), NodePath("./Environment/Walls"), NodePath("./Environment/Walls/LeftWall"), NodePath("./Environment/Walls"), NodePath("./Environment/Walls/BottomWall"), NodePath("./Environment"), NodePath("./Environment"), NodePath("./Environment"), NodePath("."), NodePath("."), NodePath("./BattleTrigger"), NodePath("./BattleTrigger")],
+"nodes": PackedInt32Array(-1, -1, 1, 0, -1, 1, 2, 0, 0, 1073741824, 0, 4, 3, -1, 4, 5, 1, 6, 2, 7, 3, 8, 4, 0, 1073741825, 0, 10, 9, -1, 4, 11, 5, 12, 6, 13, 7, 14, 8, 0, 1073741826, 0, 16, 15, -1, 3, 17, 9, 18, 10, 19, 11, 0, 1073741827, 0, 21, 20, -1, 0, 0, 1073741828, 0, 23, 22, -1, 2, 24, 12, 25, 13, 0, 1073741829, 0, 27, 26, -1, 1, 28, 14, 0, 1073741830, 0, 30, 29, -1, 2, 31, 15, 32, 16, 0, 1073741831, 0, 34, 33, -1, 0, 0, 1073741832, 0, 36, 35, -1, 2, 37, 17, 38, 18, 0, 1073741833, 0, 40, 39, -1, 1, 41, 19, 0, 1073741834, 0, 43, 42, -1, 2, 44, 20, 45, 21, 0, 1073741835, 0, 47, 46, -1, 6, 48, 22, 49, 23, 50, 24, 51, 25, 52, 26, 53, 27, 0, 1073741836, 0, 55, 54, -1, 6, 56, 28, 57, 29, 58, 30, 59, 31, 60, 32, 61, 33, 0, 1073741837, 0, 63, 62, -1, 6, 64, 34, 65, 35, 66, 36, 67, 37, 68, 38, 69, 39, 0, 1073741838, 0, 71, 70, -1, 1, 72, 40, 0, 1073741839, 0, 74, 73, -1, 2, 75, 41, 76, 42, 0, 1073741840, 0, 78, 77, -1, 2, 79, 43, 80, 44, 0, 1073741841, 0, 82, 81, -1, 5, 83, 45, 84, 46, 85, 47, 86, 48, 87, 49, 0),
+"variants": [ExtResource("1_nierm"), -1.0, 1921.0, 1081.0, Color(0, 0.27067333, 0.08999216, 1), 3, 0, 40.0, 40.0, 0, 40.0, 40.0, Vector2(960, -10), SubResource("RectangleShape2D_o2v85"), Vector2(1936.39, 0), Vector2(-6.3900146, 540), SubResource("RectangleShape2D_5oxym"), Vector2(-10, 540), SubResource("RectangleShape2D_ghifo"), Vector2(0, 1084.25), Vector2(960, 5.875), SubResource("RectangleShape2D_md2jo"), 0, 882.0, 830.0, 1038.0, 1079.0, Color(0.60784316, 0.43529412, 0, 1), 0, 551.0, 139.0, 1364.0, 835.0, Color(0.60784316, 0.43529412, 0, 1), 0, 665.0, 2.0, 1256.0, 140.0, Color(0.60784316, 0.43529412, 0, 1), Vector2(960, 1041), Vector2(957.06494, 455.86), ExtResource("2_uoxo1"), Vector2(-0.5649414, -66.92999), SubResource("RectangleShape2D_cvs70"), -26.064941, -77.859985, 28.935059, -54.859985, "BOSS"],
+"version": 3
+}
 
 [resource]
 script = ExtResource("1_txepd")
 room_type = 6
 room_name = "Boss Battle"
-room_scene = ExtResource("2_cvycw")
+room_scene = SubResource("PackedScene_nbh2a")
 exit_count = 0
 metadata/_custom_type_script = "uid://0k05qgpjl5gm"

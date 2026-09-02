@@ -41,6 +41,24 @@ const ENEMY_STATUS_UI = preload(
 @onready var player_status_label = $PlayerPanel/PlayerStatusLabel
 @onready var enemy_status_label = $EnemyPanel/EnemyStatusLabel
 
+@onready var item_bag_panel: Control = $ItemBagPanel
+
+@onready var potion_button_1: Button = (
+	$ItemBagPanel/VBoxContainer/PotionButton1
+)
+
+@onready var potion_button_2: Button = (
+	$ItemBagPanel/VBoxContainer/PotionButton2
+)
+
+@onready var potion_button_3: Button = (
+	$ItemBagPanel/VBoxContainer/PotionButton3
+)
+
+@onready var item_bag_close_button: Button = (
+	$ItemBagPanel/VBoxContainer/CloseButton
+)
+
 
 # ==================================================
 # Member Variables
@@ -53,6 +71,8 @@ var enemy_ui := {}
 
 var selecting_target := false
 
+var current_player: PlayerAnimal = null
+
 
 # ==================================================
 # Initialization
@@ -60,11 +80,17 @@ var selecting_target := false
 
 
 func _ready():
+
 	print("BattleUI ready")
 
 	_setup_buttons()
 
-	
+	item_bag_panel.hide()
+
+	item_bag_close_button.pressed.connect(
+		_close_item_bag
+	)
+
 	if not GameEvents.animal_hp_changed.is_connected(update_hp):
 
 		GameEvents.animal_hp_changed.connect(
@@ -142,6 +168,51 @@ func setup_enemy_ui(
 # ==================================================
 
 
+func _refresh_item_bag() -> void:
+
+	if current_player == null:
+		return
+
+	var run_manager := current_player.run_manager
+
+	if run_manager == null:
+		return
+
+	var potions := run_manager.get_run_potions()
+
+	var buttons := [
+		potion_button_1,
+		potion_button_2,
+		potion_button_3
+	]
+
+	for i in range(buttons.size()):
+
+		var button: Button = buttons[i]
+
+		button.text = "Empty"
+		button.disabled = true
+
+		if i >= potions.size():
+			continue
+
+		var potion: PotionResource = potions[i]
+
+		if potion == null:
+			continue
+
+		button.text = potion.potion_name
+		button.disabled = false
+
+
+func _close_item_bag() -> void:
+
+	item_bag_panel.hide()
+
+	enable_moves()
+
+
+
 func setup_names(
 		player: PlayerAnimal,
 		enemies:Array
@@ -151,23 +222,6 @@ func setup_names(
 		player_name_label.text = (
 			player.get_display_name()
 		)
-
-	#if enemies.is_empty():
-#
-		#enemy_name_label.text = ""
-#
-		#return
-#
-		#var enemy_text := ""
-#
-		#for enemy in enemies:
-#
-			#if enemy:
-#
-				#enemy_text += (
-				#enemy.get_display_name()
-				#+ "\n"
-			#)
 
 
 func setup_moves(player):
@@ -205,8 +259,8 @@ func disable_moves():
 
 	for button in move_buttons:
 		button.disabled = true
-		
-		
+
+
 func update_status_labels(
 	player:AnimalBase,
 	enemies:Array
@@ -221,21 +275,6 @@ func update_status_labels(
 		if enemy_ui.has(enemy):
 
 			enemy_ui[enemy].update_status()
-
-	#var text := ""
-#
-	#for enemy in enemies:
-#
-		#if enemy:
-#
-			#text += (
-				#enemy.name
-				#+ ": "
-				#+ get_status_text(enemy)
-				#+ "\n"
-			#)
-#
-	#enemy_status_label.text = text
 
 
 func get_status_text(animal:AnimalBase) -> String:
@@ -261,6 +300,8 @@ func setup_battle_ui(
 	player,
 	enemies
 ):
+
+	current_player = player
 
 	setup_enemy_ui(
 		enemies
@@ -418,6 +459,9 @@ func _setup_buttons():
 		move4_button
 	]
 
+	item_button.pressed.connect(
+		_open_item_bag
+	)
 
 	attack_button.pressed.connect(
 		func():
@@ -451,6 +495,41 @@ func _setup_buttons():
 
 	_clear_optional_moves()
 
+
+func _open_item_bag() -> void:
+
+	print("ITEM BUTTON CLICKED")
+
+	if current_player == null:
+
+		print("No current player.")
+
+		return
+
+	if current_player.turn_manager == null:
+
+		print("Player has no TurnManager.")
+
+		return
+
+	if current_player.turn_manager.current_state != (
+		TurnManager.TurnState.PLAYER_TURN
+	):
+
+		print(
+			"Cannot open items. Current state:",
+			current_player.turn_manager.current_state
+		)
+
+		return
+
+	print("Opening Player's Bag")
+
+	disable_moves()
+
+	item_bag_panel.show()
+
+	_refresh_item_bag()
 
 
 # ==================================================

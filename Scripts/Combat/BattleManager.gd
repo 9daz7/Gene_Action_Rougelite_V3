@@ -6,7 +6,7 @@ class_name BattleManager
 # Signals
 # ==================================================
 
-
+signal battle_cleanup_finished
 #signal battle_won(enemy)
 #signal battle_lost
 
@@ -626,6 +626,8 @@ func end_battle():
 	print("Player after cleanup:", player)
 
 	print("========== CLEANUP COMPLETE ==========")
+
+	battle_cleanup_finished.emit()
 
 #func end_battle():
 #

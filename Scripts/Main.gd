@@ -18,6 +18,7 @@ extends Node
 @onready var potion_database: PotionDatabase = $Managers/PotionDatabase
 
 @onready var battle_root: Node = $World/BattleRoot
+@onready var map_root: Node = $World/MapRoot
 
 #@onready var battle_manager = $Managers/BattleManager
 #@onready var run_manager = $Managers/RunManager
@@ -106,6 +107,13 @@ func _ready():
 	):
 		hub_world.animal_lab_requested.connect(
 			_on_animal_lab_requested
+		)
+
+	if not battle_manager.battle_cleanup_finished.is_connected(
+		_on_battle_cleanup_finished
+	):
+		battle_manager.battle_cleanup_finished.connect(
+			_on_battle_cleanup_finished
 		)
 
 	# ==================================================
@@ -266,6 +274,18 @@ func start_run():
 	hub_world.close()
 	lab_hub.hide()
 
+	# ==================================================
+	# Enable Run Worlds
+	# ==================================================
+
+	if map_root != null:
+		map_root.show()
+		map_root.process_mode = Node.PROCESS_MODE_INHERIT
+
+	if battle_root != null:
+		battle_root.show()
+		battle_root.process_mode = Node.PROCESS_MODE_INHERIT
+
 	print("================================")
 	print("TESTING NEW ROOM RESOURCE SYSTEM")
 	print("================================")
@@ -352,9 +372,6 @@ func open_victory_screen():
 
 	await get_tree().create_timer(0.0).timeout
 
-	map_manager.disable_scanner()
-	map_ui.close_map()
-
 	var enemy_reward := PermanentProgressionManager.reward_enemy_defeats(
 		run_manager.enemies_defeated
 	)
@@ -366,10 +383,39 @@ func open_victory_screen():
 
 	run_manager.reset_run()
 
+	close_run_worlds()
+
+	# Wait for BattleManager cleanup.
+	await get_tree().process_frame
+
+	print("================================")
+	print("RETURNING TO HUB WORLD")
+	print("================================")
+
 	hub_world.open()
 
 
-func _on_battle_lost():
+func close_run_worlds() -> void:
+
+	print("================================")
+	print("CLOSING RUN WORLDS")
+	print("================================")
+
+	map_manager.disable_scanner()
+	map_ui.hide()
+
+	if map_root != null:
+
+		map_root.hide()
+		map_root.process_mode = Node.PROCESS_MODE_DISABLED
+
+	if battle_root != null:
+
+		battle_root.hide()
+		battle_root.process_mode = Node.PROCESS_MODE_DISABLED
+
+
+func _on_battle_lost() -> void:
 
 	print("================================")
 	print("RUN FAILED")
@@ -377,18 +423,36 @@ func _on_battle_lost():
 
 	map_manager.disable_scanner()
 
-	var enemy_reward := PermanentProgressionManager.reward_enemy_defeats(
+	PermanentProgressionManager.reward_enemy_defeats(
 		run_manager.enemies_defeated
-	)
-
-	print(
-		"Permanent progression reward:",
-		enemy_reward
 	)
 
 	run_manager.reset_run()
 
+	room_manager.close_active_room()
+
 	map_ui.hide()
+
+	if map_root != null:
+
+		map_root.hide()
+		map_root.process_mode = Node.PROCESS_MODE_DISABLED
+
+	if battle_root != null:
+
+		battle_root.hide()
+		battle_root.process_mode = Node.PROCESS_MODE_DISABLED
+
+	print("Waiting for battle cleanup...")
+
+
+func _on_battle_cleanup_finished() -> void:
+
+	print("================================")
+	print("BATTLE CLEANUP FINISHED")
+	print("================================")
+
+	print("Returning to HubWorld")
 
 	hub_world.open()
 
