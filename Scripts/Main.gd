@@ -366,12 +366,14 @@ func open_victory_screen():
 
 	run_manager.reset_run()
 
-	open_lab_hub()
+	hub_world.open()
 
 
 func _on_battle_lost():
 
-	print("Run failed")
+	print("================================")
+	print("RUN FAILED")
+	print("================================")
 
 	map_manager.disable_scanner()
 
@@ -388,7 +390,7 @@ func _on_battle_lost():
 
 	map_ui.hide()
 
-	open_lab_hub()
+	hub_world.open()
 
 
 func finish_run():

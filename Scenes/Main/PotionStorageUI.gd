@@ -262,7 +262,6 @@ func _remove_from_run(
 
 	potion_storage.return_potion_from_run(
 		removed,
-		run_manager
 	)
 
 	_refresh()

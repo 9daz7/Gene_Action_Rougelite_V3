@@ -161,6 +161,46 @@ text = "Temp 3"
 layout_mode = 2
 text = "Temp 4"
 
+[node name="ItemButton" type="Button" parent="." unique_id=824975228]
+offset_left = 41.0
+offset_top = 1008.0
+offset_right = 142.0
+offset_bottom = 1064.0
+text = "Items"
+
+[node name="ItemBagPanel" type="Panel" parent="." unique_id=973462374]
+visible = false
+offset_left = 7.0
+offset_top = 244.0
+offset_right = 397.0
+offset_bottom = 430.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ItemBagPanel" unique_id=609899138]
+layout_mode = 0
+offset_right = 390.0
+offset_bottom = 185.0
+
+[node name="TitleLabel" type="Label" parent="ItemBagPanel/VBoxContainer" unique_id=1670192658]
+layout_mode = 2
+text = "Items
+"
+
+[node name="PotionButton1" type="Button" parent="ItemBagPanel/VBoxContainer" unique_id=91199147]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="PotionButton2" type="Button" parent="ItemBagPanel/VBoxContainer" unique_id=12760947]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="PotionButton3" type="Button" parent="ItemBagPanel/VBoxContainer" unique_id=1458054876]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="CloseButton" type="Button" parent="ItemBagPanel/VBoxContainer" unique_id=1583445247]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
 [node name="BattleLogPanel" type="PanelContainer" parent="." unique_id=1827975768]
 custom_minimum_size = Vector2(400, 250)
 offset_left = 530.0

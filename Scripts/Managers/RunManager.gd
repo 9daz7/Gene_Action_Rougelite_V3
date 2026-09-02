@@ -1975,6 +1975,16 @@ func print_run_graph() -> void:
 	print("================================")
 
 
+func add_potion_to_bag(
+	potion: PotionResource
+) -> bool:
+
+	if potion == null:
+		return false
+
+	return add_potion_to_run(potion)
+
+
 func add_potion_to_run(
 	potion: PotionResource
 ) -> bool:
@@ -2000,7 +2010,7 @@ func add_potion_to_run(
 			return true
 
 	print(
-		"Run potion pocket full."
+		"Potion pocket full."
 	)
 
 	return false
@@ -2042,7 +2052,9 @@ func has_run_potion(
 	if potion == null:
 		return false
 
-	return potion in run_potion_pocket
+	return run_potion_pocket.has(
+		potion
+	)
 
 
 func get_run_potions() -> Array[PotionResource]:
@@ -2157,12 +2169,6 @@ func reset_run() -> void:
 
 	run_mutagens.clear()
 
-	run_potion_pocket = [
-		null,
-		null,
-		null
-	]
-
 	enemies_defeated = 0
 
 	current_animal_build = null
@@ -2179,6 +2185,11 @@ func reset_run() -> void:
 	)
 
 	print("Run reset")
+
+	print(
+		"Player bag:",
+		get_run_potions()
+	)
 
 
 # ==================================================

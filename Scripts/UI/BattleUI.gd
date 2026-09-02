@@ -24,6 +24,8 @@ const ENEMY_STATUS_UI = preload(
 @onready var move3_button = $MoveButtons/Move3Button
 @onready var move4_button = $MoveButtons/Move4Button
 
+@onready var item_button: Button = $ItemButton
+
 @onready var player_name_label = $PlayerPanel/PlayerNameLabel
 #@onready var enemy_name_label = $EnemyPanel/EnemyNameLabel
 @onready var enemy_container = $EnemyPanel/EnemyStatusContainer

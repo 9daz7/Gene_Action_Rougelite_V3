@@ -15,9 +15,11 @@
 [ext_resource type="Script" uid="uid://bbfr6ua0f4fu" path="res://Scripts/Managers/RoomManager.gd" id="8_hfg1r"]
 [ext_resource type="PackedScene" uid="uid://duo7vnk5nhe3f" path="res://Scenes/UI/GeneLoadoutScreen.tscn" id="8_imbg2"]
 [ext_resource type="PackedScene" uid="uid://c77fp71r8tcxd" path="res://Scenes/UI/MapUI.tscn" id="9_imbg2"]
+[ext_resource type="Script" uid="uid://b6376cidh46so" path="res://Scripts/Managers/PotionStorageManager.gd" id="9_tdwxr"]
 [ext_resource type="PackedScene" uid="uid://cedb6l4k7ejsf" path="res://Scenes/Hub/HubWorld.tscn" id="11_vk4q2"]
 [ext_resource type="PackedScene" uid="uid://behj6glwxh240" path="res://Scenes/LabHub/LabHub.tscn" id="12_4e4y2"]
 [ext_resource type="Script" uid="uid://cmha305puw7iq" path="res://Scenes/UI/PauseMenu.gd" id="17_koken"]
+[ext_resource type="Script" uid="uid://dewxe3hh4pbyt" path="res://Scenes/Main/ItemShopUI.gd" id="18_1t20g"]
 [ext_resource type="Script" uid="uid://duadx32d3o12m" path="res://Scenes/Main/PotionStorageUI.gd" id="19_c4b4r"]
 
 [node name="Main" type="Node" unique_id=1435261983]
@@ -45,6 +47,9 @@ script = ExtResource("7_2ok46")
 
 [node name="PotionDatabase" type="Node" parent="Managers" unique_id=1204112644]
 script = ExtResource("8_es6iu")
+
+[node name="PotionStorageManager" type="Node" parent="Managers" unique_id=385391173]
+script = ExtResource("9_tdwxr")
 
 [node name="SaveManager" type="Node" parent="Managers" unique_id=1870900078]
 script = ExtResource("5_hfg1r")
@@ -96,6 +101,48 @@ anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
+[node name="ItemShopUI" type="Control" parent="UI" unique_id=52332243]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("18_1t20g")
+
+[node name="CenterContainer" type="CenterContainer" parent="UI/ItemShopUI" unique_id=1112765790]
+layout_mode = 0
+offset_right = 1917.0
+offset_bottom = 1079.0
+
+[node name="PanelContainer" type="PanelContainer" parent="UI/ItemShopUI/CenterContainer" unique_id=604448786]
+custom_minimum_size = Vector2(400, 400)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/ItemShopUI/CenterContainer/PanelContainer" unique_id=856950202]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="UI/ItemShopUI/CenterContainer/PanelContainer/VBoxContainer" unique_id=230020124]
+layout_mode = 2
+text = "Item Shop"
+horizontal_alignment = 1
+
+[node name="HealthButton" type="Button" parent="UI/ItemShopUI/CenterContainer/PanelContainer/VBoxContainer" unique_id=439544642]
+layout_mode = 2
+text = "Health Potion"
+
+[node name="AttackButton" type="Button" parent="UI/ItemShopUI/CenterContainer/PanelContainer/VBoxContainer" unique_id=1666820809]
+layout_mode = 2
+text = "Attack Potion"
+
+[node name="DefenseButton" type="Button" parent="UI/ItemShopUI/CenterContainer/PanelContainer/VBoxContainer" unique_id=35956150]
+layout_mode = 2
+text = "Defense Potion"
+
+[node name="CloseButton" type="Button" parent="UI/ItemShopUI/CenterContainer/PanelContainer/VBoxContainer" unique_id=1209400965]
+layout_mode = 2
+text = "Close Shop"
+
 [node name="PauseMenu" type="Control" parent="UI" unique_id=314436742]
 layout_mode = 3
 anchors_preset = 0
@@ -107,17 +154,18 @@ script = ExtResource("17_koken")
 
 [node name="Dimmer" type="ColorRect" parent="UI/PauseMenu" unique_id=729393985]
 layout_mode = 0
+offset_top = -38.115
 offset_right = 1540.0
-offset_bottom = 876.0
+offset_bottom = 837.885
 mouse_filter = 2
 color = Color(0.29411766, 0.29411766, 0.29411766, 0.44705883)
 
 [node name="MainPanel" type="PanelContainer" parent="UI/PauseMenu" unique_id=1916313229]
 layout_mode = 0
 offset_left = 19.0
-offset_top = 23.0
+offset_top = -16.26
 offset_right = 1515.0
-offset_bottom = 857.0
+offset_bottom = 817.74
 
 [node name="MarginContainer" type="MarginContainer" parent="UI/PauseMenu/MainPanel" unique_id=1425639155]
 layout_mode = 2
@@ -412,13 +460,13 @@ script = ExtResource("19_c4b4r")
 
 [node name="CenterContainer" type="CenterContainer" parent="UI/PotionStorageUI" unique_id=1681502010]
 layout_mode = 0
-offset_left = 552.0
-offset_top = 317.0
-offset_right = 1366.0
-offset_bottom = 783.0
+offset_left = 1134.855
+offset_top = 780.55
+offset_right = 1508.71
+offset_bottom = 1068.55
 
 [node name="PanelContainer" type="PanelContainer" parent="UI/PotionStorageUI/CenterContainer" unique_id=369353453]
-custom_minimum_size = Vector2(350, 400)
+custom_minimum_size = Vector2(350, 80)
 layout_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="UI/PotionStorageUI/CenterContainer/PanelContainer" unique_id=1652315336]
@@ -426,7 +474,8 @@ layout_mode = 2
 
 [node name="TitleLabel" type="Label" parent="UI/PotionStorageUI/CenterContainer/PanelContainer/VBoxContainer" unique_id=1409086150]
 layout_mode = 2
-text = "Potion Storage"
+text = "Potion Storage
+"
 horizontal_alignment = 1
 
 [node name="Content" type="HBoxContainer" parent="UI/PotionStorageUI/CenterContainer/PanelContainer/VBoxContainer" unique_id=1805244550]
@@ -438,8 +487,10 @@ layout_mode = 2
 
 [node name="StorageTitle" type="Label" parent="UI/PotionStorageUI/CenterContainer/PanelContainer/VBoxContainer/Content/StoragePanel" unique_id=528813139]
 layout_mode = 2
+text = "Storage"
 
 [node name="StorageList" type="VBoxContainer" parent="UI/PotionStorageUI/CenterContainer/PanelContainer/VBoxContainer/Content/StoragePanel" unique_id=1059594562]
+custom_minimum_size = Vector2(0, 162.88)
 layout_mode = 2
 
 [node name="RunPanel" type="VBoxContainer" parent="UI/PotionStorageUI/CenterContainer/PanelContainer/VBoxContainer/Content" unique_id=1150437859]
@@ -448,21 +499,22 @@ layout_mode = 2
 
 [node name="RunTitle" type="Label" parent="UI/PotionStorageUI/CenterContainer/PanelContainer/VBoxContainer/Content/RunPanel" unique_id=1108738091]
 layout_mode = 2
+text = "Run Pocket"
 
 [node name="RunSlots" type="HBoxContainer" parent="UI/PotionStorageUI/CenterContainer/PanelContainer/VBoxContainer/Content/RunPanel" unique_id=122302522]
 custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
 
 [node name="Slot1" type="Button" parent="UI/PotionStorageUI/CenterContainer/PanelContainer/VBoxContainer/Content/RunPanel/RunSlots" unique_id=1180909512]
-custom_minimum_size = Vector2(30, 0)
+custom_minimum_size = Vector2(40, 60)
 layout_mode = 2
 
 [node name="Slot2" type="Button" parent="UI/PotionStorageUI/CenterContainer/PanelContainer/VBoxContainer/Content/RunPanel/RunSlots" unique_id=469297774]
-custom_minimum_size = Vector2(30, 0)
+custom_minimum_size = Vector2(40, 60)
 layout_mode = 2
 
 [node name="Slot3" type="Button" parent="UI/PotionStorageUI/CenterContainer/PanelContainer/VBoxContainer/Content/RunPanel/RunSlots" unique_id=1777126225]
-custom_minimum_size = Vector2(30, 0)
+custom_minimum_size = Vector2(40, 60)
 layout_mode = 2
 
 [node name="CloseButton" type="Button" parent="UI/PotionStorageUI/CenterContainer/PanelContainer/VBoxContainer" unique_id=88543817]

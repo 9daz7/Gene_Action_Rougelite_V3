@@ -2,10 +2,19 @@ extends Node2D
 class_name House
 
 
+# ==================================================
+# Interactions
+# ==================================================
+
 @onready var interactable: Interactable = $Interactable
 
+
+# ==================================================
+# UI
+# ==================================================
+
 @onready var potion_storage_ui: PotionStorageUI = get_node(
-	"../../UI/PotionStorageUI"
+	"../../../UI/PotionStorageUI"
 )
 
 

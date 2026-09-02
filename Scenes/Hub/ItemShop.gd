@@ -2,11 +2,6 @@ extends StaticBody2D
 class_name ItemShop
 
 
-@onready var potion_storage: PotionStorageManager = get_node(
-	"../../../Managers/PotionStorageManager"
-)
-
-
 # ==================================================
 # Interaction
 # ==================================================
@@ -89,92 +84,107 @@ func _open_shop() -> void:
 	print("POTION SHOP OPENED")
 	print("================================")
 
+	var shop_ui := get_tree().current_scene.get_node_or_null(
+		"UI/ItemShopUI"
+	)
+
+	if shop_ui == null:
+
+		push_error(
+			"ItemShop: Could not find UI/ItemShopUI."
+		)
+
+		return
+
+	shop_ui.open(
+		self
+	)
+
+
+# ==================================================
+# Purchase
+# ==================================================
+
+func buy_health_potion() -> bool:
+
+	if health_stock <= 0:
+
+		print("Health potion stock empty.")
+
+		return false
+
+	health_stock -= 1
+
 	print(
-		"Health:",
-		health_stock,
-	"| Attack:",
-		attack_stock,
-	"| Defense:",
+		"Health potion purchased.",
+		" Remaining:",
+		health_stock
+	)
+
+	return true
+
+
+func buy_attack_potion() -> bool:
+
+	if attack_stock <= 0:
+
+		print("Attack potion stock empty.")
+
+		return false
+
+	attack_stock -= 1
+
+	print(
+		"Attack potion purchased.",
+		" Remaining:",
+		attack_stock
+	)
+
+	return true
+
+
+func buy_defense_potion() -> bool:
+
+	if defense_stock <= 0:
+
+		print("Defense potion stock empty.")
+
+		return false
+
+	defense_stock -= 1
+
+	print(
+		"Defense potion purchased.",
+		" Remaining:",
 		defense_stock
 	)
 
-	_buy_test_potion(
-		SMALL_HEALTH_POTION,
-		"Health"
-	)
-
-	_buy_test_potion(
-		ATTACK_POTION,
-		"Attack"
-	)
-
-	_buy_test_potion(
-		DEFENSE_POTION,
-		"Defense"
-	)
+	return true
 
 
 # ==================================================
-# Test Purchase
+# Potion Access
 # ==================================================
 
-func _buy_test_potion(
-	potion: PotionResource,
-	type_name: String
-) -> void:
+func get_health_potion() -> PotionResource:
+	return SMALL_HEALTH_POTION
 
-	if potion == null:
-		return
 
-	var stock := 0
+func get_attack_potion() -> PotionResource:
+	return ATTACK_POTION
 
-	match type_name:
 
-		"Health":
-			stock = health_stock
+func get_defense_potion() -> PotionResource:
+	return DEFENSE_POTION
 
-		"Attack":
-			stock = attack_stock
 
-		"Defense":
-			stock = defense_stock
+func get_health_stock() -> int:
+	return health_stock
 
-	if stock <= 0:
 
-		print(
-			type_name,
-			" potion stock empty."
-		)
+func get_attack_stock() -> int:
+	return attack_stock
 
-		return
 
-	if potion_storage == null:
-
-		push_error(
-			"ItemShop: PotionStorageManager not found."
-		)
-
-		return
-
-	potion_storage.add_potion(
-		potion,
-		1
-	)
-
-	match type_name:
-
-		"Health":
-			health_stock -= 1
-
-		"Attack":
-			attack_stock -= 1
-
-		"Defense":
-			defense_stock -= 1
-
-	print(
-		"Added to permanent storage:",
-		potion.potion_name,
-		"| Remaining:",
-		stock - 1
-	)
+func get_defense_stock() -> int:
+	return defense_stock
