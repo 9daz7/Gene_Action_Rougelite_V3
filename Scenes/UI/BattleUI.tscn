@@ -77,6 +77,13 @@ offset_top = 67.44
 offset_right = 109.24501
 offset_bottom = 149.93002
 
+[node name="PotionEffectsContainer" type="VBoxContainer" parent="PlayerPanel" unique_id=1044249153]
+layout_mode = 0
+offset_left = 17.0
+offset_top = 141.0
+offset_right = 216.0
+offset_bottom = 241.0
+
 [node name="Sprite2D" type="Sprite2D" parent="PlayerPanel" unique_id=1590204960]
 position = Vector2(1294, 405.00006)
 scale = Vector2(0.3045539, 0.32799587)

@@ -39,6 +39,10 @@ const ENEMY_STATUS_UI = preload(
 #]
 
 @onready var player_status_label = $PlayerPanel/PlayerStatusLabel
+@onready var potion_effects_container: VBoxContainer = (
+	$PlayerPanel/PotionEffectsContainer
+)
+
 @onready var enemy_status_label = $EnemyPanel/EnemyStatusLabel
 
 @onready var item_bag_panel: Control = $ItemBagPanel
@@ -148,6 +152,14 @@ func _ready():
 
 		GameEvents.turn_changed.connect(
 			_on_turn_changed
+		)
+
+	if not GameEvents.potion_effects_changed.is_connected(
+		update_potion_effects
+	):
+
+		GameEvents.potion_effects_changed.connect(
+			update_potion_effects
 		)
 
 
@@ -295,6 +307,55 @@ func update_status_labels(
 			enemy_ui[enemy].update_status()
 
 
+func update_potion_effects(
+	_player = null
+) -> void:
+
+	if potion_effects_container == null:
+		return
+
+	for child in potion_effects_container.get_children():
+		child.queue_free()
+
+	if current_player == null:
+		return
+
+	if current_player.turn_manager == null:
+		return
+
+	var effects := (
+		current_player.turn_manager.get_active_potion_effects()
+	)
+
+	for effect in effects:
+
+		var label := Label.new()
+
+		var stat: String = effect["stat"]
+		var amount: int = effect["amount"]
+		var turns: int = effect["turns"]
+
+		var sign := "+"
+
+		if amount < 0:
+			sign = ""
+
+		label.text = (
+			stat.capitalize()
+			+ " "
+			+ sign
+			+ str(amount)
+			+ "  "
+			+ str(turns)
+			+ " turn"
+		)
+
+		if turns != 1:
+			label.text += "s"
+
+		potion_effects_container.add_child(label)
+
+
 func get_status_text(animal:AnimalBase) -> String:
 
 	if animal == null:
@@ -346,6 +407,8 @@ func setup_battle_ui(
 	print(
 		"Battle UI initialized"
 	)
+
+	update_potion_effects()
 
 
 func show_target_selection(
@@ -413,6 +476,10 @@ func _on_turn_changed(
 	if new_state != TurnManager.TurnState.PLAYER_TURN:
 
 		item_bag_panel.hide()
+
+	else:
+
+		update_potion_effects()
 
 
 func update_hp(
@@ -663,3 +730,6 @@ func _exit_tree():
 
 	if GameEvents.turn_changed.is_connected(_on_turn_changed):
 		GameEvents.turn_changed.disconnect(_on_turn_changed)
+
+	if GameEvents.potion_effects_changed.is_connected(update_potion_effects):
+		GameEvents.potion_effects_changed.disconnect(update_potion_effects)

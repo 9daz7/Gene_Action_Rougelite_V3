@@ -42,6 +42,7 @@ signal status_changed(animal, enemies)
 
 signal battle_names_updated(player, enemies)
 
+signal potion_effects_changed(player)
 
 # ================================================== 
 # ROOM EVENTS 
@@ -81,7 +82,6 @@ signal permanent_gene_removed(gene, amount)
 # ================================================== 
 # PLAYER EVENTS 
 # ==================================================
-
 
 
 signal hp_changed(current_hp, max_hp)

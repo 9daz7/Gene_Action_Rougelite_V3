@@ -52,10 +52,14 @@ var pending_enemy_moves:Array = []
 var waiting_for_target := false
 
 
+func get_active_potion_effects() -> Array[Dictionary]:
+
+	return active_potion_effects.duplicate(true)
+
+
 # ==================================================
 # Initialization
 # ==================================================
-
 
 func initialize(
 	player_ref:PlayerAnimal,
@@ -990,6 +994,10 @@ func use_player_potion(
 		enemies
 	)
 
+	GameEvents.potion_effects_changed.emit(
+		player
+	)
+
 	# ==================================================
 	# Enemy Turn
 	# ==================================================
@@ -1092,6 +1100,9 @@ func _tick_potion_effects() -> void:
 			effect["amount"]
 		)
 
+		GameEvents.potion_effects_changed.emit(
+			player
+		)
 
 func _resolve_enemy_turn_after_item() -> void:
 
