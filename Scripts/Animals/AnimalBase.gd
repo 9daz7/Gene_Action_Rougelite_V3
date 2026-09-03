@@ -692,7 +692,7 @@ func get_armor() -> int:
 		if mutagen == null:
 			continue
 
-		value += mutagen.armor_bonus
+		value += mutagen.defense_bonus
 
 	for slot in gene_slots:
 		for gene in gene_slots[slot]:
@@ -782,6 +782,48 @@ func get_mutagen_damage_bonus(
 		if mutagen.affects_move(move):
 
 			bonus += mutagen.damage_bonus
+
+	return bonus
+
+
+func get_mutagen_accuracy_bonus(
+	move:MoveResource
+) -> int:
+
+	if move == null:
+		return 0
+
+	var bonus := 0
+
+	for mutagen in get_run_mutagens():
+
+		if mutagen == null:
+			continue
+
+		if mutagen.affects_move(move):
+
+			bonus += mutagen.accuracy_bonus_for_move
+
+	return bonus
+
+
+func get_mutagen_critical_bonus(
+	move: MoveResource
+) -> int:
+
+	if move == null:
+		return 0
+
+	var bonus := 0
+
+	for mutagen in get_run_mutagens():
+
+		if mutagen == null:
+			continue
+
+		if mutagen.affects_move(move):
+
+			bonus += mutagen.critical_bonus_for_move
 
 	return bonus
 
@@ -1392,6 +1434,302 @@ func trigger_passive_event(
 					self,
 					data
 				)
+
+	# ==================================================
+	# Mutagen Events
+	# ==================================================
+
+	trigger_mutagen_event(
+		event_name,
+		data
+	)
+
+
+# ==================================================
+# Mutagen Trigger System
+# ==================================================
+
+
+func trigger_mutagen_event(
+	event_name: String,
+	data = null
+) -> void:
+
+	if data == null:
+		data = {}
+
+	var mutagens := get_run_mutagens()
+
+	if mutagens.is_empty():
+		return
+
+	var trigger_type: MutagenResource.MutagenTrigger = (
+		_get_mutagen_trigger_type(event_name)
+	)
+
+	if trigger_type == MutagenResource.MutagenTrigger.NONE:
+		return
+
+	for mutagen in mutagens:
+
+		if mutagen == null:
+			continue
+
+		if (
+			mutagen.mutagen_type != MutagenResource.MutagenType.TRIGGER
+			and
+			mutagen.mutagen_type != MutagenResource.MutagenType.CONDITIONAL
+		):
+			continue
+
+		# --------------------------------------------------
+		# Trigger must match.
+		# --------------------------------------------------
+
+		if mutagen.trigger != trigger_type:
+			continue
+
+		# --------------------------------------------------
+		# Check condition.
+		# --------------------------------------------------
+
+		if not _check_mutagen_condition(
+			mutagen,
+			data
+		):
+			continue
+
+		print(
+			"MUTAGEN TRIGGERED:",
+			mutagen.mutagen_name,
+			"| Event:",
+			event_name
+		)
+
+		print(
+			"MUTAGEN CONDITION PASSED:",
+			mutagen.mutagen_name,
+			"| Target:",
+			data.get("target")
+		)
+
+		# --------------------------------------------------
+		# Determine effect target.
+		# --------------------------------------------------
+
+		var effect_target: AnimalBase = self
+
+		if data.has("target"):
+
+			var possible_target = data["target"]
+
+			if possible_target is AnimalBase:
+
+				effect_target = possible_target
+
+		# --------------------------------------------------
+		# Apply Mutagen status effects.
+		# --------------------------------------------------
+
+		for effect in mutagen.added_effects:
+
+			if effect == null:
+				continue
+
+			var new_effect: StatusEffect = (
+				effect.duplicate(true)
+			)
+
+			effect_target.apply_status_effect(
+				new_effect
+			)
+
+			print(
+				"Mutagen trigger effect:",
+				mutagen.mutagen_name,
+				"->",
+				new_effect.effect_name,
+				"on",
+				effect_target.name
+			)
+
+func _get_mutagen_trigger_type(
+	event_name: String
+) -> MutagenResource.MutagenTrigger:
+
+	match event_name:
+
+		"battle_start":
+			return MutagenResource.MutagenTrigger.BATTLE_START
+
+		"battle_end":
+			return MutagenResource.MutagenTrigger.BATTLE_END
+
+		"turn_start":
+			return MutagenResource.MutagenTrigger.TURN_START
+
+		"turn_end":
+			return MutagenResource.MutagenTrigger.TURN_END
+
+		"before_attack":
+			return MutagenResource.MutagenTrigger.BEFORE_ATTACK
+
+		"after_attack":
+			return MutagenResource.MutagenTrigger.AFTER_ATTACK
+
+		"before_damage":
+			return MutagenResource.MutagenTrigger.BEFORE_DAMAGE
+
+		"after_damage":
+			return MutagenResource.MutagenTrigger.AFTER_DAMAGE
+
+		"attack_missed":
+			return MutagenResource.MutagenTrigger.ATTACK_MISSED
+
+		"critical_hit":
+			return MutagenResource.MutagenTrigger.CRITICAL_HIT
+
+		"before_heal":
+			return MutagenResource.MutagenTrigger.BEFORE_HEAL
+
+		"after_heal":
+			return MutagenResource.MutagenTrigger.AFTER_HEAL
+
+		"status_applied":
+			return MutagenResource.MutagenTrigger.STATUS_APPLIED
+
+		"status_received":
+			return MutagenResource.MutagenTrigger.STATUS_RECEIVED
+
+		"kill":
+			return MutagenResource.MutagenTrigger.KILL
+
+		"death":
+			return MutagenResource.MutagenTrigger.DEATH
+
+		_:
+			return MutagenResource.MutagenTrigger.NONE
+
+
+func _check_mutagen_condition(
+	mutagen: MutagenResource,
+	data: Dictionary
+) -> bool:
+
+	if mutagen == null:
+		return false
+
+	match mutagen.condition:
+
+		MutagenResource.MutagenCondition.NONE:
+			return true
+
+		MutagenResource.MutagenCondition.SELF_BELOW_HP_PERCENT:
+
+			var max_hp := get_max_hp()
+
+			if max_hp <= 0:
+				return false
+
+			var hp_percent := (
+				float(hp) / float(max_hp)
+			) * 100.0
+
+			return hp_percent <= mutagen.condition_value
+
+		MutagenResource.MutagenCondition.TARGET_BELOW_HP_PERCENT:
+
+			if not data.has("target"):
+				return false
+
+			var target_data = data["target"]
+
+			if not target_data is AnimalBase:
+				return false
+
+			var target: AnimalBase = target_data
+
+			var target_max_hp: int = target.get_max_hp()
+
+			if target_max_hp <= 0:
+				return false
+
+			var target_hp_percent := (
+				float(target.hp)
+				/
+				float(target_max_hp)
+			) * 100.0
+
+			return (
+				target_hp_percent
+				<= mutagen.condition_value
+			)
+
+		MutagenResource.MutagenCondition.TARGET_HAS_STATUS:
+
+			if not data.has("target"):
+				return false
+
+			var target_data = data["target"]
+
+			if not target_data is AnimalBase:
+				return false
+
+			var target: AnimalBase = target_data
+
+			return target._has_status_name(
+				mutagen.condition_status
+			)
+
+		MutagenResource.MutagenCondition.SELF_HAS_STATUS:
+
+			return _has_status_name(
+				mutagen.condition_status
+			)
+
+		MutagenResource.MutagenCondition.CRITICAL_HIT:
+
+			return data.get(
+				"is_critical",
+				false
+			)
+
+		MutagenResource.MutagenCondition.TARGET_MARKED:
+
+			if not data.has("target"):
+				return false
+
+			var target_data = data["target"]
+
+			if not target_data is AnimalBase:
+				return false
+
+			var target: AnimalBase = target_data
+
+			return target._has_status_name(
+				"Mark"
+			)
+
+		_:
+			return false
+
+
+func _has_status_name(
+	status_name: String
+) -> bool:
+
+	if status_name.is_empty():
+		return false
+
+	for status in status_effects:
+
+		if status == null:
+			continue
+
+		if status.effect_name == status_name:
+			return true
+
+	return false
 
 
 func trigger_protect_mutagens(

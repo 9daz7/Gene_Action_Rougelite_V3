@@ -275,9 +275,25 @@ func execute_damage(
 	# Accuracy
 	# ==========================================
 
+	var final_accuracy := (
+		accuracy
+		+ user.get_mutagen_accuracy_bonus(self)
+	)
+
+	print(
+		"ACCURACY DEBUG | Move:",
+		move_name,
+		"| Base:",
+		accuracy,
+		"| Mutagen Bonus:",
+		user.get_mutagen_accuracy_bonus(self),
+		"| Final:",
+		final_accuracy
+	)
+
 	var hit_chance = user.calculate_hit_chance(
 		target,
-		accuracy
+		final_accuracy
 	)
 
 	var roll = randi_range(1, 100)
@@ -316,8 +332,14 @@ func execute_damage(
 
 	var user_critical_chance := user.get_critical_chance()
 
+	var mutagen_move_critical := (
+		user.get_mutagen_critical_bonus(self)
+	)
+
 	var final_critical_chance: int = clamp(
-		critical_chance + user_critical_chance,
+		critical_chance
+		+ user_critical_chance
+		+ mutagen_move_critical,
 		0,
 		100
 	)
@@ -328,7 +350,9 @@ func execute_damage(
 		" | Move Crit:",
 		critical_chance,
 		" | User Crit:",
-		user.get_critical_chance(),
+		user_critical_chance,
+		" | Mutagen Move Crit:",
+		mutagen_move_critical,
 		" | Final Crit:",
 		final_critical_chance
 	)
@@ -346,7 +370,8 @@ func execute_damage(
 			{
 				"target": target,
 				"move": self,
-				"damage": damage
+				"damage": damage,
+				"is_critical": true
 			}
 		)
 

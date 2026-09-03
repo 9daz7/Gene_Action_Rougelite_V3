@@ -19,6 +19,52 @@ enum MutagenType {
 
 
 # ==================================================
+# Mutagen Triggers
+# ==================================================
+
+enum MutagenTrigger {
+	NONE,
+	BATTLE_START,
+	BATTLE_END,
+	TURN_START,
+	TURN_END,
+	BEFORE_ATTACK,
+	AFTER_ATTACK,
+	BEFORE_DAMAGE,
+	AFTER_DAMAGE,
+	ATTACK_MISSED,
+	CRITICAL_HIT,
+	BEFORE_HEAL,
+	AFTER_HEAL,
+	STATUS_APPLIED,
+	STATUS_RECEIVED,
+	KILL,
+	DEATH
+}
+
+@export var trigger: MutagenTrigger = MutagenTrigger.NONE
+
+
+# ==================================================
+# Mutagen Conditions
+# ==================================================
+
+enum MutagenCondition {
+	NONE,
+	SELF_BELOW_HP_PERCENT,
+	TARGET_BELOW_HP_PERCENT,
+	TARGET_HAS_STATUS,
+	SELF_HAS_STATUS,
+	CRITICAL_HIT,
+	TARGET_MARKED
+}
+
+@export var condition: MutagenCondition = MutagenCondition.NONE
+@export var condition_value: float = 0.0
+@export var condition_status: String = ""
+
+
+# ==================================================
 # Mutagen Tier
 # ==================================================
 
@@ -131,7 +177,6 @@ enum MutagenTag {
 @export var hp_bonus: int = 0
 @export var accuracy_bonus: int = 0
 @export var evasion_bonus: int = 0
-@export var armor_bonus: int = 0
 @export var crit_bonus: int = 0
 
 

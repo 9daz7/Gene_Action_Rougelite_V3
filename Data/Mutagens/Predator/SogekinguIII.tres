@@ -10,7 +10,8 @@ mutagen_id = "sogekingu_3"
 required_mutagen_id = "sogekingu_2"
 mutagen_family = 4
 mutagen_name = "Sogekingu III"
-description = "The one who declared war."
+description = "The one who declared war.
+Bonus damage against marked/low-HP targets"
 accuracy_bonus = 18
 crit_bonus = 18
 metadata/_custom_type_script = "uid://cps66j48fyqt5"

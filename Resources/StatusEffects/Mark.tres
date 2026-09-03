@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="StatusEffect" format=3 uid="uid://bymveklbbf41v"]
+
+[ext_resource type="Script" uid="uid://cedh0hgwqddn4" path="res://Resources/StatusEffect.gd" id="1_bt1mb"]
+
+[resource]
+script = ExtResource("1_bt1mb")
+effect_name = "Mark"
+metadata/_custom_type_script = "uid://cedh0hgwqddn4"
