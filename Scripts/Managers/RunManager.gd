@@ -276,7 +276,7 @@ func load_room_pools() -> void:
 	# ==================================================
 
 	_add_room_to_pool(
-		"res://Data/Rooms/AbandonedLab_01.tres"
+		"res://Data/Rooms/AbandonedLab_1.tres"
 	)
 
 	# ==================================================
@@ -546,11 +546,11 @@ func _get_random_non_battle_room(
 		exit_count
 	)
 
-	_add_available_rooms(
-		candidates,
-		RoomResource.RoomType.LAB,
-		exit_count
-	)
+	#_add_available_rooms(
+		#candidates,
+		#RoomResource.RoomType.LAB,
+		#exit_count
+	#)
 
 	if candidates.is_empty():
 
@@ -854,15 +854,28 @@ func _create_room_for_node(
 			_get_random_boss_room()
 		)
 
+	## ==================================================
+	## Guaranteed Rest Room
+	## ==================================================
+#
+	#if node.layer == total_layers - 2:
+#
+		#return _duplicate_room_template(
+			#get_random_room(
+				#RoomResource.RoomType.REST,
+				#required_exit_count
+			#)
+		#)
 	# ==================================================
-	# Guaranteed Rest Room
+	# Guaranteed Pre-Boss Lab
+	# TEMPORARY FOR WORLD 1 TESTING
 	# ==================================================
 
 	if node.layer == total_layers - 2:
 
 		return _duplicate_room_template(
 			get_random_room(
-				RoomResource.RoomType.REST,
+				RoomResource.RoomType.LAB,
 				required_exit_count
 			)
 		)
@@ -1075,6 +1088,19 @@ func _get_random_world_one_type(
 
 
 	return candidates.pick_random()
+
+# --------------------------------------------------
+# Lab
+# --------------------------------------------------
+
+	if _has_room_with_exit_count(
+		RoomResource.RoomType.LAB,
+		exit_count
+	):
+
+		candidates.append(
+			RoomResource.RoomType.LAB
+		)
 
 
 # ==================================================

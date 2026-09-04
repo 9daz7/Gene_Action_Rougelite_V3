@@ -36,6 +36,14 @@ func load_mutagens() -> void:
 	all_mutagens.clear()
 
 	# ==================================================
+	# Carapace
+	# ==================================================
+
+	_add_mutagen(
+		"res://Data/Mutagens/Carapace/SpikedShellI.tres"
+	)
+	
+	# ==================================================
 	# Feral
 	# ==================================================
 
@@ -90,7 +98,7 @@ func load_mutagens() -> void:
 	# ==================================================
 	# Predator
 	# ==================================================
-
+#
 	_add_mutagen(
 		"res://Data/Mutagens/Predator/EnhancedVisionI.tres"
 	)
@@ -101,6 +109,10 @@ func load_mutagens() -> void:
 
 	_add_mutagen(
 		"res://Data/Mutagens/Predator/EnhancedVisionIII.tres"
+	)
+
+	_add_mutagen(
+		"res://Data/Mutagens/Predator/PredatorsMarkI.tres"
 	)
 
 	_add_mutagen(

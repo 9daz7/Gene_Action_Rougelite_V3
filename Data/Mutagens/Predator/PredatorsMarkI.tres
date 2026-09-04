@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="MutagenResource" format=3 uid="uid://bjujgf5v4qhad"]
+
+[ext_resource type="Script" uid="uid://cedh0hgwqddn4" path="res://Resources/StatusEffect.gd" id="1_4bo41"]
+[ext_resource type="Resource" uid="uid://bymveklbbf41v" path="res://Resources/StatusEffects/Mark.tres" id="2_kpv7s"]
+[ext_resource type="Script" uid="uid://cps66j48fyqt5" path="res://Scripts/Resources/MutagenResource.gd" id="2_v63o1"]
+
+[resource]
+script = ExtResource("2_v63o1")
+mutagen_type = 2
+trigger = 10
+requires_previous_tier = false
+mutagen_id = "predators_mark_1"
+mutagen_family = 4
+mutagen_name = "Predator's Mark I"
+description = "Adds a mark on critical hits. crit boost = 10%"
+added_effects = Array[ExtResource("1_4bo41")]([ExtResource("2_kpv7s")])
+metadata/_custom_type_script = "uid://cps66j48fyqt5"

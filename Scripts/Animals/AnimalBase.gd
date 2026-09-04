@@ -786,6 +786,54 @@ func get_mutagen_damage_bonus(
 	return bonus
 
 
+func get_mutagen_conditional_damage_bonus(
+	move: MoveResource,
+	target: AnimalBase
+) -> int:
+
+	if move == null:
+		return 0
+
+	if target == null:
+		return 0
+
+	var bonus := 0
+
+	var data := {
+		"target": target,
+		"move": move
+	}
+
+	for mutagen in get_run_mutagens():
+
+		if mutagen == null:
+			continue
+
+		if mutagen.conditional_damage_bonus == 0:
+			continue
+
+		var condition_passed := _check_mutagen_condition(
+			mutagen,
+			data
+		)
+
+		if not condition_passed:
+			continue
+
+		bonus += mutagen.conditional_damage_bonus
+
+		print(
+			"CONDITIONAL DAMAGE MUTAGEN:",
+			mutagen.mutagen_name,
+			"| Bonus:",
+			mutagen.conditional_damage_bonus,
+			"| Target:",
+			target.name
+		)
+
+	return bonus
+
+
 func get_mutagen_accuracy_bonus(
 	move:MoveResource
 ) -> int:
@@ -1079,8 +1127,10 @@ func take_damage(
 	trigger_passive_event(
 		"after_damage",
 		{
-			"amount": amount,
-			"attacker": attacker
+		"target": self,
+		"attacker": attacker,
+		"effect_target": attacker,
+		"amount": amount
 		}
 	)
 
@@ -1519,13 +1569,26 @@ func trigger_mutagen_event(
 
 		var effect_target: AnimalBase = self
 
-		if data.has("target"):
+		if data.has("effect_target"):
+
+			var possible_effect_target = data["effect_target"]
+
+			if possible_effect_target is AnimalBase:
+				effect_target = possible_effect_target
+
+		elif data.has("target"):
 
 			var possible_target = data["target"]
 
 			if possible_target is AnimalBase:
-
 				effect_target = possible_target
+
+		elif data.has("attacker"):
+
+			var possible_attacker = data["attacker"]
+
+			if possible_attacker is AnimalBase:
+				effect_target = possible_attacker
 
 		# --------------------------------------------------
 		# Apply Mutagen status effects.
@@ -1619,23 +1682,58 @@ func _check_mutagen_condition(
 	if mutagen == null:
 		return false
 
-	match mutagen.condition:
+	var first_result := _check_single_mutagen_condition(
+		mutagen.condition,
+		mutagen.condition_value,
+		mutagen.condition_status,
+		data
+	)
+
+	# No second condition.
+	if mutagen.second_condition == MutagenResource.MutagenCondition.NONE:
+		return first_result
+
+	var second_result := _check_single_mutagen_condition(
+		mutagen.second_condition,
+		mutagen.second_condition_value,
+		mutagen.second_condition_status,
+		data
+	)
+
+	if mutagen.conditions_use_or:
+		return first_result or second_result
+
+	return first_result and second_result
+
+
+func _check_single_mutagen_condition(
+	condition: MutagenResource.MutagenCondition,
+	condition_value: float,
+	condition_status: String,
+	data: Dictionary
+) -> bool:
+
+	match condition:
 
 		MutagenResource.MutagenCondition.NONE:
 			return true
 
+
 		MutagenResource.MutagenCondition.SELF_BELOW_HP_PERCENT:
 
-			var max_hp := get_max_hp()
+			var max_hp: int = get_max_hp()
 
 			if max_hp <= 0:
 				return false
 
 			var hp_percent := (
-				float(hp) / float(max_hp)
+				float(hp)
+				/
+				float(max_hp)
 			) * 100.0
 
-			return hp_percent <= mutagen.condition_value
+			return hp_percent <= condition_value
+
 
 		MutagenResource.MutagenCondition.TARGET_BELOW_HP_PERCENT:
 
@@ -1648,7 +1746,6 @@ func _check_mutagen_condition(
 				return false
 
 			var target: AnimalBase = target_data
-
 			var target_max_hp: int = target.get_max_hp()
 
 			if target_max_hp <= 0:
@@ -1660,10 +1757,8 @@ func _check_mutagen_condition(
 				float(target_max_hp)
 			) * 100.0
 
-			return (
-				target_hp_percent
-				<= mutagen.condition_value
-			)
+			return target_hp_percent <= condition_value
+
 
 		MutagenResource.MutagenCondition.TARGET_HAS_STATUS:
 
@@ -1678,14 +1773,16 @@ func _check_mutagen_condition(
 			var target: AnimalBase = target_data
 
 			return target._has_status_name(
-				mutagen.condition_status
+				condition_status
 			)
+
 
 		MutagenResource.MutagenCondition.SELF_HAS_STATUS:
 
 			return _has_status_name(
-				mutagen.condition_status
+				condition_status
 			)
+
 
 		MutagenResource.MutagenCondition.CRITICAL_HIT:
 
@@ -1693,6 +1790,7 @@ func _check_mutagen_condition(
 				"is_critical",
 				false
 			)
+
 
 		MutagenResource.MutagenCondition.TARGET_MARKED:
 
@@ -1709,6 +1807,7 @@ func _check_mutagen_condition(
 			return target._has_status_name(
 				"Mark"
 			)
+
 
 		_:
 			return false

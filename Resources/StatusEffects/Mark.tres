@@ -5,4 +5,10 @@
 [resource]
 script = ExtResource("1_bt1mb")
 effect_name = "Mark"
+type = 11
+power = 0
+can_stack = false
+max_stacks = 0
+refresh_duration = false
+stack_power = false
 metadata/_custom_type_script = "uid://cedh0hgwqddn4"

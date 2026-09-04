@@ -1,0 +1,115 @@
+[gd_scene format=3 uid="uid://pdcuvsbqjge2"]
+
+[ext_resource type="Script" uid="uid://r3p10btixrj6" path="res://Scenes/Rooms/AbandonedLab.gd" id="1_ljfjf"]
+[ext_resource type="Script" uid="uid://csjgqa1kcrfgr" path="res://Scripts/Hub/Interactable.gd" id="2_0xtyf"]
+[ext_resource type="PackedScene" uid="uid://s4vol5fxx17b" path="res://Scenes/Rooms/RoomExit.tscn" id="3_a66kl"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dyxk2"]
+size = Vector2(1960, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_v5yh4"]
+size = Vector2(20, 1080)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_uf5fv"]
+size = Vector2(20, 1080)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_efes5"]
+size = Vector2(1960, 20.25)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kkvx5"]
+size = Vector2(303, 253)
+
+[node name="AbandonedLab1" type="Node2D" unique_id=624543516]
+script = ExtResource("1_ljfjf")
+
+[node name="Background" type="ColorRect" parent="." unique_id=1929488119]
+offset_right = 1919.0
+offset_bottom = 1080.0
+color = Color(0, 0.27058825, 0.09019608, 1)
+
+[node name="Environment" type="Control" parent="." unique_id=636826182]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Walls" type="Control" parent="Environment" unique_id=463988282]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="topWall" type="StaticBody2D" parent="Environment/Walls" unique_id=1031970470]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Walls/topWall" unique_id=1863534996]
+position = Vector2(960, -10)
+shape = SubResource("RectangleShape2D_dyxk2")
+
+[node name="RightWall" type="StaticBody2D" parent="Environment/Walls" unique_id=1305958726]
+position = Vector2(1936.39, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Walls/RightWall" unique_id=1714669637]
+position = Vector2(-6.3900146, 540)
+shape = SubResource("RectangleShape2D_v5yh4")
+
+[node name="LeftWall" type="StaticBody2D" parent="Environment/Walls" unique_id=346343399]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Walls/LeftWall" unique_id=1450048717]
+position = Vector2(-10, 540)
+shape = SubResource("RectangleShape2D_uf5fv")
+
+[node name="BottomWall" type="StaticBody2D" parent="Environment/Walls" unique_id=527756736]
+position = Vector2(0, 1084.25)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Walls/BottomWall" unique_id=371452745]
+position = Vector2(960, 5.875)
+shape = SubResource("RectangleShape2D_efes5")
+
+[node name="ColorRect" type="ColorRect" parent="Environment" unique_id=1020915618]
+layout_mode = 0
+offset_left = 882.0
+offset_top = 830.0
+offset_right = 1038.0
+offset_bottom = 1079.0
+color = Color(0.60784316, 0.43529412, 0, 1)
+
+[node name="ColorRect2" type="ColorRect" parent="Environment" unique_id=1880465354]
+layout_mode = 0
+offset_left = 551.0
+offset_top = 139.0
+offset_right = 1364.0
+offset_bottom = 835.0
+color = Color(0.60784316, 0.43529412, 0, 1)
+
+[node name="ColorRect3" type="ColorRect" parent="Environment" unique_id=184494227]
+layout_mode = 0
+offset_left = 665.0
+offset_top = 2.0
+offset_right = 1256.0
+offset_bottom = 140.0
+color = Color(0.60784316, 0.43529412, 0, 1)
+
+[node name="PlayerSpawn" type="Marker2D" parent="." unique_id=1579959126]
+position = Vector2(960, 1041)
+
+[node name="LabInteractable" type="Area2D" parent="." unique_id=1695093635]
+position = Vector2(1400, 450)
+script = ExtResource("2_0xtyf")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LabInteractable" unique_id=1318839252]
+position = Vector2(31.5, 9.5)
+shape = SubResource("RectangleShape2D_kkvx5")
+
+[node name="Label" type="Label" parent="LabInteractable" unique_id=1477288812]
+offset_right = 40.0
+offset_bottom = 23.0
+text = "Abandoned Lab"
+
+[node name="Exit1" parent="." unique_id=1730805262 instance=ExtResource("3_a66kl")]
+position = Vector2(671, -1)
+
+[node name="Label" type="Label" parent="Exit1" unique_id=1135603240]
+offset_left = 42.760002
+offset_top = 37.730003
+offset_right = 101.0
+offset_bottom = 71.99999
+text = "EXIT 1"

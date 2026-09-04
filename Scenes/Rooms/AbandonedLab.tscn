@@ -114,25 +114,3 @@ offset_top = 37.730003
 offset_right = 101.0
 offset_bottom = 71.99999
 text = "EXIT 1"
-
-[node name="Exit2" parent="." unique_id=1233407698 instance=ExtResource("1_k2oyl")]
-position = Vector2(891, -2)
-exit_id = 1
-
-[node name="Label" type="Label" parent="Exit2" unique_id=1240305287]
-offset_left = 42.760002
-offset_top = 37.730003
-offset_right = 96.99999
-offset_bottom = 72.0
-text = "EXIT 2"
-
-[node name="Exit3" parent="." unique_id=876425636 instance=ExtResource("1_k2oyl")]
-position = Vector2(1097, -1)
-exit_id = 2
-
-[node name="Label" type="Label" parent="Exit3" unique_id=744121283]
-offset_left = 42.760002
-offset_top = 37.730003
-offset_right = 99.99999
-offset_bottom = 77.0
-text = "EXIT 3"

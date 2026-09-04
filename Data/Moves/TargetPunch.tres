@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="MoveResource" format=3 uid="uid://buf2qrtxcltgy"]
+
+[ext_resource type="Script" uid="uid://cedh0hgwqddn4" path="res://Resources/StatusEffect.gd" id="1_5had2"]
+[ext_resource type="Script" uid="uid://bnmm0xqkm6atb" path="res://Scripts/Moves/MoveResource.gd" id="2_lnfkl"]
+[ext_resource type="Resource" uid="uid://bymveklbbf41v" path="res://Resources/StatusEffects/Mark.tres" id="2_rv08c"]
+
+[resource]
+script = ExtResource("2_lnfkl")
+move_name = "Target Punch"
+description = "Applies a Mark target to an enemy."
+effect_type = 3
+power = 3
+effects = Array[ExtResource("1_5had2")]([ExtResource("2_rv08c")])
+metadata/_custom_type_script = "uid://bnmm0xqkm6atb"

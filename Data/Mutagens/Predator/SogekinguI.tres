@@ -6,10 +6,10 @@
 [resource]
 script = ExtResource("2_k4nuy")
 mutagen_type = 3
-trigger = 10
 condition = 2
-condition_value = 50.0
-condition_status = "Mark"
+condition_value = 25.0
+second_condition = 6
+second_condition_status = "Mark"
 tier = 3
 requires_previous_tier = false
 mutagen_id = "sogekingu_1"
@@ -20,5 +20,6 @@ mutagen_name = "Sogekingu I"
 description = "The one who declared war.
 Bonus damage against marked/low-HP target"
 accuracy_bonus = 6
-crit_bonus = 100
+crit_bonus = 6
+conditional_damage_bonus = 10
 metadata/_custom_type_script = "uid://cps66j48fyqt5"

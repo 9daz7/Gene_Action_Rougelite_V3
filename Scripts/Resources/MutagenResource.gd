@@ -63,6 +63,12 @@ enum MutagenCondition {
 @export var condition_value: float = 0.0
 @export var condition_status: String = ""
 
+@export var second_condition: MutagenCondition = MutagenCondition.NONE
+@export var second_condition_value: float = 0.0
+@export var second_condition_status: String = ""
+
+@export var conditions_use_or: bool = true
+
 
 # ==================================================
 # Mutagen Tier
@@ -178,6 +184,7 @@ enum MutagenTag {
 @export var accuracy_bonus: int = 0
 @export var evasion_bonus: int = 0
 @export var crit_bonus: int = 0
+@export var conditional_damage_bonus: int = 0
 
 
 # ==================================================

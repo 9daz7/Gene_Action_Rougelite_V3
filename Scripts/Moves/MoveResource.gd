@@ -326,6 +326,11 @@ func execute_damage(
 		self
 	)
 
+	damage += user.get_mutagen_conditional_damage_bonus(
+		self,
+		target
+	)
+
 	# ==========================================
 	# Critical Hit
 	# ==========================================

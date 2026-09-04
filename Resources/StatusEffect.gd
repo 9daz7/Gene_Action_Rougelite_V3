@@ -14,7 +14,8 @@ enum Type
 	ATTACK_UP,
 	ATTACK_DOWN,
 	DEFENSE_UP,
-	DEFENSE_DOWN
+	DEFENSE_DOWN,
+	MARK
 }
 
 @export var effect_name:String
@@ -153,6 +154,11 @@ func apply(target: AnimalBase):
 				get_total_power()
 			)
 
+		Type.MARK:
+			print(
+				target.name,
+				" is now Marked."
+			)
 
 func remove(target: AnimalBase) -> void:
 
@@ -310,6 +316,10 @@ func process_turn(target: AnimalBase):
 					healing
 				]
 			)
+
+		Type.MARK:
+			pass
+
 
 func apply_stack(
 	target: AnimalBase,
