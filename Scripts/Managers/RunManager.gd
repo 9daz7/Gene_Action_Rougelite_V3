@@ -276,7 +276,7 @@ func load_room_pools() -> void:
 	# ==================================================
 
 	_add_room_to_pool(
-		"res://Data/Rooms/AbandonedLab_1.tres"
+		"res://Data/Rooms/AbandonedLab_01.tres"
 	)
 
 	# ==================================================

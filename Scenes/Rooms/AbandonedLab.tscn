@@ -20,6 +20,7 @@ size = Vector2(1960, 20.25)
 size = Vector2(303, 253)
 
 [node name="AbandonedLab" type="Node2D" unique_id=1655595929]
+visible = false
 script = ExtResource("1_ooidg")
 exits_available_on_entry = false
 

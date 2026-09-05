@@ -10,6 +10,28 @@ signal lab_finished
 
 
 # ==================================================
+# Managers
+# ==================================================
+
+@onready var run_manager: RunManager = get_node(
+	"../../Managers/RunManager"
+)
+
+@onready var mutagen_database: MutagenDatabase = get_node(
+	"../../Managers/MutagenDatabase"
+)
+
+
+# ==================================================
+# Constants
+# ==================================================
+
+const MUTAGEN_MANAGEMENT_SCENE = preload(
+	"res://Scenes/Rooms/MutagenManagementUI.tscn"
+)
+
+
+# ==================================================
 # Export Variables
 # ==================================================
 
@@ -23,12 +45,13 @@ signal lab_finished
 @onready var status_label = $VBoxContainer/LabStatusLabel
 @onready var description_label = $VBoxContainer/DescriptionLabel
 
-@onready var edit_gene_button = $VBoxContainer/OperationContainer/EditGeneButton
-@onready var upgrade_gene_button = $VBoxContainer/OperationContainer/UpgradeGeneButton
-@onready var extract_gene_button = $VBoxContainer/OperationContainer/ExtractGeneButton
+#@onready var edit_gene_button = $VBoxContainer/OperationContainer/EditGeneButton
+#@onready var upgrade_gene_button = $VBoxContainer/OperationContainer/UpgradeGeneButton
+#@onready var extract_gene_button = $VBoxContainer/OperationContainer/ExtractGeneButton
 
-@onready var edit_mutagen_button = $VBoxContainer/OperationContainer/EditMutagenButton
-@onready var upgrade_mutagen_button = $VBoxContainer/OperationContainer/UpgradeMutagenButton
+@onready var edit_mutagen_button = ($VBoxContainer/OperationContainer/EditMutagenButton)
+#@onready var upgrade_mutagen_button = $VBoxContainer/OperationContainer/UpgradeMutagenButton
+@onready var heal_button = ($VBoxContainer/OperationContainer/HealButton)
 
 @onready var continue_button = $VBoxContainer/ContinueButton
 
@@ -38,13 +61,15 @@ signal lab_finished
 # ==================================================
 
 var battle_manager: BattleManager = null
+var mutagen_management_ui: MutagenManagementUI = null
 
-var lab_action_used: bool = false
-var experiment_available: bool = false
+var mutagen_management_used: bool = false
+var healing_used: bool = false
 
+#var experiment_available: bool = false
 var critical_battle_complete: bool = false
-
 var connected_to_battle: bool = false
+
 var lab_completed: bool = false
 
 
@@ -53,15 +78,24 @@ var lab_completed: bool = false
 # ==================================================
 
 
-func _ready():
+func _ready() -> void:
 	
 	_connect_buttons()
 
 
 # ==================================================
-# Public Functions
+# Reset Lab Actions
 # ==================================================
 
+func reset_lab_actions() -> void:
+
+	mutagen_management_used = false
+	healing_used = false
+
+
+# ==================================================
+# Open
+# ==================================================
 
 func open(
 	data: LabResource,
@@ -89,29 +123,33 @@ func open(
 
 	lab_completed = false
 
+	reset_lab_actions()
+
+	critical_battle_complete = false
+
 	show()
 
-	lab_action_used = false
-	experiment_available = false
-
-	if lab_data.lab_status != LabResource.LabStatus.CRITICAL:
-		critical_battle_complete = false
+	# ==================================================
+	# Critical Lab
+	# ==================================================
 
 	if lab_data.lab_status == LabResource.LabStatus.CRITICAL:
-		
+
 		if not GameEvents.battle_won.is_connected(
 			_on_experiment_won
 		):
-			
+
 			GameEvents.battle_won.connect(
 				_on_experiment_won
 			)
-			
+
 			connected_to_battle = true
-	
+
 	print(
 		"Opened lab:",
-		LabResource.LabStatus.keys()[lab_data.lab_status]
+		LabResource.LabStatus.keys()[
+			lab_data.lab_status
+		]
 	)
 
 	setup_lab()
@@ -119,17 +157,31 @@ func open(
 	match lab_data.lab_status:
 
 		LabResource.LabStatus.CRITICAL:
-			
+
 			start_critical_lab()
 
 		_:
+
 			reset_buttons()
-			check_experiment()
 
 
-func close():
+# ==================================================
+# Close
+# ==================================================
 
-	print("Closing abandoned lab")
+func close() -> void:
+
+	print(
+		"Closing abandoned lab"
+	)
+
+	if is_instance_valid(
+		mutagen_management_ui
+	):
+
+		mutagen_management_ui.queue_free()
+
+	mutagen_management_ui = null
 
 	if connected_to_battle:
 
@@ -147,16 +199,15 @@ func close():
 	battle_manager = null
 
 	critical_battle_complete = false
-	experiment_available = false
-	lab_action_used = false
+
+	reset_lab_actions()
 
 	hide()
 
 
 # ==================================================
-# Critical Experiment
+# Critical Lab
 # ==================================================
-
 
 func start_critical_lab() -> void:
 
@@ -192,50 +243,147 @@ func critical_battle_won() -> void:
 	critical_battle_complete = true
 
 	print(
-		"Epic experiment gene recovered"
+		"Critical experiment completed"
 	)
 
-		# permanently complete lab
-	lab_data.lab_status = LabResource.LabStatus.STABLE
+	# ==================================================
+	# Award Rare Mutagen
+	# ==================================================
+
+	var reward := get_critical_mutagen_reward()
+
+	if reward != null:
+
+		print(
+			"Critical Lab Mutagen Reward:",
+			reward.mutagen_name
+		)
+
+		if run_manager != null:
+
+			var added := run_manager.add_mutagen(
+				reward
+			)
+
+			if added:
+
+				print(
+					"Critical Lab Mutagen added:",
+					reward.mutagen_name
+				)
+
+			else:
+
+				print(
+					"Critical Lab Mutagen could not be added:"
+					,
+					reward.mutagen_name
+				)
+
+	# ==================================================
+	# Convert Critical Lab to Stable
+	# ==================================================
+
+	lab_data.lab_status = (
+		LabResource.LabStatus.STABLE
+	)
+
+	setup_lab()
 
 	reset_buttons()
 
 	continue_button.disabled = false
-	
-	#if connected_to_battle:
-#
-		#if battle_manager.battle_won.is_connected(
-			#_on_experiment_won
-		#):
-#
-			#battle_manager.battle_won.disconnect(
-				#_on_experiment_won
-			#)
-#
-#
-		#connected_to_battle = false
 
 
-#func _on_continue_pressed():
-	#
-	#if connected_to_battle:
-		#
-		#battle_manager.battle_won.disconnect(_on_experiment_won)
-		#connected_to_battle = false
-	#
-	#print("Leaving laboratory")
-#
-	#lab_finished.emit()
+# ==================================================
+# Critical Mutagen Reward
+# ==================================================
+
+func get_critical_mutagen_reward() -> MutagenResource:
+
+	if mutagen_database == null:
+
+		push_error(
+			"AbandonedLab_UI: MutagenDatabase not found."
+		)
+
+		return null
+
+
+	if run_manager == null:
+
+		push_error(
+			"AbandonedLab_UI: RunManager not found."
+		)
+
+		return null
+
+
+	var available: Array[MutagenResource] = (
+		mutagen_database.get_mutagens_for_world(
+			run_manager.current_world
+		)
+	)
+
+	var candidates: Array[MutagenResource] = []
+
+	for mutagen in available:
+
+		if mutagen == null:
+			continue
+
+		# ==================================================
+		# Critical Labs give Tier 3 Mutagens
+		# ==================================================
+
+		if mutagen.tier != (
+			MutagenResource.MutagenTier.TIER_3
+		):
+
+			continue
+
+		# ==================================================
+		# Don't reward an already equipped Mutagen
+		# ==================================================
+
+		if run_manager.run_mutagens.has(
+			mutagen
+		):
+
+			continue
+
+		candidates.append(
+			mutagen
+		)
+
+	if candidates.is_empty():
+
+		print(
+			"No Tier 3 Mutagen available for Critical Lab."
+		)
+
+		return null
+
+	var reward: MutagenResource = (
+		candidates.pick_random()
+	)
+
+	print(
+		"Critical Lab selected Mutagen:",
+		reward.mutagen_name
+	)
+
+	return reward
 
 
 # ==================================================
 # Lab Setup
 # ==================================================
 
-
-func setup_lab():
+func setup_lab() -> void:
 
 	match lab_data.lab_status:
+
 
 		LabResource.LabStatus.STABLE:
 
@@ -264,112 +412,153 @@ func setup_lab():
 			)
 
 
-func reset_buttons():
+# ==================================================
+# Buttons
+# ==================================================
 
-	edit_gene_button.disabled = false
-	upgrade_gene_button.disabled = false
+func reset_buttons() -> void:
 
-	extract_gene_button.disabled = true
+	edit_mutagen_button.disabled = (mutagen_management_used)
 
-	edit_mutagen_button.disabled = false
-	upgrade_mutagen_button.disabled = false
+	heal_button.disabled = (healing_used)
+
+	continue_button.disabled = false
 
 
-func check_experiment():
+func disable_operations() -> void:
 
-	if randf() <= lab_data.experiment_chance:
-
-		experiment_available = true
-		extract_gene_button.disabled = false
-
-	else:
-		experiment_available = false
-		extract_gene_button.disabled = true
+	edit_mutagen_button.disabled = true
+	heal_button.disabled = true
 
 
 # ==================================================
 # Lab Actions
 # ==================================================
 
-
-func use_lab_action(action:String):
-	
-	if lab_action_used:
-		return
-
-	lab_action_used = true
+func use_lab_action(
+	action: String
+) -> void:
 
 	match action:
 
-		"edit_gene":
-
-			print("Gene modification complete")
-
-
-		"upgrade_gene":
-
-			print("Gene upgraded")
-
-
-		"extract_gene":
-
-			print("Experiment gene extracted.")
-
-
 		"edit_mutagen":
 
-			print("Mutagen formula altered")
+			open_mutagen_management()
 
 
-		"upgrade_mutagen":
+		"heal":
 
-			print("Mutagen potency increased")
-
-
-	disable_operations()
+			heal_player()
 
 
-func disable_operations():
+func open_mutagen_management() -> void:
 
-	edit_gene_button.disabled = true
-	upgrade_gene_button.disabled = true
+	if mutagen_management_used:
+		return
 
-	extract_gene_button.disabled = true
+	mutagen_management_used = true
 
 	edit_mutagen_button.disabled = true
-	upgrade_mutagen_button.disabled = true
 
+	print(
+		"Opening Mutagen management."
+	)
+
+	mutagen_management_ui = (
+		MUTAGEN_MANAGEMENT_SCENE.instantiate()
+		as MutagenManagementUI
+	)
+
+	if mutagen_management_ui == null:
+
+		push_error(
+			"AbandonedLab_UI: Failed to create Mutagen Management UI."
+		)
+
+		edit_mutagen_button.disabled = false
+		mutagen_management_used = false
+
+		return
+
+	get_tree().current_scene.get_node(
+		"UI"
+	).add_child(
+		mutagen_management_ui
+	)
+
+	mutagen_management_ui.set_anchors_and_offsets_preset(
+		Control.PRESET_FULL_RECT
+	)
+
+	if not mutagen_management_ui.management_finished.is_connected(
+		_on_mutagen_management_finished
+	):
+
+		mutagen_management_ui.management_finished.connect(
+			_on_mutagen_management_finished
+		)
+
+	mutagen_management_ui.open()
+
+
+func _on_mutagen_management_finished() -> void:
+
+	print(
+		"Returned from Mutagen management."
+	)
+
+	if is_instance_valid(
+		mutagen_management_ui
+	):
+
+		mutagen_management_ui.queue_free()
+
+	mutagen_management_ui = null
+
+	edit_mutagen_button.disabled = true
+
+	# Healing remains available.
+	heal_button.disabled = healing_used
+
+
+func heal_player() -> void:
+
+	if healing_used:
+		return
+
+	if run_manager == null:
+
+		push_error(
+			"AbandonedLab_UI: RunManager not found."
+		)
+
+		return
+
+	var heal_amount: int = int(
+		run_manager.max_hp * 0.50
+	)
+
+	if heal_amount <= 0:
+		return
+
+	run_manager.heal_player(
+		heal_amount
+	)
+
+	healing_used = true
+
+	heal_button.disabled = true
+
+	print(
+		"Lab healed player for:",
+		heal_amount
+	)
 
 # ==================================================
-# Private Functions
+# Buttons
 # ==================================================
-
 
 func _connect_buttons() -> void:
-
-	if not edit_gene_button.pressed.is_connected(
-		_on_edit_gene_pressed
-	):
-
-		edit_gene_button.pressed.connect(
-			_on_edit_gene_pressed
-	)
-
-	if not upgrade_gene_button.pressed.is_connected(
-		_on_upgrade_gene_pressed
-	):
-
-		upgrade_gene_button.pressed.connect(
-			_on_upgrade_gene_pressed
-	)
-
-	if not extract_gene_button.pressed.is_connected(
-		_on_extract_gene_pressed
-	):
-
-		extract_gene_button.pressed.connect(
-			_on_extract_gene_pressed
-	)
 
 	if not edit_mutagen_button.pressed.is_connected(
 		_on_edit_mutagen_pressed
@@ -379,13 +568,15 @@ func _connect_buttons() -> void:
 			_on_edit_mutagen_pressed
 	)
 
-	if not upgrade_mutagen_button.pressed.is_connected(
-		_on_upgrade_mutagen_pressed
+
+	if not heal_button.pressed.is_connected(
+		_on_heal_pressed
 	):
 
-		upgrade_mutagen_button.pressed.connect(
-			_on_upgrade_mutagen_pressed
+		heal_button.pressed.connect(
+			_on_heal_pressed
 	)
+
 
 	if not continue_button.pressed.is_connected(
 		_on_continue_pressed
@@ -396,73 +587,23 @@ func _connect_buttons() -> void:
 	)
 
 
-func _on_edit_gene_pressed() -> void:
-
-	use_lab_action("edit_gene")
-
-
-func _on_upgrade_gene_pressed() -> void:
-
-	use_lab_action("upgrade_gene")
-
-
-func _on_extract_gene_pressed() -> void:
-
-	use_lab_action("extract_gene")
-
-
 func _on_edit_mutagen_pressed() -> void:
 
-	use_lab_action("edit_mutagen")
+	use_lab_action(
+		"edit_mutagen"
+	)
 
 
-func _on_upgrade_mutagen_pressed() -> void:
+func _on_heal_pressed() -> void:
 
-	use_lab_action("upgrade_mutagen")
-
-#
-	#if not continue_button.pressed.is_connected(
-		#_on_continue_pressed
-	#):
-#
-		#continue_button.pressed.connect(
-			#_on_continue_pressed
-	#)
-#
-	#edit_gene_button.pressed.connect(
-		#func():
-			#use_lab_action("edit_gene")
-	#)
-#
-	#upgrade_gene_button.pressed.connect(
-		#func():
-			#use_lab_action("upgrade_gene")
-	#)
-#
-	#extract_gene_button.pressed.connect(
-		#func():
-			#use_lab_action("extract_gene")
-	#)
-#
-	#edit_mutagen_button.pressed.connect(
-		#func():
-			#use_lab_action("edit_mutagen")
-	#)
-#
-	#upgrade_mutagen_button.pressed.connect(
-		#func():
-			#use_lab_action("upgrade_mutagen")
-	#)
-#
-	#continue_button.pressed.connect(
-		#_on_continue_pressed
-	#)
+	use_lab_action(
+		"heal"
+	)
 
 
 func _on_continue_pressed() -> void:
 
 	if lab_completed:
-
 		return
 
 	lab_completed = true

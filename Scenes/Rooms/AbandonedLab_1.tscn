@@ -105,7 +105,7 @@ offset_bottom = 23.0
 text = "Abandoned Lab"
 
 [node name="Exit1" parent="." unique_id=1730805262 instance=ExtResource("3_a66kl")]
-position = Vector2(671, -1)
+position = Vector2(887, 2)
 
 [node name="Label" type="Label" parent="Exit1" unique_id=1135603240]
 offset_left = 42.760002

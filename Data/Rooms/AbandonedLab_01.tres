@@ -1,13 +1,13 @@
-[gd_resource type="Resource" script_class="RoomResource" format=3 uid="uid://7hcejjqiu7l"]
+[gd_resource type="Resource" script_class="RoomResource" format=3 uid="uid://batufr3ukcxvo"]
 
-[ext_resource type="Script" uid="uid://0k05qgpjl5gm" path="res://Data/Rooms/RoomResource.gd" id="1_2mcid"]
-[ext_resource type="Resource" uid="uid://llthls2sj18m" path="res://Data/Labs/StableLab.tres" id="1_8njnb"]
-[ext_resource type="TextFile" uid="uid://rfg1a6chwvlj" path="res://Scenes/Rooms/AbandonedLab.tscn" id="2_2mcid"]
+[ext_resource type="Script" uid="uid://0k05qgpjl5gm" path="res://Data/Rooms/RoomResource.gd" id="1_8ev51"]
+[ext_resource type="Resource" uid="uid://llthls2sj18m" path="res://Data/Labs/StableLab.tres" id="1_hejpu"]
+[ext_resource type="PackedScene" uid="uid://pdcuvsbqjge2" path="res://Scenes/Rooms/AbandonedLab_1.tscn" id="2_fx2th"]
 
 [resource]
-script = ExtResource("1_2mcid")
+script = ExtResource("1_8ev51")
 room_type = 9
 room_name = "Abandoned Lab"
-room_scene = ExtResource("2_2mcid")
-lab_data = ExtResource("1_8njnb")
+room_scene = ExtResource("2_fx2th")
+lab_data = ExtResource("1_hejpu")
 metadata/_custom_type_script = "uid://0k05qgpjl5gm"

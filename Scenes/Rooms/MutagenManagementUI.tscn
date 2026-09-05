@@ -1,0 +1,72 @@
+[gd_scene format=3 uid="uid://b3ci5vu8lnpk0"]
+
+[ext_resource type="Script" uid="uid://dyvuhpju7rymf" path="res://Scenes/Rooms/MutagenManagementUI.gd" id="1_y7ltu"]
+
+[node name="MutagenManagementUI" type="Control" unique_id=285025096]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_y7ltu")
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=2066736309]
+layout_mode = 0
+offset_left = 207.0
+offset_right = 287.0
+offset_bottom = 212.0
+
+[node name="PanelContainer" type="PanelContainer" parent="CenterContainer" unique_id=1299730515]
+custom_minimum_size = Vector2(112.245, 0)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/PanelContainer" unique_id=1696853882]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="CenterContainer/PanelContainer/VBoxContainer" unique_id=712614615]
+layout_mode = 2
+
+[node name="EquippedLabel" type="Label" parent="CenterContainer/PanelContainer/VBoxContainer" unique_id=1721437683]
+layout_mode = 2
+
+[node name="EquippedGrid" type="GridContainer" parent="CenterContainer/PanelContainer/VBoxContainer" unique_id=606064846]
+layout_mode = 2
+
+[node name="Button0" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer/EquippedGrid" unique_id=197910680]
+layout_mode = 2
+
+[node name="Button1" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer/EquippedGrid" unique_id=907733937]
+layout_mode = 2
+
+[node name="Button2" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer/EquippedGrid" unique_id=1054539242]
+layout_mode = 2
+
+[node name="Button3" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer/EquippedGrid" unique_id=737975279]
+layout_mode = 2
+
+[node name="Button4" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer/EquippedGrid" unique_id=106352085]
+layout_mode = 2
+
+[node name="Button5" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer/EquippedGrid" unique_id=1470550641]
+layout_mode = 2
+
+[node name="ReserveLabel" type="Label" parent="CenterContainer/PanelContainer/VBoxContainer" unique_id=1576186376]
+layout_mode = 2
+
+[node name="ReserveButton" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer" unique_id=565237682]
+layout_mode = 2
+
+[node name="SelectedLabel" type="Label" parent="CenterContainer/PanelContainer/VBoxContainer" unique_id=902759624]
+layout_mode = 2
+
+[node name="ActionContainer" type="HBoxContainer" parent="CenterContainer/PanelContainer/VBoxContainer" unique_id=1981150811]
+layout_mode = 2
+
+[node name="RemoveButton" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer/ActionContainer" unique_id=1003051958]
+layout_mode = 2
+text = "Remove"
+
+[node name="SwapReserveButton" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer/ActionContainer" unique_id=1893234718]
+layout_mode = 2
+text = "Swap"
+
+[node name="DoneButton" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer" unique_id=1007696500]
+layout_mode = 2
+text = "Done"
