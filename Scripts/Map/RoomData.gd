@@ -19,7 +19,8 @@ enum RoomType {
 	MYSTERY_ROOM,
 	AMBUSH,
 	MERCHANT_TRAP,
-	BOSS
+	BOSS,
+	LAB
 }
 
 

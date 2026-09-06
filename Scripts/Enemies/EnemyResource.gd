@@ -4,7 +4,8 @@ class_name EnemyResource
 enum EnemyType {
 	NORMAL,
 	ELITE,
-	BOSS
+	BOSS,
+	CRITICAL_LAB
 }
 
 

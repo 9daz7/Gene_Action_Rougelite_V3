@@ -42,6 +42,10 @@ const BOSS_POOL = [
 	preload("res://Data/Enemies/Boss/ModifiedWolf.tres")
 ]
 
+const CRITICAL_LAB_POOL = [
+	preload("res://Data/Enemies/Labs/MutatedEnemy.tres")
+]
+
 
 # ==================================================
 # Scene References
@@ -136,7 +140,7 @@ func initialize(
 		)
 
 
-func start_critical_experiment():
+func start_critical_experiment() -> void:
 
 	print("==============================")
 	print("STARTING CRITICAL EXPERIMENT")
@@ -144,13 +148,10 @@ func start_critical_experiment():
 	print("battle type BEFORE:", current_battle_type)
 	print("==============================")
 
-	critical_experiment = true
-
-	current_battle_type = RoomData.RoomType.ELITE
-
-	print("Critical flag set:", critical_experiment)
-
-	start_battle(RoomData.RoomType.ELITE) # elite until criticalexperiment.tres is ready
+	start_battle(
+		RoomData.RoomType.LAB,
+		true
+	)
 
 
 # ==================================================
@@ -159,8 +160,9 @@ func start_critical_experiment():
 
 
 func start_battle(
-	room_type = RoomData.RoomType.ENEMY
-):
+	room_type = RoomData.RoomType.ENEMY,
+	is_critical: bool = false
+) -> void:
 
 	roaming_battle = false
 
@@ -172,9 +174,11 @@ func start_battle(
 	print("STARTING BATTLE", battle_number)
 	print("==========================")
 
-	if room_type != RoomData.RoomType.ELITE:
+	critical_experiment = is_critical
 
-		critical_experiment = false
+	current_battle_type = room_type
+
+	print("Critical flag:", critical_experiment)
 
 	if spawner == null:
 
@@ -183,9 +187,6 @@ func start_battle(
 		)
 
 		return
-
-
-	current_battle_type = room_type
 
 	enemies.clear()
 
@@ -197,11 +198,11 @@ func start_battle(
 		room_type
 	)
 
-	var enemy_resources:Array[EnemyResource] = []
+	var enemy_resources: Array[EnemyResource] = []
 
 	for i in range(enemy_count):
 
-		var resource = get_enemy(
+		var resource := get_enemy(
 			room_type
 		)
 
@@ -355,28 +356,50 @@ func start_debug_battle():
 # ==================================================
 
 
-func get_enemy(room_type) -> EnemyResource:
+func get_enemy(
+	room_type
+) -> EnemyResource:
 
 	var pool = []
 
-	match  room_type:
+	# ==================================================
+	# Critical Lab
+	# ==================================================
 
-		RoomData.RoomType.ENEMY:
-			pool = ENEMY_POOL
+	if critical_experiment:
 
-		RoomData.RoomType.GROUP_ENEMY:
-			pool = ENEMY_POOL
+		pool = CRITICAL_LAB_POOL
 
-		RoomData.RoomType.ELITE:
-			pool = ELITE_POOL
+	else:
 
-		RoomData.RoomType.BOSS:
-			pool = BOSS_POOL
+		match room_type:
+
+			RoomData.RoomType.ENEMY:
+				pool = ENEMY_POOL
+
+			RoomData.RoomType.GROUP_ENEMY:
+				pool = ENEMY_POOL
+
+			RoomData.RoomType.ELITE:
+				pool = ELITE_POOL
+
+			RoomData.RoomType.BOSS:
+				pool = BOSS_POOL
+
+			_:
+				push_error(
+					"BattleManager: Unknown room type: "
+					+ str(room_type)
+				)
 
 	if pool.is_empty():
-		print("ERROR: Enemy pool empty")
+
+		push_error(
+			"BattleManager: Enemy pool is empty."
+		)
+
 		return null
-	
+
 	var choices = pool.duplicate()
 
 	choices.shuffle()
@@ -387,6 +410,11 @@ func get_enemy(room_type) -> EnemyResource:
 func get_enemy_count(
 	room_type
 ) -> int:
+
+	# Critical Labs always contain exactly one enemy.
+	if critical_experiment:
+
+		return 1
 
 	match room_type:
 

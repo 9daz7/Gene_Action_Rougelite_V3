@@ -291,6 +291,208 @@ func add_mutagen(
 
 
 # ==================================================
+# Add Mutagen With Reserve Handling
+# ==================================================
+
+func add_mutagen_with_reserve(
+	mutagen: MutagenResource
+) -> bool:
+
+	if mutagen == null:
+
+		push_error(
+			"RunMutagenManager: Cannot add null Mutagen."
+		)
+
+		return false
+
+	# ==================================================
+	# Equipped Slot Available
+	# ==================================================
+
+	if equipped_mutagens.size() < MAX_EQUIPPED_MUTAGENS:
+
+		return add_mutagen(
+			mutagen
+		)
+
+	# ==================================================
+	# Equipped Full / Reserve Available
+	# ==================================================
+
+	if reserve_mutagen == null:
+
+		if set_reserve_mutagen(
+			mutagen
+		):
+
+			print(
+				"MUTAGEN MOVED TO RESERVE:",
+				mutagen.mutagen_name
+			)
+
+			return true
+
+		return false
+
+	# ==================================================
+	# Equipped + Reserve Full
+	# ==================================================
+
+	print(
+		"Mutagen slots and reserve are full:",
+		mutagen.mutagen_name
+	)
+
+	return false
+
+
+func add_critical_lab_reward() -> MutagenResource:
+
+	if mutagen_database == null:
+
+		push_error(
+			"RunMutagenManager: MutagenDatabase is missing."
+		)
+
+		return null
+
+	if run_manager == null:
+
+		push_error(
+			"RunMutagenManager: RunManager is missing."
+		)
+
+		return null
+
+	var current_world: int = (
+		run_manager.current_world
+	)
+
+	var candidates: Array[MutagenResource] = []
+
+	# ==================================================
+	# Find Critical Lab Mutagens
+	# ==================================================
+
+	for mutagen in mutagen_database.get_mutagens_for_world(
+		current_world
+	):
+
+		if mutagen == null:
+			continue
+
+		if not mutagen.critical_lab_exclusive:
+			continue
+
+		if not is_mutagen_eligible(
+			mutagen
+		):
+
+			continue
+
+		candidates.append(
+			mutagen
+		)
+
+
+	# ==================================================
+	# No Eligible Critical Mutagens
+	# ==================================================
+
+	if candidates.is_empty():
+
+		print(
+			"RunMutagenManager: No eligible Critical Lab Mutagen for World ",
+			current_world
+		)
+
+		return null
+
+
+	# ==================================================
+	# Select Reward
+	# ==================================================
+
+	candidates.shuffle()
+
+	var reward: MutagenResource = candidates[0]
+
+	print(
+		"================================"
+	)
+
+	print(
+		"CRITICAL LAB REWARD"
+	)
+
+	print(
+		"World:",
+		current_world
+	)
+
+	print(
+		"Mutagen:",
+		reward.mutagen_name
+	)
+
+	print(
+		"Tier:",
+		reward.tier
+	)
+
+	print(
+		"================================"
+	)
+
+	return reward
+
+	# ==================================================
+	# Equip Reward
+	# ==================================================
+
+	#if equipped_mutagens.size() < MAX_EQUIPPED_MUTAGENS:
+#
+		#if add_mutagen(reward):
+#
+			#return reward
+#
+		#return null
+
+	# ==================================================
+	# Equipped Full → Reserve
+	# ==================================================
+
+	#if reserve_mutagen == null:
+#
+		#if set_reserve_mutagen(
+			#reward
+		#):
+#
+			#return reward
+#
+		#return null
+
+	# ==================================================
+	# No Available Storage
+	# ==================================================
+
+	#print(
+		#"CRITICAL LAB REWARD CANNOT BE STORED:"
+	#)
+#
+	#print(
+		#reward.mutagen_name
+	#)
+#
+	#print(
+		#"Equipped slots and reserve are full."
+	#)
+#
+	#return null
+
+
+# ==================================================
 # Set Reserve
 # ==================================================
 
@@ -305,6 +507,16 @@ func set_reserve_mutagen(
 		)
 
 		return false
+
+	if reserve_mutagen != null:
+
+		print(
+			"Reserve slot already occupied:",
+			reserve_mutagen.mutagen_name
+		)
+
+		return false
+
 
 	reserve_mutagen = mutagen
 
@@ -362,9 +574,7 @@ func remove_reserve_mutagen() -> MutagenResource:
 	if reserve_mutagen == null:
 		return null
 
-	var removed: MutagenResource = (
-		reserve_mutagen
-	)
+	var removed: MutagenResource = reserve_mutagen
 
 	reserve_mutagen = null
 
@@ -376,6 +586,39 @@ func remove_reserve_mutagen() -> MutagenResource:
 	mutagens_changed.emit()
 
 	return removed
+
+
+# ==================================================
+# Replace Reserve Mutagen
+# ==================================================
+
+func replace_reserve_mutagen(
+	new_mutagen: MutagenResource
+) -> MutagenResource:
+
+	if new_mutagen == null:
+
+		push_error(
+			"RunMutagenManager: Cannot replace reserve with null Mutagen."
+		)
+
+		return null
+
+	var old_reserve: MutagenResource = reserve_mutagen
+
+	reserve_mutagen = new_mutagen
+
+	print(
+		"RESERVE MUTAGEN REPLACED:",
+		"Old:",
+		old_reserve.mutagen_name if old_reserve != null else "Empty",
+		"-> New:",
+		new_mutagen.mutagen_name
+	)
+
+	mutagens_changed.emit()
+
+	return old_reserve
 
 
 # ==================================================

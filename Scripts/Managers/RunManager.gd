@@ -2141,6 +2141,23 @@ func start_run():
 
 	run_mutagens.clear()
 
+# test test
+	run_mutagen_manager.reset()
+
+	var test_mutagens: Array[MutagenResource] = [
+		load("res://Data/Mutagens/Carapace/SpikedShellI.tres"),
+		load("res://Data/Mutagens/Feral/MetallicaI.tres"),
+		load("res://Data/Mutagens/Inferno/100,000DegreeBazookaI.tres"),
+		load("res://Data/Mutagens/Inferno/BurningFangsI.tres"),
+		load("res://Data/Mutagens/Instinct/EvasionI.tres"),
+		load("res://Data/Mutagens/Predator/SogekinguI.tres")
+	]
+
+	for mutagen in test_mutagens:
+
+		if mutagen != null:
+			run_mutagen_manager.add_mutagen(mutagen)
+
 	# ==================================================
 	# TEST MUTAGENS
 	# ==================================================

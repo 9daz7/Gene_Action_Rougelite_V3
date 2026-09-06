@@ -20,6 +20,3 @@ enum LabStatus
 
 # Chance experiment attacks when extracting gene
 @export var hostile_experiment_chance: float = 0.0
-
-# Gene rarity from extraction
-@export var experiment_gene_rarity: GeneResource.Rarity

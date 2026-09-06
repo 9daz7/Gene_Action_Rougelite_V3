@@ -82,6 +82,7 @@ enum MutagenTier {
 
 @export var tier: MutagenTier = MutagenTier.TIER_1
 
+@export var critical_lab_exclusive: bool = false
 
 # ==================================================
 # Tier Progression

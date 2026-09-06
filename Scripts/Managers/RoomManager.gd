@@ -1152,7 +1152,7 @@ func apply_reward(
 			return
 
 		var added_mutagen: bool = (
-			run_mutagen_manager.add_mutagen(
+			run_mutagen_manager.add_mutagen_with_reserve(
 				reward
 			)
 		)

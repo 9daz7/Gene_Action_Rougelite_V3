@@ -17,9 +17,13 @@ signal lab_finished
 	"../../Managers/RunManager"
 )
 
-@onready var mutagen_database: MutagenDatabase = get_node(
-	"../../Managers/MutagenDatabase"
+@onready var run_mutagen_manager: RunMutagenManager = get_node(
+	"../../Managers/RunMutagenManager"
 )
+
+#@onready var mutagen_database: MutagenDatabase = get_node(
+	#"../../Managers/MutagenDatabase"
+#)
 
 
 # ==================================================
@@ -72,6 +76,10 @@ var connected_to_battle: bool = false
 
 var lab_completed: bool = false
 
+var pending_critical_reward: MutagenResource = null
+
+var reward_confirmation_dialog: ConfirmationDialog = null
+
 
 # ==================================================
 # Initialization
@@ -79,8 +87,26 @@ var lab_completed: bool = false
 
 
 func _ready() -> void:
-	
+
 	_connect_buttons()
+
+	reward_confirmation_dialog = ConfirmationDialog.new()
+
+	reward_confirmation_dialog.title = (
+		"Replace Reserve Mutagen?"
+	)
+
+	reward_confirmation_dialog.confirmed.connect(
+		_on_replace_reserve_confirmed
+	)
+
+	reward_confirmation_dialog.canceled.connect(
+		_on_replace_reserve_canceled
+	)
+
+	add_child(
+		reward_confirmation_dialog
+	)
 
 
 # ==================================================
@@ -195,6 +221,12 @@ func close() -> void:
 
 		connected_to_battle = false
 
+	if is_instance_valid(
+		reward_confirmation_dialog
+	):
+
+		reward_confirmation_dialog.hide()
+
 	lab_data = null
 	battle_manager = null
 
@@ -211,11 +243,16 @@ func close() -> void:
 
 func start_critical_lab() -> void:
 
-	print("Critical containment failure")
+	print("================================")
+	print("CRITICAL LAB")
+	print("Containment failure!")
+	print("================================")
 
 	disable_operations()
 
 	continue_button.disabled = true
+
+	hide()
 
 	battle_manager.start_critical_experiment()
 
@@ -240,140 +277,261 @@ func _on_experiment_won(enemy) -> void:
 
 func critical_battle_won() -> void:
 
+	if critical_battle_complete:
+		return
+
 	critical_battle_complete = true
 
-	print(
-		"Critical experiment completed"
+	print("================================")
+	print("CRITICAL LAB: BATTLE WON")
+	print("================================")
+
+	show()
+
+	# ==================================================
+	# Generate Reward
+	# ==================================================
+
+	var reward: MutagenResource = (
+		run_mutagen_manager.add_critical_lab_reward()
 	)
 
-	# ==================================================
-	# Award Rare Mutagen
-	# ==================================================
+	if reward == null:
 
-	var reward := get_critical_mutagen_reward()
-
-	if reward != null:
-
-		print(
-			"Critical Lab Mutagen Reward:",
-			reward.mutagen_name
+		status_label.text = (
+			"Containment stabilized.\n"
+			+ "No eligible Critical Lab Mutagen available."
 		)
 
-		if run_manager != null:
+		reset_buttons()
 
-			var added := run_manager.add_mutagen(
-				reward
+		return
+
+	# ==================================================
+	# Equipped Slot Available
+	# ==================================================
+
+	if not run_mutagen_manager.is_full():
+
+		if run_mutagen_manager.add_mutagen(
+			reward
+		):
+
+			status_label.text = (
+				"Containment stabilized.\n"
+				+ "Recovered Mutagen:\n"
+				+ reward.mutagen_name
 			)
 
-			if added:
+			reset_buttons()
 
-				print(
-					"Critical Lab Mutagen added:",
-					reward.mutagen_name
-				)
-
-			else:
-
-				print(
-					"Critical Lab Mutagen could not be added:"
-					,
-					reward.mutagen_name
-				)
+			return
 
 	# ==================================================
-	# Convert Critical Lab to Stable
+	# Equipped Full / Reserve Empty
 	# ==================================================
 
-	lab_data.lab_status = (
-		LabResource.LabStatus.STABLE
+	if not run_mutagen_manager.has_reserve():
+
+		if run_mutagen_manager.set_reserve_mutagen(
+			reward
+		):
+
+			status_label.text = (
+				"Containment stabilized.\n"
+				+ "Recovered Mutagen placed in reserve:\n"
+				+ reward.mutagen_name
+			)
+
+			reset_buttons()
+
+			return
+
+	# ==================================================
+	# Equipped + Reserve Full
+	# ==================================================
+
+	pending_critical_reward = reward
+
+	_show_reward_replacement_confirmation()
+
+
+func _show_reward_replacement_confirmation() -> void:
+
+	if pending_critical_reward == null:
+
+		return
+
+	var current_reserve: MutagenResource = (
+		run_mutagen_manager.reserve_mutagen
 	)
 
-	setup_lab()
+	if current_reserve == null:
+
+		push_error(
+			"AbandonedLab_UI: Expected reserve Mutagen but none exists."
+		)
+
+		pending_critical_reward = null
+
+		return
+
+	reward_confirmation_dialog.dialog_text = (
+		"Your Mutagen slots are full.\n\n"
+		+ "Replace your reserve Mutagen?\n\n"
+		+ "Current Reserve:\n"
+		+ current_reserve.mutagen_name
+		+ "\n\n"
+		+ "New Mutagen:\n"
+		+ pending_critical_reward.mutagen_name
+	)
+
+	reward_confirmation_dialog.ok_button_text = (
+		"Replace Reserve"
+	)
+
+	reward_confirmation_dialog.cancel_button_text = (
+		"Skip Reward"
+	)
+
+	reward_confirmation_dialog.popup_centered()
+
+
+func _on_replace_reserve_confirmed() -> void:
+
+	if pending_critical_reward == null:
+
+		return
+
+	var reward: MutagenResource = (
+		pending_critical_reward
+	)
+
+	var old_reserve: MutagenResource = (
+		run_mutagen_manager.replace_reserve_mutagen(
+			reward
+		)
+	)
+
+	if old_reserve != null:
+
+		status_label.text = (
+			"Containment stabilized.\n"
+			+ "Reserve Mutagen replaced.\n\n"
+			+ "Recovered Mutagen:\n"
+			+ reward.mutagen_name
+		)
+
+	else:
+
+		status_label.text = (
+			"Containment stabilized.\n"
+			+ "Recovered Mutagen:\n"
+			+ reward.mutagen_name
+		)
+
+	pending_critical_reward = null
 
 	reset_buttons()
 
-	continue_button.disabled = false
 
+func _on_replace_reserve_canceled() -> void:
+
+	print(
+		"Critical Lab reward skipped:",
+		pending_critical_reward.mutagen_name
+		if pending_critical_reward != null
+		else "Unknown"
+	)
+
+	status_label.text = (
+		"Containment stabilized.\n"
+		+ "Mutagen reward skipped."
+	)
+
+	pending_critical_reward = null
+
+	reset_buttons()
 
 # ==================================================
 # Critical Mutagen Reward
 # ==================================================
 
-func get_critical_mutagen_reward() -> MutagenResource:
-
-	if mutagen_database == null:
-
-		push_error(
-			"AbandonedLab_UI: MutagenDatabase not found."
-		)
-
-		return null
-
-
-	if run_manager == null:
-
-		push_error(
-			"AbandonedLab_UI: RunManager not found."
-		)
-
-		return null
-
-
-	var available: Array[MutagenResource] = (
-		mutagen_database.get_mutagens_for_world(
-			run_manager.current_world
-		)
-	)
-
-	var candidates: Array[MutagenResource] = []
-
-	for mutagen in available:
-
-		if mutagen == null:
-			continue
-
-		# ==================================================
-		# Critical Labs give Tier 3 Mutagens
-		# ==================================================
-
-		if mutagen.tier != (
-			MutagenResource.MutagenTier.TIER_3
-		):
-
-			continue
-
-		# ==================================================
-		# Don't reward an already equipped Mutagen
-		# ==================================================
-
-		if run_manager.run_mutagens.has(
-			mutagen
-		):
-
-			continue
-
-		candidates.append(
-			mutagen
-		)
-
-	if candidates.is_empty():
-
-		print(
-			"No Tier 3 Mutagen available for Critical Lab."
-		)
-
-		return null
-
-	var reward: MutagenResource = (
-		candidates.pick_random()
-	)
-
-	print(
-		"Critical Lab selected Mutagen:",
-		reward.mutagen_name
-	)
-
-	return reward
+#func get_critical_mutagen_reward() -> MutagenResource:
+#
+	#if mutagen_database == null:
+#
+		#push_error(
+			#"AbandonedLab_UI: MutagenDatabase not found."
+		#)
+#
+		#return null
+#
+#
+	#if run_manager == null:
+#
+		#push_error(
+			#"AbandonedLab_UI: RunManager not found."
+		#)
+#
+		#return null
+#
+#
+	#var available: Array[MutagenResource] = (
+		#mutagen_database.get_mutagens_for_world(
+			#run_manager.current_world
+		#)
+	#)
+#
+	#var candidates: Array[MutagenResource] = []
+#
+	#for mutagen in available:
+#
+		#if mutagen == null:
+			#continue
+#
+		## ==================================================
+		## Critical Labs give Tier 3 Mutagens
+		## ==================================================
+#
+		#if mutagen.tier != (
+			#MutagenResource.MutagenTier.TIER_3
+		#):
+#
+			#continue
+#
+		## ==================================================
+		## Don't reward an already equipped Mutagen
+		## ==================================================
+#
+		#if run_manager.run_mutagens.has(
+			#mutagen
+		#):
+#
+			#continue
+#
+		#candidates.append(
+			#mutagen
+		#)
+#
+	#if candidates.is_empty():
+#
+		#print(
+			#"No Tier 3 Mutagen available for Critical Lab."
+		#)
+#
+		#return null
+#
+	#var reward: MutagenResource = (
+		#candidates.pick_random()
+	#)
+#
+	#print(
+		#"Critical Lab selected Mutagen:",
+		#reward.mutagen_name
+	#)
+#
+	#return reward
 
 
 # ==================================================

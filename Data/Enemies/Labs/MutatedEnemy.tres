@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="EnemyResource" format=3 uid="uid://p68vaa1dnk7x"]
+
+[ext_resource type="Script" uid="uid://cnlwwn0eoa0pn" path="res://Scripts/Genes/GeneResource.gd" id="1_66ime"]
+[ext_resource type="Script" uid="uid://bnmm0xqkm6atb" path="res://Scripts/Moves/MoveResource.gd" id="2_tavxb"]
+[ext_resource type="Script" uid="uid://byxi3hsf2x8dx" path="res://Scripts/Enemies/EnemyResource.gd" id="3_2wfhv"]
+[ext_resource type="Resource" uid="uid://cfsalnn48dv3f" path="res://Data/Moves/Bite.tres" id="3_ff2ub"]
+[ext_resource type="Resource" uid="uid://dssodq4lr1182" path="res://Data/Moves/Protect.tres" id="4_l8pg1"]
+[ext_resource type="Texture2D" uid="uid://btha0go4fr6sq" path="res://Assets/Sprites/enemypng.png" id="6_eoxmp"]
+
+[resource]
+script = ExtResource("3_2wfhv")
+enemy_name = "Mutated Enemy"
+description = "Test test"
+enemy_type = 3
+ai_type = 1
+base_hp = 50
+moves = Array[ExtResource("2_tavxb")]([ExtResource("3_ff2ub"), ExtResource("4_l8pg1")])
+sprite = ExtResource("6_eoxmp")
+metadata/_custom_type_script = "uid://byxi3hsf2x8dx"
