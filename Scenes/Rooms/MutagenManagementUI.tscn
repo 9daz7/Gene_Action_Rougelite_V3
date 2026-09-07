@@ -1,10 +1,15 @@
 [gd_scene format=3 uid="uid://b3ci5vu8lnpk0"]
 
 [ext_resource type="Script" uid="uid://dyvuhpju7rymf" path="res://Scenes/Rooms/MutagenManagementUI.gd" id="1_y7ltu"]
+[ext_resource type="Script" uid="uid://bow8fffqifox1" path="res://Scripts/UI/MutagenDragSlot.gd" id="2_il7y8"]
 
 [node name="MutagenManagementUI" type="Control" unique_id=285025096]
 layout_mode = 3
-anchors_preset = 0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_y7ltu")
 
 [node name="CenterContainer" type="CenterContainer" parent="." unique_id=2066736309]
@@ -22,51 +27,109 @@ layout_mode = 2
 
 [node name="TitleLabel" type="Label" parent="CenterContainer/PanelContainer/VBoxContainer" unique_id=712614615]
 layout_mode = 2
+text = "Manage Mutagens"
 
-[node name="EquippedLabel" type="Label" parent="CenterContainer/PanelContainer/VBoxContainer" unique_id=1721437683]
+[node name="RecoveredMutagenContainer" type="VBoxContainer" parent="CenterContainer/PanelContainer/VBoxContainer" unique_id=2063704886]
 layout_mode = 2
 
-[node name="EquippedGrid" type="GridContainer" parent="CenterContainer/PanelContainer/VBoxContainer" unique_id=606064846]
+[node name="RecoveredLabel" type="Label" parent="CenterContainer/PanelContainer/VBoxContainer/RecoveredMutagenContainer" unique_id=1118185519]
+layout_mode = 2
+text = "Recovered Mutagen"
+
+[node name="RewardSlot" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer/RecoveredMutagenContainer" unique_id=931049429]
+custom_minimum_size = Vector2(150, 70)
+custom_maximum_size = Vector2(150, -1)
+layout_mode = 2
+script = ExtResource("2_il7y8")
+metadata/_custom_type_script = "uid://bow8fffqifox1"
+
+[node name="WorkspaceContainer" type="HBoxContainer" parent="CenterContainer/PanelContainer/VBoxContainer" unique_id=254681727]
 layout_mode = 2
 
-[node name="Button0" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer/EquippedGrid" unique_id=197910680]
+[node name="EquippedContainer" type="VBoxContainer" parent="CenterContainer/PanelContainer/VBoxContainer/WorkspaceContainer" unique_id=1924097201]
 layout_mode = 2
 
-[node name="Button1" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer/EquippedGrid" unique_id=907733937]
+[node name="EquippedLabel" type="Label" parent="CenterContainer/PanelContainer/VBoxContainer/WorkspaceContainer/EquippedContainer" unique_id=1721437683]
+layout_mode = 2
+text = "Equipped Mutagens"
+
+[node name="EquippedGrid" type="GridContainer" parent="CenterContainer/PanelContainer/VBoxContainer/WorkspaceContainer/EquippedContainer" unique_id=606064846]
+layout_mode = 2
+columns = 2
+
+[node name="MutagenSlot0" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer/WorkspaceContainer/EquippedContainer/EquippedGrid" unique_id=682185661]
+custom_minimum_size = Vector2(150, 70)
+layout_mode = 2
+script = ExtResource("2_il7y8")
+metadata/_custom_type_script = "uid://bow8fffqifox1"
+
+[node name="MutagenSlot1" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer/WorkspaceContainer/EquippedContainer/EquippedGrid" unique_id=1771133549]
+custom_minimum_size = Vector2(150, 70)
+layout_mode = 2
+script = ExtResource("2_il7y8")
+metadata/_custom_type_script = "uid://bow8fffqifox1"
+
+[node name="MutagenSlot2" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer/WorkspaceContainer/EquippedContainer/EquippedGrid" unique_id=735069030]
+custom_minimum_size = Vector2(150, 70)
+layout_mode = 2
+script = ExtResource("2_il7y8")
+metadata/_custom_type_script = "uid://bow8fffqifox1"
+
+[node name="MutagenSlot3" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer/WorkspaceContainer/EquippedContainer/EquippedGrid" unique_id=1126760314]
+custom_minimum_size = Vector2(150, 70)
+layout_mode = 2
+script = ExtResource("2_il7y8")
+metadata/_custom_type_script = "uid://bow8fffqifox1"
+
+[node name="MutagenSlot4" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer/WorkspaceContainer/EquippedContainer/EquippedGrid" unique_id=2041364489]
+custom_minimum_size = Vector2(150, 70)
+layout_mode = 2
+script = ExtResource("2_il7y8")
+metadata/_custom_type_script = "uid://bow8fffqifox1"
+
+[node name="MutagenSlot5" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer/WorkspaceContainer/EquippedContainer/EquippedGrid" unique_id=1200487561]
+custom_minimum_size = Vector2(150, 70)
+layout_mode = 2
+script = ExtResource("2_il7y8")
+metadata/_custom_type_script = "uid://bow8fffqifox1"
+
+[node name="ReserveContainer" type="VBoxContainer" parent="CenterContainer/PanelContainer/VBoxContainer/WorkspaceContainer" unique_id=1828377347]
 layout_mode = 2
 
-[node name="Button2" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer/EquippedGrid" unique_id=1054539242]
+[node name="ReserveLabel" type="Label" parent="CenterContainer/PanelContainer/VBoxContainer/WorkspaceContainer/ReserveContainer" unique_id=1576186376]
+layout_mode = 2
+text = "Reserve"
+
+[node name="ReserveSlot" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer/WorkspaceContainer/ReserveContainer" unique_id=1324708890]
+custom_minimum_size = Vector2(150, 70)
+layout_mode = 2
+script = ExtResource("2_il7y8")
+metadata/_custom_type_script = "uid://bow8fffqifox1"
+
+[node name="RemoveContainer" type="VBoxContainer" parent="CenterContainer/PanelContainer/VBoxContainer/WorkspaceContainer" unique_id=1713310633]
 layout_mode = 2
 
-[node name="Button3" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer/EquippedGrid" unique_id=737975279]
+[node name="RemoveLabel" type="Label" parent="CenterContainer/PanelContainer/VBoxContainer/WorkspaceContainer/RemoveContainer" unique_id=881422292]
 layout_mode = 2
+text = "Remove"
 
-[node name="Button4" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer/EquippedGrid" unique_id=106352085]
+[node name="RemoveSlot" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer/WorkspaceContainer/RemoveContainer" unique_id=1031189658]
+custom_minimum_size = Vector2(150, 70)
 layout_mode = 2
-
-[node name="Button5" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer/EquippedGrid" unique_id=1470550641]
-layout_mode = 2
-
-[node name="ReserveLabel" type="Label" parent="CenterContainer/PanelContainer/VBoxContainer" unique_id=1576186376]
-layout_mode = 2
-
-[node name="ReserveButton" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer" unique_id=565237682]
-layout_mode = 2
-
-[node name="SelectedLabel" type="Label" parent="CenterContainer/PanelContainer/VBoxContainer" unique_id=902759624]
-layout_mode = 2
+script = ExtResource("2_il7y8")
+metadata/_custom_type_script = "uid://bow8fffqifox1"
 
 [node name="ActionContainer" type="HBoxContainer" parent="CenterContainer/PanelContainer/VBoxContainer" unique_id=1981150811]
 layout_mode = 2
 
-[node name="RemoveButton" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer/ActionContainer" unique_id=1003051958]
+[node name="ConfirmButton" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer/ActionContainer" unique_id=1893234718]
 layout_mode = 2
-text = "Remove"
+text = "Confirm"
 
-[node name="SwapReserveButton" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer/ActionContainer" unique_id=1893234718]
+[node name="LeaveButton" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer/ActionContainer" unique_id=145035263]
 layout_mode = 2
-text = "Swap"
+text = "Leave"
 
-[node name="DoneButton" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer" unique_id=1007696500]
+[node name="InstructionsLabel" type="Label" parent="CenterContainer/PanelContainer/VBoxContainer" unique_id=326651221]
 layout_mode = 2
-text = "Done"
+text = "Drag to replace or remove Mutagens."

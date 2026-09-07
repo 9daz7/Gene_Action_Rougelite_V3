@@ -67,6 +67,29 @@ func _ready() -> void:
 func _on_lab_interacted() -> void:
 
 	if is_instance_valid(lab_ui):
+		return
+
+	var current_room: RoomResource = (
+		room_manager.current_room
+	)
+
+	if current_room == null:
+
+		push_error(
+			"AbandonedLabWorld: No current RoomResource."
+		)
+
+		return
+
+	# ==================================================
+	# Lab Permanently Locked
+	# ==================================================
+
+	if current_room.lab_mutagen_editing_completed:
+
+		print(
+			"Lab already completed. Interaction blocked."
+		)
 
 		return
 
@@ -117,15 +140,13 @@ func _on_lab_interacted() -> void:
 		)
 	)
 
-	var current_room := room_manager.current_room
-
-	if current_room == null:
-
-		push_error(
-			"AbandonedLabWorld: No current RoomResource."
-		)
-
-		return
+	#if current_room == null:
+#
+		#push_error(
+			#"AbandonedLabWorld: No current RoomResource."
+		#)
+#
+		#return
 
 	if current_room.lab_data == null:
 
@@ -152,6 +173,22 @@ func _on_lab_finished() -> void:
 	print("================================")
 
 
+	var current_room: RoomResource = (
+		room_manager.current_room
+	)
+
+	if current_room == null:
+
+		push_error(
+			"AbandonedLabWorld: No current RoomResource."
+		)
+
+		return
+
+	# ==================================================
+	# Close Lab UI
+	# ==================================================
+
 	if is_instance_valid(lab_ui):
 
 		lab_ui.close()
@@ -163,15 +200,35 @@ func _on_lab_finished() -> void:
 			"Lab UI closed and freed"
 		)
 
-	# --------------------------------------------------
-	# Complete Room
-	# --------------------------------------------------
+	# ==================================================
+	# Check Mutagen Editing State
+	# ==================================================
 
-	room_manager.complete_room()
+	if current_room.lab_mutagen_editing_completed:
 
-	# --------------------------------------------------
+		print(
+			"Lab editing completed."
+		)
+
+		print(
+			"Completing Lab room."
+		)
+
+		room_manager.complete_room()
+
+	else:
+
+		print(
+			"Lab editing NOT completed."
+		)
+
+		print(
+			"Lab remains available for re-entry."
+		)
+
+	# ==================================================
 	# Restore Player
-	# --------------------------------------------------
+	# ==================================================
 
 	if room_player != null:
 

@@ -59,3 +59,20 @@ enum RoomType {
 # ==================================================
 
 @export var completed: bool = false
+
+
+# ==================================================
+# Lab State
+# ==================================================
+
+# critical lab completed
+@export var lab_battle_completed: bool = false
+
+# no lab re-entry
+@export var lab_mutagen_editing_completed: bool = false
+
+# heal has been used
+@export var lab_healing_used: bool = false
+
+# critical Lab reward remains until accepted
+@export var pending_lab_mutagen_reward: MutagenResource = null
