@@ -48,7 +48,7 @@ const EQUIPPED_SLOT_COUNT: int = 6
 )
 
 @onready var reward_button: MutagenDragSlot = (
-	$CenterContainer/PanelContainer/VBoxContainer/RecoveredMutagenContainer/RewardButton
+	$CenterContainer/PanelContainer/VBoxContainer/RecoveredMutagenContainer/RewardSlot
 )
 
 @onready var equipped_label: Label = (
@@ -64,7 +64,7 @@ const EQUIPPED_SLOT_COUNT: int = 6
 )
 
 @onready var reserve_button: MutagenDragSlot = (
-	$CenterContainer/PanelContainer/VBoxContainer/WorkspaceContainer/ReserveContainer/ReserveButton
+	$CenterContainer/PanelContainer/VBoxContainer/WorkspaceContainer/ReserveContainer/ReserveSlot
 )
 
 @onready var remove_label: Label = (
@@ -72,7 +72,7 @@ const EQUIPPED_SLOT_COUNT: int = 6
 )
 
 @onready var remove_button: MutagenDragSlot = (
-	$CenterContainer/PanelContainer/VBoxContainer/WorkspaceContainer/RemoveContainer/RemoveButton
+	$CenterContainer/PanelContainer/VBoxContainer/WorkspaceContainer/RemoveContainer/RemoveSlot
 )
 
 @onready var instructions_label: Label = (
@@ -84,7 +84,7 @@ const EQUIPPED_SLOT_COUNT: int = 6
 )
 
 @onready var leave_button: Button = (
-	$CenterContainer/PanelContainer/VBoxContainer/ActionContainer/DoneButton
+	$CenterContainer/PanelContainer/VBoxContainer/ActionContainer/LeaveButton
 )
 
 

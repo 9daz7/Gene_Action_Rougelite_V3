@@ -413,7 +413,7 @@ func _refresh_stats(
 			speed += mutagen.speed_bonus
 			accuracy += mutagen.accuracy_bonus
 			evasion += mutagen.evasion_bonus
-			armor += mutagen.armor_bonus
+			armor += mutagen.defense_bonus
 			critical += mutagen.crit_bonus
 
 	# ==================================================
