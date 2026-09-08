@@ -55,9 +55,9 @@ func load_mutagens() -> void:
 		#"res://Data/Mutagens/Feral/FerociousBiteI.tres"
 	#)
 #
-	#_add_mutagen(
-		#"res://Data/Mutagens/Feral/MetallicaI.tres"
-	#)
+	_add_mutagen(
+		"res://Data/Mutagens/Feral/MetallicaI.tres"
+	)
 #
 	_add_mutagen(
 		"res://Data/Mutagens/Feral/FeralI.tres"
@@ -155,9 +155,9 @@ func load_mutagens() -> void:
 	## Storm
 	## ==================================================
 #
-	_add_mutagen(
-		"res://Data/Mutagens/Storm/ElectricGuardI.tres"
-	)
+	#_add_mutagen(
+		#"res://Data/Mutagens/Storm/ElectricGuardI.tres"
+	#)
 #
 	#_add_mutagen(
 		#"res://Data/Mutagens/Storm/ElectricGuardII.tres"
