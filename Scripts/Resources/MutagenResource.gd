@@ -100,6 +100,36 @@ enum MutagenTier {
 
 
 # ==================================================
+# DUO Requirements
+# ==================================================
+
+@export var has_duo_effect: bool = false
+
+# Require a specific Mutagen family.
+@export var duo_required_families: Array[MutagenFamily] = []
+
+# Require a specific Mutagen type.
+
+@export var duo_required_types: Array[MutagenType] = []
+
+# exact Mutagen requirement.
+@export var duo_required_mutagen_id: String = ""
+
+
+# ==================================================
+# Duo Effects
+# ==================================================
+
+@export var duo_attack_bonus: int = 0
+@export var duo_defense_bonus: int = 0
+@export var duo_speed_bonus: int = 0
+@export var duo_hp_bonus: int = 0
+@export var duo_accuracy_bonus: int = 0
+@export var duo_evasion_bonus: int = 0
+@export var duo_crit_bonus: int = 0
+
+
+# ==================================================
 # World Availability
 # ==================================================
 

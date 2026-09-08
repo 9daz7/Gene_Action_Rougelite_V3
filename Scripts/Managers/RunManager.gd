@@ -2108,11 +2108,11 @@ func get_empty_potion_slot() -> int:
 func start_run():
 
 	if current_animal_build == null:
-		
+
 		push_error(
 			"No animal build selected"
 		)
-		
+
 		return
 
 # ----------------------------------------------
@@ -2120,7 +2120,7 @@ func start_run():
 # ----------------------------------------------
 
 	run_active = true
-	
+
 	gold = 35
 
 	GameEvents.gold_changed.emit(gold)
@@ -2144,46 +2144,6 @@ func start_run():
 # test test
 	run_mutagen_manager.reset()
 
-	var test_mutagens: Array[MutagenResource] = [
-		load("res://Data/Mutagens/Carapace/SpikedShellI.tres"),
-		load("res://Data/Mutagens/Feral/MetallicaI.tres"),
-		load("res://Data/Mutagens/Inferno/100,000DegreeBazookaI.tres"),
-		load("res://Data/Mutagens/Inferno/BurningFangsI.tres"),
-		load("res://Data/Mutagens/Instinct/EvasionI.tres"),
-		load("res://Data/Mutagens/Predator/SogekinguI.tres")
-	]
-
-	for mutagen in test_mutagens:
-
-		if mutagen != null:
-			run_mutagen_manager.add_mutagen(mutagen)
-
-	# ==================================================
-	# TEST MUTAGENS
-	# ==================================================
-
-	#var electric_guard := load(
-		#"res://Data/Mutagens/ElectricGuard.tres"
-	#) as MutagenResource
-#
-	#if electric_guard != null:
-#
-		#if run_mutagen_manager != null:
-#
-			#run_mutagen_manager.add_mutagen(
-				#electric_guard
-			#)
-
-	#var burning_fang := load(
-		#"res://Data/Mutagens/BurningFangsMutagen.tres"
-	#) as MutagenResource
-#
-	#if burning_fang != null:
-#
-		#add_mutagen(
-			#burning_fang
-		#)
-
 	GameEvents.hp_changed.emit(
 		player_hp,
 		max_hp
@@ -2197,7 +2157,7 @@ func start_run():
 	)
 
 	print("=== Run Start ===")
-	
+
 	print(
 		"Animal:",
 		current_animal_build.animal_name

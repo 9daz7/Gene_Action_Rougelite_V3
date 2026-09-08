@@ -796,6 +796,273 @@ func get_mutagens_by_family(
 	)
 
 
+func has_mutagen_type(
+	required_type: MutagenResource.MutagenType
+) -> bool:
+
+	for mutagen in equipped_mutagens:
+
+		if mutagen == null:
+			continue
+
+		if mutagen.mutagen_type == required_type:
+			return true
+
+	return false
+
+
+func has_mutagen_family(
+	required_family: MutagenResource.MutagenFamily
+) -> bool:
+
+	for mutagen in equipped_mutagens:
+
+		if mutagen == null:
+			continue
+
+		if mutagen.mutagen_family == required_family:
+			return true
+
+	return false
+
+
+func is_duo_active(
+	mutagen: MutagenResource
+) -> bool:
+
+	if mutagen == null:
+		return false
+
+	if not mutagen.has_duo_effect:
+		return false
+
+	return has_duo_partner(
+		mutagen
+	)
+
+#func is_duo_active(
+	#mutagen: MutagenResource
+#) -> bool:
+#
+	#if mutagen == null:
+		#return false
+#
+	#if mutagen.mutagen_type != (
+		#MutagenResource.MutagenType.DUO
+	#):
+#
+		#print(
+			#"DUO INACTIVE:",
+			#mutagen.mutagen_name
+		#)
+#
+		#return false
+#
+	## ==================================================
+	## Exact Mutagen Requirement
+	## ==================================================
+#
+	#if not mutagen.required_mutagen_id.is_empty():
+#
+		#var found_required_mutagen := false
+#
+		#for equipped in equipped_mutagens:
+#
+			#if equipped == null:
+				#continue
+#
+			#if equipped.mutagen_id == (
+				#mutagen.required_mutagen_id
+			#):
+#
+				#found_required_mutagen = true
+				#break
+#
+		#if not found_required_mutagen:
+#
+			#print(
+				#"DUO INACTIVE:",
+				#mutagen.mutagen_name
+			#)
+#
+			#return false
+#
+	## ==================================================
+	## Required Mutagen Types
+	## ==================================================
+#
+	#for required_type in mutagen.duo_required_types:
+#
+		#if not has_mutagen_type(
+			#required_type
+		#):
+#
+			#print(
+				#"DUO INACTIVE:",
+				#mutagen.mutagen_name
+			#)
+#
+			#return false
+#
+	## ==================================================
+	## Required Mutagen Families
+	## ==================================================
+#
+	#for required_family in mutagen.duo_required_families:
+#
+		#if not has_mutagen_family(
+			#required_family
+		#):
+#
+			#print(
+				#"DUO INACTIVE:",
+				#mutagen.mutagen_name
+			#)
+#
+			#return false
+#
+	## ==================================================
+	## All Requirements Passed
+	## ==================================================
+#
+	#print(
+		#"DUO ACTIVE:",
+		#mutagen.mutagen_name,
+		#"| Types:",
+		#mutagen.duo_required_types,
+		#"| Families:",
+		#mutagen.duo_required_families
+	#)
+#
+	#return true
+
+
+func has_duo_partner(
+	mutagen: MutagenResource
+) -> bool:
+
+	if mutagen == null:
+		return false
+
+	if not mutagen.has_duo_effect:
+		return false
+
+	# ==================================================
+	# Exact Mutagen Requirement
+	# ==================================================
+
+	if not mutagen.duo_required_mutagen_id.is_empty():
+
+		for equipped in equipped_mutagens:
+
+			if equipped == null:
+				continue
+
+			if equipped == mutagen:
+				continue
+
+			if equipped.mutagen_id == (
+				mutagen.duo_required_mutagen_id
+			):
+
+				return true
+
+		return false
+
+	# ==================================================
+	# Required Families
+	# ==================================================
+
+	for required_family in (
+		mutagen.duo_required_families
+	):
+
+		var found_family := false
+
+		for equipped in equipped_mutagens:
+
+			if equipped == null:
+				continue
+
+			if equipped == mutagen:
+				continue
+
+			if equipped.mutagen_family == required_family:
+
+				found_family = true
+				break
+
+		if not found_family:
+			return false
+
+	# ==================================================
+	# Required Types
+	# ==================================================
+
+	for required_type in (
+		mutagen.duo_required_types
+	):
+
+		var found_type := false
+
+		for equipped in equipped_mutagens:
+
+			if equipped == null:
+				continue
+
+			if equipped == mutagen:
+				continue
+
+			if equipped.mutagen_type == required_type:
+
+				found_type = true
+				break
+
+		if not found_type:
+			return false
+
+	return true
+
+
+func is_mutagen_active(
+	mutagen: MutagenResource
+) -> bool:
+
+	if mutagen == null:
+		return false
+
+	return true
+#func is_mutagen_active(
+	#mutagen: MutagenResource
+#) -> bool:
+#
+	#if mutagen == null:
+		#return false
+#
+	#if mutagen.mutagen_type == (
+		#MutagenResource.MutagenType.DUO
+	#):
+#
+		#return is_duo_active(
+			#mutagen
+		#)
+#
+	#return true
+
+
+func get_duo_attack_bonus(
+	mutagen: MutagenResource
+) -> int:
+
+	if mutagen == null:
+		return 0
+
+	if not has_duo_partner(mutagen):
+		return 0
+
+	return mutagen.duo_attack_bonus
+
+
 # ==================================================
 # Family Selection
 # ==================================================

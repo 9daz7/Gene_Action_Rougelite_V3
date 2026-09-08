@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="MutagenResource" format=3 uid="uid://cwna0irb0u7u3"]
+
+[ext_resource type="Script" uid="uid://cedh0hgwqddn4" path="res://Resources/StatusEffect.gd" id="1_8qn1g"]
+[ext_resource type="Script" uid="uid://cps66j48fyqt5" path="res://Scripts/Resources/MutagenResource.gd" id="2_j5yd2"]
+
+[resource]
+script = ExtResource("2_j5yd2")
+requires_previous_tier = false
+mutagen_id = "instinct_1"
+mutagen_family = 7
+mutagen_name = "Insctinct I"
+evasion_bonus = 10
+metadata/_custom_type_script = "uid://cps66j48fyqt5"

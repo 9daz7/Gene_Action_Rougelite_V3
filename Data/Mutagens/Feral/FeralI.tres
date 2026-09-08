@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="MutagenResource" format=3 uid="uid://b6y7gh6g3do6"]
+
+[ext_resource type="Script" uid="uid://cedh0hgwqddn4" path="res://Resources/StatusEffect.gd" id="1_eov5x"]
+[ext_resource type="Script" uid="uid://cps66j48fyqt5" path="res://Scripts/Resources/MutagenResource.gd" id="2_wxtpc"]
+
+[resource]
+script = ExtResource("2_wxtpc")
+mutagen_type = 1
+requires_previous_tier = false
+mutagen_id = "feral_1"
+has_duo_effect = true
+duo_required_families = Array[int]([2])
+duo_attack_bonus = 5
+mutagen_name = "Feral I"
+attack_bonus = 2
+metadata/_custom_type_script = "uid://cps66j48fyqt5"

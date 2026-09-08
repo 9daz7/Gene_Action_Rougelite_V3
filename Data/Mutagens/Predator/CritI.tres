@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="MutagenResource" format=3 uid="uid://bij3n5jx1ier3"]
+
+[ext_resource type="Script" uid="uid://cedh0hgwqddn4" path="res://Resources/StatusEffect.gd" id="1_6mdf5"]
+[ext_resource type="Script" uid="uid://cps66j48fyqt5" path="res://Scripts/Resources/MutagenResource.gd" id="2_v0c38"]
+
+[resource]
+script = ExtResource("2_v0c38")
+requires_previous_tier = false
+mutagen_id = "crit_1"
+mutagen_family = 4
+mutagen_name = "Crit I"
+crit_bonus = 10
+metadata/_custom_type_script = "uid://cps66j48fyqt5"

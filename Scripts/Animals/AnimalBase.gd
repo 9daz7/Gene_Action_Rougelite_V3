@@ -551,11 +551,35 @@ func get_attack() -> int:
 		if mutagen == null:
 			continue
 
+		if not run_mutagen_manager.is_mutagen_active(
+			mutagen
+		):
+
+			continue
+
+		# Normal Mutagen effect
 		value += mutagen.attack_bonus
+
+		# Duo effect
+		if run_mutagen_manager.has_duo_partner(
+			mutagen
+		):
+
+			print(
+				"DUO BONUS ACTIVE:",
+				mutagen.mutagen_name,
+				"| Attack Bonus:",
+				mutagen.duo_attack_bonus
+			)
+	
+			value += mutagen.duo_attack_bonus
 
 	for slot in gene_slots:
 
 		for gene in gene_slots[slot]:
+
+			if gene == null:
+				continue
 
 			value += gene.attack_bonus
 
@@ -565,7 +589,6 @@ func get_attack() -> int:
 			self,
 			value
 		)
-
 
 	return value
 
@@ -579,11 +602,20 @@ func get_max_hp() -> int:
 		if mutagen == null:
 			continue
 
+		if not run_mutagen_manager.is_mutagen_active(
+			mutagen
+		):
+
+			continue
+	
 		value += mutagen.hp_bonus
 
 	for slot in gene_slots:
 
 		for gene in gene_slots[slot]:
+
+			if gene == null:
+				continue
 
 			value += gene.hp_bonus
 
@@ -606,6 +638,12 @@ func get_speed() -> int:
 	for mutagen in get_run_mutagens():
 
 		if mutagen == null:
+			continue
+
+		if not run_mutagen_manager.is_mutagen_active(
+			mutagen
+		):
+
 			continue
 
 		value += mutagen.speed_bonus
@@ -639,6 +677,12 @@ func get_accuracy() -> int:
 		if mutagen == null:
 			continue
 
+		if not run_mutagen_manager.is_mutagen_active(
+			mutagen
+		):
+
+			continue
+
 		value += mutagen.accuracy_bonus
 
 	for slot in gene_slots:
@@ -654,7 +698,6 @@ func get_accuracy() -> int:
 			value
 		)
 
-
 	return value
 
 
@@ -667,10 +710,21 @@ func get_evasion() -> int:
 		if mutagen == null:
 			continue
 
+		if not run_mutagen_manager.is_mutagen_active(
+			mutagen
+		):
+
+			continue
+
 		value += mutagen.evasion_bonus
 
 	for slot in gene_slots:
+
 		for gene in gene_slots[slot]:
+
+			if gene == null:
+				continue
+
 			value += gene.evasion_bonus
 
 	for passive in passive_effects:
@@ -692,12 +746,23 @@ func get_armor() -> int:
 		if mutagen == null:
 			continue
 
+		if not run_mutagen_manager.is_mutagen_active(
+			mutagen
+		):
+
+			continue
+
 		value += mutagen.defense_bonus
 
 	for slot in gene_slots:
+
 		for gene in gene_slots[slot]:
+
+			if gene == null:
+				continue
+
 			value += gene.armor_bonus
-			
+
 	for passive in passive_effects:
 
 		value = passive.modify_armor(
@@ -715,6 +780,12 @@ func get_critical_chance() -> int:
 	for mutagen in get_run_mutagens():
 
 		if mutagen == null:
+			continue
+
+		if not run_mutagen_manager.is_mutagen_active(
+			mutagen
+		):
+
 			continue
 
 		chance += mutagen.crit_bonus
@@ -772,15 +843,17 @@ func get_mutagen_damage_bonus(
 	if move == null:
 		return 0
 
-	var bonus := 0
+	var bonus: int = 0
 
 	for mutagen in get_run_mutagens():
 
 		if mutagen == null:
 			continue
 
-		if mutagen.affects_move(move):
+		if mutagen.mutagen_type != MutagenResource.MutagenType.ABILITY:
+			continue
 
+		if mutagen.affects_move(move):
 			bonus += mutagen.damage_bonus
 
 	return bonus
@@ -791,13 +864,10 @@ func get_mutagen_conditional_damage_bonus(
 	target: AnimalBase
 ) -> int:
 
-	if move == null:
+	if move == null or target == null:
 		return 0
 
-	if target == null:
-		return 0
-
-	var bonus := 0
+	var bonus: int = 0
 
 	var data := {
 		"target": target,
@@ -809,15 +879,18 @@ func get_mutagen_conditional_damage_bonus(
 		if mutagen == null:
 			continue
 
+		if mutagen.mutagen_type != (
+			MutagenResource.MutagenType.CONDITIONAL
+		):
+			continue
+
 		if mutagen.conditional_damage_bonus == 0:
 			continue
 
-		var condition_passed := _check_mutagen_condition(
+		if not _check_mutagen_condition(
 			mutagen,
 			data
-		)
-
-		if not condition_passed:
+		):
 			continue
 
 		bonus += mutagen.conditional_damage_bonus
@@ -828,10 +901,60 @@ func get_mutagen_conditional_damage_bonus(
 			"| Bonus:",
 			mutagen.conditional_damage_bonus,
 			"| Target:",
-			target.name
+			target.name,
+			"| Target HP:",
+			target.hp,
+			"/",
+			target.get_max_hp()
 		)
 
 	return bonus
+#func get_mutagen_conditional_damage_bonus(
+	#move: MoveResource,
+	#target: AnimalBase
+#) -> int:
+#
+	#if move == null:
+		#return 0
+#
+	#if target == null:
+		#return 0
+#
+	#var bonus := 0
+#
+	#var data := {
+		#"target": target,
+		#"move": move
+	#}
+#
+	#for mutagen in get_run_mutagens():
+#
+		#if mutagen == null:
+			#continue
+#
+		#if mutagen.conditional_damage_bonus == 0:
+			#continue
+#
+		#var condition_passed := _check_mutagen_condition(
+			#mutagen,
+			#data
+		#)
+#
+		#if not condition_passed:
+			#continue
+#
+		#bonus += mutagen.conditional_damage_bonus
+#
+		#print(
+			#"CONDITIONAL DAMAGE MUTAGEN:",
+			#mutagen.mutagen_name,
+			#"| Bonus:",
+			#mutagen.conditional_damage_bonus,
+			#"| Target:",
+			#target.name
+		#)
+#
+	#return bonus
 
 
 func get_mutagen_accuracy_bonus(
@@ -841,15 +964,17 @@ func get_mutagen_accuracy_bonus(
 	if move == null:
 		return 0
 
-	var bonus := 0
+	var bonus: int = 0
 
 	for mutagen in get_run_mutagens():
 
 		if mutagen == null:
 			continue
 
-		if mutagen.affects_move(move):
+		if mutagen.mutagen_type != MutagenResource.MutagenType.ABILITY:
+			continue
 
+		if mutagen.affects_move(move):
 			bonus += mutagen.accuracy_bonus_for_move
 
 	return bonus
@@ -862,15 +987,17 @@ func get_mutagen_critical_bonus(
 	if move == null:
 		return 0
 
-	var bonus := 0
+	var bonus: int = 0
 
 	for mutagen in get_run_mutagens():
 
 		if mutagen == null:
 			continue
 
-		if mutagen.affects_move(move):
+		if mutagen.mutagen_type != MutagenResource.MutagenType.ABILITY:
+			continue
 
+		if mutagen.affects_move(move):
 			bonus += mutagen.critical_bonus_for_move
 
 	return bonus
@@ -892,6 +1019,9 @@ func apply_mutagen_move_effects(
 		if mutagen == null:
 			continue
 
+		if mutagen.mutagen_type != MutagenResource.MutagenType.ABILITY:
+			continue
+
 		if not mutagen.affects_move(move):
 			continue
 
@@ -909,9 +1039,9 @@ func apply_mutagen_move_effects(
 			)
 
 			print(
-				"Mutagen applied:",
+				"MUTAGEN ADDED EFFECT:",
 				mutagen.mutagen_name,
-				" ->",
+				"->",
 				effect.effect_name
 			)
 
@@ -934,17 +1064,40 @@ func modify_accuracy(amount:int):
 
 func modify_evasion(amount:int):
 	evasion_modifier += amount
-	
-	
-func calculate_hit_chance(target, move_accuracy: int) -> int:
-	
-	var chance = move_accuracy + get_accuracy() - target.get_evasion()
-	
-	var final_chance = clamp(chance,10,100)
+
+
+func calculate_hit_chance(
+	target,
+	move_accuracy: int
+) -> int:
+
+	if target == null:
+		return 0
+
+	var chance: int = int(get_accuracy())
+
+	chance += move_accuracy - 100
+
+	var target_evasion: int = int(target.get_evasion())
+
+	chance -= target_evasion
+
+	var final_chance: int = clamp(
+		chance,
+		10,
+		100
+	)
 
 	print(
+		"HIT CHANCE DEBUG | Attacker:",
 		name,
-		" hit chance:",
+		"| Accuracy:",
+		get_accuracy(),
+		"| Move Accuracy:",
+		move_accuracy,
+		"| Target Evasion:",
+		target_evasion,
+		"| Final Hit Chance:",
 		final_chance
 	)
 
@@ -1252,7 +1405,10 @@ func heal(amount:int):
 		die()
 
 
-func calculate_move_damage(move:MoveResource) -> int:
+func calculate_move_damage(
+	move: MoveResource,
+	target: AnimalBase = null
+) -> int:
 
 	var damage := 0
 
@@ -1268,10 +1424,48 @@ func calculate_move_damage(move:MoveResource) -> int:
 			damage = 0
 
 	damage += move.power
-	
+
 	damage = int(
 		damage * move.damage_multiplier
 	)
+
+	# ==========================================
+	# Ability Mutagen Bonus
+	# ==========================================
+
+	var mutagen_bonus := get_mutagen_damage_bonus(
+		move
+	)
+
+	if mutagen_bonus != 0:
+
+		print(
+			"MUTAGEN DAMAGE BONUS:",
+			move.move_name,
+			"| Bonus:",
+			mutagen_bonus
+		)
+
+		damage += mutagen_bonus
+
+	# ==========================================
+	# Conditional Mutagen Bonus
+	# ==========================================
+
+	var conditional_bonus := (
+		get_mutagen_conditional_damage_bonus(
+			move,
+			target
+		)
+	)
+
+	if conditional_bonus != 0:
+
+		damage += conditional_bonus
+
+	# ==========================================
+	# Passive Effects
+	# ==========================================
 
 	for passive in passive_effects:
 

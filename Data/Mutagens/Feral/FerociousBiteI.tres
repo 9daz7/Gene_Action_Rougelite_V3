@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="MutagenResource" format=3 uid="uid://dqncpwysxoxld"]
+
+[ext_resource type="Script" uid="uid://cedh0hgwqddn4" path="res://Resources/StatusEffect.gd" id="1_kg5t3"]
+[ext_resource type="Script" uid="uid://cps66j48fyqt5" path="res://Scripts/Resources/MutagenResource.gd" id="2_v112c"]
+
+[resource]
+script = ExtResource("2_v112c")
+mutagen_type = 5
+condition = 2
+condition_value = 50.0
+requires_previous_tier = false
+mutagen_id = "fb_1"
+duo_required_families = Array[int]([0, 2])
+mutagen_name = "Feral Ability Test"
+attack_bonus = 5
+conditional_damage_bonus = 5
+metadata/_custom_type_script = "uid://cps66j48fyqt5"
