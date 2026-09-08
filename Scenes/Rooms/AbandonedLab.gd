@@ -239,3 +239,22 @@ func _on_lab_finished() -> void:
 	print(
 		"ABANDONED LAB PLAYER CONTROLS RESTORED"
 	)
+
+
+func _exit_tree() -> void:
+
+	print(
+		"AbandonedLab exiting tree"
+	)
+
+	if is_instance_valid(lab_ui):
+
+		lab_ui.close()
+
+		lab_ui.queue_free()
+
+		lab_ui = null
+
+		print(
+			"AbandonedLab UI cleaned up"
+	)

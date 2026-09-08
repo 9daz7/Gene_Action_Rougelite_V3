@@ -37,6 +37,13 @@ var current_world: int = 1
 
 
 # ==================================================
+# World Progression
+# ==================================================
+
+var tutorial_completed: bool = false
+
+
+# ==================================================
 # Room Pools
 # ==================================================
 
@@ -110,6 +117,14 @@ func remove_gene(
 	)
 
 	return true
+
+
+func get_starting_world() -> int:
+
+	if tutorial_completed:
+		return 2
+
+	return 1
 
 
 # ==================================================
@@ -1289,6 +1304,49 @@ func _choose_non_battle_type(
 	return candidates.pick_random()
 
 
+func complete_world() -> void:
+
+	print("================================")
+	print("WORLD COMPLETED")
+	print("Current World:", current_world)
+	print("================================")
+
+	# ==================================================
+	# Tutorial completion
+	# ==================================================
+
+	if current_world == 1 and not tutorial_completed:
+
+		tutorial_completed = true
+
+		print(
+			"Tutorial World completed permanently."
+		)
+
+		# Demo currently moves directly to World 2.
+		current_world = 2
+
+		print(
+			"Next World:",
+			current_world
+		)
+
+		return
+
+	# ==================================================
+	# Normal World Progression
+	# ==================================================
+
+	if current_world < 2:
+
+		current_world += 1
+
+		print(
+			"Advanced to World:",
+			current_world
+		)
+
+
 # ==================================================
 # Layer Column
 # ==================================================
@@ -2120,6 +2178,8 @@ func start_run():
 # ----------------------------------------------
 
 	run_active = true
+
+	current_world = get_starting_world()
 
 	gold = 35
 

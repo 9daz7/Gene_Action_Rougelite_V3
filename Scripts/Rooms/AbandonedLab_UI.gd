@@ -77,6 +77,8 @@ var mutagen_management_ui: MutagenManagementUI = null
 
 var connected_to_battle: bool = false
 
+var critical_battle_active: bool = false
+
 
 # ==================================================
 # Initialization
@@ -201,6 +203,7 @@ func close() -> void:
 		"Closing abandoned lab"
 	)
 
+	critical_battle_active = false
 
 	# ==================================================
 	# Close Management UI
@@ -214,13 +217,11 @@ func close() -> void:
 
 	mutagen_management_ui = null
 
-
 	# ==================================================
 	# Disconnect Battle Signal
 	# ==================================================
 
 	_disconnect_critical_battle_signal()
-
 
 	# ==================================================
 	# Clear References
@@ -312,15 +313,17 @@ func start_critical_lab() -> void:
 
 
 	edit_mutagen_button.disabled = true
-
 	heal_button.disabled = true
-
 	continue_button.disabled = true
 
+	# --------------------------------------------------
+	# Mark critical battle as active
+	# --------------------------------------------------
+
+	critical_battle_active = true
 
 	# Prevent this UI from blocking BattleUI input.
 	hide()
-
 
 	battle_manager.start_critical_experiment()
 
@@ -331,10 +334,17 @@ func start_critical_lab() -> void:
 
 func _on_experiment_won(enemy) -> void:
 
+	# --------------------------------------------------
+	# Ignore unrelated battles
+	# --------------------------------------------------
+
+	if not critical_battle_active:
+
+		return
+
 	print(
 		"AbandonedLab received battle win"
 	)
-
 
 	var current_room: RoomResource = (
 		_get_current_room()
@@ -344,11 +354,9 @@ func _on_experiment_won(enemy) -> void:
 
 		return
 
-
 	if lab_data == null:
 
 		return
-
 
 	if (
 		lab_data.lab_status
@@ -361,7 +369,6 @@ func _on_experiment_won(enemy) -> void:
 
 		return
 
-
 	if current_room.lab_battle_completed:
 
 		print(
@@ -370,11 +377,11 @@ func _on_experiment_won(enemy) -> void:
 
 		return
 
-
 	print(
 		"Critical experiment defeated"
 	)
 
+	critical_battle_active = false
 
 	critical_battle_won()
 

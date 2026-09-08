@@ -34,23 +34,23 @@ func initialize() -> void:
 func load_mutagens() -> void:
 
 	all_mutagens.clear()
-#
-	## ==================================================
-	## Carapace
-	## ==================================================
-#
-	#_add_mutagen(
-		#"res://Data/Mutagens/Carapace/SpikedShellI.tres"
-	#)
-#
+
+	# ==================================================
+	# Carapace
+	# ==================================================
+
+	_add_mutagen(
+		"res://Data/Mutagens/Carapace/SpikedShellI.tres"
+	)
+
 	#_add_mutagen(
 		#"res://Data/Mutagens/Carapace/CarapaceI.tres"
 	#)
-#
-	## ==================================================
-	## Feral
-	## ==================================================
-#
+
+	# ==================================================
+	# Feral
+	# ==================================================
+
 	#_add_mutagen(
 		#"res://Data/Mutagens/Feral/FerociousBiteI.tres"
 	#)
@@ -59,165 +59,165 @@ func load_mutagens() -> void:
 		"res://Data/Mutagens/Feral/MetallicaI.tres"
 	)
 #
+	#_add_mutagen(
+		#"res://Data/Mutagens/Feral/FeralI.tres"
+	#)
+#
+	# ==================================================
+	# Inferno
+	# ==================================================
+
 	_add_mutagen(
-		"res://Data/Mutagens/Feral/FeralI.tres"
+		"res://Data/Mutagens/Inferno/100,000DegreeBazookaI.tres"
 	)
-#
-	## ==================================================
-	## Inferno
-	## ==================================================
-#
+
+	_add_mutagen(
+		"res://Data/Mutagens/Inferno/100,000DegreeBazookaII.tres"
+	)
+
+	_add_mutagen(
+		"res://Data/Mutagens/Inferno/100,000DegreeBazookaIII.tres"
+	)
+
+	_add_mutagen(
+		"res://Data/Mutagens/Inferno/BurningFangsI.tres"
+	)
+
+	_add_mutagen(
+		"res://Data/Mutagens/Inferno/BurningFangsII.tres"
+	)
+
+	_add_mutagen(
+		"res://Data/Mutagens/Inferno/BurningFangsIII.tres"
+	)
+
+	# ==================================================
+	# Instinct
+	# ==================================================
+
 	#_add_mutagen(
-		#"res://Data/Mutagens/Inferno/100,000DegreeBazookaI.tres"
+		#"res://Data/Mutagens/Instinct/InstinctI.tres"
 	#)
-#
+
+	_add_mutagen(
+		"res://Data/Mutagens/Instinct/EvasionI.tres"
+	)
+
+	_add_mutagen(
+		"res://Data/Mutagens/Instinct/EvasionII.tres"
+	)
+
+	_add_mutagen(
+		"res://Data/Mutagens/Instinct/EvasionIII.tres"
+	)
+
+	# ==================================================
+	# Predator
+	# ==================================================
+
 	#_add_mutagen(
-		#"res://Data/Mutagens/Inferno/100,000DegreeBazookaII.tres"
+		#"res://Data/Mutagens/Predator/CritI.tres"
 	#)
-#
+
 	#_add_mutagen(
-		#"res://Data/Mutagens/Inferno/100,000DegreeBazookaIII.tres"
+		#"res://Data/Mutagens/Predator/AccuracyI.tres"
 	#)
-#
+
+	_add_mutagen(
+		"res://Data/Mutagens/Predator/EnhancedVisionI.tres"
+	)
+
+	_add_mutagen(
+		"res://Data/Mutagens/Predator/EnhancedVisionII.tres"
+	)
+
+	_add_mutagen(
+		"res://Data/Mutagens/Predator/EnhancedVisionIII.tres"
+	)
+
+	_add_mutagen(
+		"res://Data/Mutagens/Predator/PredatorsMarkI.tres"
+	)
+
+	_add_mutagen(
+		"res://Data/Mutagens/Predator/SogekinguI.tres"
+	)
+
+	_add_mutagen(
+		"res://Data/Mutagens/Predator/SogekinguII.tres"
+	)
+
+	_add_mutagen(
+		"res://Data/Mutagens/Predator/SogekinguIII.tres"
+	)
+
+	# ==================================================
+	# Storm
+	# ==================================================
+
+	_add_mutagen(
+		"res://Data/Mutagens/Storm/ElectricGuardI.tres"
+	)
+
+	_add_mutagen(
+		"res://Data/Mutagens/Storm/ElectricGuardII.tres"
+	)
+
+	_add_mutagen(
+		"res://Data/Mutagens/Storm/ElectricGuardIII.tres"
+	)
+
+	_add_mutagen(
+		"res://Data/Mutagens/Storm/GodSpeedI.tres"
+	)
+
+	_add_mutagen(
+		"res://Data/Mutagens/Storm/ThunderBiteI.tres"
+	)
+
+	_add_mutagen(
+		"res://Data/Mutagens/Storm/ThunderBiteII.tres"
+	)
+
+	_add_mutagen(
+		"res://Data/Mutagens/Storm/ThunderBiteIII.tres"
+	)
+
+	_add_mutagen(
+		"res://Data/Mutagens/Storm/ThunderThighsI.tres"
+	)
+
+	_add_mutagen(
+		"res://Data/Mutagens/Storm/ThunderThighsII.tres"
+	)
+
+	_add_mutagen(
+		"res://Data/Mutagens/Storm/ThunderThighsIII.tres"
+	)
+
+	# ==================================================
+	# Vitality
+	# ==================================================
+
 	#_add_mutagen(
-		#"res://Data/Mutagens/Inferno/BurningFangsI.tres"
+		#"res://Data/Mutagens/Vitality/VitalityI.tres"
 	#)
-#
-	#_add_mutagen(
-		#"res://Data/Mutagens/Inferno/BurningFangsII.tres"
-	#)
-#
-	#_add_mutagen(
-		#"res://Data/Mutagens/Inferno/BurningFangsIII.tres"
-	#)
-#
-	## ==================================================
-	## Instinct
-	## ==================================================
-#
-	##_add_mutagen(
-		##"res://Data/Mutagens/Instinct/InstinctI.tres"
-	##)
-#
-	#_add_mutagen(
-		#"res://Data/Mutagens/Instinct/EvasionI.tres"
-	#)
-#
-	#_add_mutagen(
-		#"res://Data/Mutagens/Instinct/EvasionII.tres"
-	#)
-#
-	#_add_mutagen(
-		#"res://Data/Mutagens/Instinct/EvasionIII.tres"
-	#)
-#
-	## ==================================================
-	## Predator
-	## ==================================================
-#
-	##_add_mutagen(
-		##"res://Data/Mutagens/Predator/CritI.tres"
-	##)
-#
-	##_add_mutagen(
-		##"res://Data/Mutagens/Predator/AccuracyI.tres"
-	##)
-#
-	#_add_mutagen(
-		#"res://Data/Mutagens/Predator/EnhancedVisionI.tres"
-	#)
-#
-	#_add_mutagen(
-		#"res://Data/Mutagens/Predator/EnhancedVisionII.tres"
-	#)
-#
-	#_add_mutagen(
-		#"res://Data/Mutagens/Predator/EnhancedVisionIII.tres"
-	#)
-#
-	#_add_mutagen(
-		#"res://Data/Mutagens/Predator/PredatorsMarkI.tres"
-	#)
-#
-	#_add_mutagen(
-		#"res://Data/Mutagens/Predator/SogekinguI.tres"
-	#)
-#
-	#_add_mutagen(
-		#"res://Data/Mutagens/Predator/SogekinguII.tres"
-	#)
-#
-	#_add_mutagen(
-		#"res://Data/Mutagens/Predator/SogekinguIII.tres"
-	#)
-#
-	## ==================================================
-	## Storm
-	## ==================================================
-#
-	#_add_mutagen(
-		#"res://Data/Mutagens/Storm/ElectricGuardI.tres"
-	#)
-#
-	#_add_mutagen(
-		#"res://Data/Mutagens/Storm/ElectricGuardII.tres"
-	#)
-#
-	#_add_mutagen(
-		#"res://Data/Mutagens/Storm/ElectricGuardIII.tres"
-	#)
-#
-	#_add_mutagen(
-		#"res://Data/Mutagens/Storm/GodSpeedI.tres"
-	#)
-#
-	#_add_mutagen(
-		#"res://Data/Mutagens/Storm/ThunderBiteI.tres"
-	#)
-#
-	#_add_mutagen(
-		#"res://Data/Mutagens/Storm/ThunderBiteII.tres"
-	#)
-#
-	#_add_mutagen(
-		#"res://Data/Mutagens/Storm/ThunderBiteIII.tres"
-	#)
-#
-	#_add_mutagen(
-		#"res://Data/Mutagens/Storm/ThunderThighsI.tres"
-	#)
-#
-	#_add_mutagen(
-		#"res://Data/Mutagens/Storm/ThunderThighsII.tres"
-	#)
-#
-	#_add_mutagen(
-		#"res://Data/Mutagens/Storm/ThunderThighsIII.tres"
-	#)
-#
-	## ==================================================
-	## Vitality
-	## ==================================================
-#
-	##_add_mutagen(
-		##"res://Data/Mutagens/Vitality/VitalityI.tres"
-	##)
-#
-	#_add_mutagen(
-		#"res://Data/Mutagens/Vitality/GoldenExperience.tres"
-	#)
-#
-	#_add_mutagen(
-		#"res://Data/Mutagens/Vitality/HealingBoostI.tres"
-	#)
-#
-	#_add_mutagen(
-		#"res://Data/Mutagens/Vitality/HealingBoostII.tres"
-	#)
-#
-	#_add_mutagen(
-		#"res://Data/Mutagens/Vitality/HealingBoostIII.tres"
-	#)
+
+	_add_mutagen(
+		"res://Data/Mutagens/Vitality/GoldenExperience.tres"
+	)
+
+	_add_mutagen(
+		"res://Data/Mutagens/Vitality/HealingBoostI.tres"
+	)
+
+	_add_mutagen(
+		"res://Data/Mutagens/Vitality/HealingBoostII.tres"
+	)
+
+	_add_mutagen(
+		"res://Data/Mutagens/Vitality/HealingBoostIII.tres"
+	)
 
 	print(
 		"Total Mutagens:",

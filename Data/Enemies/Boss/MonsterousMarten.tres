@@ -13,7 +13,7 @@
 [resource]
 script = ExtResource("2_aicnq")
 description = "An extreamly large marten. It must have genes of a larger animal."
-base_hp = 70
+base_hp = 11
 starting_genes = Array[ExtResource("1_kcq4u")]([ExtResource("4_laq5i")])
 moves = Array[ExtResource("2_tyibk")]([ExtResource("3_7j4ie"), ExtResource("4_4fthk"), ExtResource("5_0w17s"), ExtResource("6_7yly6")])
 drop_gene_pool = Array[ExtResource("1_kcq4u")]([ExtResource("4_laq5i")])

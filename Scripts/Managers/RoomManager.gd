@@ -1227,12 +1227,35 @@ func _on_battle_won() -> void:
 		return
 
 	# ==================================================
-	# Normal room battle
+	# Normal RoomResource battle
 	# ==================================================
 
 	if current_room != null:
 
+		var defeated_room_type := (
+			current_room.room_type
+		)
+
+		# --------------------------------------------------
+		# Complete the room first
+		# --------------------------------------------------
+
 		complete_room()
+
+		# --------------------------------------------------
+		# Boss defeated
+		# --------------------------------------------------
+
+		if defeated_room_type == RoomResource.RoomType.BOSS:
+
+			print("================================")
+			print("BOSS DEFEATED")
+			print("World:", run_manager.current_world)
+			print("================================")
+
+			run_manager.complete_world()
+
+			return
 
 	else:
 
