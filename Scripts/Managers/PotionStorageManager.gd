@@ -56,15 +56,10 @@ func move_potion_to_run(
 	run_manager: RunManager
 ) -> bool:
 
-	if potion == null:
+	if potion == null or run_manager == null:
 		return false
 
-	if run_manager == null:
-		return false
-
-	var current_count := get_potion_count(
-		potion
-	)
+	var current_count := get_potion_count(potion)
 
 	if current_count <= 0:
 
@@ -76,11 +71,12 @@ func move_potion_to_run(
 		return false
 
 	if not run_manager.add_potion_to_run(
-		potion
+		potion,
+		true
 	):
 
 		print(
-			"Potion could not be added to run pocket:"
+			"Potion could not be added to run pocket."
 		)
 
 		return false

@@ -91,6 +91,12 @@ var run_potion_pocket: Array[PotionResource] = [
 	null
 ]
 
+var run_potion_brought_from_hub: Array[bool] = [
+	false,
+	false,
+	false
+]
+
 const MAX_POTION_POCKET_SIZE: int = 3
 
 
@@ -2166,7 +2172,8 @@ func add_potion_to_bag(
 
 
 func add_potion_to_run(
-	potion: PotionResource
+	potion: PotionResource,
+	brought_from_hub: bool = false
 ) -> bool:
 
 	if potion == null:
@@ -2180,18 +2187,22 @@ func add_potion_to_run(
 
 			run_potion_pocket[i] = potion
 
+			run_potion_brought_from_hub[i] = (
+				brought_from_hub
+			)
+
 			print(
 				"Potion added to run slot:",
 				i,
 				"|",
-				potion.potion_name
+				potion.potion_name,
+				"| From Hub:",
+				brought_from_hub
 			)
 
 			return true
 
-	print(
-		"Potion pocket full."
-	)
+	print("Potion pocket full.")
 
 	return false
 
@@ -2214,6 +2225,7 @@ func remove_potion_from_run(
 		return null
 
 	run_potion_pocket[slot_index] = null
+	run_potion_brought_from_hub[slot_index] = false
 
 	print(
 		"Potion removed from run slot:",
@@ -2583,3 +2595,24 @@ func damage_player(amount: int):
 		"/",
 		max_hp
 	)
+
+
+func discard_unbrought_run_potions() -> void:
+
+	for i in range(
+		run_potion_pocket.size()
+	):
+
+		if run_potion_pocket[i] == null:
+			continue
+
+		if run_potion_brought_from_hub[i]:
+			continue
+
+		print(
+			"Discarding run-found potion:",
+			run_potion_pocket[i].potion_name
+		)
+
+		run_potion_pocket[i] = null
+		run_potion_brought_from_hub[i] = false

@@ -497,7 +497,20 @@ func _serialize_potion_pocket(
 
 	var potions := run_manager.get_run_potions()
 
-	for potion in potions:
+	for i in range(potions.size()):
+
+		var potion: PotionResource = potions[i]
+
+		# --------------------------------------------------
+		# Only save potions that came from Hub storage.
+		# Run-found potions are temporary.
+		# --------------------------------------------------
+
+		if not run_manager.run_potion_brought_from_hub[i]:
+
+			result.append(null)
+
+			continue
 
 		if potion == null:
 
@@ -537,6 +550,12 @@ func _deserialize_potion_pocket(
 		null
 	]
 
+	run_manager.run_potion_brought_from_hub = [
+		false,
+		false,
+		false
+	]
+
 	for i in range(
 		min(
 			saved_pocket.size(),
@@ -569,6 +588,12 @@ func _deserialize_potion_pocket(
 
 		run_manager.run_potion_pocket[i] = potion
 
+		# --------------------------------------------------
+		# This potion was already accepted as persistent
+		# when the save was created.
+		# --------------------------------------------------
+
+		run_manager.run_potion_brought_from_hub[i] = true
 
 # ==================================================
 # Pocket Helpers

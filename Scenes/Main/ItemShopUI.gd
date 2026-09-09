@@ -248,22 +248,24 @@ func _store_purchased_potion(
 		return
 
 	# ==================================================
-	# Try Player's Bag First
+	# Purchased in Hub
 	# ==================================================
 
-	if run_manager.add_potion_to_bag(
-		potion
+	if run_manager.add_potion_to_run(
+		potion,
+		true
 	):
 
 		print(
-			"Purchased potion added to Player's Bag:",
-			potion.potion_name
+			"Purchased potion added to Player's Pocket:",
+			potion.potion_name,
+			"| From Hub: true"
 		)
 
 		return
 
 	# ==================================================
-	# Bag Full -> Permanent Storage
+	# Pocket Full -> Permanent Storage
 	# ==================================================
 
 	if potion_storage == null:
@@ -279,7 +281,8 @@ func _store_purchased_potion(
 	)
 
 	print(
-		"Player's Bag full. Added to permanent storage:",
+		"Player's Pocket full. "
+		+ "Purchased potion added to permanent storage:",
 		potion.potion_name
 	)
 

@@ -50,6 +50,7 @@ script = ExtResource("8_es6iu")
 
 [node name="PotionStorageManager" type="Node" parent="Managers" unique_id=385391173]
 script = ExtResource("9_tdwxr")
+starting_storage_capacity = null
 
 [node name="SaveManager" type="Node" parent="Managers" unique_id=1870900078]
 script = ExtResource("5_hfg1r")
