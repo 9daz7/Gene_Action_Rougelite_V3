@@ -79,6 +79,10 @@ var connected_to_battle: bool = false
 
 var critical_battle_active: bool = false
 
+var lab_context_room: RoomResource = null
+
+var is_between_world_lab: bool = false
+
 
 # ==================================================
 # Initialization
@@ -95,7 +99,9 @@ func _ready() -> void:
 
 func open(
 	data: LabResource,
-	manager: BattleManager
+	manager: BattleManager,
+	context_room: RoomResource = null,
+	between_world: bool = false
 ) -> void:
 
 	if data == null:
@@ -105,7 +111,6 @@ func open(
 		)
 
 		return
-
 
 	if manager == null:
 
@@ -117,8 +122,9 @@ func open(
 
 
 	lab_data = data
-
 	battle_manager = manager
+	lab_context_room = context_room
+	is_between_world_lab = between_world
 
 	show()
 
@@ -228,8 +234,9 @@ func close() -> void:
 	# ==================================================
 
 	lab_data = null
-
 	battle_manager = null
+	lab_context_room = null
+	is_between_world_lab = false
 
 	hide()
 
@@ -239,6 +246,18 @@ func close() -> void:
 # ==================================================
 
 func _get_current_room() -> RoomResource:
+
+	# --------------------------------------------------
+	# Temporary / between-world Lab
+	# --------------------------------------------------
+
+	if lab_context_room != null:
+
+		return lab_context_room
+
+	# --------------------------------------------------
+	# Normal map Lab
+	# --------------------------------------------------
 
 	if room_manager == null:
 
@@ -523,9 +542,33 @@ func setup_lab() -> void:
 
 		return
 
+	# ==================================================
+	# Between-World Lab
+	# ==================================================
+
+	if is_between_world_lab:
+
+		status_label.text = (
+			"Laboratory Status: Stable"
+		)
+
+		description_label.text = (
+			"The laboratory is fully operational. "
+			+ "Prepare your mutagens and recover before "
+			+ "entering the next world."
+		)
+
+		edit_mutagen_button.text = (
+			"Manage Mutagens"
+		)
+
+		return
+
+	# ==================================================
+	# Normal Lab
+	# ==================================================
 
 	match lab_data.lab_status:
-
 
 		LabResource.LabStatus.STABLE:
 

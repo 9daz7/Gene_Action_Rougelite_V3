@@ -42,6 +42,8 @@ var current_world: int = 1
 
 var tutorial_completed: bool = false
 
+var world_transition_pending: bool = false
+
 
 # ==================================================
 # Room Pools
@@ -292,6 +294,14 @@ func load_room_pools() -> void:
 
 	_add_room_to_pool(
 		"res://Data/Rooms/AbandonedLab_01.tres"
+	)
+
+	_add_room_to_pool(
+		"res://Data/Rooms/AbandonedLab_02.tres"
+	)
+
+	_add_room_to_pool(
+		"res://Data/Rooms/AbandonedLab_03.tres"
 	)
 
 	# ==================================================
@@ -779,12 +789,35 @@ func get_world_layer_sizes() -> Array[int]:
 	match current_world:
 
 		1:
+
+			# --------------------------------------------------
+			# First-time tutorial
+			# --------------------------------------------------
+
+			if not tutorial_completed:
+
+				return [
+					1,
+					2,
+					4,
+					5,
+					5,
+					4,
+					3,
+					2,
+					1
+				]
+
+			# --------------------------------------------------
+			# Regular World 1
+			# --------------------------------------------------
+
 			return [
 				1,
 				2,
+				3,
 				4,
-				5,
-				5,
+				4,
 				4,
 				3,
 				2,
@@ -792,6 +825,11 @@ func get_world_layer_sizes() -> Array[int]:
 			]
 
 		_:
+
+			# --------------------------------------------------
+			# World 2
+			# --------------------------------------------------
+
 			return [
 				1,
 				randi_range(2, 3),
@@ -803,6 +841,25 @@ func get_world_layer_sizes() -> Array[int]:
 				2,
 				1
 			]
+
+			## --------------------------------------------------
+			## World 3+
+			## --------------------------------------------------
+#
+			#return [
+				#1,
+				#randi_range(2, 3),
+				#randi_range(3, 5),
+				#randi_range(4, 5),
+				#randi_range(4, 6),
+				#randi_range(4, 6),
+				#randi_range(4, 5),
+				#randi_range(4, 5),
+				#randi_range(3, 5),
+				#randi_range(3, 4),
+				#2,
+				#1
+			#]
 
 
 # ==================================================
@@ -869,24 +926,40 @@ func _create_room_for_node(
 			_get_random_boss_room()
 		)
 
-	## ==================================================
-	## Guaranteed Rest Room
-	## ==================================================
-#
-	#if node.layer == total_layers - 2:
-#
-		#return _duplicate_room_template(
-			#get_random_room(
-				#RoomResource.RoomType.REST,
-				#required_exit_count
-			#)
-		#)
 	# ==================================================
-	# Guaranteed Pre-Boss Lab
-	# TEMPORARY FOR WORLD 1 TESTING
+	# Rest Before Boss
 	# ==================================================
 
 	if node.layer == total_layers - 2:
+
+		return _duplicate_room_template(
+			get_random_room(
+				RoomResource.RoomType.REST,
+				required_exit_count
+			)
+		)
+
+	# ==================================================
+	# Tutorial World
+	# ==================================================
+
+	if current_world == 1 and not tutorial_completed:
+
+		return _create_world_one_room(
+			node,
+			required_exit_count,
+			total_layers
+		)
+
+	# ==================================================
+	# Middle Layer Lab
+	# ==================================================
+
+	var middle_layer := int(
+		total_layers / 2
+	)
+
+	if node.layer == middle_layer:
 
 		return _duplicate_room_template(
 			get_random_room(
@@ -896,19 +969,7 @@ func _create_room_for_node(
 		)
 
 	# ==================================================
-	# World 1 Tutorial
-	# ==================================================
-
-	if current_world == 1:
-
-		return _create_world_one_room(
-			node,
-			required_exit_count,
-			total_layers
-		)
-
-	# ==================================================
-	# World 2+
+	# Procedural World
 	# ==================================================
 
 	return _create_procedural_world_room(
@@ -916,6 +977,28 @@ func _create_room_for_node(
 		required_exit_count,
 		total_layers
 	)
+
+	## ==================================================
+	## World 1 Tutorial
+	## ==================================================
+#
+	#if current_world == 1:
+#
+		#return _create_world_one_room(
+			#node,
+			#required_exit_count,
+			#total_layers
+		#)
+#
+	## ==================================================
+	## World 2+
+	## ==================================================
+#
+	#return _create_procedural_world_room(
+		#node,
+		#required_exit_count,
+		#total_layers
+	#)
 
 
 # ==================================================
@@ -1319,11 +1402,12 @@ func complete_world() -> void:
 
 		tutorial_completed = true
 
+		world_transition_pending = true
+
 		print(
 			"Tutorial World completed permanently."
 		)
 
-		# Demo currently moves directly to World 2.
 		current_world = 2
 
 		print(
@@ -1340,6 +1424,8 @@ func complete_world() -> void:
 	if current_world < 2:
 
 		current_world += 1
+
+		world_transition_pending = true
 
 		print(
 			"Advanced to World:",

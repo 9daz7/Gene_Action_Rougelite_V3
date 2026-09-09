@@ -42,12 +42,21 @@ const LAB_HUB_SCENE = preload(
 	"res://Scenes/LabHub/LabHub.tscn"
 )
 
+const ABANDONED_LAB_UI_SCENE = preload(
+	"res://Scenes/Rooms/AbandonedLab_UI.tscn"
+)
+
+const BETWEEN_WORLD_LAB_DATA = preload(
+	"res://Data/Labs/BetweenWorldLab.tres"
+)
+
 
 # ==================================================
 # State
 # ==================================================
 
 var lab_hub: LabHub = null
+var between_world_lab_ui: AbandonedLab_UI = null
 var returning_to_hub_after_battle: bool = false
 
 
@@ -223,6 +232,189 @@ func open_lab_hub() -> void:
 	)
 
 
+func open_between_world_lab() -> void:
+
+	print("================================")
+	print("OPENING BETWEEN-WORLD LAB")
+	print("================================")
+
+	# ==================================================
+	# Prevent duplicate UI
+	# ==================================================
+
+	if is_instance_valid(between_world_lab_ui):
+
+		print(
+			"Between-world Lab is already open."
+		)
+
+		return
+
+	# ==================================================
+	# Validate LabResource
+	# ==================================================
+
+	if BETWEEN_WORLD_LAB_DATA == null:
+
+		push_error(
+			"Main: Between-world LabResource is missing."
+		)
+
+		return
+
+	# ==================================================
+	# Create temporary room state
+	# ==================================================
+
+	var temporary_room := RoomResource.new()
+
+	temporary_room.room_name = "Between-World Lab"
+
+	temporary_room.room_type = (
+		RoomResource.RoomType.LAB
+	)
+
+	# --------------------------------------------------
+	# Prevent Critical Lab battle
+	# --------------------------------------------------
+
+	temporary_room.lab_battle_completed = true
+
+	# --------------------------------------------------
+	# Fresh state for this Lab visit
+	# --------------------------------------------------
+
+	temporary_room.lab_mutagen_editing_completed = false
+	temporary_room.lab_healing_used = false
+	temporary_room.pending_lab_mutagen_reward = null
+
+	# Use the dedicated Between-World LabResource.
+	temporary_room.lab_data = (
+		BETWEEN_WORLD_LAB_DATA
+	)
+
+	# ==================================================
+	# Create Lab UI
+	# ==================================================
+
+	between_world_lab_ui = (
+		ABANDONED_LAB_UI_SCENE.instantiate()
+		as AbandonedLab_UI
+	)
+
+	if between_world_lab_ui == null:
+
+		push_error(
+			"Main: Failed to create Between-World Lab UI."
+		)
+
+		return
+
+	$UI.add_child(
+		between_world_lab_ui
+	)
+
+	between_world_lab_ui.set_anchors_and_offsets_preset(
+		Control.PRESET_FULL_RECT
+	)
+
+	# ==================================================
+	# Connect Finish
+	# ==================================================
+
+	if not between_world_lab_ui.lab_finished.is_connected(
+		_on_between_world_lab_finished
+	):
+
+		between_world_lab_ui.lab_finished.connect(
+			_on_between_world_lab_finished
+		)
+
+	# ==================================================
+	# Open
+	# ==================================================
+
+	between_world_lab_ui.open(
+		temporary_room.lab_data,
+		battle_manager,
+		temporary_room,
+		true
+	)
+
+	print(
+		"Between-World Lab opened."
+	)
+
+
+func _on_between_world_lab_finished() -> void:
+
+	print("================================")
+	print("BETWEEN-WORLD LAB FINISHED")
+	print("================================")
+
+	if is_instance_valid(
+		between_world_lab_ui
+	):
+
+		between_world_lab_ui.close()
+		between_world_lab_ui.queue_free()
+
+	between_world_lab_ui = null
+
+	# ==================================================
+	# Transition is finished
+	# ==================================================
+
+	run_manager.world_transition_pending = false
+
+	print(
+		"Starting World:",
+		run_manager.current_world
+	)
+
+	print(
+		"Creating new run map..."
+	)
+
+
+	# ==================================================
+	# Generate next world
+	# ==================================================
+
+	run_manager.create_run_map()
+
+	print(
+		"create_run_map() returned."
+	)
+
+	print(
+		"Current run map:",
+		run_manager.current_run_map
+	)
+
+	if run_manager.current_run_map == null:
+
+		push_error(
+			"MAIN: World map generation failed."
+		)
+
+		return
+
+	print(
+		"World map exists."
+	)
+
+	print(
+		"Layer count:",
+		run_manager.current_run_map.layers.size()
+	)
+
+	print(
+		"Node count:",
+		run_manager.current_run_map.all_nodes.size()
+	)
+
+
 func _on_lab_hub_closed() -> void:
 
 	print("MAIN: LabHub closed")
@@ -338,11 +530,38 @@ func _on_battle_won(enemy):
 	print("Battle type:", battle_manager.current_battle_type)
 	#print("Battle won against:", enemy.enemy_data.enemy_name)
 
-	# boss victory
+	# ==================================================
+	# Boss victory
+	# ==================================================
+
 	if battle_manager.current_battle_type == RoomData.RoomType.BOSS:
+
 		print("BOSS DEFEATED")
+
+		# --------------------------------------------------
+		# World transition
+		# --------------------------------------------------
+
+		if run_manager.world_transition_pending:
+
+			print(
+				"World transition pending."
+			)
+
+			return
+
+		# --------------------------------------------------
+		# Final run completion
+		# --------------------------------------------------
+
+		print(
+			"Final boss defeated."
+		)
+
 		await get_tree().process_frame
+
 		open_victory_screen()
+
 		return
 
 	# roaming battles
@@ -471,6 +690,27 @@ func _on_battle_cleanup_finished() -> void:
 	print("================================")
 	print("BATTLE CLEANUP FINISHED")
 	print("================================")
+
+	# ==================================================
+	# World Transition
+	# ==================================================
+
+	if run_manager.world_transition_pending:
+
+		print("================================")
+		print("STARTING BETWEEN-WORLD LAB")
+		print("Next World:", run_manager.current_world)
+		print("================================")
+
+		room_manager.close_active_room()
+
+		open_between_world_lab()
+
+		return
+
+	# ==================================================
+	# Failed Run
+	# ==================================================
 
 	if not returning_to_hub_after_battle:
 

@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="LabResource" format=3 uid="uid://8lhsco4lqgqq"]
+
+[ext_resource type="Script" uid="uid://duoq1hq7kebtd" path="res://Scripts/Rooms/LabResource.gd" id="1_7t07h"]
+
+[resource]
+script = ExtResource("1_7t07h")
+lab_name = "Between World Laboratory"
+experiment_chance = 0.0
+metadata/_custom_type_script = "uid://duoq1hq7kebtd"
