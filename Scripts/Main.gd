@@ -76,6 +76,16 @@ func _ready():
 			_on_battle_lost
 		)
 
+	var pause_menu = $UI/PauseMenu
+
+	if not pause_menu.return_home_requested.is_connected(
+		_on_return_home_requested
+	):
+
+		pause_menu.return_home_requested.connect(
+			_on_return_home_requested
+	)
+
 	print("THIS IS THE CURRENT MAIN SCRIPT")
 
 	battle_manager.initialize(
@@ -759,6 +769,56 @@ func finish_run():
 	)
 
 	run_manager.reset_run()
+
+
+func _on_return_home_requested() -> void:
+
+	print("================================")
+	print("RETURN HOME REQUESTED")
+	print("================================")
+
+	# ==================================================
+	# Stop Run Systems
+	# ==================================================
+
+	map_manager.disable_scanner()
+
+	# ==================================================
+	# Close Active Room
+	# ==================================================
+
+	room_manager.close_active_room()
+
+	# ==================================================
+	# Reset Run
+	# ==================================================
+
+	# clears temporary run data.
+	run_manager.reset_run()
+
+	# ==================================================
+	# Close Run Worlds
+	# ==================================================
+
+	close_run_worlds()
+
+	# ==================================================
+	# Save Persistent Hub State
+	# ==================================================
+
+	save_game()
+
+	# ==================================================
+	# Return To Hub
+	# ==================================================
+
+	print(
+		"Returning to HubWorld."
+	)
+
+	hub_world.open()
+
+	map_ui.hide()
 
 
 func return_to_map() -> void:

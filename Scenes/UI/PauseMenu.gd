@@ -3,6 +3,13 @@ class_name PauseMenu
 
 
 # ==================================================
+# Signals
+# ==================================================
+
+signal return_home_requested
+
+
+# ==================================================
 # Managers
 # ==================================================
 
@@ -791,6 +798,10 @@ func _on_return_home_pressed() -> void:
 	print(
 		"PauseMenu: Return Home selected."
 	)
+
+	close_pause()
+
+	return_home_requested.emit()
 
 
 func _on_return_menu_pressed() -> void:
