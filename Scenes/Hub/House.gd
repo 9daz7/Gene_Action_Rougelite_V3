@@ -3,13 +3,6 @@ class_name House
 
 
 # ==================================================
-# Interactions
-# ==================================================
-
-@onready var interactable: Interactable = $Interactable
-
-
-# ==================================================
 # UI
 # ==================================================
 
@@ -18,26 +11,48 @@ class_name House
 )
 
 
+# ==================================================
+# Interaction
+# ==================================================
+
+@onready var interactable: Interactable = $Interactable
+
+
+# ==================================================
+# Initialization
+# ==================================================
+
 func _ready() -> void:
 
 	if interactable == null:
-		push_error("House: Interactable not found.")
+
+		push_error(
+			"House: Interactable not found."
+		)
+
 		return
 
 	if not interactable.interacted.is_connected(
 		_open_potion_storage
 	):
+
 		interactable.interacted.connect(
 			_open_potion_storage
 	)
 
 
+# ==================================================
+# Open Potion Storage
+# ==================================================
+
 func _open_potion_storage() -> void:
 
 	if potion_storage_ui == null:
+
 		push_error(
 			"House: PotionStorageUI not found."
 		)
+
 		return
 
 	potion_storage_ui.open()

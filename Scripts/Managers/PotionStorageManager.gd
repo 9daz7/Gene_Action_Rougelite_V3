@@ -23,27 +23,6 @@ func _ready() -> void:
 
 	print("POTION STORAGE MANAGER READY")
 
-	add_potion(
-		preload(
-			"res://Data/Potions/SmallHealthPotion.tres"
-		),
-		5
-	)
-
-	add_potion(
-		preload(
-			"res://Data/Potions/AttackPotion.tres"
-		),
-		5
-	)
-
-	add_potion(
-		preload(
-			"res://Data/Potions/DefensePotion.tres"
-		),
-		5
-	)
-
 
 # ==================================================
 # Storage

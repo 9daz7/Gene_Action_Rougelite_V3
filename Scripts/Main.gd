@@ -89,7 +89,8 @@ func _ready():
 
 	save_manager.load_game(
 		PermanentProgressionManager,
-		gene_database
+		gene_database,
+		run_manager
 	)
 
 	run_manager.initialize_starting_collection(
@@ -511,6 +512,18 @@ func start_run():
 	map_ui.close_map()
 
 
+func save_game() -> void:
+
+	print("================================")
+	print("SAVING GAME")
+	print("================================")
+
+	save_manager.save_game(
+		PermanentProgressionManager,
+		run_manager
+	)
+
+
 func _on_room_entered(room: RoomData) -> void:
 
 	#current_room = room
@@ -629,6 +642,8 @@ func open_victory_screen():
 	print("RETURNING TO HUB WORLD")
 	print("================================")
 
+	save_game()
+
 	hub_world.open()
 
 
@@ -726,6 +741,8 @@ func _on_battle_cleanup_finished() -> void:
 	print("================================")
 	print("Returning to HubWorld")
 	print("================================")
+
+	save_game()
 
 	hub_world.open()
 

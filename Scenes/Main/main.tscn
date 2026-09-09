@@ -191,20 +191,17 @@ text = "Options"
 [node name="ResumeButton" type="Button" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/OptionsPanel/MarginContainer/OptionsColumn" unique_id=946604694]
 custom_minimum_size = Vector2(0, 35)
 layout_mode = 2
-text = "Resume
-"
+text = "Resume"
 
 [node name="SettingsButton" type="Button" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/OptionsPanel/MarginContainer/OptionsColumn" unique_id=1358105362]
 custom_minimum_size = Vector2(0, 35)
 layout_mode = 2
-text = "Settings
-"
+text = "Settings"
 
 [node name="ReturnHomeButton" type="Button" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/OptionsPanel/MarginContainer/OptionsColumn" unique_id=1533270307]
 custom_minimum_size = Vector2(0, 35)
 layout_mode = 2
-text = "Return Home
-"
+text = "Return Home"
 
 [node name="ReturnMenuButton" type="Button" parent="UI/PauseMenu/MainPanel/MarginContainer/MainContainer/OptionsPanel/MarginContainer/OptionsColumn" unique_id=1991729117]
 custom_minimum_size = Vector2(0, 35)
@@ -474,8 +471,7 @@ layout_mode = 2
 
 [node name="TitleLabel" type="Label" parent="UI/PotionStorageUI/CenterContainer/PanelContainer/VBoxContainer" unique_id=1409086150]
 layout_mode = 2
-text = "Potion Storage
-"
+text = "Potion Storage"
 horizontal_alignment = 1
 
 [node name="Content" type="HBoxContainer" parent="UI/PotionStorageUI/CenterContainer/PanelContainer/VBoxContainer" unique_id=1805244550]
@@ -520,6 +516,10 @@ layout_mode = 2
 [node name="CloseButton" type="Button" parent="UI/PotionStorageUI/CenterContainer/PanelContainer/VBoxContainer" unique_id=88543817]
 layout_mode = 2
 text = "close"
+
+[node name="SaveButton" type="Button" parent="UI/PotionStorageUI/CenterContainer/PanelContainer/VBoxContainer" unique_id=576787527]
+layout_mode = 2
+text = "Save Game"
 
 [node name="Transition" type="Control" parent="UI" unique_id=1850224517]
 layout_mode = 3

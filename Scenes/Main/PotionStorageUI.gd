@@ -31,6 +31,10 @@ class_name PotionStorageUI
 	$CenterContainer/PanelContainer/VBoxContainer/CloseButton
 )
 
+@onready var save_button: Button = (
+	$CenterContainer/PanelContainer/VBoxContainer/SaveButton
+)
+
 
 # ==================================================
 # State
@@ -47,6 +51,10 @@ func _ready() -> void:
 
 	close_button.pressed.connect(
 		_close
+	)
+
+	save_button.pressed.connect(
+		_save_game
 	)
 
 	for i in range(
@@ -265,6 +273,44 @@ func _remove_from_run(
 	)
 
 	_refresh()
+
+
+# ==================================================
+# Save Game
+# ==================================================
+
+func _save_game() -> void:
+
+	print("================================")
+	print("MANUAL SAVE REQUESTED")
+	print("================================")
+
+	var save_manager = get_node_or_null(
+		"../../Managers/SaveManager"
+	)
+
+	if save_manager == null:
+
+		push_error(
+			"PotionStorageUI: SaveManager not found."
+		)
+
+		return
+
+	if run_manager == null:
+
+		push_error(
+			"PotionStorageUI: RunManager not found."
+		)
+
+		return
+
+	save_manager.save_game(
+		PermanentProgressionManager,
+		run_manager
+	)
+
+	print("Manual save complete.")
 
 
 # ==================================================

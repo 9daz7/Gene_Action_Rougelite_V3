@@ -10,9 +10,17 @@ const SAVE_PATH = "user://save.json"
 
 
 # ==================================================
-# Initialization
+# Managers
 # ==================================================
 
+@onready var potion_storage: PotionStorageManager = get_node(
+	"../PotionStorageManager"
+)
+
+
+# ==================================================
+# Initialization
+# ==================================================
 
 func _ready() -> void:
 
@@ -23,8 +31,10 @@ func _ready() -> void:
 # Public Functions
 # ==================================================
 
-
-func save_game(permanent_manager: Node) -> void:
+func save_game(
+	permanent_manager: Node,
+	run_manager: RunManager
+) -> void:
 
 	if permanent_manager == null:
 
@@ -34,11 +44,32 @@ func save_game(permanent_manager: Node) -> void:
 
 		return
 
+	if run_manager == null:
+
+		push_error(
+			"Cannot save: RunManager is missing"
+		)
+
+		return
+
+	if potion_storage == null:
+
+		push_error(
+			"Cannot save: PotionStorageManager is missing"
+		)
+
+		return
+
 	# ==================================================
 	# Build Save Data
 	# ==================================================
 
 	var data := {
+
+		# --------------------------------------------------
+		# Permanent Progression
+		# --------------------------------------------------
+
 		"permanent_currency":
 			permanent_manager.permanent_currency,
 
@@ -48,7 +79,15 @@ func save_game(permanent_manager: Node) -> void:
 		"gene_storage_upgrade_level":
 			permanent_manager.gene_storage_upgrade_level,
 
+		"tutorial_completed":
+			run_manager.tutorial_completed,
+
+		# --------------------------------------------------
+		# Permanent Upgrades
+		# --------------------------------------------------
+
 		"upgrades": {
+
 			"max_health_level":
 				permanent_manager.max_health_level,
 
@@ -57,7 +96,21 @@ func save_game(permanent_manager: Node) -> void:
 
 			"damage_level":
 				permanent_manager.damage_level
-		}
+		},
+
+		# --------------------------------------------------
+		# Potion Storage
+		# --------------------------------------------------
+
+		"potion_storage":
+			_serialize_potion_storage(),
+
+		# --------------------------------------------------
+		# Player Potion Pockets
+		# --------------------------------------------------
+
+		"potion_pocket":
+			_serialize_potion_pocket(run_manager)
 	}
 
 	# ==================================================
@@ -83,6 +136,10 @@ func save_game(permanent_manager: Node) -> void:
 
 	file.close()
 
+	# ==================================================
+	# Debug
+	# ==================================================
+
 	print("GAME SAVED")
 
 	print(
@@ -95,17 +152,27 @@ func save_game(permanent_manager: Node) -> void:
 		permanent_manager.gene_counts
 	)
 
+	print(
+		"Potion storage:",
+		potion_storage.stored_potions
+	)
+
+	print(
+		"Potion pocket:",
+		run_manager.get_run_potions()
+	)
+
 
 # ==================================================
 # Load Game
 # ==================================================
 
-
 func load_game(
 	permanent_manager: Node,
-	gene_database:GeneDatabase
+	gene_database: GeneDatabase,
+	run_manager: RunManager
 ) -> void:
-	
+
 	if permanent_manager == null:
 
 		push_error(
@@ -118,6 +185,22 @@ func load_game(
 
 		push_error(
 			"Cannot load: GeneDatabase is missing"
+		)
+
+		return
+
+	if run_manager == null:
+
+		push_error(
+			"Cannot load: RunManager is missing"
+		)
+
+		return
+
+	if potion_storage == null:
+
+		push_error(
+			"Cannot load: PotionStorageManager is missing"
 		)
 
 		return
@@ -160,6 +243,7 @@ func load_game(
 	# ==================================================
 	# Validate Save
 	# ==================================================
+
 	if data == null or not data is Dictionary:
 
 		push_error(
@@ -228,6 +312,21 @@ func load_game(
 		)
 
 	# ==================================================
+	# Load World Progression
+	# ==================================================
+
+	if data.has("tutorial_completed"):
+
+		run_manager.tutorial_completed = bool(
+			data["tutorial_completed"]
+		)
+
+	print(
+		"Tutorial completed:",
+		run_manager.tutorial_completed
+	)
+
+	# ==================================================
 	# Load Permanent Upgrades
 	# ==================================================
 
@@ -259,6 +358,27 @@ func load_game(
 			)
 
 	# ==================================================
+	# Load Potion Storage
+	# ==================================================
+
+	if data.has("potion_storage"):
+
+		_deserialize_potion_storage(
+			data["potion_storage"]
+		)
+
+	# ==================================================
+	# Load Potion Pocket
+	# ==================================================
+
+	if data.has("potion_pocket"):
+
+		_deserialize_potion_pocket(
+			data["potion_pocket"],
+			run_manager
+		)
+
+	# ==================================================
 	# Finished
 	# ==================================================
 
@@ -273,6 +393,238 @@ func load_game(
 		"Permanent genes:",
 		permanent_manager.gene_counts
 	)
+
+	print(
+		"Potion storage:",
+		potion_storage.stored_potions
+	)
+
+	print(
+		"Potion pocket:",
+		run_manager.get_run_potions()
+	)
+
+
+# ==================================================
+# Potion Serialization
+# ==================================================
+
+func _serialize_potion_storage() -> Array:
+
+	var result: Array = []
+
+	for potion in potion_storage.stored_potions.keys():
+
+		if potion == null:
+			continue
+
+		var amount: int = potion_storage.get_potion_count(
+			potion
+		)
+
+		if amount <= 0:
+			continue
+
+		if potion.resource_path.is_empty():
+			print(
+				"WARNING: Potion has no resource path:",
+				potion.potion_name
+			)
+
+			continue
+
+		result.append({
+			"path": potion.resource_path,
+			"amount": amount
+		})
+
+	return result
+
+
+func _deserialize_potion_storage(
+	saved_storage
+) -> void:
+
+	potion_storage.stored_potions.clear()
+
+	if not saved_storage is Array:
+		return
+
+	for entry in saved_storage:
+
+		if not entry is Dictionary:
+			continue
+
+		var path: String = str(
+			entry.get("path", "")
+		)
+
+		var amount: int = int(
+			entry.get("amount", 0)
+		)
+
+		if path.is_empty():
+			continue
+
+		if amount <= 0:
+			continue
+
+		var potion = load(path) as PotionResource
+
+		if potion == null:
+
+			print(
+				"WARNING: Could not load saved potion:",
+				path
+			)
+
+			continue
+
+		potion_storage.stored_potions[
+			potion
+		] = amount
+
+
+# ==================================================
+# Potion Pocket Serialization
+# ==================================================
+
+func _serialize_potion_pocket(
+	run_manager: RunManager
+) -> Array:
+
+	var result: Array = []
+
+	var potions := run_manager.get_run_potions()
+
+	for potion in potions:
+
+		if potion == null:
+
+			result.append(null)
+
+			continue
+
+		if potion.resource_path.is_empty():
+
+			print(
+				"WARNING: Potion in pocket has no resource path:",
+				potion.potion_name
+			)
+
+			result.append(null)
+
+			continue
+
+		result.append(
+			potion.resource_path
+		)
+
+	return result
+
+
+func _deserialize_potion_pocket(
+	saved_pocket,
+	run_manager: RunManager
+) -> void:
+
+	if not saved_pocket is Array:
+		return
+
+	run_manager.run_potion_pocket = [
+		null,
+		null,
+		null
+	]
+
+	for i in range(
+		min(
+			saved_pocket.size(),
+			3
+		)
+	):
+
+		var saved_value = saved_pocket[i]
+
+		if saved_value == null:
+			continue
+
+		var path: String = str(
+			saved_value
+		)
+
+		if path.is_empty():
+			continue
+
+		var potion = load(path) as PotionResource
+
+		if potion == null:
+
+			print(
+				"WARNING: Could not load saved pocket potion:",
+				path
+			)
+
+			continue
+
+		run_manager.run_potion_pocket[i] = potion
+
+
+# ==================================================
+# Pocket Helpers
+# ==================================================
+
+#func run_manager_for_save_pocket() -> Array:
+#
+	## This calls RunManager's public getter.
+	#return get_node("../RunManager").get_run_potions()
+
+
+#func run_manager_for_load_pocket(
+	#saved_pocket: Array
+#) -> void:
+#
+	#var run_manager_node: RunManager = get_node(
+		#"../RunManager"
+	#)
+#
+	#run_manager_node.run_potion_pocket = [
+		#null,
+		#null,
+		#null
+	#]
+#
+	#for i in range(
+		#min(
+			#saved_pocket.size(),
+			#RunManager.MAX_POTION_POCKET_SIZE
+		#)
+	#):
+#
+		#var saved_value = saved_pocket[i]
+#
+		#if saved_value == null:
+			#continue
+#
+		#var path: String = str(
+			#saved_value
+		#)
+#
+		#if path.is_empty():
+			#continue
+#
+		#var potion = load(path) as PotionResource
+#
+		#if potion == null:
+#
+			#print(
+				#"WARNING: Could not load saved pocket potion:",
+				#path
+			#)
+#
+			#continue
+#
+		#run_manager_node.run_potion_pocket[i] = potion
 
 
 # ==================================================

@@ -123,8 +123,8 @@ func remove_gene(
 
 func get_starting_world() -> int:
 
-	if tutorial_completed:
-		return 2
+	#if tutorial_completed:
+		#return 1
 
 	return 1
 
@@ -245,6 +245,10 @@ func load_room_pools() -> void:
 
 	_add_room_to_pool(
 		"res://Data/Rooms/EliteBattle_02.tres"
+	)
+
+	_add_room_to_pool(
+		"res://Data/Rooms/EliteBattle_03.tres"
 	)
 
 	# ==================================================
@@ -1402,11 +1406,17 @@ func complete_world() -> void:
 
 		tutorial_completed = true
 
-		world_transition_pending = true
-
 		print(
 			"Tutorial World completed permanently."
 		)
+
+		# Save the permanent tutorial unlock immediately.
+		save_manager.save_game(
+			PermanentProgressionManager,
+			self
+		)
+
+		world_transition_pending = true
 
 		current_world = 2
 

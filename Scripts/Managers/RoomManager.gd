@@ -1120,7 +1120,8 @@ func apply_reward(
 		if added:
 
 			save_manager.save_game(
-				PermanentProgressionManager
+				PermanentProgressionManager,
+				run_manager
 			)
 
 			print(

@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://bp377p5s8qep"]
+
+[node name="SaveUI" type="Control" unique_id=24200610]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="Panel" type="Panel" parent="." unique_id=1579283346]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel" unique_id=1807816160]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="SaveButton" type="Button" parent="Panel/VBoxContainer" unique_id=1113415014]
+layout_mode = 2
+text = "Save"
+
+[node name="CloseButton" type="Button" parent="Panel/VBoxContainer" unique_id=914834874]
+layout_mode = 2
+text = "Close"
