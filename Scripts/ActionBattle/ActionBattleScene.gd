@@ -10,6 +10,15 @@ const PLAYER_SCENE_PATH = (
 	"res://Scenes/Animals/PlayerAnimal.tscn"
 )
 
+const ENEMY_SCENE_PATH = (
+	"res://Scenes/Animals/EnemyAnimal.tscn"
+)
+
+const ACTION_PLAYER_CONTROLLER = preload(
+	"res://Scripts/ActionBattle/ActionPlayerController.gd"
+)
+
+
 # ==================================================
 # Scene References
 # ==================================================
@@ -25,6 +34,7 @@ const PLAYER_SCENE_PATH = (
 # ==================================================
 
 var player = null
+var enemy = null
 
 
 # ==================================================
@@ -43,6 +53,7 @@ func _ready() -> void:
 	print("Enemies Container:", enemies)
 
 	spawn_player()
+	spawn_enemy()
 
 
 # ==================================================
@@ -68,6 +79,10 @@ func spawn_player() -> void:
 
 	add_child(player)
 
+	var controller = ACTION_PLAYER_CONTROLLER.new()
+
+	player.add_child(controller)
+
 	player.global_position = player_spawn.global_position
 
 	# --------------------------------------------------
@@ -89,3 +104,73 @@ func spawn_player() -> void:
 	print("========================================")
 	print("Player:", player)
 	print("Position:", player.global_position)
+
+
+# ==================================================
+# Enemy Setup
+# ==================================================
+
+func spawn_enemy() -> void:
+
+	var enemy_scene = load(ENEMY_SCENE_PATH)
+
+	if enemy_scene == null:
+
+		push_error(
+			"Failed to load EnemyAnimal scene: "
+			+ ENEMY_SCENE_PATH
+		)
+
+		return
+
+	enemy = enemy_scene.instantiate()
+
+	if enemy == null:
+
+		push_error(
+			"Failed to instantiate EnemyAnimal."
+		)
+
+		return
+
+	enemies.add_child(enemy)
+
+	enemy.global_position = enemy_spawn.global_position
+
+	# --------------------------------------------------
+	# Initialize Wolf
+	# --------------------------------------------------
+
+	var wolf_resource = load(
+		"res://Data/Enemies/Normal/Wolf.tres"
+	)
+
+	if wolf_resource != null:
+
+		enemy.enemy_data = wolf_resource
+
+		if enemy.has_method("start_battle"):
+			enemy.start_battle()
+
+	else:
+
+		push_error(
+			"Failed to load Wolf.tres."
+		)
+
+	# --------------------------------------------------
+	# Make sure the Wolf sprite is visible.
+	# --------------------------------------------------
+
+	var sprite = enemy.get_node_or_null(
+		"EnemySprite"
+	)
+
+	if sprite != null:
+		sprite.visible = true
+
+	print("========================================")
+	print("WOLF SPAWNED")
+	print("========================================")
+	print("Enemy:", enemy)
+	print("Position:", enemy.global_position)
