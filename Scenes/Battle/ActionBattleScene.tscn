@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://dsd7i425r5ena"]
+
+[ext_resource type="Script" uid="uid://kg21kdtfh7v2" path="res://Scripts/ActionBattle/ActionBattleScene.gd" id="1_6axtg"]
+
+[node name="ActionBattleScene" type="Node2D" unique_id=173095800]
+script = ExtResource("1_6axtg")
+
+[node name="Arena" type="Node2D" parent="." unique_id=1849613358]
+
+[node name="PlayerSpawn" type="Marker2D" parent="Arena" unique_id=1627961946]
+position = Vector2(1200, 700)
+
+[node name="EnemySpawn" type="Marker2D" parent="Arena" unique_id=1551734252]
+position = Vector2(700, 400)
+
+[node name="Enemies" type="Node2D" parent="." unique_id=782385757]

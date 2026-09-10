@@ -632,8 +632,10 @@ func open_victory_screen():
 
 	await get_tree().create_timer(0.0).timeout
 
-	var enemy_reward := PermanentProgressionManager.reward_enemy_defeats(
-		run_manager.enemies_defeated
+	var enemy_reward: int = (
+		PermanentProgressionManager.reward_enemy_defeats(
+			run_manager.enemies_defeated
+		)
 	)
 
 	print(
@@ -645,7 +647,6 @@ func open_victory_screen():
 
 	close_run_worlds()
 
-	# Wait for BattleManager cleanup.
 	await get_tree().process_frame
 
 	print("================================")
@@ -759,8 +760,10 @@ func _on_battle_cleanup_finished() -> void:
 
 func finish_run():
 
-	var enemy_reward := PermanentProgressionManager.reward_enemy_defeats(
-		run_manager.enemies_defeated
+	var enemy_reward: int = (
+		PermanentProgressionManager.reward_enemy_defeats(
+			run_manager.enemies_defeated
+		)
 	)
 
 	print(

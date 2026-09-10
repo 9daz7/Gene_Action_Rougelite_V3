@@ -18,6 +18,7 @@ signal build_confirmed(build: AnimalBuildResource)
 @onready var start_button = $StartRunButton
 @onready var animal_button = $AnimalButton
 @onready var animal_creation: AnimalCreationUI = $AnimalCreationUI
+@onready var gene_storage_label: Label = $GeneStorageLabel
 
 
 # ==================================================
@@ -29,6 +30,8 @@ func _ready() -> void:
 	_setup_connections()
 
 	animal_creation.hide()
+
+	_update_gene_storage_label()
 
 
 # ==================================================
@@ -54,6 +57,9 @@ func setup(
 func open() -> void:
 
 	print("Lab Hub opened")
+
+	_update_gene_storage_label()
+
 	show()
 
 
@@ -92,6 +98,39 @@ func _setup_connections() -> void:
 		animal_creation.build_confirmed.connect(
 			_on_build_confirmed
 		)
+
+	if not PermanentProgressionManager.gene_storage_changed.is_connected(
+		_update_gene_storage_label
+	):
+
+		PermanentProgressionManager.gene_storage_changed.connect(
+			_update_gene_storage_label
+		)
+
+
+# ==================================================
+# Gene Storage
+# ==================================================
+
+func _update_gene_storage_label() -> void:
+
+	if gene_storage_label == null:
+		return
+
+	var used: int = (
+		PermanentProgressionManager.get_gene_storage_used()
+	)
+
+	var capacity: int = (
+		PermanentProgressionManager.get_gene_storage_capacity()
+	)
+
+	gene_storage_label.text = (
+		"Gene Storage: "
+		+ str(used)
+		+ " / "
+		+ str(capacity)
+	)
 
 
 # ==================================================
