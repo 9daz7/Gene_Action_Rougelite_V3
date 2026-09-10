@@ -61,6 +61,10 @@ func _physics_process(delta: float) -> void:
 	if enemy == null:
 		return
 
+	if not enemy.is_alive():
+		enemy.velocity = Vector2.ZERO
+		return
+
 	if target == null:
 		return
 
