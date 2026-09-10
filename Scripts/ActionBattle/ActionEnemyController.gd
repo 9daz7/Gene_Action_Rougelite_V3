@@ -18,10 +18,20 @@ class_name ActionEnemyController
 # ==================================================
 
 @export var attack_range: float = 80.0
-
 @export var attack_cooldown: float = 1.5
 
 var attack_timer: float = 0.0
+
+
+# ==================================================
+# Knockback
+# ==================================================
+
+@export var knockback_duration: float = 0.08
+
+var is_knocked_back: bool = false
+var knockback_timer: float = 0.0
+var knockback_velocity: Vector2 = Vector2.ZERO
 
 
 # ==================================================
@@ -59,6 +69,10 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 
 	if enemy == null:
+		return
+
+	if is_knocked_back:
+		_update_knockback(delta)
 		return
 
 	if not enemy.is_alive():
@@ -136,6 +150,78 @@ func _physics_process(delta: float) -> void:
 	)
 
 	enemy.move_and_slide()
+
+
+# ==================================================
+# Knockback
+# ==================================================
+
+func _update_knockback(delta: float) -> void:
+
+	knockback_timer += delta
+
+	enemy.velocity = knockback_velocity
+
+	enemy.move_and_slide()
+
+	knockback_velocity = (
+		knockback_velocity.move_toward(
+			Vector2.ZERO,
+			knockback_velocity.length()
+			/
+			knockback_duration
+			*
+			delta
+		)
+	)
+
+	if knockback_timer >= knockback_duration:
+
+		knockback_timer = 0.0
+		knockback_velocity = Vector2.ZERO
+		is_knocked_back = false
+
+		print(
+			enemy.name,
+			" KNOCKBACK COMPLETE"
+		)
+
+
+func apply_knockback(
+	direction: Vector2,
+	distance: float
+) -> void:
+
+	if enemy == null:
+		return
+
+	if not enemy.is_alive():
+		return
+
+	if direction == Vector2.ZERO:
+		return
+
+	var duration := knockback_duration
+
+	var speed := (
+		distance
+		/
+		duration
+	)
+
+	knockback_velocity = (
+		direction.normalized()
+		*
+		speed
+	)
+
+	knockback_timer = 0.0
+	is_knocked_back = true
+
+	print(
+		enemy.name,
+		" KNOCKBACK START"
+	)
 
 
 # ==================================================

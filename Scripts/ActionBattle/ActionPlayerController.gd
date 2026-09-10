@@ -12,14 +12,47 @@ class_name ActionPlayerController
 
 
 # ==================================================
-# Combat
+# Attack
 # ==================================================
+
+@export var attack_recovery: float = 0.5
+@export var attack_lunge_distance: float = 70.0
+@export var attack_lunge_duration: float = 0.12
+@export var attack_return_duration: float = 0.10
+@export var attack_knockback_distance: float = 35.0
+@export var attack_knockback_duration: float = 0.08
+
+
+# ==================================================
+# Attack state
+# ==================================================
+
+enum AttackState {
+	IDLE,
+	LUNGING,
+	#KNOCKBACK,
+	RETURNING,
+	RECOVERING
+}
+
+var attack_state: AttackState = AttackState.IDLE
+
+var attack_recovery_timer: float = 0.0
+var attack_timer: float = 0.0
+
+#var knockback_timer: float = 0.0
+#var knockback_start_position: Vector2
+#var knockback_target_position: Vector2
+
+var attack_start_position: Vector2
+var attack_target_position: Vector2
 
 var selected_target: AnimalBase = null
+var attack_move: MoveResource = null
 
 
 # ==================================================
-# State
+# Movement state
 # ==================================================
 
 var is_sprinting: bool = false
@@ -57,15 +90,158 @@ func _ready() -> void:
 # Physics
 # ==================================================
 
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
 
 	if player == null:
 		return
 
+	_update_attack_state(delta)
 
-	# ==================================================
-	# Movement Input
-	# ==================================================
+	_handle_movement()
+
+	if Input.is_action_just_pressed("attack"):
+		_try_attack()
+
+
+# ==================================================
+# Attack State
+# ==================================================
+
+func _update_attack_state(delta: float) -> void:
+
+	match attack_state:
+
+		AttackState.IDLE:
+			pass
+
+		AttackState.LUNGING:
+
+			attack_timer += delta
+
+			var progress := (
+				attack_timer
+				/ attack_lunge_duration
+			)
+
+			progress = clamp(
+				progress,
+				0.0,
+				1.0
+			)
+
+			player.global_position = (
+				attack_start_position.lerp(
+					attack_target_position,
+					progress
+				)
+			)
+
+			if progress >= 1.0:
+
+				await _execute_attack()
+
+				attack_state = AttackState.RETURNING
+				attack_timer = 0.0
+
+		#AttackState.KNOCKBACK:
+#
+			#knockback_timer += delta
+#
+			#var progress := (
+				#knockback_timer
+				#/ attack_knockback_duration
+			#)
+#
+			#progress = clamp(
+				#progress,
+				#0.0,
+				#1.0
+			#)
+#
+			#if selected_target != null:
+				#if is_instance_valid(selected_target):
+#
+					#selected_target.global_position = (
+						#knockback_start_position.lerp(
+							#knockback_target_position,
+							#progress
+						#)
+					#)
+#
+			#if progress >= 1.0:
+#
+				#attack_state = AttackState.RETURNING
+				#attack_timer = 0.0
+
+		AttackState.RETURNING:
+
+			attack_timer += delta
+
+			var progress := (
+				attack_timer
+				/ attack_return_duration
+			)
+
+			progress = clamp(
+				progress,
+				0.0,
+				1.0
+			)
+
+			player.global_position = (
+				attack_target_position.lerp(
+					attack_start_position,
+					progress
+				)
+			)
+
+			if progress >= 1.0:
+
+				player.global_position = (
+					attack_start_position
+				)
+
+				attack_state = (
+					AttackState.RECOVERING
+				)
+
+				attack_recovery_timer = (
+					attack_recovery
+				)
+
+				print(
+					"PLAYER ATTACK COMPLETE - RECOVERING"
+				)
+
+		AttackState.RECOVERING:
+
+			attack_recovery_timer -= delta
+
+			if attack_recovery_timer <= 0.0:
+
+				attack_recovery_timer = 0.0
+				attack_state = AttackState.IDLE
+
+				print("PLAYER READY")
+
+
+# ==================================================
+# Movement
+# ==================================================
+
+func _handle_movement() -> void:
+
+	# --------------------------------------------------
+	# Don't move during an attack.
+	# --------------------------------------------------
+
+	if attack_state != AttackState.IDLE:
+		player.velocity = Vector2.ZERO
+		return
+
+	# --------------------------------------------------
+	# Normal movement.
+	# --------------------------------------------------
 
 	var direction := Input.get_vector(
 		"move_left",
@@ -101,14 +277,6 @@ func _physics_process(_delta: float) -> void:
 
 	player.move_and_slide()
 
-	# ==================================================
-	# Attack Input
-	# ==================================================
-
-	if Input.is_action_just_pressed("attack"):
-
-		_try_attack()
-
 
 # ==================================================
 # Attack
@@ -118,8 +286,24 @@ func _try_attack() -> void:
 
 	print("PLAYER ATTACK INPUT")
 
-	var targeting = get_parent().get_parent().get_node_or_null(
-		"ActionTargeting"
+	# --------------------------------------------------
+	# Only allow attacks while idle.
+	# --------------------------------------------------
+
+	if attack_state != AttackState.IDLE:
+
+		print("PLAYER CANNOT ATTACK - NOT READY")
+
+		return
+
+	# --------------------------------------------------
+	# Find targeting system.
+	# --------------------------------------------------
+
+	var targeting = (
+		get_parent()
+		.get_parent()
+		.get_node_or_null("ActionTargeting")
 	)
 
 	if targeting == null:
@@ -130,7 +314,13 @@ func _try_attack() -> void:
 
 		return
 
-	selected_target = targeting.get_selected_target()
+	# --------------------------------------------------
+	# Get selected target.
+	# --------------------------------------------------
+
+	selected_target = (
+		targeting.get_selected_target()
+	)
 
 	if selected_target == null:
 
@@ -149,7 +339,11 @@ func _try_attack() -> void:
 		selected_target.name
 	)
 
-	var attack_move := _find_attack_move()
+	# --------------------------------------------------
+	# Find attack move.
+	# --------------------------------------------------
+
+	attack_move = _find_attack_move()
 
 	if attack_move == null:
 
@@ -164,11 +358,148 @@ func _try_attack() -> void:
 		attack_move.move_name
 	)
 
-	attack_move.execute(
+	# --------------------------------------------------
+	# Store attack position.
+	# --------------------------------------------------
+
+	attack_start_position = (
+		player.global_position
+	)
+
+	# --------------------------------------------------
+	# Calculate lunge position.
+	# --------------------------------------------------
+
+	var direction := (
+		selected_target.global_position
+		- player.global_position
+	).normalized()
+
+	attack_target_position = (
+		player.global_position
+		+
+		direction
+		*
+		attack_lunge_distance
+	)
+
+	# --------------------------------------------------
+	# Start lunge.
+	# --------------------------------------------------
+
+	attack_state = AttackState.LUNGING
+	attack_timer = 0.0
+
+	print(
+		"PLAYER LUNGE START"
+	)
+
+
+# ==================================================
+# Execute Attack
+# ==================================================
+
+func _execute_attack() -> void:
+
+	if attack_move == null:
+		return
+
+	if selected_target == null:
+		return
+
+	if not is_instance_valid(selected_target):
+		return
+
+	if not selected_target.is_alive():
+
+		print(
+			"TARGET DIED BEFORE ATTACK CONNECTED"
+		)
+
+		return
+
+	print(
+		"PLAYER ATTACK CONNECTED"
+	)
+
+	print(
+		"PLAYER USES:",
+		attack_move.move_name
+	)
+
+	await attack_move.execute(
 		player,
 		selected_target
 	)
 
+	_apply_enemy_knockback()
+
+
+func _apply_enemy_knockback() -> void:
+
+	if selected_target == null:
+		return
+
+	if not is_instance_valid(selected_target):
+		return
+
+	if not selected_target.is_alive():
+		return
+
+	var controller := selected_target.get_node_or_null(
+		"ActionEnemyController"
+	)
+
+	if controller == null:
+		return
+
+	var direction := (
+		selected_target.global_position
+		- player.global_position
+	).normalized()
+
+	if controller.has_method("apply_knockback"):
+
+		controller.apply_knockback(
+			direction,
+			attack_knockback_distance
+		)
+
+
+#func _start_knockback() -> void:
+#
+	#if selected_target == null:
+		#return
+#
+	#if not is_instance_valid(selected_target):
+		#return
+#
+	#if not selected_target.is_alive():
+		#return
+#
+	#var direction := (
+		#selected_target.global_position
+		#- player.global_position
+	#).normalized()
+#
+	#knockback_start_position = (
+		#selected_target.global_position
+	#)
+#
+	#knockback_target_position = (
+		#knockback_start_position
+		#+
+		#direction
+		#*
+		#attack_knockback_distance
+	#)
+#
+	#knockback_timer = 0.0
+#
+	#attack_state = AttackState.KNOCKBACK
+#
+	#print("ENEMY KNOCKBACK START")
+#
 
 # ==================================================
 # Attack Selection
@@ -179,7 +510,8 @@ func _find_attack_move() -> MoveResource:
 	if not player.has_method("get_battle_moves"):
 
 		push_warning(
-			"Player does not have get_battle_moves()."
+			"Player does not have "
+			+ "get_battle_moves()."
 		)
 
 		return null
