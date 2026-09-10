@@ -109,6 +109,15 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_kfjng")
 text = "Start Run"
 script = ExtResource("2_3lbnj")
 
+[node name="GeneStorageLabel" type="Label" parent="." unique_id=2000000001]
+layout_mode = 0
+offset_left = 200.0
+offset_top = 900.0
+offset_right = 500.0
+offset_bottom = 940.0
+theme_override_font_sizes/font_size = 24
+text = "Gene Storage: 0 / 10"
+
 [node name="AnimalCreationUI" type="Control" parent="." unique_id=1094525652]
 anchors_preset = 0
 offset_right = 40.0
