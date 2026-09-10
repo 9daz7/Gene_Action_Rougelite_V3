@@ -18,6 +18,10 @@ const ACTION_PLAYER_CONTROLLER = preload(
 	"res://Scripts/ActionBattle/ActionPlayerController.gd"
 )
 
+const ACTION_ENEMY_CONTROLLER = preload(
+	"res://Scripts/ActionBattle/ActionEnemyController.gd"
+)
+
 
 # ==================================================
 # Scene References
@@ -134,6 +138,12 @@ func spawn_enemy() -> void:
 		return
 
 	enemies.add_child(enemy)
+
+	var controller = ACTION_ENEMY_CONTROLLER.new()
+
+	enemy.add_child(controller)
+
+	controller.target = player
 
 	enemy.global_position = enemy_spawn.global_position
 

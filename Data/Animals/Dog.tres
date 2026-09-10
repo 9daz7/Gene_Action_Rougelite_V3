@@ -7,4 +7,5 @@
 
 [resource]
 script = ExtResource("2_any26")
+base_speed = 11
 starter_moves = Array[ExtResource("2_2d8k5")]([ExtResource("1_any26"), ExtResource("2_hs14y")])
