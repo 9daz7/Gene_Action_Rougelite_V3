@@ -9,6 +9,11 @@ class_name ActionTargeting
 var selected_target: AnimalBase = null
 
 
+@onready var target_marker: Polygon2D = (
+	get_parent().get_node("TargetMarker")
+)
+
+
 # ==================================================
 # Initialization
 # ==================================================
@@ -71,6 +76,12 @@ func _select_target_at_mouse(mouse_position: Vector2) -> void:
 
 			selected_target = enemy
 
+			target_marker.global_position = (
+				enemy.global_position
+			)
+
+			target_marker.visible = true
+
 			print(
 				"TARGET SELECTED: ",
 				enemy.name
@@ -84,6 +95,8 @@ func _select_target_at_mouse(mouse_position: Vector2) -> void:
 
 	selected_target = null
 
+	target_marker.visible = false
+
 	print("TARGET DESELECTED")
 
 
@@ -94,3 +107,23 @@ func _select_target_at_mouse(mouse_position: Vector2) -> void:
 func get_selected_target() -> AnimalBase:
 
 	return selected_target
+
+
+func _process(_delta: float) -> void:
+
+	if selected_target == null:
+		return
+
+	if not is_instance_valid(selected_target):
+		selected_target = null
+		target_marker.visible = false
+		return
+
+	if not selected_target.is_alive():
+		selected_target = null
+		target_marker.visible = false
+		return
+
+	target_marker.global_position = (
+		selected_target.global_position
+	)

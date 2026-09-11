@@ -16,9 +16,11 @@ position = Vector2(700, 400)
 
 [node name="Enemies" type="Node2D" parent="." unique_id=782385757]
 
-[node name="TargetMarker" type="Sprite2D" parent="." unique_id=947204712]
+[node name="TargetMarker" type="Polygon2D" parent="." unique_id=2103720164]
 visible = false
 z_index = 10
+color = Color(0.84, 0, 0, 1)
+polygon = PackedVector2Array(0, -5, 3, -4, 5, 0, 3, 4, 0, 5, -3, 4, -5, 0, -3, -4)
 
 [node name="ActionTargeting" type="Node" parent="." unique_id=1917210121]
 script = ExtResource("2_lmuoj")
