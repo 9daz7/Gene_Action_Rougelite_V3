@@ -362,6 +362,21 @@ func _try_attack() -> void:
 
 func _update_attack_state(delta: float) -> void:
 
+	if not enemy.is_alive():
+
+		enemy.velocity = Vector2.ZERO
+
+		attack_state = AttackState.IDLE
+
+		attack_move = null
+
+		print(
+			enemy.name,
+			" ATTACK CANCELLED - ENEMY DEAD"
+		)
+
+		return
+
 	match attack_state:
 
 		AttackState.PRIMING:

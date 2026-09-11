@@ -34,6 +34,8 @@ const ACTION_ENEMY_CONTROLLER = preload(
 @onready var arena = $Arena
 @onready var player_spawn = $Arena/PlayerSpawn
 @onready var enemy_spawn = $Arena/EnemySpawn
+@onready var enemy_spawn_2 = $Arena/EnemySpawn2
+
 @onready var enemies = $Enemies
 
 
@@ -43,6 +45,8 @@ const ACTION_ENEMY_CONTROLLER = preload(
 
 var player = null
 var enemy = null
+var enemy_2 = null
+
 var battle_finished: bool = false
 
 
@@ -69,6 +73,7 @@ func _ready() -> void:
 
 	spawn_player()
 	spawn_enemy()
+	spawn_enemy_2()
 
 
 func _process(_delta: float) -> void:
@@ -287,6 +292,68 @@ func spawn_enemy() -> void:
 	print("Position:", enemy.global_position)
 
 
+func spawn_enemy_2() -> void:
+
+	var enemy_scene = load(ENEMY_SCENE_PATH)
+
+	if enemy_scene == null:
+		push_error(
+			"Failed to load EnemyAnimal scene: "
+			+ ENEMY_SCENE_PATH
+		)
+		return
+
+	enemy_2 = enemy_scene.instantiate()
+
+	if enemy_2 == null:
+		push_error("Failed to instantiate second enemy.")
+		return
+
+	enemies.add_child(enemy_2)
+
+	var controller = ACTION_ENEMY_CONTROLLER.new()
+
+	controller.name = "ActionEnemyController"
+
+	enemy_2.add_child(controller)
+
+	controller.target = player
+
+	enemy_2.global_position = (
+		enemy_spawn_2.global_position
+	)
+
+	var wolf_resource = load(
+		"res://Data/Enemies/Normal/Wolf.tres"
+	)
+
+	if wolf_resource != null:
+
+		enemy_2.enemy_data = wolf_resource
+
+		if enemy_2.has_method("start_battle"):
+			enemy_2.start_battle()
+
+	else:
+
+		push_error(
+			"Failed to load Wolf.tres."
+		)
+
+	var sprite = enemy_2.get_node_or_null(
+		"EnemySprite"
+	)
+
+	if sprite != null:
+		sprite.visible = true
+
+	print("========================================")
+	print("SECOND WOLF SPAWNED")
+	print("========================================")
+	print("Enemy:", enemy_2)
+	print("Position:", enemy_2.global_position)
+
+
 # ==================================================
 # Combat Results
 # ==================================================
@@ -297,15 +364,38 @@ func _check_battle_result() -> void:
 		return
 
 	if player != null:
+
 		if not player.is_alive():
+
 			battle_finished = true
+
 			_handle_defeat()
+
 			return
 
-	if enemy != null:
-		if not enemy.is_alive():
+	if enemies != null:
+
+		var all_enemies_dead := true
+
+		for child in enemies.get_children():
+
+			if not child is AnimalBase:
+				continue
+
+			var current_enemy := child as AnimalBase
+
+			if current_enemy.is_alive():
+
+				all_enemies_dead = false
+
+				break
+
+		if all_enemies_dead:
+
 			battle_finished = true
+
 			_handle_victory()
+
 			return
 
 
