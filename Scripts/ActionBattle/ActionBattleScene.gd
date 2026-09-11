@@ -18,6 +18,13 @@ const BITE_MOVE_PATH = (
 	"res://Data/Moves/Bite.tres"
 )
 
+const PROTECT_MOVE_PATH = (
+	"res://Data/Moves/Protect.tres"
+)
+const GENE_MOVE_PATH = (
+	"res://Data/Moves/FerociousBite.tres"
+)
+
 const ACTION_PLAYER_CONTROLLER = preload(
 	"res://Scripts/ActionBattle/ActionPlayerController.gd"
 )
@@ -161,52 +168,74 @@ func spawn_player() -> void:
 
 func _setup_player_moves() -> void:
 
-	var bite_move = load(
-		BITE_MOVE_PATH
-	)
+	if not player.has_method("add_move"):
+		push_error("PlayerAnimal does not have add_move().")
+		return
+
+	# ----------------------------------------------
+	# Base Move
+	# ----------------------------------------------
+
+	var bite_move = load(BITE_MOVE_PATH)
 
 	if bite_move == null:
-
 		push_error(
 			"Failed to load Bite move: "
 			+ BITE_MOVE_PATH
 		)
+	else:
+		player.add_move(bite_move)
+		print("Loaded base move:", bite_move.move_name)
 
-		return
+	# ----------------------------------------------
+	# Protect
+	# ----------------------------------------------
 
-	if not player.has_method("add_move"):
+	var protect_move = load(PROTECT_MOVE_PATH)
 
+	if protect_move == null:
 		push_error(
-			"PlayerAnimal does not have add_move()."
+			"Failed to load Protect move: "
+			+ PROTECT_MOVE_PATH
 		)
+	else:
+		player.add_move(protect_move)
+		print("Loaded defensive move:", protect_move.move_name)
 
-		return
+	# ----------------------------------------------
+	# Gene Move
+	# ----------------------------------------------
 
-	player.add_move(bite_move)
+	var gene_move = load(GENE_MOVE_PATH)
 
-	print("========================================")
-	print("PLAYER MOVE SETUP")
-	print("========================================")
-	print("Loaded move:", bite_move.move_name)
+	if gene_move == null:
+		push_error(
+			"Failed to load gene move: "
+			+ GENE_MOVE_PATH
+		)
+	else:
+		player.add_move(gene_move)
+		print("Loaded gene move:", gene_move.move_name)
+
+	# ----------------------------------------------
+	# Verify Move List
+	# ----------------------------------------------
 
 	if player.has_method("get_battle_moves"):
 
 		var moves = player.get_battle_moves()
 
-		print(
-			"Player battle moves:",
-			moves.size()
-		)
+		print("========================================")
+		print("PLAYER MOVE SETUP")
+		print("========================================")
+		print("Player battle moves:", moves.size())
 
 		for move in moves:
 
 			if move == null:
 				continue
 
-			print(
-				" - ",
-				move.move_name
-			)
+			print(" - ", move.move_name)
 
 
 # ==================================================

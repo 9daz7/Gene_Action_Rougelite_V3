@@ -49,6 +49,7 @@ var attack_target_position: Vector2
 
 var selected_target: AnimalBase = null
 var attack_move: MoveResource = null
+var selected_move: MoveResource = null
 
 
 # ==================================================

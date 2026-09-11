@@ -6,7 +6,7 @@
 [ext_resource type="Resource" uid="uid://cfsalnn48dv3f" path="res://Data/Moves/Bite.tres" id="3_a7s3f"]
 [ext_resource type="Resource" uid="uid://bjcqdkaq6oa1o" path="res://Data/Genes/WolfFangs.tres" id="4_0edjg"]
 [ext_resource type="Resource" uid="uid://dssodq4lr1182" path="res://Data/Moves/Protect.tres" id="4_c0gng"]
-[ext_resource type="Resource" uid="uid://drakyvl6jwh0f" path="res://Data/Moves/Ferocious bite.tres" id="5_kd3m8"]
+[ext_resource type="Resource" uid="uid://drakyvl6jwh0f" path="res://Data/Moves/FerociousBite.tres" id="5_kd3m8"]
 [ext_resource type="Resource" uid="uid://73ylas6rloet" path="res://Data/Moves/Outspeed.tres" id="6_pko1q"]
 [ext_resource type="Texture2D" uid="uid://btha0go4fr6sq" path="res://Assets/Sprites/enemypng.png" id="8_c0gng"]
 

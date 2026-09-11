@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://btvgdy4ii0xbh" path="res://Scripts/Genes/Legendaries/LegendaryMutation.gd" id="1_ae0od"]
 [ext_resource type="Script" uid="uid://bnmm0xqkm6atb" path="res://Scripts/Moves/MoveResource.gd" id="2_a835o"]
 [ext_resource type="Script" uid="uid://cykpuveioj0q4" path="res://Scripts/Genes/Effects/PassiveEffects.gd" id="3_5jcc0"]
-[ext_resource type="Resource" uid="uid://drakyvl6jwh0f" path="res://Data/Moves/Ferocious bite.tres" id="3_a835o"]
+[ext_resource type="Resource" uid="uid://drakyvl6jwh0f" path="res://Data/Moves/FerociousBite.tres" id="3_a835o"]
 [ext_resource type="Resource" uid="uid://buf2qrtxcltgy" path="res://Data/Moves/TargetPunch.tres" id="4_5jcc0"]
 [ext_resource type="Script" uid="uid://cnlwwn0eoa0pn" path="res://Scripts/Genes/GeneResource.gd" id="4_poi5u"]
 
