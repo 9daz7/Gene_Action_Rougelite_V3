@@ -231,6 +231,8 @@ func spawn_enemy() -> void:
 
 	var controller = ACTION_ENEMY_CONTROLLER.new()
 
+	controller.name = "ActionEnemyController"
+
 	enemy.add_child(controller)
 
 	controller.target = player

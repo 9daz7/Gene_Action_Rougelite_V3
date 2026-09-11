@@ -437,20 +437,65 @@ func _execute_attack() -> void:
 
 func _apply_enemy_knockback() -> void:
 
+	print("========================================")
+	print("APPLY ENEMY KNOCKBACK")
+	print("========================================")
+
 	if selected_target == null:
+
+		print("KNOCKBACK FAILED: No selected target")
 		return
 
+	print(
+		"Selected target:",
+		selected_target.name
+	)
+
 	if not is_instance_valid(selected_target):
+
+		print(
+			"KNOCKBACK FAILED: Target is invalid"
+		)
+
 		return
 
 	if not selected_target.is_alive():
+
+		print(
+			"KNOCKBACK FAILED: Target is dead"
+		)
+
 		return
 
 	var controller := selected_target.get_node_or_null(
 		"ActionEnemyController"
 	)
 
+	print(
+		"Enemy controller found:",
+		controller
+	)
+
 	if controller == null:
+
+		print(
+			"KNOCKBACK FAILED: "
+			+ "ActionEnemyController not found"
+		)
+
+		print(
+			"Target children:"
+		)
+
+		for child in selected_target.get_children():
+
+			print(
+				" - ",
+				child.name,
+				" | ",
+				child.get_class()
+			)
+
 		return
 
 	var direction := (
@@ -458,13 +503,33 @@ func _apply_enemy_knockback() -> void:
 		- player.global_position
 	).normalized()
 
+	print(
+		"Knockback direction:",
+		direction
+	)
+
+	print(
+		"Knockback distance:",
+		attack_knockback_distance
+	)
+
 	if controller.has_method("apply_knockback"):
+
+		print(
+			"Calling ActionEnemyController.apply_knockback()"
+		)
 
 		controller.apply_knockback(
 			direction,
 			attack_knockback_distance
 		)
 
+	else:
+
+		print(
+			"KNOCKBACK FAILED: "
+			+ "apply_knockback() not found"
+		)
 
 #func _start_knockback() -> void:
 #
