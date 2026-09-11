@@ -29,8 +29,8 @@ class_name ActionPlayerController
 
 enum AttackState {
 	IDLE,
+	PRIMING,
 	LUNGING,
-	#KNOCKBACK,
 	RETURNING,
 	RECOVERING
 }

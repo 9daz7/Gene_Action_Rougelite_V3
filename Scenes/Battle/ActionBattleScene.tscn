@@ -16,5 +16,9 @@ position = Vector2(700, 400)
 
 [node name="Enemies" type="Node2D" parent="." unique_id=782385757]
 
+[node name="TargetMarker" type="Sprite2D" parent="." unique_id=947204712]
+visible = false
+z_index = 10
+
 [node name="ActionTargeting" type="Node" parent="." unique_id=1917210121]
 script = ExtResource("2_lmuoj")

@@ -43,6 +43,7 @@ const ACTION_ENEMY_CONTROLLER = preload(
 
 var player = null
 var enemy = null
+var battle_finished: bool = false
 
 
 # ==================================================
@@ -68,6 +69,11 @@ func _ready() -> void:
 
 	spawn_player()
 	spawn_enemy()
+
+
+func _process(_delta: float) -> void:
+
+	_check_battle_result()
 
 
 # ==================================================
@@ -279,3 +285,41 @@ func spawn_enemy() -> void:
 	print("========================================")
 	print("Enemy:", enemy)
 	print("Position:", enemy.global_position)
+
+
+# ==================================================
+# Combat Results
+# ==================================================
+
+func _check_battle_result() -> void:
+
+	if battle_finished:
+		return
+
+	if player != null:
+		if not player.is_alive():
+			battle_finished = true
+			_handle_defeat()
+			return
+
+	if enemy != null:
+		if not enemy.is_alive():
+			battle_finished = true
+			_handle_victory()
+			return
+
+
+func _handle_victory() -> void:
+
+	print("")
+	print("========================================")
+	print("VICTORY")
+	print("========================================")
+
+
+func _handle_defeat() -> void:
+
+	print("")
+	print("========================================")
+	print("DEFEAT")
+	print("========================================")

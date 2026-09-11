@@ -20,7 +20,29 @@ class_name ActionEnemyController
 @export var attack_range: float = 80.0
 @export var attack_cooldown: float = 1.5
 
+@export var attack_prime_time: float = 0.3
+@export var attack_lunge_distance: float = 100.0
+@export var attack_lunge_duration: float = 0.12
+@export var attack_recovery_time: float = 0.5
+
 var attack_timer: float = 0.0
+
+enum AttackState {
+	IDLE,
+	PRIMING,
+	LUNGING,
+	RECOVERING
+}
+
+var attack_state: AttackState = AttackState.IDLE
+
+var attack_start_position: Vector2
+var attack_target_position: Vector2
+var attack_move: MoveResource = null
+
+var attack_prime_timer: float = 0.0
+var attack_lunge_timer: float = 0.0
+var attack_recovery_timer: float = 0.0
 
 
 # ==================================================
@@ -40,6 +62,9 @@ var knockback_velocity: Vector2 = Vector2.ZERO
 
 var enemy: AnimalBase
 var target: AnimalBase
+
+var enemy_sprite: Sprite2D
+var original_sprite_scale: Vector2
 
 
 # ==================================================
@@ -61,6 +86,13 @@ func _ready() -> void:
 
 	print("ActionEnemyController ready")
 
+	enemy_sprite = enemy.get_node_or_null(
+		"EnemySprite"
+	) as Sprite2D
+
+	if enemy_sprite != null:
+		original_sprite_scale = enemy_sprite.scale
+
 
 # ==================================================
 # Physics
@@ -71,8 +103,16 @@ func _physics_process(delta: float) -> void:
 	if enemy == null:
 		return
 
+	if not target.is_alive():
+		enemy.velocity = Vector2.ZERO
+		return
+
 	if is_knocked_back:
 		_update_knockback(delta)
+		return
+
+	if attack_state != AttackState.IDLE:
+		_update_attack_state(delta)
 		return
 
 	if not enemy.is_alive():
@@ -84,6 +124,7 @@ func _physics_process(delta: float) -> void:
 
 	if not target.is_alive():
 		enemy.velocity = Vector2.ZERO
+		attack_state = AttackState.IDLE
 		return
 
 	# --------------------------------------------------
@@ -109,7 +150,7 @@ func _physics_process(delta: float) -> void:
 	# Outside chase range
 	# --------------------------------------------------
 
-	if distance > chase_range:
+	if distance > chase_range and not is_alerted:
 
 		enemy.velocity = Vector2.ZERO
 		enemy.move_and_slide()
@@ -142,6 +183,15 @@ func _physics_process(delta: float) -> void:
 
 	if enemy.has_method("get_speed"):
 		animal_speed = enemy.get_speed()
+
+	if is_alerted:
+		print(
+			enemy.name,
+			" ALERTED CHASING ",
+			target.name,
+			" | Distance: ",
+			distance
+		)
 
 	enemy.velocity = (
 		direction
@@ -224,6 +274,34 @@ func apply_knockback(
 	)
 
 
+
+var is_alerted: bool = false
+
+# ==================================================
+# Alert / Aggro
+# ==================================================
+
+func alert_to_attacker(attacker: AnimalBase) -> void:
+
+	if enemy == null:
+		return
+
+	if attacker == null:
+		return
+
+	if not attacker.is_alive():
+		return
+
+	target = attacker
+	is_alerted = true
+
+	print(
+		enemy.name,
+		" ALERTED BY: ",
+		attacker.name
+	)
+
+
 # ==================================================
 # Combat
 # ==================================================
@@ -247,11 +325,165 @@ func _try_attack() -> void:
 		)
 		return
 
-	var attack_move = _find_attack_move(moves)
+	var selected_move := _find_attack_move(moves)
 
-	if attack_move == null:
+	if selected_move == null:
 		push_warning(
 			"Enemy has no usable attack move."
+		)
+		return
+
+	attack_move = selected_move
+
+	print(
+		"========================================"
+	)
+	print(
+		"ENEMY ATTACK PRIME"
+	)
+	print(
+		"========================================"
+	)
+	print(
+		enemy.name,
+		" prepares ",
+		attack_move.move_name
+	)
+
+	attack_timer = attack_cooldown
+
+	attack_prime_timer = 0.0
+	attack_state = AttackState.PRIMING
+
+
+# ==================================================
+# Attack State
+# ==================================================
+
+func _update_attack_state(delta: float) -> void:
+
+	match attack_state:
+
+		AttackState.PRIMING:
+
+			enemy.velocity = Vector2.ZERO
+			enemy.move_and_slide()
+
+			attack_prime_timer += delta
+
+			if attack_prime_timer >= attack_prime_time:
+
+				_start_attack_lunge()
+
+
+		AttackState.LUNGING:
+
+			attack_lunge_timer += delta
+
+			var progress := (
+				attack_lunge_timer
+				/
+				attack_lunge_duration
+			)
+
+			progress = clamp(progress, 0.0, 1.0)
+
+			enemy.global_position = (
+				attack_start_position.lerp(
+					attack_target_position,
+					progress
+				)
+			)
+
+			if progress >= 1.0:
+
+				_execute_attack_hit()
+
+				attack_state = AttackState.RECOVERING
+				attack_recovery_timer = 0.0
+
+
+		AttackState.RECOVERING:
+
+			enemy.velocity = Vector2.ZERO
+			enemy.move_and_slide()
+
+			attack_recovery_timer += delta
+
+			if attack_recovery_timer >= attack_recovery_time:
+
+				attack_state = AttackState.IDLE
+
+				print(
+					enemy.name,
+					" ATTACK RECOVERY COMPLETE"
+				)
+
+
+func _start_attack_lunge() -> void:
+
+	if target == null:
+		attack_state = AttackState.IDLE
+		return
+
+	if not target.is_alive():
+		attack_state = AttackState.IDLE
+		return
+
+	print(
+		enemy.name,
+		" LUNGES AT ",
+		target.name
+	)
+
+	attack_start_position = enemy.global_position
+
+	var direction := (
+		target.global_position
+		-
+		enemy.global_position
+	).normalized()
+
+	attack_target_position = (
+		attack_start_position
+		+
+		direction
+		*
+		attack_lunge_distance
+	)
+
+	attack_lunge_timer = 0.0
+	attack_state = AttackState.LUNGING
+
+
+func _execute_attack_hit() -> void:
+
+	if attack_move == null:
+		return
+
+	if target == null:
+		return
+
+	if not is_instance_valid(target):
+		return
+
+	if not target.is_alive():
+		return
+
+	var distance := enemy.global_position.distance_to(
+		target.global_position
+	)
+
+	print(
+		enemy.name,
+		" BITE HIT CHECK | Distance: ",
+		distance
+	)
+
+	if distance > attack_range:
+		print(
+			enemy.name,
+			" MISSED!"
 		)
 		return
 
@@ -259,7 +491,7 @@ func _try_attack() -> void:
 		"========================================"
 	)
 	print(
-		"ENEMY ATTACK"
+		"ENEMY ATTACK CONNECTED"
 	)
 	print(
 		"========================================"
@@ -269,8 +501,6 @@ func _try_attack() -> void:
 		" uses ",
 		attack_move.move_name
 	)
-
-	attack_timer = attack_cooldown
 
 	attack_move.execute(
 		enemy,

@@ -659,11 +659,11 @@ func get_speed() -> int:
 			value
 		)
 
-	print(
-		name,
-		" current speed:",
-		value
-	)
+	#print(
+		#name,
+		#" current speed:",
+		#value
+	#)
 	
 	return value
 
@@ -1223,6 +1223,8 @@ func take_damage(
 		get_max_hp()
 	)
 
+	play_hit_flash()
+
 	print(
 		"PROTECT MUTAGEN DEBUG | Target:",
 		name,
@@ -1315,6 +1317,8 @@ func take_status_damage(
 		get_max_hp()
 	)
 
+	play_hit_flash()
+
 	print(
 		name,
 		" took ",
@@ -1344,6 +1348,87 @@ func take_status_damage(
 		die()
 
 
+# ==================================================
+# Hit Feedback
+# ==================================================
+
+func play_hit_flash() -> void:
+
+	var sprite: Sprite2D = null
+
+	# --------------------------------------------------
+	# Find character sprite
+	# --------------------------------------------------
+
+	sprite = get_node_or_null("Sprite2D")
+
+	if sprite == null:
+		sprite = get_node_or_null("EnemySprite")
+
+	if sprite == null:
+		return
+
+	# --------------------------------------------------
+	# Reset existing flash
+	# --------------------------------------------------
+
+	sprite.modulate = Color.WHITE
+
+	# --------------------------------------------------
+	# Create red flash
+	# --------------------------------------------------
+
+	var tween := create_tween()
+
+	tween.tween_property(
+		sprite,
+		"modulate",
+		Color(1.0, 0.75, 0.75),
+		0.04
+	)
+
+	tween.tween_property(
+		sprite,
+		"modulate",
+		Color.WHITE,
+		0.10
+	)
+
+
+# ==================================================
+# Death Feedback
+# ==================================================
+
+func play_death_effect() -> void:
+
+	var sprite: Sprite2D = null
+
+	# --------------------------------------------------
+	# Find Character Sprite
+	# --------------------------------------------------
+
+	sprite = get_node_or_null("Sprite2D")
+
+	if sprite == null:
+		sprite = get_node_or_null("EnemySprite")
+
+	if sprite == null:
+		return
+
+	# --------------------------------------------------
+	# Fade Out
+	# --------------------------------------------------
+
+	var tween := create_tween()
+
+	tween.tween_property(
+		sprite,
+		"modulate:a",
+		0.0,
+		0.25
+	)
+
+
 func die():
 
 	if hp > 0:
@@ -1352,6 +1437,9 @@ func die():
 	trigger_passive_event(
 		"death"
 	)
+
+	# Play death visual
+	play_death_effect()
 
 	animal_died.emit()
 

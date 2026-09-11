@@ -240,58 +240,34 @@ func evaluate_move(
 	return score
 
 
-#func choose_basic_move(moves):
-#
-	#return moves.pick_random()
-#
-#
-#func choose_aggressive_move(moves):
-#
-	#var best_move = moves[0]
-#
-#
-	#for move in moves:
-#
-		#if move.power > best_move.power:
-			#best_move = move
-#
-#
-	#return best_move
-#
-#
-#func choose_defensive_move(moves):
-#
-	#if hp <= get_max_hp() * 0.4:
-#
-		#for move in moves:
-#
-			#if move.effect_type == MoveResource.MoveEffectType.PROTECT:
-				#return move
-#
-#
-	#return moves.pick_random()
-#
-#
-#func choose_tactical_move(
-	#moves,
-	#player
-#):
-#
-	#if hp <= get_max_hp() * 0.3:
-#
-		#for move in moves:
-#
-			#if move.effect_type == MoveResource.MoveEffectType.PROTECT:
-				#return move
-#
-#
-	#for move in moves:
-#
-		#if move.effect_type == MoveResource.MoveEffectType.STATUS:
-			#return move
-#
-#
-	#return choose_aggressive_move(moves)
+func take_damage(
+	amount: int,
+	attacker: AnimalBase = null,
+	is_status_damage: bool = false,
+	move: MoveResource = null
+):
+	super.take_damage(
+		amount,
+		attacker,
+		is_status_damage,
+		move
+	)
+
+	if attacker == null:
+		return
+
+	if not is_alive():
+		return
+
+	var controller := get_node_or_null(
+		"ActionEnemyController"
+	)
+
+	if controller == null:
+		return
+
+	if controller.has_method("alert_to_attacker"):
+		controller.alert_to_attacker(attacker)
 
 
 func get_drop_gene() -> GeneResource:
