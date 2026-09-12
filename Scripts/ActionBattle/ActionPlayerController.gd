@@ -252,122 +252,89 @@ func _execute_attack() -> void:
 		print("ATTACK FAILED - NO MOVE")
 		return
 
-	# --------------------------------------------------
-	# Check optional target
-	# --------------------------------------------------
+	# ==========================================
+	# Create Move Hitbox
+	# ==========================================
 
-	if selected_target != null:
+	var hitbox := ATTACK_HITBOX_SCENE.instantiate()
 
-		if not is_instance_valid(selected_target):
-			selected_target = null
+	get_tree().current_scene.add_child(hitbox)
 
-		elif not selected_target.is_alive():
-			selected_target = null
-
-	# --------------------------------------------------
-	# Targeted attack
-	# --------------------------------------------------
-
-	if selected_target != null:
-
-		print(
-			"PLAYER EXECUTING MOVE: ",
-			attack_move.move_name,
-			" ON ",
-			selected_target.name
-		)
-
-		await attack_move.execute(
-			player,
-			selected_target
-		)
-
-		_apply_enemy_knockback()
-
-		return
-
-	# --------------------------------------------------
-	# Untargeted attack
-	# --------------------------------------------------
-
-	if attack_area == null:
-
-		print(
-			"ATTACK MISSED - NO ATTACK AREA"
-		)
-
-		return
-
-	var detected_enemies := (
-		attack_area.get_detected_enemies()
+	hitbox.global_position = (
+		player.global_position
+		+ facing_direction * attack_move.hitbox_offset
 	)
+
+	print(
+		"ATTACK HITBOX CREATED | Move:",
+		attack_move.move_name,
+		"| Position:",
+		hitbox.global_position
+	)
+
+	# ==========================================
+	# Wait for Physics Detection
+	# ==========================================
+
+	await get_tree().physics_frame
+
+	var detected_enemies: Array[AnimalBase] = (
+		hitbox.get_detected_enemies()
+	)
+
+	# ==========================================
+	# Execute Move
+	# ==========================================
 
 	if detected_enemies.is_empty():
 
 		print(
 			"PLAYER ATTACK MISSED - "
-			+ "NO ENEMY IN ATTACK AREA"
+			+ "NO ENEMY IN MOVE HITBOX"
 		)
 
-		return
-
-	# --------------------------------------------------
-	# Use the closest detected enemy.
-	# --------------------------------------------------
-
-	var closest_enemy: AnimalBase = null
-	var closest_distance := INF
-
-	for enemy in detected_enemies:
-
-		if enemy == null:
-			continue
-
-		if not is_instance_valid(enemy):
-			continue
-
-		if not enemy.is_alive():
-			continue
-
-		var distance := (
-			player.global_position
-			.distance_to(enemy.global_position)
-		)
-
-		if distance < closest_distance:
-
-			closest_distance = distance
-			closest_enemy = enemy
-
-	if closest_enemy == null:
+	else:
 
 		print(
-			"PLAYER ATTACK MISSED - "
-			+ "NO VALID ENEMY"
+			"PLAYER HIT ",
+			detected_enemies.size(),
+			" ENEMY/ENEMIES"
 		)
 
-		return
+		for enemy in detected_enemies:
 
-	# --------------------------------------------------
-	# Execute attack.
-	# --------------------------------------------------
+			if enemy == null:
+				continue
 
-	selected_target = closest_enemy
+			if not is_instance_valid(enemy):
+				continue
 
-	print(
-		"PLAYER EXECUTING MOVE: ",
-		attack_move.move_name,
-		" ON ",
-		selected_target.name,
-		" USING ATTACK AREA"
-	)
+			if not enemy.is_alive():
+				continue
 
-	await attack_move.execute(
-		player,
-		selected_target
-	)
+			print(
+				"PLAYER EXECUTING MOVE: ",
+				attack_move.move_name,
+				" ON ",
+				enemy.name
+			)
 
-	_apply_enemy_knockback()
+			await attack_move.execute(
+				player,
+				enemy
+			)
+
+	# ==========================================
+	# Remove Hitbox
+	# ==========================================
+
+	hitbox.queue_free()
+
+	# ==========================================
+	# Clear Target
+	# ==========================================
+
+	selected_target = null
 
 
 # ==================================================
@@ -566,13 +533,6 @@ func _use_move(index: int) -> void:
 		return
 
 	selected_move = move
-
-	var test_hitbox := _create_attack_hitbox()
-
-	print(
-		"TEST HITBOX CREATED AT: ",
-		test_hitbox.global_position
-	)
 
 	print("========================================")
 	print("PLAYER USES MOVE")
