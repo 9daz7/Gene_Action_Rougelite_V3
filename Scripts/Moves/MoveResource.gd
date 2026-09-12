@@ -36,12 +36,31 @@ enum TargetType {
 	ALL_ALLIES
 }
 
+enum HitboxType {
+	NONE,
+	CIRCLE,
+	RECTANGLE,
+	CONE
+}
+
 
 # ==================================================
 # Targeting
 # ==================================================
 
 @export var target_type: TargetType = TargetType.SINGLE_ENEMY
+
+
+# ==================================================
+# Hitbox
+# ==================================================
+
+@export var hitbox_type: HitboxType = HitboxType.NONE
+@export var hitbox_size: Vector2 = Vector2(60.0, 40.0)
+@export var hitbox_radius: float = 60.0
+@export var hitbox_offset: float = 40.0
+@export var hitbox_duration: float = 0.05
+
 
 # ==================================================
 # Basic Move Info

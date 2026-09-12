@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://dyb8boy5fqxa2"]
+
+[ext_resource type="Script" uid="uid://ilhtkd7ekaru" path="res://Scripts/ActionBattle/ActionAttackHitbox.gd" id="1_rtrs4"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_gs0tk"]
+radius = 130.0
+
+[node name="ActionAttackHitbox" type="Area2D" unique_id=1990340675]
+collision_layer = 0
+script = ExtResource("1_rtrs4")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1957718503]
+shape = SubResource("CircleShape2D_gs0tk")

@@ -3,6 +3,15 @@ class_name ActionPlayerController
 
 
 # ==================================================
+# Hitbox
+# ==================================================
+
+const ATTACK_HITBOX_SCENE = preload(
+	"res://Scenes/Battle/ActionAttackHitbox.tscn"
+)
+
+
+# ==================================================
 # Movement
 # ==================================================
 
@@ -98,6 +107,24 @@ func _ready() -> void:
 		)
 
 	print("ActionPlayerController ready")
+
+
+# ==================================================
+# Attack Hitbox
+# ==================================================
+
+func _create_attack_hitbox() -> ActionAttackHitbox:
+
+	var hitbox := ATTACK_HITBOX_SCENE.instantiate()
+
+	get_tree().current_scene.add_child(hitbox)
+
+	hitbox.global_position = (
+		player.global_position
+		+ facing_direction * 60.0
+	)
+
+	return hitbox
 
 
 # ==================================================
@@ -539,6 +566,13 @@ func _use_move(index: int) -> void:
 		return
 
 	selected_move = move
+
+	var test_hitbox := _create_attack_hitbox()
+
+	print(
+		"TEST HITBOX CREATED AT: ",
+		test_hitbox.global_position
+	)
 
 	print("========================================")
 	print("PLAYER USES MOVE")
