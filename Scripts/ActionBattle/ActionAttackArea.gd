@@ -1,0 +1,84 @@
+extends Area2D
+class_name ActionAttackArea
+
+
+# ==================================================
+# Detected Enemies
+# ==================================================
+
+var detected_enemies: Array[AnimalBase] = []
+
+
+# ==================================================
+# Initialization
+# ==================================================
+
+func _ready() -> void:
+
+	print("ActionAttackArea ready")
+
+	body_entered.connect(_on_body_entered)
+	body_exited.connect(_on_body_exited)
+
+
+# ==================================================
+# Detection
+# ==================================================
+
+func _on_body_entered(body: Node2D) -> void:
+
+	if not body is AnimalBase:
+		return
+
+	var enemy := body as AnimalBase
+
+	if not enemy.is_alive():
+		return
+
+	if enemy in detected_enemies:
+		return
+
+	detected_enemies.append(enemy)
+
+	print(
+		"ATTACK AREA ENTERED: ",
+		enemy.name
+	)
+
+
+func _on_body_exited(body: Node2D) -> void:
+
+	if not body is AnimalBase:
+		return
+
+	var enemy := body as AnimalBase
+
+	if enemy in detected_enemies:
+		detected_enemies.erase(enemy)
+
+	print(
+		"ATTACK AREA EXITED: ",
+		enemy.name
+	)
+
+
+# ==================================================
+# Public Access
+# ==================================================
+
+func get_detected_enemies() -> Array[AnimalBase]:
+
+	# --------------------------------------------------
+	# Remove invalid/dead enemies.
+	# --------------------------------------------------
+
+	for enemy in detected_enemies.duplicate():
+
+		if not is_instance_valid(enemy):
+			detected_enemies.erase(enemy)
+			continue
+
+		if not enemy.is_alive():
+			detected_enemies.erase(enemy)
+
+	return detected_enemies

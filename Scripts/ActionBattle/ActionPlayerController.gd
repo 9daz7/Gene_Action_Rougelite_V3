@@ -59,12 +59,15 @@ var selected_move: MoveResource = null
 var is_sprinting: bool = false
 var is_crouching: bool = false
 
+var facing_direction: Vector2 = Vector2.RIGHT
+
 
 # ==================================================
 # References
 # ==================================================
 
 var player: AnimalBase
+var attack_area: ActionAttackArea
 
 
 # ==================================================
@@ -84,6 +87,16 @@ func _ready() -> void:
 
 		return
 
+	attack_area = player.get_node_or_null(
+		"AttackArea2D"
+	)
+
+	if attack_area == null:
+
+		push_error(
+			"ActionAttackArea not found on PlayerAnimal."
+		)
+
 	print("ActionPlayerController ready")
 
 
@@ -100,8 +113,14 @@ func _physics_process(delta: float) -> void:
 
 	_handle_movement()
 
-	if Input.is_action_just_pressed("attack"):
-		_try_attack()
+	if Input.is_action_just_pressed("select_move_1"):
+		_use_move(0)
+
+	if Input.is_action_just_pressed("select_move_2"):
+		_use_move(1)
+
+	if Input.is_action_just_pressed("select_move_3"):
+		_use_move(2)
 
 
 # ==================================================
@@ -143,36 +162,6 @@ func _update_attack_state(delta: float) -> void:
 
 				attack_state = AttackState.RETURNING
 				attack_timer = 0.0
-
-		#AttackState.KNOCKBACK:
-#
-			#knockback_timer += delta
-#
-			#var progress := (
-				#knockback_timer
-				#/ attack_knockback_duration
-			#)
-#
-			#progress = clamp(
-				#progress,
-				#0.0,
-				#1.0
-			#)
-#
-			#if selected_target != null:
-				#if is_instance_valid(selected_target):
-#
-					#selected_target.global_position = (
-						#knockback_start_position.lerp(
-							#knockback_target_position,
-							#progress
-						#)
-					#)
-#
-			#if progress >= 1.0:
-#
-				#attack_state = AttackState.RETURNING
-				#attack_timer = 0.0
 
 		AttackState.RETURNING:
 
@@ -227,6 +216,134 @@ func _update_attack_state(delta: float) -> void:
 
 
 # ==================================================
+# Execute Attack
+# ==================================================
+
+func _execute_attack() -> void:
+
+	if attack_move == null:
+		print("ATTACK FAILED - NO MOVE")
+		return
+
+	# --------------------------------------------------
+	# Check optional target
+	# --------------------------------------------------
+
+	if selected_target != null:
+
+		if not is_instance_valid(selected_target):
+			selected_target = null
+
+		elif not selected_target.is_alive():
+			selected_target = null
+
+	# --------------------------------------------------
+	# Targeted attack
+	# --------------------------------------------------
+
+	if selected_target != null:
+
+		print(
+			"PLAYER EXECUTING MOVE: ",
+			attack_move.move_name,
+			" ON ",
+			selected_target.name
+		)
+
+		await attack_move.execute(
+			player,
+			selected_target
+		)
+
+		_apply_enemy_knockback()
+
+		return
+
+	# --------------------------------------------------
+	# Untargeted attack
+	# --------------------------------------------------
+
+	if attack_area == null:
+
+		print(
+			"ATTACK MISSED - NO ATTACK AREA"
+		)
+
+		return
+
+	var detected_enemies := (
+		attack_area.get_detected_enemies()
+	)
+
+	if detected_enemies.is_empty():
+
+		print(
+			"PLAYER ATTACK MISSED - "
+			+ "NO ENEMY IN ATTACK AREA"
+		)
+
+		return
+
+	# --------------------------------------------------
+	# Use the closest detected enemy.
+	# --------------------------------------------------
+
+	var closest_enemy: AnimalBase = null
+	var closest_distance := INF
+
+	for enemy in detected_enemies:
+
+		if enemy == null:
+			continue
+
+		if not is_instance_valid(enemy):
+			continue
+
+		if not enemy.is_alive():
+			continue
+
+		var distance := (
+			player.global_position
+			.distance_to(enemy.global_position)
+		)
+
+		if distance < closest_distance:
+
+			closest_distance = distance
+			closest_enemy = enemy
+
+	if closest_enemy == null:
+
+		print(
+			"PLAYER ATTACK MISSED - "
+			+ "NO VALID ENEMY"
+		)
+
+		return
+
+	# --------------------------------------------------
+	# Execute attack.
+	# --------------------------------------------------
+
+	selected_target = closest_enemy
+
+	print(
+		"PLAYER EXECUTING MOVE: ",
+		attack_move.move_name,
+		" ON ",
+		selected_target.name,
+		" USING ATTACK AREA"
+	)
+
+	await attack_move.execute(
+		player,
+		selected_target
+	)
+
+	_apply_enemy_knockback()
+
+
+# ==================================================
 # Movement
 # ==================================================
 
@@ -276,6 +393,9 @@ func _handle_movement() -> void:
 		* _get_current_move_speed()
 	)
 
+	if direction != Vector2.ZERO:
+		facing_direction = direction.normalized()
+
 	player.move_and_slide()
 
 
@@ -319,45 +439,23 @@ func _try_attack() -> void:
 	# Get selected target.
 	# --------------------------------------------------
 
-	selected_target = (
-		targeting.get_selected_target()
-	)
+	selected_target = targeting.get_selected_target()
 
-	if selected_target == null:
-
-		print("NO TARGET SELECTED")
-
-		return
-
-	if not selected_target.is_alive():
-
-		print("TARGET IS DEAD")
-
-		return
-
-	print(
-		"PLAYER TARGET:",
-		selected_target.name
-	)
+	if selected_target != null:
+		if not selected_target.is_alive():
+			selected_target = null
 
 	# --------------------------------------------------
 	# Find attack move.
 	# --------------------------------------------------
 
-	attack_move = _find_attack_move()
+	attack_move = selected_move
 
 	if attack_move == null:
-
-		push_warning(
-			"Player has no usable attack move."
-		)
-
+		push_warning("No move selected.")
 		return
 
-	print(
-		"PLAYER USES:",
-		attack_move.move_name
-	)
+	print("PLAYER USES:", attack_move.move_name)
 
 	# --------------------------------------------------
 	# Store attack position.
@@ -371,10 +469,15 @@ func _try_attack() -> void:
 	# Calculate lunge position.
 	# --------------------------------------------------
 
-	var direction := (
-		selected_target.global_position
-		- player.global_position
-	).normalized()
+	var direction: Vector2
+
+	if selected_target != null:
+		direction = (
+			selected_target.global_position
+			- player.global_position
+		).normalized()
+	else:
+		direction = facing_direction
 
 	attack_target_position = (
 		player.global_position
@@ -396,44 +499,99 @@ func _try_attack() -> void:
 	)
 
 
+func _use_protect() -> void:
+
+	if selected_move == null:
+		return
+
+	print("PLAYER USES PROTECT")
+
+	await selected_move.execute(
+		player,
+		player
+	)
+
+	attack_state = AttackState.RECOVERING
+	attack_recovery_timer = attack_recovery
+
+	print("PLAYER PROTECT COMPLETE - RECOVERING")
+
+
+func _use_move(index: int) -> void:
+
+	if attack_state != AttackState.IDLE:
+		print("PLAYER CANNOT ATTACK - NOT READY")
+		return
+
+	if not player.has_method("get_battle_moves"):
+		return
+
+	var moves = player.get_battle_moves()
+
+	if index < 0 or index >= moves.size():
+		print("NO MOVE IN SLOT ", index + 1)
+		return
+
+	var move = moves[index]
+
+	if move == null:
+		print("NO MOVE IN SLOT ", index + 1)
+		return
+
+	selected_move = move
+
+	print("========================================")
+	print("PLAYER USES MOVE")
+	print("========================================")
+	print("Slot:", index + 1)
+	print("Move:", selected_move.move_name)
+
+	if selected_move.effect_type == MoveResource.MoveEffectType.PROTECT:
+		_use_protect()
+		return
+	
+	_try_attack()
+
+
 # ==================================================
 # Execute Attack
 # ==================================================
 
-func _execute_attack() -> void:
-
-	if attack_move == null:
-		return
-
-	if selected_target == null:
-		return
-
-	if not is_instance_valid(selected_target):
-		return
-
-	if not selected_target.is_alive():
-
-		print(
-			"TARGET DIED BEFORE ATTACK CONNECTED"
-		)
-
-		return
-
-	print(
-		"PLAYER ATTACK CONNECTED"
-	)
-
-	print(
-		"PLAYER USES:",
-		attack_move.move_name
-	)
-
-	await attack_move.execute(
-		player,
-		selected_target
-	)
-
-	_apply_enemy_knockback()
+	#if attack_move == null:
+		#return
+#
+	#if selected_target != null:
+		#if not is_instance_valid(selected_target):
+			#selected_target = null
+#
+	#if selected_target != null:
+		#if not selected_target.is_alive():
+			#selected_target = null
+#
+	#print("PLAYER ATTACK CONNECTED")
+	#print("PLAYER USES:", attack_move.move_name)
+#
+	## --------------------------------------------------
+	## Targeted attack
+	## --------------------------------------------------
+#
+	#if selected_target != null:
+#
+		#selected_target.take_damage(
+			#player.attack
+		#)
+#
+		#_apply_enemy_knockback()
+#
+		#return
+#
+	## --------------------------------------------------
+	## Untargeted attack
+	## --------------------------------------------------
+#
+	#print(
+		#"PLAYER ATTACKED IN FACING DIRECTION"
+	#)
 
 
 func _apply_enemy_knockback() -> void:
@@ -531,81 +689,6 @@ func _apply_enemy_knockback() -> void:
 			"KNOCKBACK FAILED: "
 			+ "apply_knockback() not found"
 		)
-
-#func _start_knockback() -> void:
-#
-	#if selected_target == null:
-		#return
-#
-	#if not is_instance_valid(selected_target):
-		#return
-#
-	#if not selected_target.is_alive():
-		#return
-#
-	#var direction := (
-		#selected_target.global_position
-		#- player.global_position
-	#).normalized()
-#
-	#knockback_start_position = (
-		#selected_target.global_position
-	#)
-#
-	#knockback_target_position = (
-		#knockback_start_position
-		#+
-		#direction
-		#*
-		#attack_knockback_distance
-	#)
-#
-	#knockback_timer = 0.0
-#
-	#attack_state = AttackState.KNOCKBACK
-#
-	#print("ENEMY KNOCKBACK START")
-#
-
-# ==================================================
-# Attack Selection
-# ==================================================
-
-func _find_attack_move() -> MoveResource:
-
-	if not player.has_method("get_battle_moves"):
-
-		push_warning(
-			"Player does not have "
-			+ "get_battle_moves()."
-		)
-
-		return null
-
-	var moves = player.get_battle_moves()
-
-	if moves.is_empty():
-
-		push_warning(
-			"Player has no battle moves."
-		)
-
-		return null
-
-	for move in moves:
-
-		if move == null:
-			continue
-
-		if move.effect_type == MoveResource.MoveEffectType.DAMAGE:
-
-			return move
-
-		if move.effect_type == MoveResource.MoveEffectType.HYBRID:
-
-			return move
-
-	return null
 
 
 # ==================================================
