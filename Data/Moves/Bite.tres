@@ -5,7 +5,8 @@
 
 [resource]
 script = ExtResource("1_2u6ie")
+hitbox_type = 1
 move_name = "Bite"
-power = 8
 description = "Reliable bite attack"
+power = 8
 critical_chance = 2

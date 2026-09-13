@@ -184,14 +184,14 @@ func _physics_process(delta: float) -> void:
 	if enemy.has_method("get_speed"):
 		animal_speed = enemy.get_speed()
 
-	if is_alerted:
-		print(
-			enemy.name,
-			" ALERTED CHASING ",
-			target.name,
-			" | Distance: ",
-			distance
-		)
+	#if is_alerted:
+		#print(
+			#enemy.name,
+			#" ALERTED CHASING ",
+			#target.name,
+			#" | Distance: ",
+			#distance
+		#)
 
 	enemy.velocity = (
 		direction

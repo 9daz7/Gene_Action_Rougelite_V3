@@ -59,6 +59,7 @@ enum HitboxType {
 @export var hitbox_size: Vector2 = Vector2(60.0, 40.0)
 @export var hitbox_radius: float = 60.0
 @export var hitbox_offset: float = 40.0
+@export var hitbox_angle: float = 90.0
 @export var hitbox_duration: float = 0.05
 
 

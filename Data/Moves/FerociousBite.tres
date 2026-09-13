@@ -6,6 +6,9 @@
 
 [resource]
 script = ExtResource("2_6h4wc")
+hitbox_type = 3
+hitbox_size = Vector2(140, 50)
+hitbox_radius = 100.0
 move_name = "Ferocious bite"
 description = "The user lunges forward and deals damage through a ferocious bite."
 effect_type = 3

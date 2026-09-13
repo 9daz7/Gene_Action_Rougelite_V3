@@ -31,6 +31,8 @@ const ATTACK_HITBOX_SCENE = preload(
 @export var attack_knockback_distance: float = 35.0
 @export var attack_knockback_duration: float = 0.08
 
+@export var attack_approach_range: float = 140.0
+
 
 # ==================================================
 # Attack state
@@ -38,6 +40,7 @@ const ATTACK_HITBOX_SCENE = preload(
 
 enum AttackState {
 	IDLE,
+	APPROACHING,
 	PRIMING,
 	LUNGING,
 	RETURNING,
@@ -161,6 +164,10 @@ func _update_attack_state(delta: float) -> void:
 		AttackState.IDLE:
 			pass
 
+		AttackState.APPROACHING:
+
+			_update_attack_approach(delta)
+
 		AttackState.LUNGING:
 
 			attack_timer += delta
@@ -243,6 +250,66 @@ func _update_attack_state(delta: float) -> void:
 
 
 # ==================================================
+# Attack Approach
+# ==================================================
+
+func _update_attack_approach(_delta: float) -> void:
+
+	if selected_target == null:
+		attack_state = AttackState.IDLE
+		return
+
+	if not is_instance_valid(selected_target):
+		selected_target = null
+		attack_state = AttackState.IDLE
+		return
+
+	if not selected_target.is_alive():
+		selected_target = null
+		attack_state = AttackState.IDLE
+		return
+
+	var distance := (
+		player.global_position.distance_to(
+			selected_target.global_position
+		)
+	)
+
+	# --------------------------------------------------
+	# Target is close enough to attack.
+	# --------------------------------------------------
+
+	if distance <= attack_approach_range:
+
+		print(
+			"PLAYER REACHED ATTACK RANGE | Distance:",
+			distance
+		)
+
+		_start_lunge_toward_target()
+
+		return
+
+	# --------------------------------------------------
+	# Move toward target.
+	# --------------------------------------------------
+
+	var direction := (
+		selected_target.global_position
+		- player.global_position
+	).normalized()
+
+	player.velocity = (
+		direction
+		* sprint_speed
+	)
+
+	facing_direction = direction
+
+	player.move_and_slide()
+
+
+# ==================================================
 # Execute Attack
 # ==================================================
 
@@ -260,10 +327,14 @@ func _execute_attack() -> void:
 
 	get_tree().current_scene.add_child(hitbox)
 
+	hitbox.setup(attack_move)
+
 	hitbox.global_position = (
 		player.global_position
 		+ facing_direction * attack_move.hitbox_offset
 	)
+
+	hitbox.global_rotation = facing_direction.angle()
 
 	print(
 		"ATTACK HITBOX CREATED | Move:",
@@ -323,12 +394,6 @@ func _execute_attack() -> void:
 				player,
 				enemy
 			)
-
-	# ==========================================
-	# Remove Hitbox
-	# ==========================================
-
-	hitbox.queue_free()
 
 	# ==========================================
 	# Clear Target
@@ -452,16 +517,48 @@ func _try_attack() -> void:
 	print("PLAYER USES:", attack_move.move_name)
 
 	# --------------------------------------------------
-	# Store attack position.
+	# Selected target approach
 	# --------------------------------------------------
+
+	if selected_target != null:
+
+		var distance := (
+			player.global_position.distance_to(
+				selected_target.global_position
+			)
+		)
+
+		print(
+			"TARGET DISTANCE:",
+			distance
+		)
+
+		if distance > attack_approach_range:
+
+			print(
+				"PLAYER APPROACHING TARGET"
+			)
+
+			attack_state = AttackState.APPROACHING
+
+			return
+
+	# --------------------------------------------------
+	# Target already in range
+	# --------------------------------------------------
+
+	_start_lunge_toward_target()
+
+
+# ==================================================
+# Start Lunge
+# ==================================================
+
+func _start_lunge_toward_target() -> void:
 
 	attack_start_position = (
 		player.global_position
 	)
-
-	# --------------------------------------------------
-	# Calculate lunge position.
-	# --------------------------------------------------
 
 	var direction: Vector2
 
@@ -473,6 +570,8 @@ func _try_attack() -> void:
 	else:
 		direction = facing_direction
 
+	facing_direction = direction
+
 	attack_target_position = (
 		player.global_position
 		+
@@ -480,10 +579,6 @@ func _try_attack() -> void:
 		*
 		attack_lunge_distance
 	)
-
-	# --------------------------------------------------
-	# Start lunge.
-	# --------------------------------------------------
 
 	attack_state = AttackState.LUNGING
 	attack_timer = 0.0
