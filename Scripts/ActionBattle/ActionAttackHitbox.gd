@@ -3,12 +3,22 @@ class_name ActionAttackHitbox
 
 
 # ==================================================
+# Signals
+# ==================================================
+
+signal enemy_hit(enemy: AnimalBase)
+
+
+# ==================================================
 # Detection
 # ==================================================
 
 var detected_enemies: Array[AnimalBase] = []
+var hit_enemies: Array[AnimalBase] = []
 var move: MoveResource = null
 var hitbox_timer: float = 0.0
+var follow_target: AnimalBase = null
+var follow_direction: Vector2 = Vector2.RIGHT
 
 
 # ==================================================
@@ -34,6 +44,15 @@ func setup(action_move: MoveResource) -> void:
 	)
 
 	_build_hitbox_shape()
+
+
+func set_follow_target(
+	target: AnimalBase,
+	direction: Vector2
+) -> void:
+
+	follow_target = target
+	follow_direction = direction.normalized()
 
 
 # ==================================================
@@ -162,6 +181,18 @@ func _on_body_entered(body: Node2D) -> void:
 		enemy.name
 	)
 
+	if enemy in hit_enemies:
+		return
+
+	hit_enemies.append(enemy)
+
+	print(
+		"ACTION HITBOX HIT: ",
+		enemy.name
+	)
+
+	enemy_hit.emit(enemy)
+
 
 func _on_body_exited(body: Node2D) -> void:
 
@@ -203,8 +234,14 @@ func get_detected_enemies() -> Array[AnimalBase]:
 
 func _physics_process(delta: float) -> void:
 
+	if follow_target != null:
+		global_position = (
+			follow_target.global_position
+			+ follow_direction
+			* move.hitbox_offset
+		)
+
 	hitbox_timer -= delta
 
 	if hitbox_timer <= 0.0:
-
 		queue_free()

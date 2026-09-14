@@ -62,6 +62,7 @@ var attack_target_position: Vector2
 var selected_target: AnimalBase = null
 var attack_move: MoveResource = null
 var selected_move: MoveResource = null
+var active_attack_hitbox: ActionAttackHitbox = null
 
 
 # ==================================================
@@ -174,7 +175,7 @@ func _update_attack_state(delta: float) -> void:
 
 			var progress := (
 				attack_timer
-				/ attack_lunge_duration
+				/ attack_move.action_lunge_duration
 			)
 
 			progress = clamp(
@@ -230,7 +231,7 @@ func _update_attack_state(delta: float) -> void:
 				)
 
 				attack_recovery_timer = (
-					attack_recovery
+					attack_move.action_recovery_duration
 				)
 
 				print(
@@ -315,91 +316,67 @@ func _update_attack_approach(_delta: float) -> void:
 
 func _execute_attack() -> void:
 
-	if attack_move == null:
-		print("ATTACK FAILED - NO MOVE")
-		return
-
-	# ==========================================
-	# Create Move Hitbox
-	# ==========================================
-
-	var hitbox := ATTACK_HITBOX_SCENE.instantiate()
-
-	get_tree().current_scene.add_child(hitbox)
-
-	hitbox.setup(attack_move)
-
-	hitbox.global_position = (
-		player.global_position
-		+ facing_direction * attack_move.hitbox_offset
-	)
-
-	hitbox.global_rotation = facing_direction.angle()
-
-	print(
-		"ATTACK HITBOX CREATED | Move:",
-		attack_move.move_name,
-		"| Position:",
-		hitbox.global_position
-	)
-
-	# ==========================================
-	# Wait for Physics Detection
-	# ==========================================
-
-	await get_tree().physics_frame
-
-	var detected_enemies: Array[AnimalBase] = (
-		hitbox.get_detected_enemies()
-	)
-
-	# ==========================================
-	# Execute Move
-	# ==========================================
-
-	if detected_enemies.is_empty():
-
-		print(
-			"PLAYER ATTACK MISSED - "
-			+ "NO ENEMY IN MOVE HITBOX"
-		)
-
-	else:
-
-		print(
-			"PLAYER HIT ",
-			detected_enemies.size(),
-			" ENEMY/ENEMIES"
-		)
-
-		for enemy in detected_enemies:
-
-			if enemy == null:
-				continue
-
-			if not is_instance_valid(enemy):
-				continue
-
-			if not enemy.is_alive():
-				continue
-
-			print(
-				"PLAYER EXECUTING MOVE: ",
-				attack_move.move_name,
-				" ON ",
-				enemy.name
-			)
-
-			await attack_move.execute(
-				player,
-				enemy
-			)
-
-	# ==========================================
-	# Clear Target
-	# ==========================================
+	if active_attack_hitbox != null and is_instance_valid(active_attack_hitbox):
+		active_attack_hitbox = null
 
 	selected_target = null
+
+	print("PLAYER ATTACK COMPLETE")
+
+#func _execute_attack() -> void:
+#
+	#if attack_move == null:
+		#print("ATTACK FAILED - NO MOVE")
+		#return
+#
+	#if active_attack_hitbox == null:
+		#print("ATTACK FAILED - NO ACTIVE HITBOX")
+		#return
+#
+	#var detected_enemies: Array[AnimalBase] = (
+		#active_attack_hitbox.get_detected_enemies()
+	#)
+#
+	#if detected_enemies.is_empty():
+#
+		#print(
+			#"PLAYER ATTACK MISSED - "
+			#+ "NO ENEMY IN MOVE HITBOX"
+		#)
+#
+	#else:
+#
+		#print(
+			#"PLAYER HIT ",
+			#detected_enemies.size(),
+			#" ENEMY/ENEMIES"
+		#)
+#
+		#for enemy in detected_enemies:
+#
+			#if enemy == null:
+				#continue
+#
+			#if not is_instance_valid(enemy):
+				#continue
+#
+			#if not enemy.is_alive():
+				#continue
+#
+			#print(
+				#"PLAYER EXECUTING MOVE: ",
+				#attack_move.move_name,
+				#" ON ",
+				#enemy.name
+			#)
+#
+			#await attack_move.execute(
+				#player,
+				#enemy
+			#)
+#
+	#active_attack_hitbox = null
+	#selected_target = null
 
 
 # ==================================================
@@ -551,6 +528,76 @@ func _try_attack() -> void:
 
 
 # ==================================================
+# Active Attack Hitbox
+# ==================================================
+
+func _create_active_attack_hitbox() -> void:
+
+	if attack_move == null:
+		return
+
+	var hitbox := ATTACK_HITBOX_SCENE.instantiate() as ActionAttackHitbox
+
+	if hitbox == null:
+		push_error(
+			"Failed to create ActionAttackHitbox."
+		)
+		return
+
+	get_tree().current_scene.add_child(hitbox)
+
+	hitbox.setup(attack_move)
+
+	hitbox.enemy_hit.connect(_on_attack_hit)
+
+	hitbox.set_follow_target(
+		player,
+		facing_direction
+	)
+
+	hitbox.global_position = (
+		player.global_position
+		+ facing_direction * attack_move.hitbox_offset
+	)
+
+	hitbox.global_rotation = facing_direction.angle()
+
+	active_attack_hitbox = hitbox
+
+	print(
+		"ACTIVE ATTACK HITBOX CREATED | Move:",
+		attack_move.move_name
+	)
+
+
+func _on_attack_hit(enemy: AnimalBase) -> void:
+
+	if attack_move == null:
+		return
+
+	if enemy == null:
+		return
+
+	if not is_instance_valid(enemy):
+		return
+
+	if not enemy.is_alive():
+		return
+
+	print(
+		"PLAYER EXECUTING MOVE: ",
+		attack_move.move_name,
+		" ON ",
+		enemy.name
+	)
+
+	await attack_move.execute(
+		player,
+		enemy
+	)
+
+
+# ==================================================
 # Start Lunge
 # ==================================================
 
@@ -577,11 +624,13 @@ func _start_lunge_toward_target() -> void:
 		+
 		direction
 		*
-		attack_lunge_distance
+		attack_move.action_lunge_distance
 	)
 
 	attack_state = AttackState.LUNGING
 	attack_timer = 0.0
+
+	_create_active_attack_hitbox()
 
 	print(
 		"PLAYER LUNGE START"

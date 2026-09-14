@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="MoveResource" format=3 uid="uid://crr33q35e1har"]
+
+[ext_resource type="Script" uid="uid://cedh0hgwqddn4" path="res://Resources/StatusEffect.gd" id="1_4rane"]
+[ext_resource type="Script" uid="uid://bnmm0xqkm6atb" path="res://Scripts/Moves/MoveResource.gd" id="2_s3ljr"]
+
+[resource]
+script = ExtResource("2_s3ljr")
+hitbox_type = 2
+hitbox_size = Vector2(120, 50)
+hitbox_duration = 0.4
+action_lunge_distance = 250.0
+action_lunge_duration = 0.4
+action_recovery_duration = 0.5
+metadata/_custom_type_script = "uid://bnmm0xqkm6atb"

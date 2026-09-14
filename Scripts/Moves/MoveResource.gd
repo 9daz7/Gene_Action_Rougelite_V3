@@ -62,6 +62,13 @@ enum HitboxType {
 @export var hitbox_angle: float = 90.0
 @export var hitbox_duration: float = 0.05
 
+@export var action_lunge_distance: float = 70.0
+@export var action_lunge_duration: float = 0.12
+@export var action_recovery_duration: float = 0.0
+
+@export_range(0.0, 1.0, 0.01)
+var attack_hit_point: float = 1.0
+
 
 # ==================================================
 # Basic Move Info

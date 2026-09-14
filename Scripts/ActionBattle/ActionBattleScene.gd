@@ -22,7 +22,7 @@ const PROTECT_MOVE_PATH = (
 	"res://Data/Moves/Protect.tres"
 )
 const GENE_MOVE_PATH = (
-	"res://Data/Moves/FerociousBite.tres"
+	"res://Data/Moves/UnstoppableCharge.tres"
 )
 
 const ACTION_PLAYER_CONTROLLER = preload(
