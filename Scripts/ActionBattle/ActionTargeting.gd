@@ -27,7 +27,7 @@ func _ready() -> void:
 # Input
 # ==================================================
 
-func _unhandled_input(event: InputEvent) -> void:
+func _input(event: InputEvent) -> void:
 
 	if not event is InputEventMouseButton:
 		return
@@ -127,3 +127,36 @@ func _process(_delta: float) -> void:
 	target_marker.global_position = (
 		selected_target.global_position
 	)
+
+
+func is_enemy_at_position(mouse_position: Vector2) -> bool:
+
+	var parent_scene = get_parent()
+
+	if parent_scene == null:
+		return false
+
+	var enemies = parent_scene.get_node_or_null("Enemies")
+
+	if enemies == null:
+		return false
+
+	for child in enemies.get_children():
+
+		if not child is AnimalBase:
+			continue
+
+		var enemy := child as AnimalBase
+
+		if not enemy.is_alive():
+			continue
+
+		var distance := enemy.global_position.distance_to(
+			mouse_position
+		)
+
+		if distance <= 100.0:
+			return true
+
+	return false
+	

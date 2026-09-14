@@ -3,6 +3,51 @@ class_name ActionPlayerController
 
 
 # ==================================================
+# Deebo Movement Mode
+# ==================================================
+
+enum MovementMode {
+	FOLLOW,
+	BATTLE
+}
+
+var movement_mode: MovementMode = MovementMode.FOLLOW
+
+
+func set_movement_mode(mode: MovementMode) -> void:
+
+	movement_mode = mode
+
+	print(
+		"DEEBO MOVEMENT MODE: ",
+		MovementMode.keys()[movement_mode]
+	)
+
+
+func toggle_movement_mode() -> void:
+
+	if movement_mode == MovementMode.FOLLOW:
+
+		set_movement_mode(
+			MovementMode.BATTLE
+		)
+
+	else:
+
+		set_movement_mode(
+			MovementMode.FOLLOW
+		)
+
+
+@export var follow_distance: float = 60.0
+@export var follow_speed: float = 180.0
+@export var battle_move_speed: float = 400.0
+
+var battle_destination: Vector2
+var has_battle_destination: bool = false
+
+
+# ==================================================
 # Hitbox
 # ==================================================
 
@@ -81,6 +126,7 @@ var facing_direction: Vector2 = Vector2.RIGHT
 
 var player: AnimalBase
 var attack_area: ActionAttackArea
+var player_character: CharacterBody2D = null
 
 
 # ==================================================
@@ -100,17 +146,31 @@ func _ready() -> void:
 
 		return
 
-	attack_area = player.get_node_or_null(
-		"AttackArea2D"
+	print("ActionPlayerController ready")
+
+# ==================================================
+# Player Character
+# ==================================================
+
+func set_player_character(character: CharacterBody2D) -> void:
+
+	player_character = character
+
+	print(
+		"DEEBO FOLLOW TARGET SET: ",
+		player_character
 	)
 
-	if attack_area == null:
 
-		push_error(
-			"ActionAttackArea not found on PlayerAnimal."
-		)
+func set_battle_destination(destination: Vector2) -> void:
 
-	print("ActionPlayerController ready")
+	battle_destination = destination
+	has_battle_destination = true
+
+	print(
+		"DEEBO MOVE COMMAND: ",
+		battle_destination
+	)
 
 
 # ==================================================
@@ -142,7 +202,38 @@ func _physics_process(delta: float) -> void:
 
 	_update_attack_state(delta)
 
-	_handle_movement()
+	if movement_mode == MovementMode.FOLLOW:
+		_follow_player()
+
+	elif movement_mode == MovementMode.BATTLE:
+
+		if has_battle_destination:
+
+			var direction := (
+				battle_destination
+				- player.global_position
+			).normalized()
+
+			var distance := player.global_position.distance_to(
+				battle_destination
+			)
+
+			if distance <= 5.0:
+
+				player.velocity = Vector2.ZERO
+				has_battle_destination = false
+
+			else:
+
+				player.velocity = (
+					direction
+					* battle_move_speed
+				)
+
+				player.move_and_slide()
+
+	if Input.is_action_just_pressed("toggle_deebo_mode"):
+		toggle_movement_mode()
 
 	if Input.is_action_just_pressed("select_move_1"):
 		_use_move(0)
@@ -433,6 +524,66 @@ func _handle_movement() -> void:
 		facing_direction = direction.normalized()
 
 	player.move_and_slide()
+
+
+# ==================================================
+# Follow Player
+# ==================================================
+
+func _follow_player() -> void:
+
+	if player_character == null:
+		return
+
+	var distance := player.global_position.distance_to(
+		player_character.global_position
+	)
+
+	if distance <= follow_distance:
+		player.velocity = Vector2.ZERO
+		return
+
+	var direction := (
+		player_character.global_position
+		- player.global_position
+	).normalized()
+
+	player.velocity = direction * follow_speed
+
+	player.move_and_slide()
+
+
+# ==================================================
+# Battle Mode
+# ==================================================
+
+func _unhandled_input(event: InputEvent) -> void:
+
+	if movement_mode != MovementMode.BATTLE:
+		return
+
+	if not event is InputEventMouseButton:
+		return
+
+	if not event.pressed:
+		return
+
+	if event.button_index != MOUSE_BUTTON_LEFT:
+		return
+
+	var mouse_position := player.get_global_mouse_position()
+
+	var targeting := get_tree().current_scene.get_node_or_null(
+		"ActionTargeting"
+	)
+
+	if targeting == null:
+		return
+
+	if targeting.is_enemy_at_position(mouse_position):
+		return
+
+	set_battle_destination(mouse_position)
 
 
 # ==================================================

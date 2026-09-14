@@ -56,6 +56,7 @@ const ACTION_ENEMY_CONTROLLER = preload(
 
 var player = null
 var player_character = null
+var deebo_controller: ActionPlayerController = null
 var enemy = null
 var enemy_2 = null
 
@@ -85,6 +86,7 @@ func _ready() -> void:
 
 	spawn_player()
 	spawn_player_character()
+	_connect_deebo_to_player()
 	spawn_enemy()
 	spawn_enemy_2()
 
@@ -125,9 +127,9 @@ func spawn_player() -> void:
 
 	add_child(player)
 
-	var controller = ACTION_PLAYER_CONTROLLER.new()
+	deebo_controller = ACTION_PLAYER_CONTROLLER.new()
 
-	player.add_child(controller)
+	player.add_child(deebo_controller)
 
 	player.global_position = (
 		player_spawn.global_position
@@ -203,6 +205,7 @@ func spawn_player_character() -> void:
 
 	player_character.global_position = (
 		player_spawn.global_position
+		+ Vector2(80.0, 0.0)
 	)
 
 	print("========================================")
@@ -215,6 +218,24 @@ func spawn_player_character() -> void:
 	print(
 		"Position: ",
 		player_character.global_position
+	)
+
+# ==================================================
+# Deebo / Player Connection
+# ==================================================
+
+func _connect_deebo_to_player() -> void:
+
+	if deebo_controller == null:
+		push_error("Deebo controller is missing.")
+		return
+
+	if player_character == null:
+		push_error("Player character is missing.")
+		return
+
+	deebo_controller.set_player_character(
+		player_character
 	)
 
 

@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://s5nq1sb1o64w" path="res://Assets/Sprites/Animals/Green/walk.png" id="1_lu8gy"]
 [ext_resource type="Script" uid="uid://dc1inglghqapd" path="res://Scripts/ActionBattle/ActionPlayerCharacterController.gd" id="2_xrg1l"]
+[ext_resource type="Script" uid="uid://dp7iq3r5f6rki" path="res://Scripts/ActionBattle/ActionPlayerCombatController.gd" id="3_4h3ga"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_lu8gy"]
 atlas = ExtResource("1_lu8gy")
@@ -117,3 +118,12 @@ animation = &"walk_up"
 
 [node name="ActionPlayerCharacterController" type="Node" parent="." unique_id=1856415391]
 script = ExtResource("2_xrg1l")
+
+[node name="ActionPlayerCombatController" type="Node" parent="." unique_id=1026231667]
+script = ExtResource("3_4h3ga")
+
+[node name="AimLine" type="Line2D" parent="." unique_id=131097150]
+visible = false
+z_index = 5
+width = 3.0
+default_color = Color(5.1740557e-07, 0.31228614, 3.3691526e-07, 1)

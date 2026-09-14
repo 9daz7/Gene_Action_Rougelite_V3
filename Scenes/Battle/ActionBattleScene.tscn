@@ -9,7 +9,7 @@ script = ExtResource("1_6axtg")
 [node name="Arena" type="Node2D" parent="." unique_id=1849613358]
 
 [node name="PlayerSpawn" type="Marker2D" parent="Arena" unique_id=1627961946]
-position = Vector2(1200, 700)
+position = Vector2(1416, 814)
 
 [node name="EnemySpawn" type="Marker2D" parent="Arena" unique_id=1551734252]
 position = Vector2(791, 164)
