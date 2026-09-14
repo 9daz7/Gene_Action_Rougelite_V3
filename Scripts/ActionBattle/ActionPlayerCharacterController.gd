@@ -26,6 +26,7 @@ var facing_direction: Vector2 = Vector2.RIGHT
 # ==================================================
 
 var player_character: CharacterBody2D
+var animated_sprite: AnimatedSprite2D
 
 
 # ==================================================
@@ -45,7 +46,18 @@ func _ready() -> void:
 
 		return
 
-	print("ActionPLayerCharacterController ready")
+	animated_sprite = player_character.get_node_or_null(
+		"AnimatedSprite2D"
+	)
+
+	if animated_sprite == null:
+
+		push_error(
+			"AnimatedSprite2D not found on "
+			+ "ActionPlayerCharacter."
+		)
+
+	print("ActionPlayerCharacterController ready")
 
 
 # ==================================================
@@ -106,6 +118,8 @@ func _handle_movement() -> void:
 
 	player_character.move_and_slide()
 
+	_update_animation(direction)
+
 
 # ==================================================
 # Movement Speed
@@ -120,3 +134,51 @@ func _get_current_move_speed() -> float:
 		return crouch_speed
 
 	return move_speed
+
+
+# ==================================================
+# Animation
+# ==================================================
+
+func _update_animation(direction: Vector2) -> void:
+
+	if animated_sprite == null:
+		return
+
+	if direction == Vector2.ZERO:
+
+		animated_sprite.stop()
+
+		return
+
+	# --------------------------------------------------
+	# Horizontal movement
+	# --------------------------------------------------
+
+	if abs(direction.x) > abs(direction.y):
+
+		animated_sprite.play("walk_side")
+
+		animated_sprite.flip_h = (
+			direction.x < 0.0
+		)
+
+		return
+
+	# --------------------------------------------------
+	# Down
+	# --------------------------------------------------
+
+	if direction.y > 0.0:
+
+		animated_sprite.play("walk_down")
+		animated_sprite.flip_h = false
+
+		return
+
+	# --------------------------------------------------
+	# Up
+	# --------------------------------------------------
+
+	animated_sprite.play("walk_up")
+	animated_sprite.flip_h = false

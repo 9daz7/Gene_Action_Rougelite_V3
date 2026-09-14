@@ -10,6 +10,10 @@ const PLAYER_SCENE_PATH = (
 	"res://Scenes/Animals/PlayerAnimal.tscn"
 )
 
+const PLAYER_CHARACTER_SCENE_PATH = (
+	"res://Scenes/Battle/ActionPlayerCharacter.tscn"
+)
+
 const ENEMY_SCENE_PATH = (
 	"res://Scenes/Animals/EnemyAnimal.tscn"
 )
@@ -51,6 +55,7 @@ const ACTION_ENEMY_CONTROLLER = preload(
 # ==================================================
 
 var player = null
+var player_character = null
 var enemy = null
 var enemy_2 = null
 
@@ -79,6 +84,7 @@ func _ready() -> void:
 	print("Enemies Container:", enemies)
 
 	spawn_player()
+	spawn_player_character()
 	spawn_enemy()
 	spawn_enemy_2()
 
@@ -160,6 +166,56 @@ func spawn_player() -> void:
 	print("========================================")
 	print("Player:", player)
 	print("Position:", player.global_position)
+
+
+# ==================================================
+# Player Character Setup
+# ==================================================
+
+func spawn_player_character() -> void:
+
+	var player_character_scene = load(
+		PLAYER_CHARACTER_SCENE_PATH
+	)
+
+	if player_character_scene == null:
+
+		push_error(
+			"Failed to load player character scene: "
+			+ PLAYER_CHARACTER_SCENE_PATH
+		)
+
+		return
+
+	player_character = (
+		player_character_scene.instantiate()
+	)
+
+	if player_character == null:
+
+		push_error(
+			"Failed to instantiate player character."
+		)
+
+		return
+
+	add_child(player_character)
+
+	player_character.global_position = (
+		player_spawn.global_position
+	)
+
+	print("========================================")
+	print("PLAYER CHARACTER SPAWNED")
+	print("========================================")
+	print(
+		"Player Character: ",
+		player_character
+	)
+	print(
+		"Position: ",
+		player_character.global_position
+	)
 
 
 # ==================================================

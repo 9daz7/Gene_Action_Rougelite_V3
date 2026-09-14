@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://dcobgtjc83sfq"]
 
 [ext_resource type="Texture2D" uid="uid://s5nq1sb1o64w" path="res://Assets/Sprites/Animals/Green/walk.png" id="1_lu8gy"]
+[ext_resource type="Script" uid="uid://dc1inglghqapd" path="res://Scripts/ActionBattle/ActionPlayerCharacterController.gd" id="2_xrg1l"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_lu8gy"]
 atlas = ExtResource("1_lu8gy")
@@ -33,6 +34,22 @@ region = Rect2(64, 32, 32, 32)
 [sub_resource type="AtlasTexture" id="AtlasTexture_pwt7q"]
 atlas = ExtResource("1_lu8gy")
 region = Rect2(96, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_acypd"]
+atlas = ExtResource("1_lu8gy")
+region = Rect2(0, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m8sjk"]
+atlas = ExtResource("1_lu8gy")
+region = Rect2(32, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vh341"]
+atlas = ExtResource("1_lu8gy")
+region = Rect2(64, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_em4fo"]
+atlas = ExtResource("1_lu8gy")
+region = Rect2(96, 64, 32, 32)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_gs0tk"]
 animations = [{
@@ -67,10 +84,22 @@ animations = [{
 "texture": SubResource("AtlasTexture_pwt7q")
 }],
 "loop": 1,
-"name": &"walk_right",
+"name": &"walk_side",
 "speed": 5.0
 }, {
-"frames": [],
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_acypd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m8sjk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vh341")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_em4fo")
+}],
 "loop": 1,
 "name": &"walk_up",
 "speed": 5.0
@@ -80,7 +109,11 @@ animations = [{
 position = Vector2(7, 0)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=705220842]
+scale = Vector2(7, 7)
 sprite_frames = SubResource("SpriteFrames_gs0tk")
 animation = &"walk_up"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=668938336]
+
+[node name="ActionPlayerCharacterController" type="Node" parent="." unique_id=1856415391]
+script = ExtResource("2_xrg1l")
