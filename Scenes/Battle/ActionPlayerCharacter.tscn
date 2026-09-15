@@ -125,5 +125,5 @@ script = ExtResource("3_4h3ga")
 [node name="AimLine" type="Line2D" parent="." unique_id=131097150]
 visible = false
 z_index = 5
-width = 3.0
-default_color = Color(5.1740557e-07, 0.31228614, 3.3691526e-07, 1)
+width = 3.5
+default_color = Color(0.8392157, 1, 0.8235294, 1)

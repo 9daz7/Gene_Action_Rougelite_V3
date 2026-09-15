@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://cvt5vou66wavg"]
+
+[ext_resource type="Script" uid="uid://bgp0crcipsitu" path="res://Scripts/ActionBattle/SlingshotProjectile.gd" id="1_s8q2b"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_gs0tk"]
+radius = 5.0
+
+[node name="SlingshotProjectile" type="Area2D" unique_id=940362522]
+script = ExtResource("1_s8q2b")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1414944084]
+shape = SubResource("CircleShape2D_gs0tk")
+
+[node name="Polygon2D" type="Polygon2D" parent="." unique_id=1055137237]
+color = Color(0.42630944, 0.10971279, 0.06898094, 1)
+polygon = PackedVector2Array(-5, 0, 0, -5, 5, 0, 0, 5)
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

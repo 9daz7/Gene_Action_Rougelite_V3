@@ -38,6 +38,9 @@ func _input(event: InputEvent) -> void:
 	if event.button_index != MOUSE_BUTTON_LEFT:
 		return
 
+	if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
+		return
+
 	_select_target_at_mouse(event.position)
 
 

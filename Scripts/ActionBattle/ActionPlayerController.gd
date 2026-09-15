@@ -562,6 +562,9 @@ func _unhandled_input(event: InputEvent) -> void:
 	if movement_mode != MovementMode.BATTLE:
 		return
 
+	if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
+		return
+
 	if not event is InputEventMouseButton:
 		return
 
