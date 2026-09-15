@@ -64,6 +64,19 @@ var battle_finished: bool = false
 
 
 # ==================================================
+# Combat State
+# ==================================================
+
+enum CombatState {
+	EXPLORATION,
+	BATTLE,
+	BATTLE_END
+}
+
+var combat_state: CombatState = CombatState.BATTLE
+
+
+# ==================================================
 # Lifecycle
 # ==================================================
 
@@ -90,10 +103,41 @@ func _ready() -> void:
 	spawn_enemy()
 	spawn_enemy_2()
 
+	set_combat_state(CombatState.BATTLE)
+
 
 func _process(_delta: float) -> void:
 
 	_check_battle_result()
+
+
+# ==================================================
+# Combat State Control
+# ==================================================
+
+func set_combat_state(new_state: CombatState) -> void:
+
+	combat_state = new_state
+
+	print(
+		"ACTION COMBAT STATE: ",
+		CombatState.keys()[combat_state]
+	)
+
+
+func get_combat_state() -> CombatState:
+
+	return combat_state
+
+
+func is_in_combat() -> bool:
+
+	return combat_state == CombatState.BATTLE
+
+
+func can_combat() -> bool:
+
+	return combat_state == CombatState.BATTLE
 
 
 # ==================================================
@@ -474,6 +518,7 @@ func _check_battle_result() -> void:
 		if not player.is_alive():
 
 			battle_finished = true
+			set_combat_state(CombatState.BATTLE_END)
 
 			_handle_defeat()
 
@@ -499,6 +544,7 @@ func _check_battle_result() -> void:
 		if all_enemies_dead:
 
 			battle_finished = true
+			set_combat_state(CombatState.BATTLE_END)
 
 			_handle_victory()
 
