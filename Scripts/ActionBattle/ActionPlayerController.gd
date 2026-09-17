@@ -809,7 +809,13 @@ func _use_protect() -> void:
 	print("PLAYER PROTECT COMPLETE - RECOVERING")
 
 
-func _use_move(index: int) -> void:
+func _use_move(move_index: int) -> void:
+
+	# Move 3 and 4 require Battle mode.
+	if move_index >= 2:
+		if movement_mode != MovementMode.BATTLE:
+			print("MOVE LOCKED OUTSIDE BATTLE: ", move_index + 1)
+			return
 
 	if attack_state != AttackState.IDLE:
 		print("PLAYER CANNOT ATTACK - NOT READY")
@@ -820,14 +826,14 @@ func _use_move(index: int) -> void:
 
 	var moves = player.get_battle_moves()
 
-	if index < 0 or index >= moves.size():
-		print("NO MOVE IN SLOT ", index + 1)
+	if move_index < 0 or move_index >= moves.size():
+		print("NO MOVE IN SLOT ", move_index + 1)
 		return
 
-	var move = moves[index]
+	var move = moves[move_index]
 
 	if move == null:
-		print("NO MOVE IN SLOT ", index + 1)
+		print("NO MOVE IN SLOT ", move_index + 1)
 		return
 
 	selected_move = move
@@ -835,7 +841,7 @@ func _use_move(index: int) -> void:
 	print("========================================")
 	print("PLAYER USES MOVE")
 	print("========================================")
-	print("Slot:", index + 1)
+	print("Slot:", move_index + 1)
 	print("Move:", selected_move.move_name)
 
 	if selected_move.effect_type == MoveResource.MoveEffectType.PROTECT:
