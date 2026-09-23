@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://dsd7i425r5ena"]
+
+[ext_resource type="Script" uid="uid://kg21kdtfh7v2" path="res://Scripts/ActionBattle/ActionBattleScene.gd" id="1_6axtg"]
+[ext_resource type="Script" uid="uid://cyxrv2eg82j7j" path="res://Scripts/ActionBattle/ActionTargeting.gd" id="2_lmuoj"]
+
+[node name="ActionBattleScene" type="Node2D" unique_id=173095800]
+script = ExtResource("1_6axtg")
+
+[node name="Arena" type="Node2D" parent="." unique_id=1849613358]
+
+[node name="PlayerSpawn" type="Marker2D" parent="Arena" unique_id=1627961946]
+position = Vector2(1416, 814)
+
+[node name="EnemySpawn" type="Marker2D" parent="Arena" unique_id=1551734252]
+position = Vector2(791, 164)
+
+[node name="EnemySpawn2" type="Marker2D" parent="Arena" unique_id=1339400426]
+position = Vector2(650, 550)
+
+[node name="Enemies" type="Node2D" parent="." unique_id=782385757]
+
+[node name="TargetMarker" type="Polygon2D" parent="." unique_id=2103720164]
+visible = false
+z_index = 10
+color = Color(0.84, 0, 0, 1)
+polygon = PackedVector2Array(0, -5, 3, -4, 5, 0, 3, 4, 0, 5, -3, 4, -5, 0, -3, -4)
+
+[node name="ActionTargeting" type="Node" parent="." unique_id=1917210121]
+script = ExtResource("2_lmuoj")

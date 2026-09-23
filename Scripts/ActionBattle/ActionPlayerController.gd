@@ -114,7 +114,7 @@ var attack_target_position: Vector2
 var selected_target: AnimalBase = null
 var attack_move: MoveResource = null
 var selected_move: MoveResource = null
-var active_attack_hitbox: ActionAttackHitbox = null
+var active_attack_hitbox = null
 
 
 # ==================================================
@@ -132,7 +132,7 @@ var facing_direction: Vector2 = Vector2.RIGHT
 # ==================================================
 
 var player: AnimalBase
-var attack_area: ActionAttackArea
+#var attack_area = null
 var player_character: CharacterBody2D = null
 
 
@@ -198,8 +198,8 @@ func _physics_process(delta: float) -> void:
 
 	_update_attack_state(delta)
 
-	if attack_state == AttackState.IDLE:
-		_follow_player()
+	#if attack_state == AttackState.IDLE:
+		#_follow_player()
 
 	if Input.is_action_just_pressed("select_move_1"):
 		_use_move(0)
@@ -436,60 +436,60 @@ func _execute_attack() -> void:
 	#selected_target = null
 
 
-# ==================================================
-# Movement
-# ==================================================
-
-func _handle_movement() -> void:
-
-	# --------------------------------------------------
-	# Don't move during an attack.
-	# --------------------------------------------------
-
-	if attack_state != AttackState.IDLE:
-		player.velocity = Vector2.ZERO
-		return
-
-	# --------------------------------------------------
-	# Normal movement.
-	# --------------------------------------------------
-
-	var direction := Input.get_vector(
-		"move_left",
-		"move_right",
-		"move_up",
-		"move_down"
-	)
-
-	# ==================================================
-	# Sprint / Crouch
-	# ==================================================
-
-	is_sprinting = (
-		Input.is_action_pressed("sprint")
-		and
-		direction != Vector2.ZERO
-	)
-
-	is_crouching = (
-		Input.is_action_pressed("crouch")
-		and
-		not is_sprinting
-	)
-
-	# ==================================================
-	# Move
-	# ==================================================
-
-	player.velocity = (
-		direction
-		* _get_current_move_speed()
-	)
-
-	if direction != Vector2.ZERO:
-		facing_direction = direction.normalized()
-
-	player.move_and_slide()
+## ==================================================
+## Movement
+## ==================================================
+#
+#func _handle_movement() -> void:
+#
+	## --------------------------------------------------
+	## Don't move during an attack.
+	## --------------------------------------------------
+#
+	#if attack_state != AttackState.IDLE:
+		#player.velocity = Vector2.ZERO
+		#return
+#
+	## --------------------------------------------------
+	## Normal movement.
+	## --------------------------------------------------
+#
+	#var direction := Input.get_vector(
+		#"move_left",
+		#"move_right",
+		#"move_up",
+		#"move_down"
+	#)
+#
+	## ==================================================
+	## Sprint / Crouch
+	## ==================================================
+#
+	#is_sprinting = (
+		#Input.is_action_pressed("sprint")
+		#and
+		#direction != Vector2.ZERO
+	#)
+#
+	#is_crouching = (
+		#Input.is_action_pressed("crouch")
+		#and
+		#not is_sprinting
+	#)
+#
+	## ==================================================
+	## Move
+	## ==================================================
+#
+	#player.velocity = (
+		#direction
+		#* _get_current_move_speed()
+	#)
+#
+	#if direction != Vector2.ZERO:
+		#facing_direction = direction.normalized()
+#
+	#player.move_and_slide()
 
 
 # ==================================================
@@ -620,7 +620,7 @@ func _create_active_attack_hitbox() -> void:
 	if attack_move == null:
 		return
 
-	var hitbox := ATTACK_HITBOX_SCENE.instantiate() as ActionAttackHitbox
+	var hitbox = ATTACK_HITBOX_SCENE.instantiate()
 
 	if hitbox == null:
 		push_error(
@@ -631,7 +631,6 @@ func _create_active_attack_hitbox() -> void:
 	get_tree().current_scene.add_child(hitbox)
 
 	hitbox.setup(attack_move)
-
 	hitbox.enemy_hit.connect(_on_attack_hit)
 
 	hitbox.set_follow_target(
@@ -741,12 +740,6 @@ func _use_protect() -> void:
 
 func _use_move(move_index: int) -> void:
 
-	# Move 3 and 4 require Battle mode.
-	if move_index >= 2:
-		if movement_mode != MovementMode.BATTLE:
-			print("MOVE LOCKED OUTSIDE BATTLE: ", move_index + 1)
-			return
-
 	if attack_state != AttackState.IDLE:
 		print("PLAYER CANNOT ATTACK - NOT READY")
 		return
@@ -779,47 +772,6 @@ func _use_move(move_index: int) -> void:
 		return
 	
 	_try_attack()
-
-
-# ==================================================
-# Execute Attack
-# ==================================================
-
-	#if attack_move == null:
-		#return
-#
-	#if selected_target != null:
-		#if not is_instance_valid(selected_target):
-			#selected_target = null
-#
-	#if selected_target != null:
-		#if not selected_target.is_alive():
-			#selected_target = null
-#
-	#print("PLAYER ATTACK CONNECTED")
-	#print("PLAYER USES:", attack_move.move_name)
-#
-	## --------------------------------------------------
-	## Targeted attack
-	## --------------------------------------------------
-#
-	#if selected_target != null:
-#
-		#selected_target.take_damage(
-			#player.attack
-		#)
-#
-		#_apply_enemy_knockback()
-#
-		#return
-#
-	## --------------------------------------------------
-	## Untargeted attack
-	## --------------------------------------------------
-#
-	#print(
-		#"PLAYER ATTACKED IN FACING DIRECTION"
-	#)
 
 
 func _apply_enemy_knockback() -> void:
