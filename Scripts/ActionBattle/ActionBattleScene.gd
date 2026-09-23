@@ -29,6 +29,10 @@ const GENE_MOVE_PATH = (
 	"res://Data/Moves/UnstoppableCharge.tres"
 )
 
+const ACTION_COMBAT_CONTROLLER = preload(
+	"res://Scripts/ActionBattle/ActionCombatController.gd"
+)
+
 const ACTION_PLAYER_CONTROLLER = preload(
 	"res://Scripts/ActionBattle/ActionPlayerController.gd"
 )
@@ -57,6 +61,7 @@ const ACTION_ENEMY_CONTROLLER = preload(
 var player = null
 var player_character = null
 var deebo_controller: ActionPlayerController = null
+var combat_controller: ActionCombatController = null
 var enemy = null
 var enemy_2 = null
 
@@ -100,6 +105,15 @@ func _ready() -> void:
 	spawn_player()
 	spawn_player_character()
 	_connect_deebo_to_player()
+	
+	combat_controller = ACTION_COMBAT_CONTROLLER.new()
+	add_child(combat_controller)
+
+	combat_controller.setup(
+		player_character,
+		player
+	)
+	
 	spawn_enemy()
 	spawn_enemy_2()
 

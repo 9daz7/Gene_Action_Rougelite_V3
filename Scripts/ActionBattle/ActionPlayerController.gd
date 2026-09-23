@@ -3,48 +3,55 @@ class_name ActionPlayerController
 
 
 # ==================================================
-# Deebo Movement Mode
+# Deebo Following
 # ==================================================
-
-enum MovementMode {
-	FOLLOW,
-	BATTLE
-}
-
-var movement_mode: MovementMode = MovementMode.FOLLOW
-
-
-func set_movement_mode(mode: MovementMode) -> void:
-
-	movement_mode = mode
-
-	print(
-		"DEEBO MOVEMENT MODE: ",
-		MovementMode.keys()[movement_mode]
-	)
-
-
-func toggle_movement_mode() -> void:
-
-	if movement_mode == MovementMode.FOLLOW:
-
-		set_movement_mode(
-			MovementMode.BATTLE
-		)
-
-	else:
-
-		set_movement_mode(
-			MovementMode.FOLLOW
-		)
-
 
 @export var follow_distance: float = 60.0
 @export var follow_speed: float = 180.0
-@export var battle_move_speed: float = 400.0
 
-var battle_destination: Vector2
-var has_battle_destination: bool = false
+## ==================================================
+## Deebo Movement Mode
+## ==================================================
+#
+#enum MovementMode {
+	#FOLLOW,
+	#BATTLE
+#}
+#
+#var movement_mode: MovementMode = MovementMode.FOLLOW
+#
+#
+#func set_movement_mode(mode: MovementMode) -> void:
+#
+	#movement_mode = mode
+#
+	#print(
+		#"DEEBO MOVEMENT MODE: ",
+		#MovementMode.keys()[movement_mode]
+	#)
+#
+#
+#func toggle_movement_mode() -> void:
+#
+	#if movement_mode == MovementMode.FOLLOW:
+#
+		#set_movement_mode(
+			#MovementMode.BATTLE
+		#)
+#
+	#else:
+#
+		#set_movement_mode(
+			#MovementMode.FOLLOW
+		#)
+#
+#
+#@export var follow_distance: float = 60.0
+#@export var follow_speed: float = 180.0
+#@export var battle_move_speed: float = 400.0
+#
+#var battle_destination: Vector2
+#var has_battle_destination: bool = false
 
 
 # ==================================================
@@ -162,33 +169,22 @@ func set_player_character(character: CharacterBody2D) -> void:
 	)
 
 
-func set_battle_destination(destination: Vector2) -> void:
-
-	battle_destination = destination
-	has_battle_destination = true
-
-	print(
-		"DEEBO MOVE COMMAND: ",
-		battle_destination
-	)
-
-
-# ==================================================
-# Attack Hitbox
-# ==================================================
-
-func _create_attack_hitbox() -> ActionAttackHitbox:
-
-	var hitbox := ATTACK_HITBOX_SCENE.instantiate()
-
-	get_tree().current_scene.add_child(hitbox)
-
-	hitbox.global_position = (
-		player.global_position
-		+ facing_direction * 60.0
-	)
-
-	return hitbox
+## ==================================================
+## Attack Hitbox
+## ==================================================
+#
+#func _create_attack_hitbox() -> ActionAttackHitbox:
+#
+	#var hitbox := ATTACK_HITBOX_SCENE.instantiate()
+#
+	#get_tree().current_scene.add_child(hitbox)
+#
+	#hitbox.global_position = (
+		#player.global_position
+		#+ facing_direction * 60.0
+	#)
+#
+	#return hitbox
 
 
 # ==================================================
@@ -202,38 +198,8 @@ func _physics_process(delta: float) -> void:
 
 	_update_attack_state(delta)
 
-	if movement_mode == MovementMode.FOLLOW:
+	if attack_state == AttackState.IDLE:
 		_follow_player()
-
-	elif movement_mode == MovementMode.BATTLE:
-
-		if has_battle_destination:
-
-			var direction := (
-				battle_destination
-				- player.global_position
-			).normalized()
-
-			var distance := player.global_position.distance_to(
-				battle_destination
-			)
-
-			if distance <= 5.0:
-
-				player.velocity = Vector2.ZERO
-				has_battle_destination = false
-
-			else:
-
-				player.velocity = (
-					direction
-					* battle_move_speed
-				)
-
-				player.move_and_slide()
-
-	if Input.is_action_just_pressed("toggle_deebo_mode"):
-		toggle_movement_mode()
 
 	if Input.is_action_just_pressed("select_move_1"):
 		_use_move(0)
@@ -551,42 +517,6 @@ func _follow_player() -> void:
 	player.velocity = direction * follow_speed
 
 	player.move_and_slide()
-
-
-# ==================================================
-# Battle Mode
-# ==================================================
-
-func _unhandled_input(event: InputEvent) -> void:
-
-	if movement_mode != MovementMode.BATTLE:
-		return
-
-	if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
-		return
-
-	if not event is InputEventMouseButton:
-		return
-
-	if not event.pressed:
-		return
-
-	if event.button_index != MOUSE_BUTTON_LEFT:
-		return
-
-	var mouse_position := player.get_global_mouse_position()
-
-	var targeting := get_tree().current_scene.get_node_or_null(
-		"ActionTargeting"
-	)
-
-	if targeting == null:
-		return
-
-	if targeting.is_enemy_at_position(mouse_position):
-		return
-
-	set_battle_destination(mouse_position)
 
 
 # ==================================================
