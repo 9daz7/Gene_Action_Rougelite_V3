@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bnlupao0s4l76"]
 
 [ext_resource type="Script" uid="uid://ckxjn41pglkmx" path="res://Scenes/Rooms/BattleTrigger.gd" id="1_lott6"]
-[ext_resource type="Script" uid="uid://bd4c5xvt4q8t" path="res://Scenes/Rooms/NormalBattleRoom.gd" id="1_sta21"]
+[ext_resource type="Script" uid="uid://bd4c5xvt4q8t" path="res://Scripts/Rooms/NormalBattleRoom.gd" id="1_sta21"]
 [ext_resource type="PackedScene" uid="uid://deuudtgda4sb6" path="res://Scenes/Rooms/RoamingEnemy.tscn" id="2_p0jvm"]
 [ext_resource type="PackedScene" uid="uid://s4vol5fxx17b" path="res://Scenes/Rooms/RoomExit.tscn" id="2_sta21"]
 

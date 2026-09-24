@@ -6,8 +6,8 @@ class_name ActionCombatController
 # Combatants
 # ==================================================
 
-var player_character: CharacterBody2D = null
-var deebo: PlayerAnimal = null
+var player_character: CharacterBody2D
+var deebo: PlayerAnimal
 
 
 # ==================================================
@@ -24,15 +24,20 @@ var deebo_position: CombatPosition = CombatPosition.FRONT
 
 
 # ==================================================
+# Formation
+# ==================================================
+
+@export var front_offset: Vector2 = Vector2(80.0, 0.0)
+@export var back_offset: Vector2 = Vector2(-55.0, -35.0)
+
+
+# ==================================================
 # Swap
 # ==================================================
 
-@export var swap_distance: float = 80.0
-@export var swap_speed: float = 300.0
+@export var swap_speed_multiplier: float = 30.0
 
 var is_swapping: bool = false
-
-var player_swap_target: Vector2
 var deebo_swap_target: Vector2
 
 
@@ -49,8 +54,6 @@ func setup(
 	deebo = deebo_animal
 
 	print("ACTION COMBAT CONTROLLER READY")
-	print("Player position: BACK")
-	print("Deebo position: FRONT")
 
 
 # ==================================================
@@ -88,6 +91,54 @@ func _unhandled_input(event: InputEvent) -> void:
 		_start_swap()
 
 
+func _process(_delta: float) -> void:
+
+	if player_character == null:
+		return
+
+	if deebo == null:
+		return
+
+	if is_swapping:
+		return
+
+	_update_formation()
+
+
+func _update_formation() -> void:
+
+	var direction := _get_player_direction()
+	var side := Vector2(-direction.y, direction.x)
+
+	var offset := front_offset
+
+	if deebo_position == CombatPosition.BACK:
+		offset = back_offset
+
+	var target_position := (
+		player_character.global_position
+		+ direction * offset.x
+		+ side * offset.y
+	)
+
+	deebo.global_position = target_position
+
+
+func _get_player_direction() -> Vector2:
+
+	var controller := player_character.get_node_or_null(
+		"ActionPlayerCharacterController"
+	)
+
+	if controller == null:
+		return Vector2.RIGHT
+
+	if controller.facing_direction == Vector2.ZERO:
+		return Vector2.RIGHT
+
+	return controller.facing_direction.normalized()
+
+
 # ==================================================
 # Start Swap
 # ==================================================
@@ -108,27 +159,22 @@ func _start_swap() -> void:
 		CombatPosition.keys()[deebo_position]
 	)
 
-	var center_position := (
-		player_character.global_position
-		+ deebo.global_position
-	) / 2.0
+	var direction := _get_player_direction()
 
-	var direction := (
-		deebo.global_position
-		- player_character.global_position
-	).normalized()
-
-	if direction == Vector2.ZERO:
-		direction = Vector2.LEFT
-
-	player_swap_target = (
-		center_position
-		+ direction * swap_distance / 2.0
+	var side := Vector2(
+		-direction.y,
+		direction.x
 	)
 
+	var offset := front_offset
+
+	if deebo_position == CombatPosition.FRONT:
+		offset = back_offset
+
 	deebo_swap_target = (
-		center_position
-		- direction * swap_distance / 2.0
+		player_character.global_position
+		+ direction * offset.x
+		+ side * offset.y
 	)
 
 	is_swapping = true
@@ -140,51 +186,26 @@ func _start_swap() -> void:
 
 func _update_swap(delta: float) -> void:
 
-	var player_direction := (
-		player_swap_target
-		- player_character.global_position
-	)
-
-	var deebo_direction := (
+	var direction := (
 		deebo_swap_target
 		- deebo.global_position
 	)
 
-	var player_distance := player_direction.length()
-	var deebo_distance := deebo_direction.length()
+	var distance := direction.length()
 
-	if player_distance > 2.0:
+	if distance > 2.0:
 
-		player_character.velocity = (
-			player_direction.normalized()
+		var swap_speed: float = deebo.get_speed() * swap_speed_multiplier
+
+		deebo.global_position += (
+			direction.normalized()
 			* swap_speed
+			* delta
 		)
-
-		player_character.move_and_slide()
 
 	else:
 
-		player_character.velocity = Vector2.ZERO
-
-	if deebo_distance > 2.0:
-
-		deebo.velocity = (
-			deebo_direction.normalized()
-			* swap_speed
-		)
-
-		deebo.move_and_slide()
-
-	else:
-
-		deebo.velocity = Vector2.ZERO
-
-	if (
-		player_distance <= 2.0
-		and
-		deebo_distance <= 2.0
-	):
-
+		deebo.global_position = deebo_swap_target
 		_finish_swap()
 
 
@@ -194,11 +215,7 @@ func _update_swap(delta: float) -> void:
 
 func _finish_swap() -> void:
 
-	player_character.global_position = player_swap_target
 	deebo.global_position = deebo_swap_target
-
-	player_character.velocity = Vector2.ZERO
-	deebo.velocity = Vector2.ZERO
 
 	var old_player_position := player_position
 

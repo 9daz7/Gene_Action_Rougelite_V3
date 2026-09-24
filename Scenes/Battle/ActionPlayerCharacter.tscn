@@ -108,6 +108,8 @@ animations = [{
 
 [node name="ActionPlayerCharacter" type="CharacterBody2D" unique_id=262011270]
 position = Vector2(7, 0)
+collision_layer = 2
+collision_mask = 5
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=705220842]
 scale = Vector2(7, 7)
@@ -127,3 +129,7 @@ visible = false
 z_index = 5
 width = 3.5
 default_color = Color(0.8392157, 1, 0.8235294, 1)
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=925177375]
+position_smoothing_enabled = true
+position_smoothing_speed = 6.0

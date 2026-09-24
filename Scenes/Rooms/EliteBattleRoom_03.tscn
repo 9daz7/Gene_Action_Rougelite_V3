@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://qns4kwnrmqio"]
 
-[ext_resource type="Script" uid="uid://bd4c5xvt4q8t" path="res://Scenes/Rooms/NormalBattleRoom.gd" id="1_61usk"]
+[ext_resource type="Script" uid="uid://bd4c5xvt4q8t" path="res://Scripts/Rooms/NormalBattleRoom.gd" id="1_61usk"]
 [ext_resource type="Script" uid="uid://ckxjn41pglkmx" path="res://Scenes/Rooms/BattleTrigger.gd" id="2_yuaa4"]
 [ext_resource type="PackedScene" uid="uid://s4vol5fxx17b" path="res://Scenes/Rooms/RoomExit.tscn" id="3_feyuk"]
 

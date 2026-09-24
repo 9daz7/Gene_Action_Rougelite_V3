@@ -2,12 +2,12 @@ extends Node
 class_name ActionPlayerController
 
 
-# ==================================================
-# Deebo Following
-# ==================================================
-
-@export var follow_distance: float = 60.0
-@export var follow_speed: float = 180.0
+## ==================================================
+## Deebo Following
+## ==================================================
+#
+#@export var follow_distance: float = 60.0
+#@export var follow_speed: float = 180.0
 
 ## ==================================================
 ## Deebo Movement Mode
@@ -492,32 +492,32 @@ func _execute_attack() -> void:
 	#player.move_and_slide()
 
 
-# ==================================================
-# Follow Player
-# ==================================================
-
-func _follow_player() -> void:
-
-	if player_character == null:
-		return
-
-	var distance := player.global_position.distance_to(
-		player_character.global_position
-	)
-
-	if distance <= follow_distance:
-		player.velocity = Vector2.ZERO
-		return
-
-	var direction := (
-		player_character.global_position
-		- player.global_position
-	).normalized()
-
-	player.velocity = direction * follow_speed
-
-	player.move_and_slide()
-
+## ==================================================
+## Follow Player
+## ==================================================
+#
+#func _follow_player() -> void:
+#
+	#if player_character == null:
+		#return
+#
+	#var distance := player.global_position.distance_to(
+		#player_character.global_position
+	#)
+#
+	#if distance <= follow_distance:
+		#player.velocity = Vector2.ZERO
+		#return
+#
+	#var direction := (
+		#player_character.global_position
+		#- player.global_position
+	#).normalized()
+#
+	#player.velocity = direction * follow_speed
+#
+	#player.move_and_slide()
+#
 
 # ==================================================
 # Attack

@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cmorb7ku7gov2"]
 
-[ext_resource type="Script" uid="uid://bd4c5xvt4q8t" path="res://Scenes/Rooms/NormalBattleRoom.gd" id="1_fljp1"]
+[ext_resource type="Script" uid="uid://bd4c5xvt4q8t" path="res://Scripts/Rooms/NormalBattleRoom.gd" id="1_fljp1"]
 [ext_resource type="Script" uid="uid://ckxjn41pglkmx" path="res://Scenes/Rooms/BattleTrigger.gd" id="2_j0p5l"]
 [ext_resource type="PackedScene" uid="uid://deuudtgda4sb6" path="res://Scenes/Rooms/RoamingEnemy.tscn" id="2_rve3k"]
 [ext_resource type="PackedScene" uid="uid://s4vol5fxx17b" path="res://Scenes/Rooms/RoomExit.tscn" id="3_rve3k"]

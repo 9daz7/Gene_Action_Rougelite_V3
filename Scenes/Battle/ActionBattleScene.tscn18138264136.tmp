@@ -1,15 +1,12 @@
 [gd_scene format=3 uid="uid://dsd7i425r5ena"]
 
 [ext_resource type="Script" uid="uid://kg21kdtfh7v2" path="res://Scripts/ActionBattle/ActionBattleScene.gd" id="1_6axtg"]
-[ext_resource type="PackedScene" uid="uid://bt357jgy7sbvs" path="res://Scenes/Rooms/ActionNormalBattleRoom.tscn" id="2_2njfm"]
 [ext_resource type="Script" uid="uid://cyxrv2eg82j7j" path="res://Scripts/ActionBattle/ActionTargeting.gd" id="2_lmuoj"]
 
 [node name="ActionBattleScene" type="Node2D" unique_id=173095800]
 script = ExtResource("1_6axtg")
 
 [node name="Arena" type="Node2D" parent="." unique_id=1849613358]
-
-[node name="ActionNormalBattleRoom" parent="Arena" unique_id=1973370823 instance=ExtResource("2_2njfm")]
 
 [node name="PlayerSpawn" type="Marker2D" parent="Arena" unique_id=1627961946]
 position = Vector2(1416, 814)

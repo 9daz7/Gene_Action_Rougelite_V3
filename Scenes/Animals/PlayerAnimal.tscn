@@ -8,6 +8,8 @@
 radius = 130.0
 
 [node name="PlayerAnimal" type="CharacterBody2D" unique_id=692676620]
+collision_layer = 2
+collision_mask = 5
 script = ExtResource("1_lbnkj")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1971900039]

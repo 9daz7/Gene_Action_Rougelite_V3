@@ -8,6 +8,8 @@ radius = 95.0
 
 [node name="EnemyAnimal" type="CharacterBody2D" unique_id=34476420]
 z_index = 4
+collision_layer = 4
+collision_mask = 3
 script = ExtResource("1_fbirj")
 enemy_data = ExtResource("2_nh118")
 
