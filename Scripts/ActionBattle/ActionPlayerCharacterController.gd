@@ -28,6 +28,7 @@ var facing_direction: Vector2 = Vector2.RIGHT
 
 var player_character: CharacterBody2D
 var animated_sprite: AnimatedSprite2D
+var deebo_controller: ActionPlayerController
 
 
 # ==================================================
@@ -128,6 +129,14 @@ func _handle_movement() -> void:
 
 func _get_current_move_speed() -> float:
 
+	if deebo_controller != null:
+
+		if deebo_controller.attack_state != (
+			deebo_controller.AttackState.IDLE
+		):
+
+			return attack_move_speed
+
 	if is_sprinting:
 		return sprint_speed
 
@@ -183,3 +192,10 @@ func _update_animation(direction: Vector2) -> void:
 
 	animated_sprite.play("walk_up")
 	animated_sprite.flip_h = false
+
+
+func set_deebo_controller(
+	controller: ActionPlayerController
+) -> void:
+
+	deebo_controller = controller

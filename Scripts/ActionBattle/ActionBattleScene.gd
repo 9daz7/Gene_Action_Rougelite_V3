@@ -292,8 +292,32 @@ func _connect_deebo_to_player() -> void:
 		push_error("Player character is missing.")
 		return
 
+	# --------------------------------------------------
+	# Deebo follows the player character.
+	# --------------------------------------------------
+
 	deebo_controller.set_player_character(
 		player_character
+	)
+
+	# --------------------------------------------------
+	# Player character knows Deebo's attack state.
+	# --------------------------------------------------
+
+	var character_controller: ActionPlayerCharacterController = (
+		player_character.get_node_or_null(
+			"ActionPlayerCharacterController"
+		)
+	)
+
+	if character_controller == null:
+		push_error(
+			"ActionPlayerCharacterController is missing."
+		)
+		return
+
+	character_controller.set_deebo_controller(
+		deebo_controller
 	)
 
 
