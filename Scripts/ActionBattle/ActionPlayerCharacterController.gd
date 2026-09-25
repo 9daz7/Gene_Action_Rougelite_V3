@@ -29,6 +29,7 @@ var facing_direction: Vector2 = Vector2.RIGHT
 var player_character: CharacterBody2D
 var animated_sprite: AnimatedSprite2D
 var deebo_controller: ActionPlayerController
+var player_combat_controller: ActionPlayerCombatController
 
 
 # ==================================================
@@ -129,6 +130,14 @@ func _handle_movement() -> void:
 
 func _get_current_move_speed() -> float:
 
+	if player_combat_controller != null:
+
+		if player_combat_controller.attack_state != (
+			player_combat_controller.AttackState.IDLE
+		):
+
+			return attack_move_speed
+
 	if deebo_controller != null:
 
 		if deebo_controller.attack_state != (
@@ -199,3 +208,10 @@ func set_deebo_controller(
 ) -> void:
 
 	deebo_controller = controller
+
+
+func set_player_combat_controller(
+	controller: ActionPlayerCombatController
+) -> void:
+
+	player_combat_controller = controller

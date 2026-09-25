@@ -35,7 +35,7 @@ func _input(event: InputEvent) -> void:
 	if not event.pressed:
 		return
 
-	if event.button_index != MOUSE_BUTTON_LEFT:
+	if event.button_index != MOUSE_BUTTON_MIDDLE:
 		return
 
 	if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):

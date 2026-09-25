@@ -17,8 +17,9 @@ var detected_enemies: Array[AnimalBase] = []
 var hit_enemies: Array[AnimalBase] = []
 var move: MoveResource = null
 var hitbox_timer: float = 0.0
-var follow_target: AnimalBase = null
+var follow_target: Node2D = null
 var follow_direction: Vector2 = Vector2.RIGHT
+var follow_offset: float = 0.0
 
 
 # ==================================================
@@ -47,12 +48,14 @@ func setup(action_move: MoveResource) -> void:
 
 
 func set_follow_target(
-	target: AnimalBase,
-	direction: Vector2
+	target: Node2D,
+	direction: Vector2,
+	offset: float = 0.0
 ) -> void:
 
 	follow_target = target
 	follow_direction = direction.normalized()
+	follow_offset = offset
 
 
 # ==================================================
@@ -247,7 +250,7 @@ func _physics_process(delta: float) -> void:
 		global_position = (
 			follow_target.global_position
 			+ follow_direction
-			* move.hitbox_offset
+			* follow_offset
 		)
 
 	var overlapping_bodies := get_overlapping_bodies()
