@@ -109,6 +109,21 @@ func _ready() -> void:
 	add_child(combat_controller)
 	combat_controller.setup(player_character, player)
 
+	var player_combat_controller: ActionPlayerCombatController = (
+		player_character.get_node_or_null(
+			"ActionPlayerCombatController"
+		)
+	)
+
+	if player_combat_controller != null:
+		player_combat_controller.set_combat_controller(
+			combat_controller
+		)
+	else:
+		push_error(
+			"ActionPlayerCombatController is missing."
+		)
+
 	_connect_deebo_to_player()
 	
 	spawn_enemy()

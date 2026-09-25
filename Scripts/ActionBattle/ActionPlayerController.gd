@@ -298,14 +298,13 @@ func _update_attack_approach(_delta: float) -> void:
 		- player.global_position
 	).normalized()
 
-	player.velocity = (
-		direction
-		* sprint_speed
-	)
-
 	facing_direction = direction
 
-	player.move_and_slide()
+	if combat_controller != null:
+		combat_controller.move_deebo_toward(
+			selected_target.global_position,
+			sprint_speed
+		)
 
 
 # ==================================================
@@ -421,24 +420,32 @@ func _create_active_attack_hitbox() -> void:
 		)
 		return
 
-	get_tree().current_scene.add_child(hitbox)
+	var action_hitbox = hitbox as ActionAttackHitbox
 
-	hitbox.setup(attack_move)
-	hitbox.enemy_hit.connect(_on_attack_hit)
+	if action_hitbox == null:
+		push_error(
+			"Created node is not an ActionAttackHitbox."
+		)
+		return
 
-	hitbox.set_follow_target(
+	get_tree().current_scene.add_child(action_hitbox)
+
+	action_hitbox.setup(attack_move)
+	action_hitbox.enemy_hit.connect(_on_attack_hit)
+
+	action_hitbox.set_follow_target(
 		player,
 		facing_direction
 	)
 
-	hitbox.global_position = (
+	action_hitbox.global_position = (
 		player.global_position
 		+ facing_direction * attack_move.hitbox_offset
 	)
 
-	hitbox.global_rotation = facing_direction.angle()
+	action_hitbox.global_rotation = facing_direction.angle()
 
-	active_attack_hitbox = hitbox
+	active_attack_hitbox = action_hitbox
 
 	print(
 		"ACTIVE ATTACK HITBOX CREATED | Move:",

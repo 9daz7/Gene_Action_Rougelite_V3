@@ -105,15 +105,15 @@ func _process(delta: float) -> void:
 	if deebo == null:
 		return
 
-	if is_swapping:
-		return
-
 	if attack_override_active:
 		deebo.global_position = attack_override_position
 		return
 
 	if attack_return_active:
 		_update_attack_return(delta)
+		return
+
+	if is_swapping:
 		return
 
 	_update_formation()
@@ -219,6 +219,22 @@ func _get_player_direction() -> Vector2:
 		return Vector2.RIGHT
 
 	return controller.facing_direction.normalized()
+
+
+func move_deebo_toward(
+	target_position: Vector2,
+	speed: float
+) -> void:
+
+	if deebo == null:
+		return
+
+	var direction := (
+		target_position
+		- deebo.global_position
+	).normalized()
+
+	deebo.global_position += direction * speed * get_physics_process_delta_time()
 
 
 # ==================================================

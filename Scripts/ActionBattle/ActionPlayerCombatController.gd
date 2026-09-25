@@ -16,6 +16,7 @@ const SLINGSHOT_PROJECTILE = preload(
 # ==================================================
 
 var player_character: CharacterBody2D = null
+var combat_controller: ActionCombatController = null
 
 @onready var aim_line: Line2D = get_parent().get_node_or_null(
 	"AimLine"
@@ -72,6 +73,13 @@ func _ready() -> void:
 	aim_line.visible = false
 
 	print("ActionPlayerCombatController ready")
+
+
+func set_combat_controller(
+	controller: ActionCombatController
+) -> void:
+
+	combat_controller = controller
 
 
 # ==================================================
