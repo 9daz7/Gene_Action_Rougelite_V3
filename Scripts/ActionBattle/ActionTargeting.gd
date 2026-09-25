@@ -41,7 +41,12 @@ func _input(event: InputEvent) -> void:
 	if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
 		return
 
-	_select_target_at_mouse(event.position)
+	var player_character := get_parent().get_node_or_null("ActionPlayerCharacter")
+
+	if player_character != null:
+		_select_target_at_mouse(
+			player_character.get_global_mouse_position()
+		)
 
 
 # ==================================================

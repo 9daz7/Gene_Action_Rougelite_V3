@@ -60,7 +60,7 @@ enum HitboxType {
 @export var hitbox_radius: float = 60.0
 @export var hitbox_offset: float = 40.0
 @export var hitbox_angle: float = 90.0
-@export var hitbox_duration: float = 0.05
+@export var hitbox_duration: float = 0.15
 
 @export var action_lunge_distance: float = 70.0
 @export var action_lunge_duration: float = 0.12

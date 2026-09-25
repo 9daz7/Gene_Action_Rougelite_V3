@@ -74,6 +74,16 @@ func _build_hitbox_shape() -> void:
 	if move == null:
 		return
 
+	# Disable both shape types by default.
+	collision_shape.disabled = true
+
+	var collision_polygon := get_node_or_null(
+		"CollisionPolygon2D"
+	)
+
+	if collision_polygon != null:
+		collision_polygon.disabled = true
+
 	match move.hitbox_type:
 
 		MoveResource.HitboxType.CIRCLE:
@@ -82,6 +92,7 @@ func _build_hitbox_shape() -> void:
 			circle.radius = move.hitbox_radius
 
 			collision_shape.shape = circle
+			collision_shape.disabled = false
 
 		MoveResource.HitboxType.RECTANGLE:
 
@@ -89,14 +100,9 @@ func _build_hitbox_shape() -> void:
 			rectangle.size = move.hitbox_size
 
 			collision_shape.shape = rectangle
+			collision_shape.disabled = false
 
 		MoveResource.HitboxType.CONE:
-
-			collision_shape.disabled = true
-
-			var collision_polygon := get_node_or_null(
-				"CollisionPolygon2D"
-			)
 
 			if collision_polygon == null:
 				push_error(
@@ -127,7 +133,10 @@ func _build_hitbox_shape() -> void:
 					t
 				)
 
-				var point := Vector2.RIGHT.rotated(angle) * move.hitbox_radius
+				var point := (
+					Vector2.RIGHT.rotated(angle)
+					* move.hitbox_radius
+				)
 
 				points.append(point)
 
@@ -135,7 +144,7 @@ func _build_hitbox_shape() -> void:
 
 		MoveResource.HitboxType.NONE:
 
-			collision_shape.disabled = true
+			pass
 
 		_:
 
@@ -240,6 +249,8 @@ func _physics_process(delta: float) -> void:
 			+ follow_direction
 			* move.hitbox_offset
 		)
+
+	var overlapping_bodies := get_overlapping_bodies()
 
 	hitbox_timer -= delta
 

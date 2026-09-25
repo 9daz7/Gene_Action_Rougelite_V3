@@ -9,6 +9,7 @@ class_name ActionPlayerCharacterController
 @export var move_speed: float = 200.0
 @export var sprint_speed: float = 300.0
 @export var crouch_speed: float = 100.0
+@export var attack_move_speed: float = 80.0
 
 
 # ==================================================

@@ -169,6 +169,25 @@ func set_player_character(character: CharacterBody2D) -> void:
 	)
 
 
+func _get_attack_direction() -> Vector2:
+
+	if player_character != null:
+
+		var character_controller = (
+			player_character.get_node_or_null(
+				"ActionPlayerCharacterController"
+			)
+		)
+
+		if character_controller != null:
+
+			if character_controller.facing_direction != Vector2.ZERO:
+
+				return character_controller.facing_direction.normalized()
+
+	return facing_direction.normalized()
+
+
 ## ==================================================
 ## Attack Hitbox
 ## ==================================================
@@ -698,7 +717,7 @@ func _start_lunge_toward_target() -> void:
 			- player.global_position
 		).normalized()
 	else:
-		direction = facing_direction
+		direction = _get_attack_direction()
 
 	facing_direction = direction
 
