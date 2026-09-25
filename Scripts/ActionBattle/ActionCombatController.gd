@@ -30,6 +30,8 @@ var deebo_position: CombatPosition = CombatPosition.FRONT
 @export var front_offset: Vector2 = Vector2(80.0, 0.0)
 @export var back_offset: Vector2 = Vector2(-55.0, -35.0)
 
+@export var attack_return_speed: float = 500.0
+
 
 # ==================================================
 # Swap
@@ -39,6 +41,10 @@ var deebo_position: CombatPosition = CombatPosition.FRONT
 
 var is_swapping: bool = false
 var deebo_swap_target: Vector2
+
+var attack_override_active: bool = false
+var attack_override_position: Vector2
+var attack_return_active: bool = false
 
 
 # ==================================================
@@ -91,7 +97,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		_start_swap()
 
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 
 	if player_character == null:
 		return
@@ -102,10 +108,62 @@ func _process(_delta: float) -> void:
 	if is_swapping:
 		return
 
+	if attack_override_active:
+		deebo.global_position = attack_override_position
+		return
+
+	if attack_return_active:
+		_update_attack_return(delta)
+		return
+
 	_update_formation()
 
 
 func _update_formation() -> void:
+	deebo.global_position = _get_formation_position()
+
+#func _update_formation() -> void:
+#
+	#var direction := _get_player_direction()
+	#var side := Vector2(-direction.y, direction.x)
+#
+	#var offset := front_offset
+#
+	#if deebo_position == CombatPosition.BACK:
+		#offset = back_offset
+#
+	#var target_position := (
+		#player_character.global_position
+		#+ direction * offset.x
+		#+ side * offset.y
+	#)
+#
+	#deebo.global_position = target_position
+
+
+func _update_attack_return(delta: float) -> void:
+
+	var target_position := _get_formation_position()
+	var direction := (
+		target_position
+		- deebo.global_position
+	)
+
+	var distance := direction.length()
+
+	if distance <= 2.0:
+		deebo.global_position = target_position
+		attack_return_active = false
+		return
+
+	deebo.global_position += (
+		direction.normalized()
+		* attack_return_speed
+		* delta
+	)
+
+
+func _get_formation_position() -> Vector2:
 
 	var direction := _get_player_direction()
 	var side := Vector2(-direction.y, direction.x)
@@ -115,13 +173,37 @@ func _update_formation() -> void:
 	if deebo_position == CombatPosition.BACK:
 		offset = back_offset
 
-	var target_position := (
+	return (
 		player_character.global_position
 		+ direction * offset.x
 		+ side * offset.y
 	)
 
-	deebo.global_position = target_position
+
+func start_deebo_attack_movement(
+	start_position: Vector2
+) -> void:
+
+	attack_override_active = true
+	attack_override_position = start_position
+
+
+func set_deebo_attack_position(
+	position: Vector2
+) -> void:
+
+	if not attack_override_active:
+		return
+	
+	attack_override_position = position
+
+
+func finish_deebo_attack_movement() -> void:
+
+	attack_override_active = false
+	attack_return_active = true
+
+	print("DEEBO RETURNING TO FORMATION")
 
 
 func _get_player_direction() -> Vector2:

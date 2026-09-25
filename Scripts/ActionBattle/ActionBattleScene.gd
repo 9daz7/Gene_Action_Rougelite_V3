@@ -104,15 +104,12 @@ func _ready() -> void:
 
 	spawn_player()
 	spawn_player_character()
-	_connect_deebo_to_player()
-	
+
 	combat_controller = ACTION_COMBAT_CONTROLLER.new()
 	add_child(combat_controller)
+	combat_controller.setup(player_character, player)
 
-	combat_controller.setup(
-		player_character,
-		player
-	)
+	_connect_deebo_to_player()
 	
 	spawn_enemy()
 	spawn_enemy_2()
@@ -298,6 +295,10 @@ func _connect_deebo_to_player() -> void:
 
 	deebo_controller.set_player_character(
 		player_character
+	)
+
+	deebo_controller.set_combat_controller(
+		combat_controller
 	)
 
 	# --------------------------------------------------

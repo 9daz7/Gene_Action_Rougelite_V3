@@ -2,58 +2,6 @@ extends Node
 class_name ActionPlayerController
 
 
-## ==================================================
-## Deebo Following
-## ==================================================
-#
-#@export var follow_distance: float = 60.0
-#@export var follow_speed: float = 180.0
-
-## ==================================================
-## Deebo Movement Mode
-## ==================================================
-#
-#enum MovementMode {
-	#FOLLOW,
-	#BATTLE
-#}
-#
-#var movement_mode: MovementMode = MovementMode.FOLLOW
-#
-#
-#func set_movement_mode(mode: MovementMode) -> void:
-#
-	#movement_mode = mode
-#
-	#print(
-		#"DEEBO MOVEMENT MODE: ",
-		#MovementMode.keys()[movement_mode]
-	#)
-#
-#
-#func toggle_movement_mode() -> void:
-#
-	#if movement_mode == MovementMode.FOLLOW:
-#
-		#set_movement_mode(
-			#MovementMode.BATTLE
-		#)
-#
-	#else:
-#
-		#set_movement_mode(
-			#MovementMode.FOLLOW
-		#)
-#
-#
-#@export var follow_distance: float = 60.0
-#@export var follow_speed: float = 180.0
-#@export var battle_move_speed: float = 400.0
-#
-#var battle_destination: Vector2
-#var has_battle_destination: bool = false
-
-
 # ==================================================
 # Hitbox
 # ==================================================
@@ -132,8 +80,8 @@ var facing_direction: Vector2 = Vector2.RIGHT
 # ==================================================
 
 var player: AnimalBase
-#var attack_area = null
 var player_character: CharacterBody2D = null
+var combat_controller: ActionCombatController = null
 
 
 # ==================================================
@@ -188,22 +136,10 @@ func _get_attack_direction() -> Vector2:
 	return facing_direction.normalized()
 
 
-## ==================================================
-## Attack Hitbox
-## ==================================================
-#
-#func _create_attack_hitbox() -> ActionAttackHitbox:
-#
-	#var hitbox := ATTACK_HITBOX_SCENE.instantiate()
-#
-	#get_tree().current_scene.add_child(hitbox)
-#
-	#hitbox.global_position = (
-		#player.global_position
-		#+ facing_direction * 60.0
-	#)
-#
-	#return hitbox
+func set_combat_controller(
+	controller: ActionCombatController
+) -> void:
+	combat_controller = controller
 
 
 # ==================================================
@@ -260,22 +196,20 @@ func _update_attack_state(delta: float) -> void:
 				1.0
 			)
 
-			player.global_position = (
-				attack_start_position.lerp(
-					attack_target_position,
-					progress
+			if combat_controller != null:
+				combat_controller.set_deebo_attack_position(
+					attack_start_position.lerp(
+						attack_target_position,
+						progress
+					)
 				)
-			)
 
 			if progress >= 1.0:
-
 				await _execute_attack()
-
 				attack_state = AttackState.RETURNING
 				attack_timer = 0.0
 
 		AttackState.RETURNING:
-
 			attack_timer += delta
 
 			var progress := (
@@ -289,23 +223,11 @@ func _update_attack_state(delta: float) -> void:
 				1.0
 			)
 
-			player.global_position = (
-				attack_target_position.lerp(
-					attack_start_position,
-					progress
-				)
-			)
-
 			if progress >= 1.0:
+				if combat_controller != null:
+					combat_controller.finish_deebo_attack_movement()
 
-				player.global_position = (
-					attack_start_position
-				)
-
-				attack_state = (
-					AttackState.RECOVERING
-				)
-
+				attack_state = AttackState.RECOVERING
 				attack_recovery_timer = (
 					attack_move.action_recovery_duration
 				)
@@ -399,144 +321,6 @@ func _execute_attack() -> void:
 
 	print("PLAYER ATTACK COMPLETE")
 
-#func _execute_attack() -> void:
-#
-	#if attack_move == null:
-		#print("ATTACK FAILED - NO MOVE")
-		#return
-#
-	#if active_attack_hitbox == null:
-		#print("ATTACK FAILED - NO ACTIVE HITBOX")
-		#return
-#
-	#var detected_enemies: Array[AnimalBase] = (
-		#active_attack_hitbox.get_detected_enemies()
-	#)
-#
-	#if detected_enemies.is_empty():
-#
-		#print(
-			#"PLAYER ATTACK MISSED - "
-			#+ "NO ENEMY IN MOVE HITBOX"
-		#)
-#
-	#else:
-#
-		#print(
-			#"PLAYER HIT ",
-			#detected_enemies.size(),
-			#" ENEMY/ENEMIES"
-		#)
-#
-		#for enemy in detected_enemies:
-#
-			#if enemy == null:
-				#continue
-#
-			#if not is_instance_valid(enemy):
-				#continue
-#
-			#if not enemy.is_alive():
-				#continue
-#
-			#print(
-				#"PLAYER EXECUTING MOVE: ",
-				#attack_move.move_name,
-				#" ON ",
-				#enemy.name
-			#)
-#
-			#await attack_move.execute(
-				#player,
-				#enemy
-			#)
-#
-	#active_attack_hitbox = null
-	#selected_target = null
-
-
-## ==================================================
-## Movement
-## ==================================================
-#
-#func _handle_movement() -> void:
-#
-	## --------------------------------------------------
-	## Don't move during an attack.
-	## --------------------------------------------------
-#
-	#if attack_state != AttackState.IDLE:
-		#player.velocity = Vector2.ZERO
-		#return
-#
-	## --------------------------------------------------
-	## Normal movement.
-	## --------------------------------------------------
-#
-	#var direction := Input.get_vector(
-		#"move_left",
-		#"move_right",
-		#"move_up",
-		#"move_down"
-	#)
-#
-	## ==================================================
-	## Sprint / Crouch
-	## ==================================================
-#
-	#is_sprinting = (
-		#Input.is_action_pressed("sprint")
-		#and
-		#direction != Vector2.ZERO
-	#)
-#
-	#is_crouching = (
-		#Input.is_action_pressed("crouch")
-		#and
-		#not is_sprinting
-	#)
-#
-	## ==================================================
-	## Move
-	## ==================================================
-#
-	#player.velocity = (
-		#direction
-		#* _get_current_move_speed()
-	#)
-#
-	#if direction != Vector2.ZERO:
-		#facing_direction = direction.normalized()
-#
-	#player.move_and_slide()
-
-
-## ==================================================
-## Follow Player
-## ==================================================
-#
-#func _follow_player() -> void:
-#
-	#if player_character == null:
-		#return
-#
-	#var distance := player.global_position.distance_to(
-		#player_character.global_position
-	#)
-#
-	#if distance <= follow_distance:
-		#player.velocity = Vector2.ZERO
-		#return
-#
-	#var direction := (
-		#player_character.global_position
-		#- player.global_position
-	#).normalized()
-#
-	#player.velocity = direction * follow_speed
-#
-	#player.move_and_slide()
-#
 
 # ==================================================
 # Attack
@@ -613,16 +397,6 @@ func _try_attack() -> void:
 			distance
 		)
 
-		if distance > attack_approach_range:
-
-			print(
-				"PLAYER APPROACHING TARGET"
-			)
-
-			attack_state = AttackState.APPROACHING
-
-			return
-
 	# --------------------------------------------------
 	# Target already in range
 	# --------------------------------------------------
@@ -639,7 +413,7 @@ func _create_active_attack_hitbox() -> void:
 	if attack_move == null:
 		return
 
-	var hitbox = ATTACK_HITBOX_SCENE.instantiate()
+	var hitbox: Node = ATTACK_HITBOX_SCENE.instantiate()
 
 	if hitbox == null:
 		push_error(
@@ -708,6 +482,11 @@ func _start_lunge_toward_target() -> void:
 	attack_start_position = (
 		player.global_position
 	)
+
+	if combat_controller != null:
+		combat_controller.start_deebo_attack_movement(
+			attack_start_position
+		)
 
 	var direction: Vector2
 
