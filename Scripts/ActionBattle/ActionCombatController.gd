@@ -9,6 +9,8 @@ class_name ActionCombatController
 var player_character: CharacterBody2D
 var deebo: PlayerAnimal
 
+var player_combat_controller: ActionPlayerCombatController = null
+
 
 # ==================================================
 # Combat Position
@@ -19,8 +21,8 @@ enum CombatPosition {
 	BACK
 }
 
-var player_position: CombatPosition = CombatPosition.BACK
-var deebo_position: CombatPosition = CombatPosition.FRONT
+var player_position: CombatPosition = CombatPosition.FRONT
+var deebo_position: CombatPosition = CombatPosition.BACK
 
 
 # ==================================================
@@ -46,6 +48,8 @@ var attack_override_active: bool = false
 var attack_override_position: Vector2
 var attack_return_active: bool = false
 
+var player_dash_active: bool = false
+
 
 # ==================================================
 # Setup
@@ -60,6 +64,21 @@ func setup(
 	deebo = deebo_animal
 
 	print("ACTION COMBAT CONTROLLER READY")
+
+
+func set_player_combat_controller(
+	controller: ActionPlayerCombatController
+) -> void:
+
+	player_combat_controller = controller
+
+
+func is_dodging() -> bool:
+
+	if player_combat_controller == null:
+		return false
+
+	return player_combat_controller.is_dodging()
 
 
 # ==================================================
@@ -113,6 +132,9 @@ func _process(delta: float) -> void:
 		_update_attack_return(delta)
 		return
 
+	if player_dash_active:
+		return
+
 	if is_swapping:
 		return
 
@@ -120,25 +142,19 @@ func _process(delta: float) -> void:
 
 
 func _update_formation() -> void:
+
 	deebo.global_position = _get_formation_position()
 
-#func _update_formation() -> void:
-#
-	#var direction := _get_player_direction()
-	#var side := Vector2(-direction.y, direction.x)
-#
-	#var offset := front_offset
-#
-	#if deebo_position == CombatPosition.BACK:
-		#offset = back_offset
-#
-	#var target_position := (
-		#player_character.global_position
-		#+ direction * offset.x
-		#+ side * offset.y
-	#)
-#
-	#deebo.global_position = target_position
+
+func set_player_front() -> void:
+
+	player_position = CombatPosition.FRONT
+	deebo_position = CombatPosition.BACK
+
+
+func reposition_deebo_to_formation() -> void:
+
+	attack_return_active = true
 
 
 func _update_attack_return(delta: float) -> void:
@@ -245,6 +261,9 @@ func _start_swap() -> void:
 
 	if is_swapping:
 		return
+
+	if player_combat_controller != null:
+		player_combat_controller.cancel_player_attack()
 
 	print("========================================")
 	print("COMBAT SWAP START")

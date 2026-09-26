@@ -124,6 +124,10 @@ func _ready() -> void:
 			"ActionPlayerCombatController is missing."
 		)
 
+	combat_controller.set_player_combat_controller(
+		player_combat_controller
+	)
+
 	var character_controller: ActionPlayerCharacterController = (
 		player_character.get_node_or_null(
 			"ActionPlayerCharacterController"
