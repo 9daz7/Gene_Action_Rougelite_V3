@@ -62,6 +62,9 @@ var knockback_velocity: Vector2 = Vector2.ZERO
 
 var enemy: AnimalBase
 var target: AnimalBase
+var combat_target: Node2D = null
+
+var combat_controller: ActionCombatController = null
 
 var enemy_sprite: Sprite2D
 var original_sprite_scale: Vector2
@@ -94,6 +97,13 @@ func _ready() -> void:
 		original_sprite_scale = enemy_sprite.scale
 
 
+func set_combat_controller(
+	controller: ActionCombatController
+) -> void:
+
+	combat_controller = controller
+
+
 # ==================================================
 # Physics
 # ==================================================
@@ -103,7 +113,9 @@ func _physics_process(delta: float) -> void:
 	if enemy == null:
 		return
 
-	if not target.is_alive():
+	combat_target = _get_closest_combatant()
+
+	if combat_target == null:
 		enemy.velocity = Vector2.ZERO
 		return
 
@@ -117,14 +129,6 @@ func _physics_process(delta: float) -> void:
 
 	if not enemy.is_alive():
 		enemy.velocity = Vector2.ZERO
-		return
-
-	if target == null:
-		return
-
-	if not target.is_alive():
-		enemy.velocity = Vector2.ZERO
-		attack_state = AttackState.IDLE
 		return
 
 	# --------------------------------------------------
@@ -143,7 +147,7 @@ func _physics_process(delta: float) -> void:
 	# --------------------------------------------------
 
 	var distance := enemy.global_position.distance_to(
-		target.global_position
+		combat_target.global_position
 	)
 
 	# --------------------------------------------------
@@ -175,7 +179,7 @@ func _physics_process(delta: float) -> void:
 	# --------------------------------------------------
 
 	var direction := (
-		target.global_position
+		combat_target.global_position
 		- enemy.global_position
 	).normalized()
 
@@ -306,7 +310,51 @@ func alert_to_attacker(attacker: AnimalBase) -> void:
 # Combat
 # ==================================================
 
+func _get_closest_combatant() -> Node2D:
+
+	if combat_controller == null:
+		return target
+
+	if combat_controller.player_character == null:
+		return target
+
+	if combat_controller.deebo == null:
+		return target
+
+	var player_character := (
+		combat_controller.player_character
+	)
+
+	var deebo := (
+		combat_controller.deebo
+	)
+
+	var player_distance := (
+		enemy.global_position
+		.distance_to(
+			player_character.global_position
+		)
+	)
+
+	var deebo_distance := (
+		enemy.global_position
+		.distance_to(
+			deebo.global_position
+		)
+	)
+
+	if player_distance <= deebo_distance:
+		return player_character
+
+	return deebo
+
+
 func _try_attack() -> void:
+
+	combat_target = _get_closest_combatant()
+
+	if combat_target == null:
+		return
 
 	if attack_timer > 0.0:
 		return
@@ -437,24 +485,22 @@ func _update_attack_state(delta: float) -> void:
 
 func _start_attack_lunge() -> void:
 
-	if target == null:
-		attack_state = AttackState.IDLE
-		return
+	combat_target = _get_closest_combatant()
 
-	if not target.is_alive():
+	if combat_target == null:
 		attack_state = AttackState.IDLE
 		return
 
 	print(
 		enemy.name,
 		" LUNGES AT ",
-		target.name
+		combat_target.name
 	)
 
 	attack_start_position = enemy.global_position
 
 	var direction := (
-		target.global_position
+		combat_target.global_position
 		-
 		enemy.global_position
 	).normalized()
@@ -485,42 +531,72 @@ func _execute_attack_hit() -> void:
 	if not target.is_alive():
 		return
 
+	# ==========================================
+	# Attack Range Check
+	# ==========================================
+
 	var distance := enemy.global_position.distance_to(
-		target.global_position
+		combat_target.global_position
 	)
 
 	print(
-		enemy.name,
-		" BITE HIT CHECK | Distance: ",
-		distance
+		"ENEMY ATTACK HIT CHECK | Distance:",
+		distance,
+		"| Attack Range:",
+		attack_range
 	)
 
 	if distance > attack_range:
+
 		print(
-			enemy.name,
-			" MISSED!"
+			"ENEMY ATTACK MISS | OUT OF RANGE"
 		)
+
 		return
 
-	print(
-		"========================================"
-	)
-	print(
-		"ENEMY ATTACK CONNECTED"
-	)
-	print(
-		"========================================"
-	)
-	print(
-		enemy.name,
-		" uses ",
-		attack_move.move_name
-	)
+	# ==========================================
+	# Calculate Damage
+	# ==========================================
 
-	attack_move.execute(
+	var result := attack_move.calculate_action_damage(
 		enemy,
 		target
 	)
+
+	if not result.get("hit", false):
+
+		print(
+			"ENEMY ATTACK MISS | ACCURACY"
+		)
+
+		return
+
+	var damage: float = result.get(
+		"damage",
+		0.0
+	)
+
+	print(
+		"ENEMY ATTACK CONNECTED | Damage:",
+		damage
+	)
+
+	# ==========================================
+	# Action Combat Damage
+	# ==========================================
+
+	if combat_controller != null:
+
+		combat_controller.receive_enemy_damage(
+			enemy,
+			damage
+		)
+
+	else:
+
+		push_warning(
+			"ActionEnemyController has no ActionCombatController!"
+		)
 
 
 # ==================================================

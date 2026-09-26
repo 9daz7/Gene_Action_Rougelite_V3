@@ -54,6 +54,121 @@ var attack_return_active: bool = false
 var player_dash_active: bool = false
 
 
+func receive_enemy_damage(
+	attacker: AnimalBase,
+	damage: float
+) -> void:
+
+	if attacker == null:
+		return
+
+	if damage <= 0.0:
+		return
+
+	# ==========================================
+	# Dodge
+	# ==========================================
+
+	if is_dodging():
+
+		print(
+			"ACTION DAMAGE DODGED | Attacker:",
+			attacker.name
+		)
+
+		return
+
+
+	# ==========================================
+	# Distance
+	# ==========================================
+
+	if player_character == null:
+		return
+
+	if deebo == null:
+		return
+
+	var player_distance := (
+		attacker.global_position
+		.distance_to(
+			player_character.global_position
+		)
+	)
+
+	var deebo_distance := (
+		attacker.global_position
+		.distance_to(
+			deebo.global_position
+		)
+	)
+
+
+	# ==========================================
+	# Determine Primary Target
+	# ==========================================
+
+	var primary_damage := damage * 0.7
+	var secondary_damage := damage * 0.3
+
+
+	print(
+		"ACTION DAMAGE | Incoming:",
+		damage
+	)
+
+	print(
+		"PLAYER DISTANCE:",
+		player_distance,
+		"| DEEBO DISTANCE:",
+		deebo_distance
+	)
+
+
+	# ==========================================
+	# Player Character is Closer
+	# ==========================================
+
+	if player_distance <= deebo_distance:
+
+		print(
+			"PRIMARY TARGET: PLAYER CHARACTER | 70%"
+		)
+
+		take_player_damage(
+			primary_damage
+		)
+
+		deebo.take_damage(
+			secondary_damage,
+			attacker,
+			false,
+			null
+		)
+
+
+	# ==========================================
+	# Deebo is Closer
+	# ==========================================
+
+	else:
+
+		print(
+			"PRIMARY TARGET: DEEBO | 70%"
+		)
+
+		deebo.take_damage(
+			primary_damage,
+			attacker,
+			false,
+			null
+		)
+
+		take_player_damage(
+			secondary_damage
+		)
+
+
 # ==================================================
 # Setup
 # ==================================================

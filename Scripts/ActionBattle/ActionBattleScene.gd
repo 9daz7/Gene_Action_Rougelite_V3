@@ -470,6 +470,10 @@ func spawn_enemy() -> void:
 
 	controller.target = player
 
+	controller.set_combat_controller(
+		combat_controller
+	)
+
 	enemy.global_position = (
 		enemy_spawn.global_position
 	)
@@ -540,6 +544,10 @@ func spawn_enemy_2() -> void:
 	enemy_2.add_child(controller)
 
 	controller.target = player
+
+	controller.set_combat_controller(
+		combat_controller
+	)
 
 	enemy_2.global_position = (
 		enemy_spawn_2.global_position

@@ -469,6 +469,121 @@ func execute_damage(
 		)
 
 
+func calculate_action_damage(
+	user: AnimalBase,
+	target: AnimalBase
+) -> Dictionary:
+
+	if target == null:
+		return {
+			"hit": false,
+			"damage": 0.0
+		}
+
+	if not is_instance_valid(target):
+		return {
+			"hit": false,
+			"damage": 0.0
+		}
+
+	# ==========================================
+	# Accuracy
+	# ==========================================
+
+	var final_accuracy := (
+		accuracy
+		+ user.get_mutagen_accuracy_bonus(self)
+	)
+
+	var hit_chance = user.calculate_hit_chance(
+		target,
+		final_accuracy
+	)
+
+	var roll = randi_range(1, 100)
+
+	if roll > hit_chance:
+
+		BattleLog.add_message(
+			"But it missed!"
+		)
+
+		user.trigger_passive_event(
+			"attack_missed",
+			{
+				"target": target,
+				"move": self
+			}
+		)
+
+		return {
+			"hit": false,
+			"damage": 0.0
+		}
+
+	# ==========================================
+	# Damage
+	# ==========================================
+
+	var damage = user.calculate_move_damage(
+		self
+	)
+
+	damage += user.get_mutagen_damage_bonus(
+		self
+	)
+
+	damage += user.get_mutagen_conditional_damage_bonus(
+		self,
+		target
+	)
+
+	# ==========================================
+	# Critical Hit
+	# ==========================================
+
+	var user_critical_chance := user.get_critical_chance()
+
+	var mutagen_move_critical := (
+		user.get_mutagen_critical_bonus(self)
+	)
+
+	var final_critical_chance: int = clamp(
+		critical_chance
+		+ user_critical_chance
+		+ mutagen_move_critical,
+		0,
+		100
+	)
+
+	var is_critical := false
+
+	if randi_range(1, 100) <= final_critical_chance:
+
+		damage *= 2
+		is_critical = true
+
+		BattleLog.add_message(
+			"Critical hit!"
+		)
+
+		user.trigger_passive_event(
+			"critical_hit",
+			{
+				"target": target,
+				"move": self,
+				"damage": damage,
+				"is_critical": true
+			}
+		)
+
+	return {
+		"hit": true,
+		"damage": damage,
+		"is_critical": is_critical
+	}
+
+
 # ==================================================
 # Status Effects
 # ==================================================
