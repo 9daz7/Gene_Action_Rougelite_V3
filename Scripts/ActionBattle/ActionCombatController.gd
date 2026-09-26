@@ -9,6 +9,9 @@ class_name ActionCombatController
 var player_character: CharacterBody2D
 var deebo: PlayerAnimal
 
+var player_health: float = 100.0
+var player_max_health: float = 100.0
+
 var player_combat_controller: ActionPlayerCombatController = null
 
 
@@ -79,6 +82,26 @@ func is_dodging() -> bool:
 		return false
 
 	return player_combat_controller.is_dodging()
+
+
+func take_player_damage(damage: float) -> void:
+
+	if damage <= 0.0:
+		return
+
+	player_health = max(
+		player_health - damage,
+		0.0
+	)
+
+	print(
+		"PLAYER CHARACTER TOOK ",
+		damage,
+		" DAMAGE | HP: ",
+		player_health,
+		"/",
+		player_max_health
+	)
 
 
 # ==================================================

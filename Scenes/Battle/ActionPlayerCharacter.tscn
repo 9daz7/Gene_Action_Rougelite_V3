@@ -106,10 +106,15 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hu6wf"]
+size = Vector2(11.175786, 16.763678)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_4h3ga"]
+radius = 40.0
+
 [node name="ActionPlayerCharacter" type="CharacterBody2D" unique_id=262011270]
 position = Vector2(7, 0)
 collision_layer = 2
-collision_mask = 5
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=705220842]
 scale = Vector2(6.275, 6.275)
@@ -117,12 +122,27 @@ sprite_frames = SubResource("SpriteFrames_gs0tk")
 animation = &"walk_up"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=668938336]
+position = Vector2(1.999999, -1)
+scale = Vector2(4.295, 4.295)
+shape = SubResource("RectangleShape2D_hu6wf")
+
+[node name="Hurtbox" type="Area2D" parent="." unique_id=1533079360]
+collision_layer = 8
+collision_mask = 128
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=719981009]
+shape = SubResource("CircleShape2D_4h3ga")
 
 [node name="ActionPlayerCharacterController" type="Node" parent="." unique_id=1856415391]
 script = ExtResource("2_xrg1l")
 
 [node name="ActionPlayerCombatController" type="Node" parent="." unique_id=1026231667]
 script = ExtResource("3_4h3ga")
+min_projectile_speed = null
+max_projectile_speed = null
+max_charge_time = null
+min_projectile_distance = null
+max_projectile_distance = null
 
 [node name="AimLine" type="Line2D" parent="." unique_id=131097150]
 visible = false

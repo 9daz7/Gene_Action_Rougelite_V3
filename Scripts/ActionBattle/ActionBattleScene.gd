@@ -244,7 +244,6 @@ func spawn_player() -> void:
 	if sprite != null:
 
 		sprite.visible = true
-		sprite.scale = Vector2(0.1, 0.1)
 
 	else:
 

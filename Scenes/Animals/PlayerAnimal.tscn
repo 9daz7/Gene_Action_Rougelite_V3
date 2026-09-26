@@ -4,16 +4,14 @@
 [ext_resource type="Texture2D" uid="uid://rq85nl11ce4q" path="res://Assets/Sprites/Animals/deebo_asset_test_gene_select.png" id="2_ccafr"]
 [ext_resource type="Script" uid="uid://j4ep52aac5dq" path="res://Scripts/ActionBattle/ActionAttackArea.gd" id="3_7gnb8"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_gs0tk"]
-radius = 130.0
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7gnb8"]
+size = Vector2(55, 114)
 
 [node name="PlayerAnimal" type="CharacterBody2D" unique_id=692676620]
 collision_layer = 2
-collision_mask = 5
 script = ExtResource("1_lbnkj")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1971900039]
-visible = false
 scale = Vector2(0.05, 0.05)
 texture = ExtResource("2_ccafr")
 
@@ -26,4 +24,5 @@ collision_layer = 0
 script = ExtResource("3_7gnb8")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AtackArea2D" unique_id=189322904]
-shape = SubResource("CircleShape2D_gs0tk")
+position = Vector2(-0.5, 0)
+shape = SubResource("RectangleShape2D_7gnb8")
