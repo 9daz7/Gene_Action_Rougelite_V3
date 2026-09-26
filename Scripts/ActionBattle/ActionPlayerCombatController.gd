@@ -56,7 +56,6 @@ const ATTACK_HITBOX_SCENE = preload(
 enum AttackState {
 	IDLE,
 	LUNGING,
-	RETURNING,
 	RECOVERING
 }
 
@@ -65,11 +64,14 @@ var attack_state: AttackState = AttackState.IDLE
 @export var melee_damage: float = 5.0
 @export var melee_third_hit_damage: float = 7.0
 
-@export var melee_lunge_distance: float = 45.0
+@export var melee_lunge_distance: float = 25.0
 @export var melee_lunge_duration: float = 0.10
 @export var melee_recovery_duration: float = 0.25
 
+@export var combo_window: float = 0.30
+
 var attack_timer: float = 0.0
+var attack_start_position: Vector2
 var attack_target_position: Vector2
 var active_attack_hitbox = null
 var attack_direction: Vector2 = Vector2.RIGHT
@@ -77,7 +79,10 @@ var attack_direction: Vector2 = Vector2.RIGHT
 var combo_step: int = 0
 var combo_timer: float = 0.0
 var combo_queued: bool = false
+var melee_button_held: bool = false
 
+@export var combo_cooldown: float = 0.25
+var combo_cooldown_timer: float = 0.0
 
 # ==================================================
 # Setup
@@ -128,7 +133,10 @@ func _input(event: InputEvent) -> void:
 	if event.button_index == MOUSE_BUTTON_LEFT:
 
 		if event.pressed:
+			melee_button_held = true
 			_try_melee_attack()
+		else:
+			melee_button_held = false
 
 		return
 
@@ -150,7 +158,11 @@ func _try_melee_attack() -> void:
 	):
 		return
 
+	if combo_cooldown_timer > 0.0:
+		return
+	
 	if attack_state != AttackState.IDLE:
+		combo_queued = true
 		return
 
 	_start_melee_attack()
@@ -158,25 +170,34 @@ func _try_melee_attack() -> void:
 
 func _start_melee_attack() -> void:
 
-	attack_start_position = (
-		player_character.global_position
-	)
+	combo_step += 1
+
+	if combo_step > 3:
+		combo_step = 1
+
+	combo_timer = 0.0
 
 	attack_direction = _get_attack_direction()
 
+	attack_start_position = player_character.global_position
+
+	var lunge_distance := melee_lunge_distance
+
 	attack_target_position = (
-		attack_start_position
-		+
-		attack_direction
-		* melee_lunge_distance
+		player_character.global_position
+		+ attack_direction * lunge_distance
 	)
 
-	attack_state = AttackState.LUNGING
 	attack_timer = 0.0
+	attack_state = AttackState.LUNGING
 
 	_create_melee_hitbox()
 
-	print("PLAYER MELEE ATTACK START")
+	print(
+		"PLAYER MELEE ATTACK ",
+		combo_step,
+		" START"
+	)
 
 
 func _get_attack_direction() -> Vector2:
@@ -218,9 +239,6 @@ func _update_attack_state(delta: float) -> void:
 
 	match attack_state:
 
-		AttackState.IDLE:
-			pass
-
 		AttackState.LUNGING:
 
 			attack_timer += delta
@@ -230,11 +248,7 @@ func _update_attack_state(delta: float) -> void:
 				/ melee_lunge_duration
 			)
 
-			progress = clamp(
-				progress,
-				0.0,
-				1.0
-			)
+			progress = min(progress, 1.0)
 
 			player_character.global_position = (
 				attack_start_position.lerp(
@@ -245,54 +259,52 @@ func _update_attack_state(delta: float) -> void:
 
 			if progress >= 1.0:
 
-				attack_state = AttackState.RETURNING
+				attack_state = AttackState.RECOVERING
 				attack_timer = 0.0
 
-		AttackState.RETURNING:
-
-			attack_timer += delta
-
-			var progress := (
-				attack_timer
-				/ melee_return_duration
-			)
-
-			progress = clamp(
-				progress,
-				0.0,
-				1.0
-			)
-
-			if progress >= 1.0:
-
-				player_character.global_position = (
-					attack_start_position
-				)
-
-				attack_state = AttackState.RECOVERING
-				attack_timer = (
-					melee_recovery_duration
-				)
-
 				print(
-					"PLAYER MELEE COMPLETE - RECOVERING"
+					"PLAYER MELEE ",
+					combo_step,
+					" COMPLETE - RECOVERING"
 				)
+
 
 		AttackState.RECOVERING:
 
-			attack_timer -= delta
+			attack_timer += delta
 
-			if attack_timer <= 0.0:
+			if attack_timer >= melee_recovery_duration:
 
-				attack_timer = 0.0
 				attack_state = AttackState.IDLE
+				attack_timer = 0.0
 
-				print("PLAYER MELEE READY")
+				_combo_attack_finished()
+
+
+func _combo_attack_finished() -> void:
+
+	if combo_step == 3:
+		combo_queued = false
+		combo_timer = 0.0
+		combo_cooldown_timer = combo_cooldown
+		print("PLAYER COMBO COMPLETE - COOLDOWN")
+		return
+
+	if combo_queued:
+		combo_queued = false
+		_start_melee_attack()
+		return
+
+	if melee_button_held:
+		_start_melee_attack()
+		return
+
+	combo_timer = combo_window
 
 
 func _create_melee_hitbox() -> void:
 
-	var hitbox: Node = (
+	var hitbox = (
 		ATTACK_HITBOX_SCENE.instantiate()
 	)
 
@@ -362,23 +374,21 @@ func _create_melee_hitbox() -> void:
 
 func _on_melee_hit(enemy: AnimalBase) -> void:
 
-	if enemy == null:
-		return
+	var damage := melee_damage
 
-	if not is_instance_valid(enemy):
-		return
-
-	if not enemy.is_alive():
-		return
+	if combo_step == 3:
+		damage = melee_third_hit_damage
 
 	print(
 		"PLAYER MELEE HIT: ",
-		enemy.name
+		enemy.name,
+		" | Combo: ",
+		combo_step,
+		" | Damage: ",
+		damage
 	)
 
-	enemy.take_damage(
-		melee_damage
-	)
+	enemy.take_damage(damage)
 
 
 # ==================================================
@@ -391,6 +401,9 @@ func _process(delta: float) -> void:
 		return
 
 	_update_attack_state(delta)
+
+	_update_combo_cooldown(delta)
+	_update_combo_timer(delta)
 
 	if not is_aiming:
 		aim_line.visible = false
@@ -410,6 +423,39 @@ func _process(delta: float) -> void:
 
 	if Input.is_action_just_pressed("player_fire"):
 		_fire_slingshot()
+
+
+func _update_combo_timer(delta: float) -> void:
+
+	if combo_timer <= 0.0:
+		return
+
+	combo_timer -= delta
+
+	if combo_timer <= 0.0:
+
+		combo_timer = 0.0
+		combo_step = 0
+		combo_queued = false
+
+		print("PLAYER COMBO RESET")
+
+
+func _update_combo_cooldown(delta: float) -> void:
+
+	if combo_cooldown_timer <= 0.0:
+		return
+
+	combo_cooldown_timer -= delta
+
+	if combo_cooldown_timer <= 0.0:
+		combo_cooldown_timer = 0.0
+		combo_step = 0
+
+		print("PLAYER COMBO COOLDOWN COMPLETE")
+
+		if melee_button_held:
+			_start_melee_attack()
 
 
 # ==================================================
