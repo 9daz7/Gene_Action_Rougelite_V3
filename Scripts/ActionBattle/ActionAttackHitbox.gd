@@ -246,6 +246,13 @@ func get_detected_enemies() -> Array[AnimalBase]:
 
 func _physics_process(delta: float) -> void:
 
+	print(
+		"MELEE HITBOX ACTIVE | Position:",
+		global_position,
+		" | Overlapping:",
+		get_overlapping_bodies().size()
+	)
+
 	if follow_target != null:
 
 		global_position = (
@@ -256,6 +263,13 @@ func _physics_process(delta: float) -> void:
 	var overlapping_bodies := get_overlapping_bodies()
 
 	for body in overlapping_bodies:
+
+		print(
+			"MELEE HITBOX OVERLAPPING: ",
+			body.name,
+			" | Type: ",
+			body.get_class()
+		)
 
 		if not body is AnimalBase:
 			continue

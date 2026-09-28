@@ -543,6 +543,19 @@ func _create_melee_hitbox() -> void:
 
 	active_attack_hitbox = action_hitbox
 
+	print(
+		"MELEE HITBOX CREATED | Position:",
+		action_hitbox.global_position,
+		" | Direction:",
+		attack_direction,
+		" | Layer:",
+		action_hitbox.collision_layer,
+		" | Mask:",
+		action_hitbox.collision_mask,
+		" | Monitoring:",
+		action_hitbox.monitoring
+	)
+
 	# Build a temporary melee shape.
 	var collision_shape := (
 		action_hitbox.get_node_or_null(

@@ -53,6 +53,8 @@ const ACTION_ENEMY_CONTROLLER = preload(
 
 @onready var enemies = $Enemies
 
+@onready var action_battle_ui: ActionBattleUI = $ActionBattleUI
+
 
 # ==================================================
 # Player
@@ -104,6 +106,8 @@ func _ready() -> void:
 
 	spawn_player()
 	spawn_player_character()
+
+	action_battle_ui.setup(player, player_character)
 
 	combat_controller = ACTION_COMBAT_CONTROLLER.new()
 	add_child(combat_controller)

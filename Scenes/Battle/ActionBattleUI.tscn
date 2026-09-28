@@ -1,0 +1,93 @@
+[gd_scene format=3 uid="uid://03hih1xoemdv"]
+
+[ext_resource type="Script" uid="uid://bi5huyiiwiwga" path="res://Scenes/Battle/ActionBattleUI.gd" id="1_kysim"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oaf1g"]
+bg_color = Color(0.18431373, 0.3647059, 0.050980393, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gs0tk"]
+bg_color = Color(0.18561983, 0.3636503, 0.050395332, 1)
+
+[node name="ActionBattleUI" type="CanvasLayer" unique_id=871756832]
+script = ExtResource("1_kysim")
+
+[node name="UI" type="Control" parent="." unique_id=1203169223]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="DeeboHP" type="ProgressBar" parent="UI" unique_id=435251197]
+layout_mode = 0
+offset_left = 23.0
+offset_top = 1043.0
+offset_right = 253.0
+offset_bottom = 1071.0
+theme_override_styles/fill = SubResource("StyleBoxFlat_oaf1g")
+value = 100.0
+
+[node name="Label" type="Label" parent="UI/DeeboHP" unique_id=682507644]
+layout_mode = 0
+offset_left = 3.0
+offset_top = -24.0
+offset_right = 53.0
+offset_bottom = -1.0
+text = "Deebo"
+
+[node name="PlayerHP" type="ProgressBar" parent="UI" unique_id=1825196804]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 986.0
+offset_right = 238.0
+offset_bottom = 1014.0
+theme_override_styles/fill = SubResource("StyleBoxFlat_gs0tk")
+value = 100.0
+
+[node name="Label" type="Label" parent="UI/PlayerHP" unique_id=1976760757]
+layout_mode = 0
+offset_left = 5.0
+offset_top = -24.0
+offset_right = 54.0
+offset_bottom = 4.0
+text = "Player"
+
+[node name="Move1" type="Button" parent="UI" unique_id=935146834]
+layout_mode = 0
+offset_left = 263.0
+offset_top = 1033.0
+offset_right = 313.0
+offset_bottom = 1075.0
+theme_override_font_sizes/font_size = 12
+text = "1
+Bite"
+
+[node name="Move2" type="Button" parent="UI" unique_id=190284492]
+layout_mode = 0
+offset_left = 319.0
+offset_top = 1033.0
+offset_right = 370.0
+offset_bottom = 1075.0
+theme_override_font_sizes/font_size = 12
+text = "2
+Protect"
+
+[node name="move3" type="Button" parent="UI" unique_id=1082945100]
+layout_mode = 0
+offset_left = 376.0
+offset_top = 1033.0
+offset_right = 426.0
+offset_bottom = 1075.0
+theme_override_font_sizes/font_size = 12
+text = "3
+Move"
+
+[node name="AmmoSelector" type="Button" parent="UI" unique_id=1477201021]
+layout_mode = 0
+offset_left = 249.0
+offset_top = 981.0
+offset_right = 299.0
+offset_bottom = 1023.0
+theme_override_font_sizes/font_size = 12
+text = "Q< Ammo >E"
