@@ -1,25 +1,112 @@
-#extends CharacterBody2D
-#
-#
-#const SPEED = 300.0
-#const JUMP_VELOCITY = -400.0
-#
-#
-#func _physics_process(delta: float) -> void:
-	## Add the gravity.
-	#if not is_on_floor():
-		#velocity += get_gravity() * delta
-#
-	## Handle jump.
-	#if Input.is_action_just_pressed("ui_accept") and is_on_floor():
-		#velocity.y = JUMP_VELOCITY
-#
-	## Get the input direction and handle the movement/deceleration.
-	## As good practice, you should replace UI actions with custom gameplay actions.
-	#var direction := Input.get_axis("ui_left", "ui_right")
-	#if direction:
-		#velocity.x = direction * SPEED
-	#else:
-		#velocity.x = move_toward(velocity.x, 0, SPEED)
-#
-	#move_and_slide()
+extends CharacterBody2D
+class_name ActionPlayerCharacter
+
+
+# ==================================================
+# Health
+# ==================================================
+
+@export var max_health: float = 100.0
+
+var health: float = 100.0
+
+
+# ==================================================
+# Signals
+# ==================================================
+
+signal health_changed(current_health: float, maximum_health: float)
+signal died
+
+
+# ==================================================
+# Initialization
+# ==================================================
+
+func _ready() -> void:
+
+	health = max_health
+
+	print(
+		"ACTION PLAYER CHARACTER READY | HP: ",
+		health,
+		"/",
+		max_health
+	)
+
+
+# ==================================================
+# Health
+# ==================================================
+
+func take_damage(damage: float) -> void:
+
+	if damage <= 0.0:
+		return
+
+	if not is_alive():
+		return
+
+	health = max(
+		health - damage,
+		0.0
+	)
+
+	print(
+		"HUMAN TOOK ",
+		damage,
+		" DAMAGE | HP: ",
+		health,
+		"/",
+		max_health
+	)
+
+	health_changed.emit(
+		health,
+		max_health
+	)
+
+	if health <= 0.0:
+
+		_die()
+
+
+func heal(amount: float) -> void:
+
+	if amount <= 0.0:
+		return
+
+	if not is_alive():
+		return
+
+	health = min(
+		health + amount,
+		max_health
+	)
+
+	print(
+		"PLAYER CHARACTER HEALED ",
+		amount,
+		" | HP: ",
+		health,
+		"/",
+		max_health
+	)
+
+	health_changed.emit(
+		health,
+		max_health
+	)
+
+
+func is_alive() -> bool:
+
+	return health > 0.0
+
+func _die() -> void:
+
+	print(
+		"PLAYER CHARCTER HAS BEEN DETECTED"
+	)
+
+	died.emit()

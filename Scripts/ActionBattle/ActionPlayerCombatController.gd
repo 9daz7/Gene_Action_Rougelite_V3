@@ -252,6 +252,9 @@ func _start_dodge() -> void:
 
 func _start_melee_attack() -> void:
 
+	if combat_controller != null and not combat_controller.is_battle_active():
+		return
+
 	combo_step += 1
 
 	if combo_step > 3:

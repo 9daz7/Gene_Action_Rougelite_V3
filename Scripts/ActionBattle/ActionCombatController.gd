@@ -204,19 +204,32 @@ func take_player_damage(damage: float) -> void:
 	if damage <= 0.0:
 		return
 
-	player_health = max(
-		player_health - damage,
-		0.0
-	)
+	if player_character == null:
+		return
 
-	print(
-		"PLAYER CHARACTER TOOK ",
-		damage,
-		" DAMAGE | HP: ",
-		player_health,
-		"/",
-		player_max_health
-	)
+	if not is_instance_valid(player_character):
+		return
+
+	if not player_character.is_alive():
+		return
+
+	player_character.take_damage(damage)
+
+
+func is_battle_active() -> bool:
+	if player_character == null:
+		return false
+	
+	if not player_character.is_alive():
+		return false
+	
+	if deebo == null:
+		return false
+	
+	if not deebo.is_alive():
+		return false
+	
+	return true
 
 
 # ==================================================

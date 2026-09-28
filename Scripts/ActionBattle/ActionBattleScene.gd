@@ -593,9 +593,9 @@ func _check_battle_result() -> void:
 	if battle_finished:
 		return
 
-	if player != null:
+	if player != null and player_character != null:
 
-		if not player.is_alive():
+		if not player.is_alive() or not player_character.is_alive():
 
 			battle_finished = true
 			set_combat_state(CombatState.BATTLE_END)

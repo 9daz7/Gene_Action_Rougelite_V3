@@ -247,13 +247,44 @@ func get_detected_enemies() -> Array[AnimalBase]:
 func _physics_process(delta: float) -> void:
 
 	if follow_target != null:
+
 		global_position = (
 			follow_target.global_position
-			+ follow_direction
-			* follow_offset
+			+ follow_direction * follow_offset
 		)
 
 	var overlapping_bodies := get_overlapping_bodies()
+
+	for body in overlapping_bodies:
+
+		if not body is AnimalBase:
+			continue
+
+		var enemy := body as AnimalBase
+
+		if not enemy.is_alive():
+			continue
+
+		if enemy not in detected_enemies:
+
+			detected_enemies.append(enemy)
+
+			print(
+				"ACTION HITBOX ENTERED: ",
+				enemy.name
+			)
+
+		if enemy in hit_enemies:
+			continue
+
+		hit_enemies.append(enemy)
+
+		print(
+			"ACTION HITBOX HIT: ",
+			enemy.name
+		)
+
+		enemy_hit.emit(enemy)
 
 	hitbox_timer -= delta
 

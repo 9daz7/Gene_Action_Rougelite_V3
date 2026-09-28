@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://dcobgtjc83sfq"]
 
+[ext_resource type="Script" uid="uid://bxa2wjl3w65nf" path="res://Scenes/Battle/ActionPlayerCharacter.gd" id="1_hu6wf"]
 [ext_resource type="Texture2D" uid="uid://s5nq1sb1o64w" path="res://Assets/Sprites/Animals/Green/walk.png" id="1_lu8gy"]
 [ext_resource type="Script" uid="uid://dc1inglghqapd" path="res://Scripts/ActionBattle/ActionPlayerCharacterController.gd" id="2_xrg1l"]
 [ext_resource type="Script" uid="uid://dp7iq3r5f6rki" path="res://Scripts/ActionBattle/ActionPlayerCombatController.gd" id="3_4h3ga"]
@@ -115,6 +116,7 @@ radius = 40.0
 [node name="ActionPlayerCharacter" type="CharacterBody2D" unique_id=262011270]
 position = Vector2(7, 0)
 collision_layer = 2
+script = ExtResource("1_hu6wf")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=705220842]
 scale = Vector2(6.275, 6.275)

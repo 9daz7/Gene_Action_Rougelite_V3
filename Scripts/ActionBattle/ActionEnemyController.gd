@@ -113,6 +113,14 @@ func _physics_process(delta: float) -> void:
 	if enemy == null:
 		return
 
+	if combat_controller != null and not combat_controller.is_battle_active():
+		enemy.velocity = Vector2.ZERO
+		return
+
+	if not enemy.is_alive():
+		enemy.velocity = Vector2.ZERO
+		return
+
 	combat_target = _get_closest_combatant()
 
 	if combat_target == null:
@@ -125,10 +133,6 @@ func _physics_process(delta: float) -> void:
 
 	if attack_state != AttackState.IDLE:
 		_update_attack_state(delta)
-		return
-
-	if not enemy.is_alive():
-		enemy.velocity = Vector2.ZERO
 		return
 
 	# --------------------------------------------------
@@ -187,15 +191,6 @@ func _physics_process(delta: float) -> void:
 
 	if enemy.has_method("get_speed"):
 		animal_speed = enemy.get_speed()
-
-	#if is_alerted:
-		#print(
-			#enemy.name,
-			#" ALERTED CHASING ",
-			#target.name,
-			#" | Distance: ",
-			#distance
-		#)
 
 	enemy.velocity = (
 		direction
@@ -329,6 +324,23 @@ func _get_closest_combatant() -> Node2D:
 		combat_controller.deebo
 	)
 
+	var player_alive: bool = player_character.is_alive()
+
+	var deebo_alive: bool = deebo.is_alive()
+
+	# Neither combatant is alive
+	if not player_alive and not deebo_alive:
+		return null
+
+	# Only player is alive
+	if player_alive and not deebo_alive:
+		return player_character
+
+	# Only Deebo is alive
+	if deebo_alive and not player_alive:
+		return deebo
+
+	# Both are alive
 	var player_distance := (
 		enemy.global_position
 		.distance_to(
@@ -519,16 +531,15 @@ func _start_attack_lunge() -> void:
 
 func _execute_attack_hit() -> void:
 
+	if combat_controller != null and not combat_controller.is_battle_active():
+		return
+
 	if attack_move == null:
 		return
 
-	if target == null:
-		return
+	combat_target = _get_closest_combatant()
 
-	if not is_instance_valid(target):
-		return
-
-	if not target.is_alive():
+	if combat_target == null:
 		return
 
 	# ==========================================
