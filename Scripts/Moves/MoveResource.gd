@@ -97,6 +97,7 @@ var attack_hit_point: float = 1.0
 @export var priority := 0
 @export var accuracy := 100
 @export var critical_chance := 0
+@export var cooldown: float = 0.0
 
 
 # ==================================================

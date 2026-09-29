@@ -11,4 +11,6 @@ hitbox_duration = 0.4
 action_lunge_distance = 250.0
 action_lunge_duration = 0.4
 action_recovery_duration = 0.5
+move_name = "Unstoppable Charge"
+cooldown = 4.0
 metadata/_custom_type_script = "uid://bnmm0xqkm6atb"

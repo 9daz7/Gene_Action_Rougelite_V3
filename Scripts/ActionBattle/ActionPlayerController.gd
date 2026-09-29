@@ -2,6 +2,12 @@ extends Node
 class_name ActionPlayerController
 
 
+signal move_cooldown_changed(
+	move: MoveResource,
+	remaining: float
+)
+
+
 # ==================================================
 # Hitbox
 # ==================================================
@@ -50,6 +56,7 @@ enum AttackState {
 var attack_state: AttackState = AttackState.IDLE
 
 var attack_recovery_timer: float = 0.0
+var move_cooldowns: Dictionary = {}
 var attack_timer: float = 0.0
 
 #var knockback_timer: float = 0.0
@@ -152,9 +159,7 @@ func _physics_process(delta: float) -> void:
 		return
 
 	_update_attack_state(delta)
-
-	#if attack_state == AttackState.IDLE:
-		#_follow_player()
+	_update_move_cooldowns(delta)
 
 	if Input.is_action_just_pressed("select_move_1"):
 		_use_move(0)
@@ -566,6 +571,23 @@ func _use_move(move_index: int) -> void:
 
 	selected_move = move
 
+	var cooldown: float = move_cooldowns.get(
+		selected_move,
+		0.0
+	)
+
+	if cooldown > 0.0:
+
+		print(
+			"MOVE ON COOLDOWN | ",
+			selected_move.move_name,
+			" | ",
+			cooldown
+		)
+
+		return
+
+
 	print("========================================")
 	print("PLAYER USES MOVE")
 	print("========================================")
@@ -573,10 +595,40 @@ func _use_move(move_index: int) -> void:
 	print("Move:", selected_move.move_name)
 
 	if selected_move.effect_type == MoveResource.MoveEffectType.PROTECT:
+
+		move_cooldowns[selected_move] = selected_move.cooldown
+
+		move_cooldown_changed.emit(
+			selected_move,
+			selected_move.cooldown
+		)
+
 		_use_protect()
 		return
-	
+
+	move_cooldowns[selected_move] = selected_move.cooldown
+
+	move_cooldown_changed.emit(
+		selected_move,
+		selected_move.cooldown
+	)
+
 	_try_attack()
+
+func _update_move_cooldowns(delta: float) -> void:
+
+	for move in move_cooldowns.keys():
+
+		move_cooldowns[move] -= delta
+
+		if move_cooldowns[move] <= 0.0:
+
+			move_cooldowns[move] = 0.0
+
+		move_cooldown_changed.emit(
+			move,
+			move_cooldowns[move]
+		)
 
 
 func _apply_enemy_knockback() -> void:

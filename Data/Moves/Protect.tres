@@ -11,4 +11,5 @@ effect_type = 1
 category = 1
 power = -1
 priority = 10
+cooldown = 3.0
 effect_target = 0
