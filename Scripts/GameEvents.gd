@@ -38,8 +38,6 @@ signal damage_dealt(target, amount)
 
 signal enemy_updated(enemy) 
 
-signal status_changed(animal, enemies)
-
 signal battle_names_updated(player, enemies)
 
 signal potion_effects_changed(player)

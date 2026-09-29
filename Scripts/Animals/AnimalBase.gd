@@ -18,7 +18,6 @@ signal status_changed(animal)
 var run_manager: RunManager
 var run_mutagen_manager: RunMutagenManager
 var animal_resource: AnimalResource
-var turn_manager: TurnManager
 
 
 # ==================================================
@@ -32,43 +31,6 @@ func initialize(resource: AnimalResource):
 	
 	setup_basic_moves()
 
-
-# ==================================================
-# Team / Targeting
-# ==================================================
-
-func get_opponents() -> Array:
-
-	if turn_manager == null:
-		return []
-
-	if self == turn_manager.player:
-		return turn_manager.enemies
-
-	return [turn_manager.player]
-
-
-func get_team_members() -> Array:
-	if turn_manager == null:
-		return []
-
-	if self == turn_manager.player:
-		return [self]
-
-	var allies: Array = []
-
-	for enemy in turn_manager.enemies:
-		if is_instance_valid(enemy) and enemy.hp > 0:
-			allies.append(enemy)
-
-	return allies
-
-func get_all_enemies() -> Array:
-	return get_opponents()
-
-
-func get_all_allies() -> Array:
-	return get_team_members()
 
 # ==================================================
 # Identity
@@ -400,11 +362,6 @@ func apply_status_effect(effect:StatusEffect):
 
 		status_changed.emit(self)
 
-		GameEvents.status_changed.emit(
-			self,
-			get_all_enemies()
-		)
-
 		return
 
 
@@ -439,11 +396,6 @@ func apply_status_effect(effect:StatusEffect):
 	)
 
 	status_changed.emit(self)
-
-	GameEvents.status_changed.emit(
-		self,
-		get_all_enemies()
-	)
 
 
 func remove_status_effect(
@@ -485,10 +437,6 @@ func remove_status_effect(
 		self
 	)
 	
-	GameEvents.status_changed.emit(
-		self,
-		get_all_enemies()
-	)
 
 	print(
 		effect.effect_name,
