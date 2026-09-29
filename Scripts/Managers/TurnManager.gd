@@ -1,7 +1,7 @@
 extends Node
 class_name TurnManager
 
-
+#DELETE THIS SCRIPT ONCE REFERENCES ARE REMOVED
 # ==================================================
 # Signals
 # ==================================================

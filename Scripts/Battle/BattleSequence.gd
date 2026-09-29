@@ -1,7 +1,7 @@
 extends Node
 class_name BattleSequence
 
-
+#DELETE THIS SCRIPT ONCE REFERENCES ARE REMOVED
 # ==================================================
 # Variables
 # ==================================================

@@ -8,9 +8,7 @@ extends Node
 @onready var managers = $Managers
 
 @onready var battle_manager: BattleManager = $Managers/BattleManager
-@onready var turn_manager: TurnManager = $Managers/TurnManager
 @onready var run_manager: RunManager = $Managers/RunManager
-@onready var battle_spawner = $Managers/BattleSpawner
 
 @onready var mutagen_database: MutagenDatabase = $Managers/MutagenDatabase
 @onready var run_mutagen_manager: RunMutagenManager = $Managers/RunMutagenManager
@@ -20,8 +18,6 @@ extends Node
 @onready var battle_root: Node = $World/BattleRoot
 @onready var map_root: Node = $World/MapRoot
 
-#@onready var battle_manager = $Managers/BattleManager
-#@onready var run_manager = $Managers/RunManager
 @onready var map_manager = $Managers/MapManager
 @onready var ui_manager = $Managers/UIManager
 @onready var gene_database = $Managers/GeneDatabase
@@ -62,20 +58,6 @@ var returning_to_hub_after_battle: bool = false
 
 func _ready():
 
-	if not GameEvents.battle_won.is_connected(
-		_on_battle_won
-	):
-		GameEvents.battle_won.connect(
-			_on_battle_won
-		)
-
-	if not GameEvents.battle_lost.is_connected(
-		_on_battle_lost
-	):
-		GameEvents.battle_lost.connect(
-			_on_battle_lost
-		)
-
 	var pause_menu = $UI/PauseMenu
 
 	if not pause_menu.return_home_requested.is_connected(
@@ -87,13 +69,6 @@ func _ready():
 	)
 
 	print("THIS IS THE CURRENT MAIN SCRIPT")
-
-	battle_manager.initialize(
-		run_manager,
-		turn_manager,
-		battle_root,
-		battle_spawner
-	)
 
 	gene_database.load_genes()
 
@@ -113,7 +88,6 @@ func _ready():
 
 	_create_lab_hub()
 
-
 	# ==================================================
 	# Hub World Setup
 	# ==================================================
@@ -128,13 +102,6 @@ func _ready():
 	):
 		hub_world.animal_lab_requested.connect(
 			_on_animal_lab_requested
-		)
-
-	if not battle_manager.battle_cleanup_finished.is_connected(
-		_on_battle_cleanup_finished
-	):
-		battle_manager.battle_cleanup_finished.connect(
-			_on_battle_cleanup_finished
 		)
 
 	# ==================================================
@@ -446,16 +413,6 @@ func _on_animal_lab_requested() -> void:
 	open_lab_hub()
 
 
-#func _on_build_confirmed(build):
-#
-	#print(
-		#"Build confirmed:",
-		#build.animal_name
-	#)
-#
-	#run_manager.set_animal_build(build)
-
-
 func start_run():
 	
 	print("======================")
@@ -547,82 +504,6 @@ func _on_room_entered(room: RoomData) -> void:
 
 	room_manager.enter_room(room)
 
-func _on_battle_won(enemy):
-	print("MAIN RECEIVED BATTLE WON")
-	print("Critical flag:", battle_manager.critical_experiment)
-	print("Battle type:", battle_manager.current_battle_type)
-	#print("Battle won against:", enemy.enemy_data.enemy_name)
-
-	# ==================================================
-	# Boss victory
-	# ==================================================
-
-	if battle_manager.current_battle_type == RoomData.RoomType.BOSS:
-
-		print("BOSS DEFEATED")
-
-		# --------------------------------------------------
-		# World transition
-		# --------------------------------------------------
-
-		if run_manager.world_transition_pending:
-
-			print(
-				"World transition pending."
-			)
-
-			return
-
-		# --------------------------------------------------
-		# Final run completion
-		# --------------------------------------------------
-
-		print(
-			"Final boss defeated."
-		)
-
-		await get_tree().process_frame
-
-		open_victory_screen()
-
-		return
-
-	# roaming battles
-	if battle_manager.roaming_battle:
-		print(
-			"MAIN: Roaming battle victory. "
-			+ "Skipping normal room rewards."
-		)
-		return
-
-	# critical experiment
-	if battle_manager.critical_experiment:
-		print("Skipping rewards: critical experiment")
-		return
-
-	# normal rewards
-	if enemy == null:
-		print("No enemy supplied for reward")
-		return
-
-	if enemy.enemy_data == null:
-		print("Enemy has no enemy_data")
-		return
-
-	print(
-		"Battle won against:",
-		enemy.enemy_data.enemy_name
-	)
-
-
-	var rewards = reward_manager.generate_rewards(enemy)
-
-	run_manager.add_gold(rewards.gold)
-
-	print("Resources:", rewards.resources)
-
-	room_manager.open_reward(rewards)
-
 
 func open_victory_screen():
 
@@ -676,86 +557,6 @@ func close_run_worlds() -> void:
 
 		battle_root.hide()
 		battle_root.process_mode = Node.PROCESS_MODE_DISABLED
-
-
-func _on_battle_lost() -> void:
-
-	print("================================")
-	print("RUN FAILED")
-	print("================================")
-
-	returning_to_hub_after_battle = true
-
-	map_manager.disable_scanner()
-
-	PermanentProgressionManager.reward_enemy_defeats(
-		run_manager.enemies_defeated
-	)
-
-	run_manager.reset_run()
-
-	room_manager.close_active_room()
-
-	map_ui.hide()
-
-	if map_root != null:
-
-		map_root.hide()
-		map_root.process_mode = Node.PROCESS_MODE_DISABLED
-
-	if battle_root != null:
-
-		battle_root.hide()
-		battle_root.process_mode = Node.PROCESS_MODE_DISABLED
-
-	print("Waiting for battle cleanup...")
-
-
-func _on_battle_cleanup_finished() -> void:
-
-	print("================================")
-	print("BATTLE CLEANUP FINISHED")
-	print("================================")
-
-	# ==================================================
-	# World Transition
-	# ==================================================
-
-	if run_manager.world_transition_pending:
-
-		print("================================")
-		print("STARTING BETWEEN-WORLD LAB")
-		print("Next World:", run_manager.current_world)
-		print("================================")
-
-		room_manager.close_active_room()
-
-		open_between_world_lab()
-
-		return
-
-	# ==================================================
-	# Failed Run
-	# ==================================================
-
-	if not returning_to_hub_after_battle:
-
-		print(
-			"Battle cleanup complete. "
-			+ "Continuing current run."
-		)
-
-		return
-
-	returning_to_hub_after_battle = false
-
-	print("================================")
-	print("Returning to HubWorld")
-	print("================================")
-
-	save_game()
-
-	hub_world.open()
 
 
 func finish_run():
