@@ -1,8 +1,11 @@
 [gd_scene format=3 uid="uid://dbfhq4u2e72ip"]
 
 [ext_resource type="Script" uid="uid://kg21kdtfh7v2" path="res://Scripts/ActionBattle/ActionBattleScene.gd" id="1_i64ty"]
+[ext_resource type="PackedScene" uid="uid://bt357jgy7sbvs" path="res://Scenes/Rooms/ActionNormalBattleRoom.tscn" id="2_1tbgt"]
 
 [node name="Testscene" type="Node2D" unique_id=1290100214]
 script = ExtResource("1_i64ty")
 
 [node name="Arena" type="Node2D" parent="." unique_id=2102274090]
+
+[node name="ActionNormalBattleRoom" parent="Arena" unique_id=1973370823 instance=ExtResource("2_1tbgt")]

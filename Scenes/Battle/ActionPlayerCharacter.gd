@@ -106,7 +106,7 @@ func is_alive() -> bool:
 func _die() -> void:
 
 	print(
-		"PLAYER CHARCTER HAS BEEN DETECTED"
+		"PLAYER CHARCTER HAS DIED"
 	)
 
 	died.emit()

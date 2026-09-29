@@ -1591,14 +1591,8 @@ func get_current_hp() -> int:
 
 
 # ==================================================
-# TURN MANAGEMENT
+# PROTECT
 # ==================================================
-
-
-func reset_turn_state():
-
-	is_protecting = false
-
 
 func activate_protect():
 
@@ -1611,25 +1605,6 @@ func activate_protect():
 
 func clear_protect():
 	is_protecting = false
-
-
-func consume_stun() -> bool:
-
-	if not stunned:
-		return false
-
-	stunned = false
-
-	print(
-		name,
-		" is stunned and cannot act."
-	)
-
-	BattleLog.add_message(
-		"%s is stunned and cannot move!" % name
-	)
-
-	return true
 
 
 # ==================================================
@@ -1909,12 +1884,6 @@ func _get_mutagen_trigger_type(
 
 		"battle_end":
 			return MutagenResource.MutagenTrigger.BATTLE_END
-
-		"turn_start":
-			return MutagenResource.MutagenTrigger.TURN_START
-
-		"turn_end":
-			return MutagenResource.MutagenTrigger.TURN_END
 
 		"before_attack":
 			return MutagenResource.MutagenTrigger.BEFORE_ATTACK
