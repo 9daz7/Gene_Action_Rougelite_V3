@@ -15,9 +15,7 @@ signal run_ended
 # ==================================================
 
 
-signal battle_started(player, enemies)
 signal battle_initialized(player, enemies)
-signal battle_finished(result)
 
 signal battle_won(enemy)
 signal battle_lost

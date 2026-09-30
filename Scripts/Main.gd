@@ -15,7 +15,6 @@ extends Node
 
 @onready var potion_database: PotionDatabase = $Managers/PotionDatabase
 
-@onready var battle_root: Node = $World/BattleRoot
 @onready var map_root: Node = $World/MapRoot
 
 @onready var map_manager = $Managers/MapManager
@@ -109,14 +108,6 @@ func _ready():
 	# ==================================================
 
 	map_ui.hide()
-
-	if not GameEvents.room_entered.is_connected(
-		_on_room_entered
-	):
-
-		GameEvents.room_entered.connect(
-			_on_room_entered
-		)
 
 	print("Opening Hub World")
 
@@ -460,10 +451,6 @@ func start_run():
 		map_root.show()
 		map_root.process_mode = Node.PROCESS_MODE_INHERIT
 
-	if battle_root != null:
-		battle_root.show()
-		battle_root.process_mode = Node.PROCESS_MODE_INHERIT
-
 	print("================================")
 	print("TESTING NEW ROOM RESOURCE SYSTEM")
 	print("================================")
@@ -489,20 +476,6 @@ func save_game() -> void:
 		PermanentProgressionManager,
 		run_manager
 	)
-
-
-func _on_room_entered(room: RoomData) -> void:
-
-	#current_room = room
-
-	print(
-		"MAIN RECEIVED ROOM ENTERED:",
-		room.room_type
-	)
-
-	map_ui.hide()
-
-	room_manager.enter_room(room)
 
 
 func open_victory_screen():
@@ -552,11 +525,6 @@ func close_run_worlds() -> void:
 
 		map_root.hide()
 		map_root.process_mode = Node.PROCESS_MODE_DISABLED
-
-	if battle_root != null:
-
-		battle_root.hide()
-		battle_root.process_mode = Node.PROCESS_MODE_DISABLED
 
 
 func finish_run():

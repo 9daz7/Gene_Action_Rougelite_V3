@@ -7,7 +7,7 @@ class_name AnimalBase
 
 
 signal animal_died
-signal status_changed(animal)
+#signal status_changed(animal)
 
 
 # ==================================================
@@ -249,25 +249,6 @@ func get_battle_moves():
 	return moves
 
 
-func use_move(index: int,target):
-
-	var move = get_move(index)
-
-	if move == null:
-		return
-		
-	#for passive in passive_effects:
-		#passive.on_before_attack(
-			#self,
-			#target
-		#)
-
-	move.execute(
-		self,
-		target
-	)
-
-
 # ==================================================
 # PASSIVES / STATUS EFFECTS
 # ==================================================
@@ -276,25 +257,25 @@ var passive_effects: Array[PassiveEffect] = []
 var status_effects: Array = []
 
 
-func process_status_effects():
-
-	if not is_alive():
-		return
-
-	for effect in status_effects.duplicate():
-
-		if effect == null:
-			continue
-
-		if not is_instance_valid(effect):
-			continue
-
-		if not is_alive():
-			return
-
-		effect.process_turn(
-			self
-		)
+#func process_status_effects():
+#
+	#if not is_alive():
+		#return
+#
+	#for effect in status_effects.duplicate():
+#
+		#if effect == null:
+			#continue
+#
+		#if not is_instance_valid(effect):
+			#continue
+#
+		#if not is_alive():
+			#return
+#
+		#effect.process_turn(
+			#self
+		#)
 
 
 func apply_status_effect(effect:StatusEffect):
@@ -360,7 +341,7 @@ func apply_status_effect(effect:StatusEffect):
 			}
 		)
 
-		status_changed.emit(self)
+		#status_changed.emit(self)
 
 		return
 
@@ -395,7 +376,7 @@ func apply_status_effect(effect:StatusEffect):
 		name
 	)
 
-	status_changed.emit(self)
+	#status_changed.emit(self)
 
 
 func remove_status_effect(
@@ -433,11 +414,6 @@ func remove_status_effect(
 		effect
 	)
 
-	status_changed.emit(
-		self
-	)
-	
-
 	print(
 		effect.effect_name,
 		" expired on ",
@@ -458,32 +434,32 @@ func clear_status_effects() -> void:
 		remove_status_effect(effect)
 
 
-func tick_status_effects():
-
-	for effect in status_effects.duplicate():
-
-		if effect == null:
-			continue
-
-		if not is_instance_valid(effect):
-			continue
-
-		effect.duration -= 1
-
-		print(
-			name,
-			" ",
-			effect.effect_name,
-			" duration:",
-			effect.duration
-		)
-
-		if effect.duration <= 0:
-
-			remove_status_effect(
-				effect
-			)
-
+#func tick_status_effects():
+#
+	#for effect in status_effects.duplicate():
+#
+		#if effect == null:
+			#continue
+#
+		#if not is_instance_valid(effect):
+			#continue
+#
+		#effect.duration -= 1
+#
+		#print(
+			#name,
+			#" ",
+			#effect.effect_name,
+			#" duration:",
+			#effect.duration
+		#)
+#
+		#if effect.duration <= 0:
+#
+			#remove_status_effect(
+				#effect
+			#)
+#
 
 # ==================================================
 # STATS
@@ -1584,18 +1560,6 @@ func trigger_passive_event(
 			"battle_end":
 
 				passive.on_battle_end(
-					self
-				)
-
-			"turn_start":
-
-				passive.on_turn_start(
-					self
-				)
-
-			"turn_end":
-
-				passive.on_turn_end(
 					self
 				)
 

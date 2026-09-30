@@ -479,7 +479,22 @@ func _on_attack_hit(enemy: AnimalBase) -> void:
 		enemy.name
 	)
 
-	await attack_move.execute(
+	var result: Dictionary = attack_move.calculate_action_damage(
+		player,
+		enemy
+	)
+
+	var damage: float = result.get("damage", 0.0)
+
+	if damage > 0.0:
+		enemy.take_damage(
+			damage,
+			player,
+			false,
+			null
+		)
+
+	attack_move.apply_effects(
 		player,
 		enemy
 	)
@@ -537,7 +552,7 @@ func _use_protect() -> void:
 
 	print("PLAYER USES PROTECT")
 
-	await selected_move.execute(
+	selected_move.apply_effects(
 		player,
 		player
 	)
