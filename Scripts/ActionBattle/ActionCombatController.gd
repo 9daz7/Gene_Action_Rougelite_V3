@@ -9,8 +9,8 @@ class_name ActionCombatController
 var player_character: CharacterBody2D
 var deebo: PlayerAnimal
 
-var player_health: float = 100.0
-var player_max_health: float = 100.0
+#var player_health: float = 100.0
+#var player_max_health: float = 100.0
 
 var player_combat_controller: ActionPlayerCombatController = null
 
