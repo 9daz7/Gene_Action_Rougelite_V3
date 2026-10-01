@@ -7,7 +7,6 @@ class_name RoomManager
 # ==================================================
 
 
-@onready var battle_manager = $"../BattleManager"
 @onready var run_manager = $"../RunManager"
 @onready var save_manager = $"../SaveManager"
 
@@ -631,102 +630,6 @@ func start_new_reward_room(
 	print("================================")
 
 	open_room_scene(room)
-
-
-# ==================================================
-# Room Encounters
-# ==================================================
-
-func start_room_battle() -> void:
-
-	print("================================")
-	print("ROOM MANAGER: STARTING ROOM BATTLE")
-	print("================================")
-
-
-	if current_room == null:
-
-		push_error(
-			"RoomManager: No current room."
-		)
-
-		return
-
-	if battle_manager == null:
-
-		push_error(
-			"RoomManager: BattleManager not found."
-		)
-
-		return
-
-	# --------------------------------------------------
-	# Lock current room
-	# --------------------------------------------------
-
-	if active_room_scene != null:
-
-		if active_room_scene.has_method(
-			"set_battle_active"
-		):
-
-			active_room_scene.set_battle_active(
-				true
-			)
-
-	match current_room.room_type:
-
-		RoomResource.RoomType.BATTLE:
-
-			print("Starting NORMAL battle")
-
-			battle_manager.start_battle(
-				RoomData.RoomType.ENEMY
-			)
-
-		RoomResource.RoomType.ELITE:
-
-			print("Starting ELITE battle")
-
-			battle_manager.start_battle(
-				RoomData.RoomType.ELITE
-			)
-
-		RoomResource.RoomType.BOSS:
-
-			print("Starting BOSS battle")
-
-			battle_manager.start_battle(
-				RoomData.RoomType.BOSS
-			)
-
-		_:
-
-			push_error(
-				"RoomManager: Room cannot start a battle: "
-				+ str(current_room.room_type)
-			)
-
-
-# ==================================================
-# Roaming Battle
-# ==================================================
-
-func start_roaming_battle(
-	enemy_resource: EnemyResource
-) -> void:
-
-	if battle_manager == null:
-
-		push_error(
-			"RoomManager: BattleManager is missing."
-		)
-
-		return
-
-	battle_manager.start_roaming_battle(
-		enemy_resource
-	)
 
 
 # ==================================================

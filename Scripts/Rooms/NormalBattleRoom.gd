@@ -80,8 +80,6 @@ func _on_battle_trigger_entered() -> void:
 
 	set_player_controls(false)
 
-	room_manager.start_room_battle()
-
 
 func _connect_roaming_enemies() -> void:
 
@@ -144,10 +142,6 @@ func _on_roaming_enemy_encounter(
 
 	set_player_controls(
 		false
-	)
-
-	room_manager.start_roaming_battle(
-		enemy.enemy_data
 	)
 
 	# --------------------------------------------------

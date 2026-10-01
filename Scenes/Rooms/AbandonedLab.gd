@@ -15,9 +15,9 @@ const LAB_UI_SCENE = preload(
 # Managers
 # ==================================================
 
-@onready var battle_manager: BattleManager = get_node(
-	"../Managers/BattleManager"
-)
+#@onready var battle_manager: BattleManager = get_node(
+	#"../Managers/BattleManager"
+#)
 
 
 # ==================================================
@@ -158,7 +158,7 @@ func _on_lab_interacted() -> void:
 
 	lab_ui.open(
 		current_room.lab_data,
-		battle_manager
+		#battle_manager
 	)
 
 

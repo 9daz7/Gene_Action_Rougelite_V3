@@ -7,7 +7,7 @@ extends Node
 
 @onready var managers = $Managers
 
-@onready var battle_manager: BattleManager = $Managers/BattleManager
+#@onready var battle_manager: BattleManager = $Managers/BattleManager
 @onready var run_manager: RunManager = $Managers/RunManager
 
 @onready var mutagen_database: MutagenDatabase = $Managers/MutagenDatabase
@@ -305,7 +305,7 @@ func open_between_world_lab() -> void:
 
 	between_world_lab_ui.open(
 		temporary_room.lab_data,
-		battle_manager,
+		#battle_manager,
 		temporary_room,
 		true
 	)

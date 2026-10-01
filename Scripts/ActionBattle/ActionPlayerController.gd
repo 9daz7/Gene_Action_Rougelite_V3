@@ -59,10 +59,6 @@ var attack_recovery_timer: float = 0.0
 var move_cooldowns: Dictionary = {}
 var attack_timer: float = 0.0
 
-#var knockback_timer: float = 0.0
-#var knockback_start_position: Vector2
-#var knockback_target_position: Vector2
-
 var attack_start_position: Vector2
 var attack_target_position: Vector2
 
