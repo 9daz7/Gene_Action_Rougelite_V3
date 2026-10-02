@@ -32,7 +32,7 @@ signal battle_won(enemy)
 
 #signal moves_updated(player) 
 
-signal damage_dealt(target, amount) 
+#signal damage_dealt(target, amount) 
 
 #signal enemy_updated(enemy) 
 
