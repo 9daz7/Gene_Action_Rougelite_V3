@@ -3,6 +3,13 @@ class_name ActionBattleScene
 
 
 # ==================================================
+# Signals
+# ==================================================
+
+signal battle_completed(won: bool)
+
+
+# ==================================================
 # Preloads
 # ==================================================
 
@@ -67,7 +74,7 @@ var combat_controller: ActionCombatController = null
 var enemy = null
 var enemy_2 = null
 
-var battle_finished: bool = false
+var battle_result_reported: bool = false
 
 
 # ==================================================
@@ -598,14 +605,14 @@ func spawn_enemy_2() -> void:
 
 func _check_battle_result() -> void:
 
-	if battle_finished:
+	if battle_result_reported:
 		return
 
 	if player != null and player_character != null:
 
 		if not player.is_alive() or not player_character.is_alive():
 
-			battle_finished = true
+			battle_result_reported = true
 			set_combat_state(CombatState.BATTLE_END)
 
 			_handle_defeat()
@@ -631,7 +638,7 @@ func _check_battle_result() -> void:
 
 		if all_enemies_dead:
 
-			battle_finished = true
+			battle_result_reported = true
 			set_combat_state(CombatState.BATTLE_END)
 
 			_handle_victory()
@@ -646,6 +653,8 @@ func _handle_victory() -> void:
 	print("VICTORY")
 	print("========================================")
 
+	battle_completed.emit(true)
+
 
 func _handle_defeat() -> void:
 
@@ -653,3 +662,5 @@ func _handle_defeat() -> void:
 	print("========================================")
 	print("DEFEAT")
 	print("========================================")
+
+	battle_completed.emit(false)

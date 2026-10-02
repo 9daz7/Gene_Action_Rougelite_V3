@@ -71,8 +71,6 @@ const MUTAGEN_MANAGEMENT_SCENE = preload(
 # Runtime References
 # ==================================================
 
-#var battle_manager: BattleManager = null
-
 var mutagen_management_ui: MutagenManagementUI = null
 
 var connected_to_battle: bool = false
@@ -99,7 +97,6 @@ func _ready() -> void:
 
 func open(
 	data: LabResource,
-	#manager: BattleManager,
 	context_room: RoomResource = null,
 	between_world: bool = false
 ) -> void:
@@ -112,17 +109,7 @@ func open(
 
 		return
 
-	#if manager == null:
-#
-		#push_error(
-			#"AbandonedLab_UI: BattleManager is missing."
-		#)
-#
-		#return
-
-
 	lab_data = data
-	#battle_manager = manager
 	lab_context_room = context_room
 	is_between_world_lab = between_world
 
@@ -234,7 +221,6 @@ func close() -> void:
 	# ==================================================
 
 	lab_data = null
-	#battle_manager = null
 	lab_context_room = null
 	is_between_world_lab = false
 
@@ -321,16 +307,6 @@ func start_critical_lab() -> void:
 	print("Containment failure!")
 	print("================================")
 
-
-	#if battle_manager == null:
-#
-		#push_error(
-			#"AbandonedLab_UI: BattleManager is missing."
-		#)
-#
-		#return
-
-
 	edit_mutagen_button.disabled = true
 	heal_button.disabled = true
 	continue_button.disabled = true
@@ -343,8 +319,6 @@ func start_critical_lab() -> void:
 
 	# Prevent this UI from blocking BattleUI input.
 	hide()
-
-	#battle_manager.start_critical_experiment()
 
 
 # ==================================================

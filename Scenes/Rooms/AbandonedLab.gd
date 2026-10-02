@@ -12,15 +12,6 @@ const LAB_UI_SCENE = preload(
 
 
 # ==================================================
-# Managers
-# ==================================================
-
-#@onready var battle_manager: BattleManager = get_node(
-	#"../Managers/BattleManager"
-#)
-
-
-# ==================================================
 # Interaction
 # ==================================================
 
@@ -140,14 +131,6 @@ func _on_lab_interacted() -> void:
 		)
 	)
 
-	#if current_room == null:
-#
-		#push_error(
-			#"AbandonedLabWorld: No current RoomResource."
-		#)
-#
-		#return
-
 	if current_room.lab_data == null:
 
 		push_error(
@@ -158,7 +141,6 @@ func _on_lab_interacted() -> void:
 
 	lab_ui.open(
 		current_room.lab_data,
-		#battle_manager
 	)
 
 

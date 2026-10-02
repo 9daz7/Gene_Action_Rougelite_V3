@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://bt357jgy7sbvs"]
 
+[ext_resource type="Script" path="res://Scripts/Rooms/NormalBattleRoom.gd" id="1_normal"]
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qwfpk"]
 size = Vector2(1940, 20)
 
@@ -19,6 +21,7 @@ size = Vector2(59, 98)
 size = Vector2(580, 31.089996)
 
 [node name="ActionNormalBattleRoom" type="Node2D" unique_id=1973370823]
+script = ExtResource("1_normal")
 
 [node name="Background" type="ColorRect" parent="." unique_id=1723921837]
 offset_top = -1.0
@@ -113,3 +116,6 @@ offset_top = 100.0
 offset_right = 1729.0
 offset_bottom = 296.0
 color = Color(0.60733163, 0.4368924, 3.85046e-07, 1)
+
+[node name="PlayerSpawn" type="Marker2D" parent="."]
+position = Vector2(1416, 814)

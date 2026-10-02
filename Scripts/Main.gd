@@ -7,7 +7,6 @@ extends Node
 
 @onready var managers = $Managers
 
-#@onready var battle_manager: BattleManager = $Managers/BattleManager
 @onready var run_manager: RunManager = $Managers/RunManager
 
 @onready var mutagen_database: MutagenDatabase = $Managers/MutagenDatabase

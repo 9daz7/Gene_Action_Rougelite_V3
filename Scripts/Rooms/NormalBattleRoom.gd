@@ -3,10 +3,12 @@ class_name NormalBattleRoom
 
 
 # ==================================================
-# Battle Trigger
+# Action Battle
 # ==================================================
 
-@onready var battle_trigger: BattleTrigger = $BattleTrigger
+const ACTION_BATTLE_SCENE = preload(
+	"res://Scenes/Battle/ActionBattleScene.tscn"
+)
 
 
 # ==================================================
@@ -21,6 +23,7 @@ var roaming_enemies: Array[RoamingEnemy] = []
 # ==================================================
 
 var active_roaming_enemy: RoamingEnemy = null
+var action_battle: ActionBattleScene = null
 
 
 # ==================================================
@@ -36,49 +39,7 @@ func _ready() -> void:
 	print("NORMAL BATTLE ROOM READY")
 	print("================================")
 
-	_connect_battle_trigger()
 	_connect_roaming_enemies()
-
-
-# ==================================================
-# Battle Trigger
-# ==================================================
-
-
-func _connect_battle_trigger() -> void:
-
-	if battle_trigger == null:
-
-		push_error(
-			"NormalBattleRoom: BattleTrigger not found."
-		)
-
-		return
-
-	if not battle_trigger.player_entered.is_connected(
-		_on_battle_trigger_entered
-	):
-
-		battle_trigger.player_entered.connect(
-			_on_battle_trigger_entered
-	)
-
-
-func _on_battle_trigger_entered() -> void:
-
-	print("================================")
-	print("NORMAL BATTLE ROOM: BATTLE TRIGGERED")
-	print("================================")
-
-	if room_manager == null:
-
-		push_error(
-			"NormalBattleRoom: RoomManager not found."
-		)
-
-		return
-
-	set_player_controls(false)
 
 
 func _connect_roaming_enemies() -> void:
@@ -144,13 +105,61 @@ func _on_roaming_enemy_encounter(
 		false
 	)
 
-	# --------------------------------------------------
-	# Temporary test
-	# --------------------------------------------------
+	start_action_battle()
+
+
+# ==================================================
+# Action Battle
+# ==================================================
+
+
+func start_action_battle() -> void:
+
+	print("!!! NORMAL BATTLE ROOM start_action_battle() CALLED !!!")
+
+	if action_battle != null:
+		push_warning(
+			"NormalBattleRoom: Action battle already active."
+		)
+		return
+
+	action_battle = ACTION_BATTLE_SCENE.instantiate()
+
+	if action_battle == null:
+		push_error(
+			"NormalBattleRoom: Failed to create ActionBattleScene."
+		)
+		return
+
+	if not action_battle.battle_completed.is_connected(
+		_on_action_battle_completed
+	):
+		action_battle.battle_completed.connect(
+			_on_action_battle_completed
+		)
 
 	print(
-		"ROAMING ENCOUNTER DETECTION TEST PASSED"
+		"ACTION BATTLE SIGNAL CONNECTED:",
+		action_battle.battle_completed.is_connected(
+			_on_action_battle_completed
+		)
 	)
+
+	add_child(action_battle)
+
+	print("================================")
+	print("ACTION BATTLE STARTED")
+	print("================================")
+
+
+func _on_action_battle_completed(
+	won: bool
+) -> void:
+
+	print("================================")
+	print("NORMAL BATTLE ROOM: ACTION BATTLE COMPLETED")
+	print("Victory:", won)
+	print("================================")
 
 
 # ==================================================
@@ -171,22 +180,7 @@ func set_battle_active(
 		not active
 	)
 
-	if battle_trigger != null:
-
-		if active:
-
-			battle_trigger.call_deferred(
-				"set_process_mode",
-				Node.PROCESS_MODE_DISABLED
-			)
-
-			_disable_room_exits()
-
-		else:
-
-			battle_trigger.call_deferred(
-				"set_process_mode",
-				Node.PROCESS_MODE_INHERIT
-			)
-
-			enable_room_exits()
+	if active:
+		_disable_room_exits()
+	else:
+		enable_room_exits()

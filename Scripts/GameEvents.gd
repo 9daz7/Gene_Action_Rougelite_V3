@@ -15,30 +15,30 @@ signal run_ended
 # ==================================================
 
 
-signal battle_initialized(player, enemies)
+#signal battle_initialized(player, enemies)
 
 signal battle_won(enemy)
-signal battle_lost
+#signal battle_lost
 
-signal turn_changed(state)
+#signal turn_changed(state)
 
-signal move_selected(move_index)
-signal move_used(attacker, move)
+#signal move_selected(move_index)
+#signal move_used(attacker, move)
 
-signal target_selected(enemy)
-signal enemy_selected(enemy)
+#signal target_selected(enemy)
+#signal enemy_selected(enemy)
 
-signal request_target_selection(enemies) 
+#signal request_target_selection(enemies) 
 
-signal moves_updated(player) 
+#signal moves_updated(player) 
 
 signal damage_dealt(target, amount) 
 
-signal enemy_updated(enemy) 
+#signal enemy_updated(enemy) 
 
-signal battle_names_updated(player, enemies)
+#signal battle_names_updated(player, enemies)
 
-signal potion_effects_changed(player)
+#signal potion_effects_changed(player)
 
 # ================================================== 
 # ROOM EVENTS 
