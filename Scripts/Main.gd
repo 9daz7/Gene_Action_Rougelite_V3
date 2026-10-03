@@ -456,11 +456,11 @@ func start_run():
 
 	run_manager.create_run_map()
 
-	# ==================================================
-	# Enable Scanner
-	# ==================================================
-
-	map_manager.enable_scanner()
+	## ==================================================
+	## Enable Scanner
+	## ==================================================
+#
+	#map_manager.enable_scanner()
 
 	map_ui.close_map()
 
