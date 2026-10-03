@@ -49,6 +49,8 @@ func enable_scanner() -> void:
 
 	map_updated.emit()
 
+	print("SCANNER ENABLE COMPLETE")
+
 
 func disable_scanner() -> void:
 

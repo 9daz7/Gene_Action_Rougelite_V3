@@ -1189,26 +1189,34 @@ func _get_random_world_one_type(
 			RoomResource.RoomType.SHOP
 		)
 
+	# --------------------------------------------------
+	# Fallback
+	# --------------------------------------------------
 
 	if candidates.is_empty():
-
 		return RoomResource.RoomType.BATTLE
-
 
 	return candidates.pick_random()
 
-# --------------------------------------------------
-# Lab
-# --------------------------------------------------
-
-	if _has_room_with_exit_count(
-		RoomResource.RoomType.LAB,
-		exit_count
-	):
-
-		candidates.append(
-			RoomResource.RoomType.LAB
-		)
+	#if candidates.is_empty():
+#
+		#return RoomResource.RoomType.BATTLE
+#
+#
+	#return candidates.pick_random()
+#
+## --------------------------------------------------
+## Lab
+## --------------------------------------------------
+#
+	#if _has_room_with_exit_count(
+		#RoomResource.RoomType.LAB,
+		#exit_count
+	#):
+#
+		#candidates.append(
+			#RoomResource.RoomType.LAB
+		#)
 
 
 # ==================================================
@@ -1491,15 +1499,21 @@ func create_run_map() -> void:
 	print("World:", current_world)
 	print("================================")
 
+	print("CREATE_RUN_MAP: STEP 1")
+
 	current_run_map = RunMapResource.new()
 
-	var layer_sizes := (
-		get_world_layer_sizes()
-	)
+	print("CREATE_RUN_MAP: STEP 2")
+
+	var layer_sizes := get_world_layer_sizes()
+
+	print("CREATE_RUN_MAP: STEP 3")
 
 	# ==================================================
 	# Create graph nodes without choosing rooms yet
 	# ==================================================
+
+	print("CREATE_RUN_MAP: BEFORE NODE CREATION")
 
 	for layer_index in range(
 		layer_sizes.size()
@@ -1538,6 +1552,8 @@ func create_run_map() -> void:
 		current_run_map.layers.append(
 			layer_nodes
 		)
+
+	print("CREATE_RUN_MAP: AFTER NODE CREATION")
 
 	# ==================================================
 	# Start Node
@@ -1672,21 +1688,43 @@ func create_run_map() -> void:
 		"../MapManager"
 	)
 
+	push_warning("CREATE_RUN_MAP: BEFORE MAP MANAGER SET")
+
 	map_manager.set_run_map(
 		current_run_map
 	)
 
+	push_warning("CREATE_RUN_MAP: AFTER MAP MANAGER SET")
+
 	map_manager.scanner_view_range = 0
+	push_warning("CREATE_RUN_MAP: BEFORE ENABLE SCANNER")
 	map_manager.enable_scanner()
+
+	push_warning("CREATE_RUN_MAP: AFTER SCANNER ENABLE")
+	print("DEBUG: Current run map:", current_run_map)
+	print("DEBUG: Start node:", current_run_map.start_node)
+	print("DEBUG: Current node:", current_run_map.current_node)
+
+	if current_run_map.current_node == null:
+		push_error("DEBUG: current_run_map.current_node IS NULL")
+		return
+
+	if current_run_map.current_node.room == null:
+		push_error("DEBUG: current_run_map.current_node.room IS NULL")
+		return
 
 	print(
 		"Starting room:",
 		current_run_map.current_node.room.room_name
 	)
 
+	print("DEBUG: ABOUT TO CALL ROOM MANAGER")
+
 	room_manager.start_room_node(
 		current_run_map.current_node
 	)
+
+	print("DEBUG: ROOM MANAGER RETURNED")
 
 	print("================================")
 	print("RUN GRAPH READY")
@@ -2309,7 +2347,6 @@ func start_run():
 
 	run_mutagens.clear()
 
-# test test
 	run_mutagen_manager.reset()
 
 	GameEvents.hp_changed.emit(

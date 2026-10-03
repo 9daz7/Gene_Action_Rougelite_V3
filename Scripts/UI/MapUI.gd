@@ -300,6 +300,8 @@ func close_map() -> void:
 
 func _on_map_updated() -> void:
 
+	print("MAP UI RECEIVED MAP UPDATED")
+
 	if map_manager == null:
 		return
 

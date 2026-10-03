@@ -14,10 +14,12 @@ class_name RoomManager
 	"../RunMutagenManager"
 )
 
-# --------------------------------------------------
-# Temporary Map Dependency
-# --------------------------------------------------
+# ==================================================
+# Map
+# ==================================================
+
 @onready var map_manager = $"../MapManager"
+
 
 # ==================================================
 # UI
@@ -63,11 +65,11 @@ var current_run_node: RunMapNode = null
 
 var reward_room = null
 
-var treasure_room = null
-var merchant_room = null
-var rest_room = null
-var abandoned_lab = null
-var mystery_room = null
+#var treasure_room = null
+#var merchant_room = null
+#var rest_room = null
+#var abandoned_lab = null
+#var mystery_room = null
 
 # --------------------------------------------------
 # Active Battle Room
@@ -136,12 +138,6 @@ func start_room_node(
 	current_room = node.room
 
 	if map_manager != null:
-
-		#if map_manager.run_map != run_manager.current_run_map:
-#
-			#map_manager.set_run_map(
-				#run_manager.current_run_map
-			#)
 
 		map_manager.set_current_node(
 			node
