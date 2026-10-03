@@ -6,6 +6,10 @@ class_name ActionCombatController
 # Combatants
 # ==================================================
 
+@export var max_simultaneous_enemy_attacks: int = 2
+
+var active_enemy_attacks: int = 0
+
 var player_character: CharacterBody2D
 var deebo: PlayerAnimal
 
@@ -230,6 +234,43 @@ func is_battle_active() -> bool:
 		return false
 	
 	return true
+
+
+func can_enemy_attack() -> bool:
+
+	return active_enemy_attacks < max_simultaneous_enemy_attacks
+
+
+func reserve_enemy_attack() -> bool:
+
+	if not can_enemy_attack():
+		return false
+
+	active_enemy_attacks += 1
+
+	print(
+		"ENEMY ATTACK SLOT RESERVED | Active:",
+		active_enemy_attacks,
+		"/",
+		max_simultaneous_enemy_attacks
+	)
+
+	return true
+
+
+func release_enemy_attack() -> void:
+
+	if active_enemy_attacks <= 0:
+		return
+
+	active_enemy_attacks -= 1
+
+	print(
+		"ENEMY ATTACK SLOT RELEASED | Active:",
+		active_enemy_attacks,
+		"/",
+		max_simultaneous_enemy_attacks
+	)
 
 
 # ==================================================

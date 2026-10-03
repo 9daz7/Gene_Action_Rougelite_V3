@@ -73,9 +73,9 @@ const MUTAGEN_MANAGEMENT_SCENE = preload(
 
 var mutagen_management_ui: MutagenManagementUI = null
 
-var connected_to_battle: bool = false
-
-var critical_battle_active: bool = false
+#var connected_to_battle: bool = false
+#
+#var critical_battle_active: bool = false
 
 var lab_context_room: RoomResource = null
 
@@ -181,7 +181,7 @@ func open(
 
 		if not current_room.lab_battle_completed:
 
-			_connect_critical_battle_signal()
+			#_connect_critical_battle_signal()
 
 			start_critical_lab()
 
@@ -196,7 +196,7 @@ func close() -> void:
 		"Closing abandoned lab"
 	)
 
-	critical_battle_active = false
+	#critical_battle_active = false
 
 	# ==================================================
 	# Close Management UI
@@ -210,11 +210,11 @@ func close() -> void:
 
 	mutagen_management_ui = null
 
-	# ==================================================
-	# Disconnect Battle Signal
-	# ==================================================
-
-	_disconnect_critical_battle_signal()
+	## ==================================================
+	## Disconnect Battle Signal
+	## ==================================================
+#
+	#_disconnect_critical_battle_signal()
 
 	# ==================================================
 	# Clear References
@@ -257,46 +257,6 @@ func _get_current_room() -> RoomResource:
 
 
 # ==================================================
-# Critical Battle Signal
-# ==================================================
-
-func _connect_critical_battle_signal() -> void:
-
-	if GameEvents.battle_won.is_connected(
-		_on_experiment_won
-	):
-
-		connected_to_battle = true
-
-		return
-
-
-	GameEvents.battle_won.connect(
-		_on_experiment_won
-	)
-
-	connected_to_battle = true
-
-
-func _disconnect_critical_battle_signal() -> void:
-
-	if not connected_to_battle:
-
-		return
-
-
-	if GameEvents.battle_won.is_connected(
-		_on_experiment_won
-	):
-
-		GameEvents.battle_won.disconnect(
-			_on_experiment_won
-		)
-
-	connected_to_battle = false
-
-
-# ==================================================
 # Critical Lab
 # ==================================================
 
@@ -311,72 +271,14 @@ func start_critical_lab() -> void:
 	heal_button.disabled = true
 	continue_button.disabled = true
 
-	# --------------------------------------------------
-	# Mark critical battle as active
-	# --------------------------------------------------
-
-	critical_battle_active = true
+	## --------------------------------------------------
+	## Mark critical battle as active
+	## --------------------------------------------------
+#
+	#critical_battle_active = true
 
 	# Prevent this UI from blocking BattleUI input.
 	hide()
-
-
-# ==================================================
-# Critical Experiment Won
-# ==================================================
-
-func _on_experiment_won(enemy) -> void:
-
-	# --------------------------------------------------
-	# Ignore unrelated battles
-	# --------------------------------------------------
-
-	if not critical_battle_active:
-
-		return
-
-	print(
-		"AbandonedLab received battle win"
-	)
-
-	var current_room: RoomResource = (
-		_get_current_room()
-	)
-
-	if current_room == null:
-
-		return
-
-	if lab_data == null:
-
-		return
-
-	if (
-		lab_data.lab_status
-		!= LabResource.LabStatus.CRITICAL
-	):
-
-		print(
-			"Ignoring battle win because Lab is not critical."
-		)
-
-		return
-
-	if current_room.lab_battle_completed:
-
-		print(
-			"Critical Lab battle already completed."
-		)
-
-		return
-
-	print(
-		"Critical experiment defeated"
-	)
-
-	critical_battle_active = false
-
-	critical_battle_won()
 
 
 # ==================================================
@@ -438,11 +340,11 @@ func critical_battle_won() -> void:
 		)
 
 
-	# ==================================================
-	# Disconnect Battle Signal
-	# ==================================================
-
-	_disconnect_critical_battle_signal()
+	## ==================================================
+	## Disconnect Battle Signal
+	## ==================================================
+#
+	#_disconnect_critical_battle_signal()
 
 
 	# ==================================================

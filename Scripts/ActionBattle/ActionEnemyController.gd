@@ -25,6 +25,8 @@ class_name ActionEnemyController
 @export var attack_lunge_duration: float = 0.12
 @export var attack_recovery_time: float = 0.5
 
+var has_attack_slot: bool = false
+
 var attack_timer: float = 0.0
 
 enum AttackState {
@@ -393,6 +395,13 @@ func _try_attack() -> void:
 		)
 		return
 
+	if combat_controller != null:
+
+		if not combat_controller.reserve_enemy_attack():
+			return
+
+		has_attack_slot = true
+
 	attack_move = selected_move
 
 	print(
@@ -429,6 +438,10 @@ func _update_attack_state(delta: float) -> void:
 		attack_state = AttackState.IDLE
 
 		attack_move = null
+
+		if has_attack_slot:
+			combat_controller.release_enemy_attack()
+			has_attack_slot = false
 
 		print(
 			enemy.name,
@@ -488,6 +501,10 @@ func _update_attack_state(delta: float) -> void:
 			if attack_recovery_timer >= attack_recovery_time:
 
 				attack_state = AttackState.IDLE
+
+				if has_attack_slot:
+					combat_controller.release_enemy_attack()
+					has_attack_slot = false
 
 				print(
 					enemy.name,

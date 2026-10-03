@@ -48,6 +48,22 @@ const ACTION_ENEMY_CONTROLLER = preload(
 	"res://Scripts/ActionBattle/ActionEnemyController.gd"
 )
 
+const WOLF_RESOURCE_PATH = (
+	"res://Data/Enemies/Normal/Wolf.tres"
+)
+
+const BOAR_RESOURCE_PATH = (
+	"res://Data/Enemies/Normal/Boar.tres"
+)
+
+const HONEY_BADGER_RESOURCE_PATH = (
+	"res://Data/Enemies/Normal/HoneyBadger.tres"
+)
+
+const MARTEN_RESOURCE_PATH = (
+	"res://Data/Enemies/Normal/Marten.tres"
+)
+
 
 # ==================================================
 # Scene References
@@ -57,6 +73,8 @@ const ACTION_ENEMY_CONTROLLER = preload(
 @onready var player_spawn = $Arena/PlayerSpawn
 @onready var enemy_spawn = $Arena/EnemySpawn
 @onready var enemy_spawn_2 = $Arena/EnemySpawn2
+@onready var enemy_spawn_3 = $Arena/EnemySpawn3
+@onready var enemy_spawn_4 = $Arena/EnemySpawn4
 
 @onready var enemies = $Enemies
 
@@ -71,8 +89,7 @@ var player = null
 var player_character = null
 var deebo_controller: ActionPlayerController = null
 var combat_controller: ActionCombatController = null
-var enemy = null
-var enemy_2 = null
+var spawned_enemies: Array[AnimalBase] = []
 
 var battle_result_reported: bool = false
 
@@ -160,8 +177,7 @@ func _ready() -> void:
 		deebo_controller
 	)
 
-	spawn_enemy()
-	spawn_enemy_2()
+	spawn_test_enemies()
 
 	set_combat_state(CombatState.BATTLE)
 
@@ -450,7 +466,44 @@ func _setup_player_moves() -> void:
 # Enemy Setup
 # ==================================================
 
-func spawn_enemy() -> void:
+func spawn_test_enemies() -> void:
+
+	var enemy_resources: Array[EnemyResource] = [
+		load(WOLF_RESOURCE_PATH),
+		load(BOAR_RESOURCE_PATH),
+		load(HONEY_BADGER_RESOURCE_PATH),
+		load(MARTEN_RESOURCE_PATH)
+	]
+
+	var spawn_points: Array[Node2D] = [
+		enemy_spawn,
+		enemy_spawn_2,
+		enemy_spawn_3,
+		enemy_spawn_4
+	]
+
+	for i in enemy_resources.size():
+
+		var resource := enemy_resources[i]
+
+		if resource == null:
+			push_error(
+				"Failed to load enemy resource at index "
+				+ str(i)
+			)
+			continue
+
+		var spawn_point := spawn_points[
+			i % spawn_points.size()
+		]
+
+		spawn_enemy(resource, spawn_point)
+
+
+func spawn_enemy(
+	enemy_resource: EnemyResource,
+	spawn_point: Node2D
+) -> void:
 
 	var enemy_scene = load(
 		ENEMY_SCENE_PATH
@@ -465,9 +518,9 @@ func spawn_enemy() -> void:
 
 		return
 
-	enemy = enemy_scene.instantiate()
+	var spawned_enemy = enemy_scene.instantiate()
 
-	if enemy == null:
+	if spawned_enemy == null:
 
 		push_error(
 			"Failed to instantiate EnemyAnimal."
@@ -475,13 +528,13 @@ func spawn_enemy() -> void:
 
 		return
 
-	enemies.add_child(enemy)
+	enemies.add_child(spawned_enemy)
 
-	var controller = ACTION_ENEMY_CONTROLLER.new()
+	var controller := ACTION_ENEMY_CONTROLLER.new()
 
 	controller.name = "ActionEnemyController"
 
-	enemy.add_child(controller)
+	spawned_enemy.add_child(controller)
 
 	controller.target = player
 
@@ -489,114 +542,55 @@ func spawn_enemy() -> void:
 		combat_controller
 	)
 
-	enemy.global_position = (
-		enemy_spawn.global_position
+	spawned_enemy.global_position = (
+		spawn_point.global_position
 	)
 
 	# --------------------------------------------------
-	# Initialize Wolf
+	# Initialize Enemy
 	# --------------------------------------------------
 
-	var wolf_resource = load(
-		"res://Data/Enemies/Normal/Wolf.tres"
-	)
+	spawned_enemy.enemy_data = enemy_resource
 
-	if wolf_resource != null:
-
-		enemy.enemy_data = wolf_resource
-
-		if enemy.has_method("start_battle"):
-			enemy.start_battle()
+	if spawned_enemy.has_method("start_battle"):
+		spawned_enemy.start_battle()
 
 	else:
 
 		push_error(
-			"Failed to load Wolf.tres."
+			"EnemyAnimal is missing start_battle()."
 		)
 
 	# --------------------------------------------------
-	# Make sure the Wolf sprite is visible.
+	# Make Enemy Visible
 	# --------------------------------------------------
 
-	var sprite = enemy.get_node_or_null(
-		"EnemySprite"
-	)
-
-	if sprite != null:
-
-		sprite.visible = true
-
-	print("========================================")
-	print("WOLF SPAWNED")
-	print("========================================")
-	print("Enemy:", enemy)
-	print("Position:", enemy.global_position)
-
-
-func spawn_enemy_2() -> void:
-
-	var enemy_scene = load(ENEMY_SCENE_PATH)
-
-	if enemy_scene == null:
-		push_error(
-			"Failed to load EnemyAnimal scene: "
-			+ ENEMY_SCENE_PATH
-		)
-		return
-
-	enemy_2 = enemy_scene.instantiate()
-
-	if enemy_2 == null:
-		push_error("Failed to instantiate second enemy.")
-		return
-
-	enemies.add_child(enemy_2)
-
-	var controller = ACTION_ENEMY_CONTROLLER.new()
-
-	controller.name = "ActionEnemyController"
-
-	enemy_2.add_child(controller)
-
-	controller.target = player
-
-	controller.set_combat_controller(
-		combat_controller
-	)
-
-	enemy_2.global_position = (
-		enemy_spawn_2.global_position
-	)
-
-	var wolf_resource = load(
-		"res://Data/Enemies/Normal/Wolf.tres"
-	)
-
-	if wolf_resource != null:
-
-		enemy_2.enemy_data = wolf_resource
-
-		if enemy_2.has_method("start_battle"):
-			enemy_2.start_battle()
-
-	else:
-
-		push_error(
-			"Failed to load Wolf.tres."
-		)
-
-	var sprite = enemy_2.get_node_or_null(
+	var sprite = spawned_enemy.get_node_or_null(
 		"EnemySprite"
 	)
 
 	if sprite != null:
 		sprite.visible = true
 
+	else:
+		push_warning(
+			"EnemySprite was not found on spawned enemy."
+		)
+
+	# --------------------------------------------------
+	# Track Enemy
+	# --------------------------------------------------
+
+	spawned_enemies.append(
+		spawned_enemy
+	)
+
 	print("========================================")
-	print("SECOND WOLF SPAWNED")
+	print("ENEMY SPAWNED")
 	print("========================================")
-	print("Enemy:", enemy_2)
-	print("Position:", enemy_2.global_position)
+	print("Enemy:", enemy_resource.enemy_name)
+	print("Type:", enemy_resource.enemy_type)
+	print("Position:", spawned_enemy.global_position)
 
 
 # ==================================================
@@ -619,31 +613,28 @@ func _check_battle_result() -> void:
 
 			return
 
-	if enemies != null:
+	if spawned_enemies.is_empty():
+		return
 
-		var all_enemies_dead := true
+	var all_enemies_dead := true
 
-		for child in enemies.get_children():
+	for current_enemy in spawned_enemies:
 
-			if not child is AnimalBase:
-				continue
+		if current_enemy == null:
+			continue
 
-			var current_enemy := child as AnimalBase
+		if current_enemy.is_alive():
 
-			if current_enemy.is_alive():
+			all_enemies_dead = false
 
-				all_enemies_dead = false
+			break
 
-				break
+	if all_enemies_dead:
 
-		if all_enemies_dead:
+		battle_result_reported = true
+		set_combat_state(CombatState.BATTLE_END)
 
-			battle_result_reported = true
-			set_combat_state(CombatState.BATTLE_END)
-
-			_handle_victory()
-
-			return
+		_handle_victory()
 
 
 func _handle_victory() -> void:
