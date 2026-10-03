@@ -161,6 +161,29 @@ func _on_action_battle_completed(
 	print("Victory:", won)
 	print("================================")
 
+	if action_battle != null:
+
+		action_battle.queue_free()
+		action_battle = null
+
+	active_roaming_enemy = null
+
+	if not won:
+
+		set_player_controls(true)
+
+		return
+
+	# --------------------------------------------------
+	# Complete Room
+	# --------------------------------------------------
+
+	print(
+		"NormalBattleRoom: Completing room."
+	)
+
+	room_manager.complete_room()
+
 
 # ==================================================
 # Battle State
