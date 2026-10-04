@@ -1559,6 +1559,8 @@ func create_run_map() -> void:
 	# Start Node
 	# ==================================================
 
+	print("CREATE_RUN_MAP: BEFORE START NODE")
+
 	current_run_map.start_node = (
 		current_run_map.layers[0][0]
 	)
@@ -1567,9 +1569,13 @@ func create_run_map() -> void:
 		current_run_map.start_node
 	)
 
+	print("CREATE_RUN_MAP: AFTER START NODE")
+
 	# ==================================================
 	# Connect Graph
 	# ==================================================
+
+	print("CREATE_RUN_MAP: BEFORE GRAPH CONNECTION")
 
 	for layer_index in range(
 		current_run_map.layers.size() - 1
@@ -1616,9 +1622,13 @@ func create_run_map() -> void:
 
 			return
 
+	print("CREATE_RUN_MAP: AFTER GRAPH CONNECTION")
+	
 	# ==================================================
 	# Assign Rooms After Connections Exist
 	# ==================================================
+
+	print("CREATE_RUN_MAP: BEFORE ROOM ASSIGNMENT")
 
 	for layer_index in range(
 		current_run_map.layers.size()
@@ -1630,11 +1640,25 @@ func create_run_map() -> void:
 
 		for node in layer:
 
+			print(
+				"CREATE_RUN_MAP: ASSIGNING ROOM TO NODE | Layer:",
+				layer_index,
+				" Node:",
+				node.index
+			)
+
 			var room := (
 				_create_room_for_node(
 					node,
 					layer_sizes.size()
 				)
+			)
+
+			print(
+				"CREATE_RUN_MAP: ROOM ASSIGNMENT RETURNED | Layer:",
+				layer_index,
+				" Node:",
+				node.index
 			)
 
 			if room == null:
@@ -1648,7 +1672,25 @@ func create_run_map() -> void:
 
 				return
 
+			print(
+				"CREATE_RUN_MAP: BEFORE ROOM PROPERTY ASSIGNMENT | Layer:",
+				layer_index,
+				" Node:",
+				node.index
+			)
+
 			node.room = room
+
+			print(
+				"CREATE_RUN_MAP: AFTER ROOM PROPERTY ASSIGNMENT | Layer:",
+				layer_index,
+				" Node:",
+				node.index
+			)
+
+	print("CREATE_RUN_MAP: LOOP FINISHED")
+
+	print("CREATE_RUN_MAP: AFTER ROOM ASSIGNMENT")
 
 	# ==================================================
 	# Print Graph
@@ -1683,6 +1725,8 @@ func create_run_map() -> void:
 	current_run_map.current_node = (
 		current_run_map.start_node
 	)
+
+	print("CREATE_RUN_MAP: AFTER START NODE")
 
 	var map_manager: MapManager = get_node(
 		"../MapManager"

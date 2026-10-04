@@ -1,6 +1,5 @@
 [gd_scene format=3 uid="uid://bbwjv1y63e8ee"]
 
-[ext_resource type="Script" uid="uid://ckxjn41pglkmx" path="res://Scenes/Rooms/BattleTrigger.gd" id="1_3dok0"]
 [ext_resource type="Script" uid="uid://d04yxlv6k5nwt" path="res://Scenes/Rooms/BossRoom.gd" id="1_o2v85"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_o2v85"]
@@ -14,9 +13,6 @@ size = Vector2(20, 1080)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_md2jo"]
 size = Vector2(1960, 20.25)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_cvs70"]
-size = Vector2(303, 195.85999)
 
 [node name="BossRoom" type="Node2D" unique_id=2090528488]
 script = ExtResource("1_o2v85")
@@ -90,18 +86,3 @@ color = Color(0.60784316, 0.43529412, 0, 1)
 
 [node name="PlayerSpawn" type="Marker2D" parent="." unique_id=1424753300]
 position = Vector2(960, 1041)
-
-[node name="BattleTrigger" type="Area2D" parent="." unique_id=1330212766]
-position = Vector2(957.06494, 455.86)
-script = ExtResource("1_3dok0")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="BattleTrigger" unique_id=94292792]
-position = Vector2(-0.5649414, -66.92999)
-shape = SubResource("RectangleShape2D_cvs70")
-
-[node name="Label" type="Label" parent="BattleTrigger" unique_id=1474177753]
-offset_left = -26.064941
-offset_top = -77.859985
-offset_right = 28.935059
-offset_bottom = -54.859985
-text = "BOSS"

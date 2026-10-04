@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://cmorb7ku7gov2"]
 
 [ext_resource type="Script" uid="uid://bd4c5xvt4q8t" path="res://Scripts/Rooms/NormalBattleRoom.gd" id="1_fljp1"]
-[ext_resource type="Script" uid="uid://ckxjn41pglkmx" path="res://Scenes/Rooms/BattleTrigger.gd" id="2_j0p5l"]
 [ext_resource type="PackedScene" uid="uid://deuudtgda4sb6" path="res://Scenes/Rooms/RoamingEnemy.tscn" id="2_rve3k"]
 [ext_resource type="PackedScene" uid="uid://s4vol5fxx17b" path="res://Scenes/Rooms/RoomExit.tscn" id="3_rve3k"]
 
@@ -175,7 +174,6 @@ position = Vector2(257, 551)
 
 [node name="BattleTrigger" type="Area2D" parent="." unique_id=582788059]
 position = Vector2(948.985, 292.925)
-script = ExtResource("2_j0p5l")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BattleTrigger" unique_id=215622722]
 position = Vector2(-7.4849854, 1)
