@@ -17,7 +17,7 @@ var room_player: RoomPlayer
 # Managers
 # ==================================================
 
-@onready var room_manager: RoomManager = get_node(
+@onready var room_manager: RoomManager = get_node_or_null(
 	"../Managers/RoomManager"
 )
 

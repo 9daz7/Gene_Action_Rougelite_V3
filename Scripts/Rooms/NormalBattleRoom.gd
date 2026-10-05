@@ -23,7 +23,11 @@ var action_combat_controller: ActionCombatController = null
 # Roaming Enemies
 # ==================================================
 
+# Roaming Enemies
 var roaming_enemies: Array[RoamingEnemy] = []
+
+# Battle State
+var battle_active: bool = false
 
 
 # ==================================================
@@ -250,6 +254,11 @@ func _on_roaming_enemy_encounter(
 	if enemy == null:
 		return
 
+	if battle_active:
+		return
+
+	_start_room_battle(enemy)
+
 	#if active_roaming_enemy != null:
 		#return
 
@@ -272,88 +281,15 @@ func _on_roaming_enemy_encounter(
 		"Action combat migration in progress."
 	)
 
-	#set_player_controls(
-		#false
-	#)
-#
-	#start_action_battle()
 
+func _start_room_battle(enemy: RoamingEnemy) -> void:
 
-# ==================================================
-# Action Battle
-# ==================================================
+	battle_active = true
 
-
-#func start_action_battle() -> void:
-#
-	#print("!!! NORMAL BATTLE ROOM start_action_battle() CALLED !!!")
-#
-	#if action_battle != null:
-		#push_warning(
-			#"NormalBattleRoom: Action battle already active."
-		#)
-		#return
-#
-	#action_battle = ACTION_BATTLE_SCENE.instantiate()
-#
-	#if action_battle == null:
-		#push_error(
-			#"NormalBattleRoom: Failed to create ActionBattleScene."
-		#)
-		#return
-#
-	#if not action_battle.battle_completed.is_connected(
-		#_on_action_battle_completed
-	#):
-		#action_battle.battle_completed.connect(
-			#_on_action_battle_completed
-		#)
-#
-	#print(
-		#"ACTION BATTLE SIGNAL CONNECTED:",
-		#action_battle.battle_completed.is_connected(
-			#_on_action_battle_completed
-		#)
-	#)
-#
-	#add_child(action_battle)
-#
-	#print("================================")
-	#print("ACTION BATTLE STARTED")
-	#print("================================")
-#
-#
-#func _on_action_battle_completed(
-	#won: bool
-#) -> void:
-#
-	#print("================================")
-	#print("NORMAL BATTLE ROOM: ACTION BATTLE COMPLETED")
-	#print("Victory:", won)
-	#print("================================")
-#
-	#if action_battle != null:
-#
-		#action_battle.queue_free()
-		#action_battle = null
-#
-	#active_roaming_enemy = null
-#
-	#if not won:
-#
-		#set_player_controls(true)
-#
-		#return
-#
-	## --------------------------------------------------
-	## Complete Room
-	## --------------------------------------------------
-#
-	#print(
-		#"NormalBattleRoom: Completing room."
-	#)
-#
-	#room_manager.complete_room()
+	print("================================")
+	print("ROOM BATTLE START")
+	print("Enemy:", enemy.name)
+	print("================================")
 
 
 # ==================================================

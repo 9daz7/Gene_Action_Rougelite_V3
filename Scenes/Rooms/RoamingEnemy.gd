@@ -200,15 +200,10 @@ func _check_player_detection() -> void:
 
 	for body in bodies:
 
-		if not body is RoomPlayer:
+		if not body is ActionPlayerCharacter:
 			continue
 
-		var player := body as RoomPlayer
-
-		var effective_radius := (
-			detection_radius
-			* player.get_detection_multiplier()
-		)
+		var player := body as ActionPlayerCharacter
 
 		var distance := (
 			global_position.distance_to(
@@ -216,7 +211,7 @@ func _check_player_detection() -> void:
 			)
 		)
 
-		if distance > effective_radius:
+		if distance > detection_radius:
 			continue
 
 		_start_encounter(player)
@@ -225,7 +220,7 @@ func _check_player_detection() -> void:
 
 
 func _start_encounter(
-	player: RoomPlayer
+	player: ActionPlayerCharacter
 ) -> void:
 
 	if encountered:
@@ -240,7 +235,6 @@ func _start_encounter(
 	print("Distance:", global_position.distance_to(
 		player.global_position
 	))
-	print("Detection multiplier:", player.get_detection_multiplier())
 	print("================================")
 
 	encounter_requested.emit(
