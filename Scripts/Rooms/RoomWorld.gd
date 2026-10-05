@@ -34,6 +34,7 @@ var room_exits: Array[RoomExit] = []
 # ==================================================
 
 @export var exits_available_on_entry: bool = true
+@export var spawn_room_player: bool = true
 
 
 # ==================================================
@@ -48,7 +49,10 @@ func _ready() -> void:
 	print("================================")
 
 	_connect_room_exits()
-	_spawn_player()
+
+	if spawn_room_player:
+
+		_spawn_player()
 	
 	if exits_available_on_entry:
 

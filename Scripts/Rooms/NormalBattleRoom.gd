@@ -107,10 +107,21 @@ func _setup_action_player() -> void:
 	# Controllers
 	# --------------------------------------------------
 
-	var deebo_controller := (
-		deebo.get_node_or_null(
-			"ActionPlayerController"
+	var deebo_controller := ActionPlayerController.new()
+
+	if deebo_controller == null:
+
+		push_error(
+			"NormalBattleRoom: Failed to create "
+			+ "ActionPlayerController."
 		)
+
+		return
+
+	deebo_controller.name = "ActionPlayerController"
+
+	deebo.add_child(
+		deebo_controller
 	)
 
 	var player_controller := (
@@ -239,8 +250,8 @@ func _on_roaming_enemy_encounter(
 	if enemy == null:
 		return
 
-	if active_roaming_enemy != null:
-		return
+	#if active_roaming_enemy != null:
+		#return
 
 	if enemy.enemy_data == null:
 

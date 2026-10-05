@@ -30,9 +30,6 @@ b = Vector2(105, 69)
 a = Vector2(-1, -1)
 b = Vector2(-134, 84)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_lbnqw"]
-size = Vector2(279, 60)
-
 [node name="NormalBattleRoom_2Exit" type="Node2D" unique_id=1163109503]
 script = ExtResource("1_fljp1")
 exits_available_on_entry = false
@@ -171,20 +168,6 @@ position = Vector2(1444, 1018)
 
 [node name="RoamingEnemy" parent="enemies" unique_id=1998266480 instance=ExtResource("2_rve3k")]
 position = Vector2(257, 551)
-
-[node name="BattleTrigger" type="Area2D" parent="." unique_id=582788059]
-position = Vector2(948.985, 292.925)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="BattleTrigger" unique_id=215622722]
-position = Vector2(-7.4849854, 1)
-shape = SubResource("RectangleShape2D_lbnqw")
-
-[node name="Label" type="Label" parent="BattleTrigger" unique_id=723787684]
-offset_left = -26.0
-offset_top = -12.0
-offset_right = 29.0
-offset_bottom = 11.0
-text = "ENEMY"
 
 [node name="Exit1" parent="." unique_id=1730805262 instance=ExtResource("3_rve3k")]
 position = Vector2(729, -2)

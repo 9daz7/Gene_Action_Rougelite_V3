@@ -60,6 +60,19 @@ func _ready() -> void:
 
 		return
 
+	var camera := player_character.get_node_or_null(
+		"Camera2D"
+	)
+
+	if camera != null:
+
+		camera.make_current()
+
+		print(
+			"Action player camera current:",
+			camera.is_current()
+		)
+
 	animated_sprite = player_character.get_node_or_null(
 		"AnimatedSprite2D"
 	)

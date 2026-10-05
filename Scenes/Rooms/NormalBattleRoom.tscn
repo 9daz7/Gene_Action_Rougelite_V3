@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://bmdklddw430wi"]
 
 [ext_resource type="Script" uid="uid://bd4c5xvt4q8t" path="res://Scripts/Rooms/NormalBattleRoom.gd" id="1_av6k5"]
-[ext_resource type="Script" uid="uid://ckxjn41pglkmx" path="res://Scenes/Rooms/BattleTrigger.gd" id="2_3yrn4"]
 [ext_resource type="PackedScene" uid="uid://s4vol5fxx17b" path="res://Scenes/Rooms/RoomExit.tscn" id="3_yefhr"]
 [ext_resource type="PackedScene" uid="uid://deuudtgda4sb6" path="res://Scenes/Rooms/RoamingEnemy.tscn" id="5_ujrim"]
 
@@ -23,12 +22,10 @@ size = Vector2(59, 98)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_npkn0"]
 size = Vector2(580, 31.089996)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_gs0tk"]
-size = Vector2(60, 195.85999)
-
-[node name="NormalBattleRoom_1" type="Node2D" unique_id=1973370823]
+[node name="NormalBattleRoom" type="Node2D" unique_id=1973370823]
 script = ExtResource("1_av6k5")
 exits_available_on_entry = false
+spawn_room_player = false
 
 [node name="Background" type="ColorRect" parent="." unique_id=1723921837]
 offset_top = -1.0
@@ -130,21 +127,6 @@ position = Vector2(138, 1055)
 [node name="enemies" type="Node2D" parent="." unique_id=1496383845]
 
 [node name="RoamingEnemy2" parent="enemies" unique_id=1998266480 instance=ExtResource("5_ujrim")]
-
-[node name="BattleTrigger" type="Area2D" parent="." unique_id=2141645197]
-position = Vector2(1371.065, 264.86)
-script = ExtResource("2_3yrn4")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="BattleTrigger" unique_id=2048770366]
-position = Vector2(0, -66.92999)
-shape = SubResource("RectangleShape2D_gs0tk")
-
-[node name="Label" type="Label" parent="BattleTrigger" unique_id=1157140154]
-offset_left = -26.064941
-offset_top = -77.859985
-offset_right = 28.935059
-offset_bottom = -54.859985
-text = "ENEMY"
 
 [node name="Exit1" parent="." unique_id=279376350 instance=ExtResource("3_yefhr")]
 position = Vector2(1576, -2)
