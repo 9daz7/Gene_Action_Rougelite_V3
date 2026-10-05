@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://s5nq1sb1o64w" path="res://Assets/Sprites/Animals/Green/walk.png" id="1_lu8gy"]
 [ext_resource type="Script" uid="uid://dc1inglghqapd" path="res://Scripts/ActionBattle/ActionPlayerCharacterController.gd" id="2_xrg1l"]
 [ext_resource type="Script" uid="uid://dp7iq3r5f6rki" path="res://Scripts/ActionBattle/ActionPlayerCombatController.gd" id="3_4h3ga"]
+[ext_resource type="PackedScene" uid="uid://bohsv48hmsnv8" path="res://Scenes/UI/InteractionPrompt.tscn" id="5_qv872"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_lu8gy"]
 atlas = ExtResource("1_lu8gy")
@@ -113,6 +114,9 @@ size = Vector2(11.175786, 16.763678)
 [sub_resource type="CircleShape2D" id="CircleShape2D_4h3ga"]
 radius = 40.0
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_gs0tk"]
+radius = 30.0
+
 [node name="ActionPlayerCharacter" type="CharacterBody2D" unique_id=262011270]
 position = Vector2(7, 0)
 collision_layer = 2
@@ -155,3 +159,10 @@ default_color = Color(0.8392157, 1, 0.8235294, 1)
 [node name="Camera2D" type="Camera2D" parent="." unique_id=925177375]
 position_smoothing_enabled = true
 position_smoothing_speed = 6.0
+
+[node name="InteractionPrompt" parent="." unique_id=1894620983 instance=ExtResource("5_qv872")]
+
+[node name="InteractionArea" type="Area2D" parent="." unique_id=1212933979]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea" unique_id=999144384]
+shape = SubResource("CircleShape2D_gs0tk")

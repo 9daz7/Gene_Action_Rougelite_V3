@@ -49,7 +49,7 @@ func _ready() -> void:
 
 	_connect_room_exits()
 	_spawn_player()
-
+	
 	if exits_available_on_entry:
 
 		enable_room_exits()

@@ -23,6 +23,17 @@ var facing_direction: Vector2 = Vector2.RIGHT
 
 
 # ==================================================
+# Interaction
+# ==================================================
+
+var nearby_interactable: Interactable = null
+
+@onready var interaction_prompt: InteractionPrompt = (
+	get_parent().get_node_or_null("InteractionPrompt")
+)
+
+
+# ==================================================
 # References
 # ==================================================
 
@@ -59,6 +70,28 @@ func _ready() -> void:
 			"AnimatedSprite2D not found on "
 			+ "ActionPlayerCharacter."
 		)
+
+	var interaction_area: Area2D = (
+		get_parent().get_node_or_null("InteractionArea")
+	)
+
+	if interaction_area != null:
+
+		if not interaction_area.area_entered.is_connected(
+			_on_interaction_area_entered
+		):
+
+			interaction_area.area_entered.connect(
+				_on_interaction_area_entered
+			)
+
+		if not interaction_area.area_exited.is_connected(
+			_on_interaction_area_exited
+		):
+
+			interaction_area.area_exited.connect(
+				_on_interaction_area_exited
+			)
 
 	print("ActionPlayerCharacterController ready")
 
@@ -120,6 +153,8 @@ func _handle_movement() -> void:
 		)
 
 	player_character.move_and_slide()
+
+	_handle_interaction()
 
 	_update_animation(direction)
 
@@ -201,6 +236,66 @@ func _update_animation(direction: Vector2) -> void:
 
 	animated_sprite.play("walk_up")
 	animated_sprite.flip_h = false
+
+
+# ==================================================
+# Interaction
+# ==================================================
+
+func _handle_interaction() -> void:
+
+	if not Input.is_action_just_pressed("interact"):
+		return
+
+	if nearby_interactable == null:
+		return
+
+	nearby_interactable.interact()
+
+
+func set_nearby_interactable(
+	interactable: Interactable
+) -> void:
+
+	nearby_interactable = interactable
+
+	if interaction_prompt == null:
+		return
+
+	if nearby_interactable == null:
+
+		interaction_prompt.hide_prompt()
+
+	else:
+
+		interaction_prompt.show_prompt(
+			nearby_interactable.interaction_text
+		)
+
+
+func _on_interaction_area_entered(
+	area: Area2D
+) -> void:
+
+	if area is Interactable:
+
+		set_nearby_interactable(area)
+
+
+func _on_interaction_area_exited(
+	area: Area2D
+) -> void:
+
+	if area == nearby_interactable:
+
+		set_nearby_interactable(null)
+
+
+func _hide_interaction_prompt() -> void:
+
+	if interaction_prompt != null:
+
+		interaction_prompt.hide_prompt()
 
 
 func set_deebo_controller(

@@ -1,6 +1,5 @@
 [gd_scene format=3 uid="uid://bnlupao0s4l76"]
 
-[ext_resource type="Script" uid="uid://ckxjn41pglkmx" path="res://Scenes/Rooms/BattleTrigger.gd" id="1_lott6"]
 [ext_resource type="Script" uid="uid://bd4c5xvt4q8t" path="res://Scripts/Rooms/NormalBattleRoom.gd" id="1_sta21"]
 [ext_resource type="PackedScene" uid="uid://deuudtgda4sb6" path="res://Scenes/Rooms/RoamingEnemy.tscn" id="2_p0jvm"]
 [ext_resource type="PackedScene" uid="uid://s4vol5fxx17b" path="res://Scenes/Rooms/RoomExit.tscn" id="2_sta21"]
@@ -22,9 +21,6 @@ size = Vector2(199.5, 329.5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ybv5l"]
 size = Vector2(120, 35.08998)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_y52b1"]
-size = Vector2(229, 34)
 
 [node name="NormalBattleRoom00" type="Node2D" unique_id=449299761]
 script = ExtResource("1_sta21")
@@ -132,21 +128,6 @@ position = Vector2(64, 530)
 
 [node name="RoamingEnemy" parent="enemies" unique_id=1998266480 instance=ExtResource("2_p0jvm")]
 position = Vector2(1098, 336)
-
-[node name="BattleTrigger" type="Area2D" parent="." unique_id=1780681507]
-position = Vector2(1676.065, 385.86)
-script = ExtResource("1_lott6")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="BattleTrigger" unique_id=712145509]
-position = Vector2(9.435059, -71.859985)
-shape = SubResource("RectangleShape2D_y52b1")
-
-[node name="Label" type="Label" parent="BattleTrigger" unique_id=6459823]
-offset_left = -22.064941
-offset_top = -83.859985
-offset_right = 32.93506
-offset_bottom = -60.859985
-text = "ENEMY"
 
 [node name="Exit1" parent="." unique_id=1730805262 instance=ExtResource("2_sta21")]
 position = Vector2(1611, 29)
