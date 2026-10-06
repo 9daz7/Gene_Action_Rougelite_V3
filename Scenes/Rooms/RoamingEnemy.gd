@@ -198,7 +198,15 @@ func _check_player_detection() -> void:
 		detection_area.get_overlapping_bodies()
 	)
 
+	#print(
+		#"ROAMING ENEMY DETECTION:",
+		#bodies
+	#)
+
 	for body in bodies:
+
+		if body == self:
+			continue
 
 		if not body is ActionPlayerCharacter:
 			continue

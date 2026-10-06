@@ -13,8 +13,35 @@ func start_battle():
 # Initialization
 # ==================================================
 
-func initialize_player(manager:RunManager):
+func initialize_player(manager: RunManager) -> void:
+
+	print("================================")
+	print("PLAYER ANIMAL INITIALIZE")
+	print("RunManager:", manager)
+	print("Current build:", manager.current_animal_build if manager else null)
+	print("================================")
+
 	run_manager = manager
+
+	if run_manager == null:
+		push_error("PlayerAnimal: RunManager is missing.")
+		return
+
+	if run_manager.current_animal_build == null:
+		push_error("PlayerAnimal: Current animal build is missing.")
+		return
+
+	load_build(
+		run_manager.current_animal_build
+	)
+
+	print("PLAYER BUILD LOADED")
+	print("Animal:", animal_resource.animal_name if animal_resource else "NULL")
+	print("Basic moves:", basic_moves)
+	print("Selected moves:", selected_moves)
+	print("Battle moves:", get_battle_moves())
+	print("================================")
+
 
 # ==================================================
 # Combat

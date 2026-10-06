@@ -14,9 +14,18 @@ const PLAYER_ANIMAL_SCENE = preload(
 	"res://Scenes/Animals/PlayerAnimal.tscn"
 )
 
+const ENEMY_ANIMAL_SCENE = preload(
+	"res://Scenes/Animals/EnemyAnimal.tscn"
+)
+
+@onready var run_manager: RunManager = get_node(
+	"/root/Main/Managers/RunManager"
+)
+
 var action_player_character: ActionPlayerCharacter = null
 var deebo: PlayerAnimal = null
 var action_combat_controller: ActionCombatController = null
+var active_combat_enemy: EnemyAnimal = null
 
 
 # ==================================================
@@ -28,6 +37,7 @@ var roaming_enemies: Array[RoamingEnemy] = []
 
 # Battle State
 var battle_active: bool = false
+var active_roaming_enemy: RoamingEnemy = null
 
 
 # ==================================================
@@ -106,6 +116,12 @@ func _setup_action_player() -> void:
 		action_player_character.global_position
 		+ Vector2(-60.0, 0.0)
 	)
+
+	deebo.initialize_player(
+		run_manager
+	)
+
+	deebo.start_battle()
 
 	# --------------------------------------------------
 	# Controllers
@@ -257,11 +273,6 @@ func _on_roaming_enemy_encounter(
 	if battle_active:
 		return
 
-	_start_room_battle(enemy)
-
-	#if active_roaming_enemy != null:
-		#return
-
 	if enemy.enemy_data == null:
 
 		push_error(
@@ -270,32 +281,115 @@ func _on_roaming_enemy_encounter(
 
 		return
 
-	#active_roaming_enemy = enemy
-
 	print("================================")
 	print("NORMAL BATTLE ROOM: ROAMING ENCOUNTER")
 	print("Enemy:", enemy.name)
 	print("================================")
 
-	print(
-		"Action combat migration in progress."
-	)
+	_start_room_battle(enemy)
 
 
-func _start_room_battle(enemy: RoamingEnemy) -> void:
+func _start_room_battle(
+	enemy: RoamingEnemy
+) -> void:
 
 	battle_active = true
 
 	print("================================")
 	print("ROOM BATTLE START")
 	print("Enemy:", enemy.name)
+	print("Enemy Resource:", enemy.enemy_data.enemy_name)
 	print("================================")
+
+	# --------------------------------------------------
+	# Create Combat Enemy
+	# --------------------------------------------------
+
+	active_combat_enemy = ENEMY_ANIMAL_SCENE.instantiate()
+
+	if active_combat_enemy == null:
+
+		push_error(
+			"NormalBattleRoom: Failed to create EnemyAnimal."
+		)
+
+		return
+
+	var enemies_container := get_node_or_null("Enemies")
+
+	if enemies_container == null:
+
+		push_error(
+			"NormalBattleRoom: Enemies container not found."
+		)
+
+		active_combat_enemy.queue_free()
+		active_combat_enemy = null
+
+		return
+
+	enemies_container.add_child(
+		active_combat_enemy
+	)
+
+	# --------------------------------------------------
+	# Copy Encounter Data
+	# --------------------------------------------------
+
+	active_combat_enemy.enemy_data = enemy.enemy_data
+
+	active_combat_enemy.global_position = (
+		enemy.global_position
+	)
+
+	# --------------------------------------------------
+	# Add Action Enemy Controller
+	# --------------------------------------------------
+
+	var enemy_controller := ActionEnemyController.new()
+
+	enemy_controller.name = "ActionEnemyController"
+
+	active_combat_enemy.add_child(
+		enemy_controller
+	)
+
+	enemy_controller.set_combat_controller(
+		action_combat_controller
+	)
+
+	# --------------------------------------------------
+	# Initialize Combat Enemy
+	# --------------------------------------------------
+
+	active_combat_enemy.start_battle()
+
+	if not active_combat_enemy.animal_died.is_connected(
+		_on_combat_enemy_died
+	):
+
+		active_combat_enemy.animal_died.connect(
+			_on_combat_enemy_died
+		)
+
+	# --------------------------------------------------
+	# Remove Roaming Enemy
+	# --------------------------------------------------
+
+	roaming_enemies.erase(enemy)
+
+	enemy.queue_free()
+
+	# --------------------------------------------------
+	# Activate Battle
+	# --------------------------------------------------
+
+	set_battle_active(true)
 
 
 # ==================================================
 # Battle State
 # ==================================================
-
 
 func set_battle_active(
 	active: bool
@@ -314,3 +408,16 @@ func set_battle_active(
 		_disable_room_exits()
 	else:
 		enable_room_exits()
+
+
+func _on_combat_enemy_died() -> void:
+
+	print("================================")
+	print("ROOM BATTLE WON")
+	print("================================")
+
+	battle_active = false
+
+	active_combat_enemy = null
+
+	set_battle_active(false)

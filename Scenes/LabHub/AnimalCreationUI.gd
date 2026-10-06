@@ -239,7 +239,7 @@ func _confirm_build():
 		build.animal_name = "Deebo"
 
 
-	build.animal = preload("res://Data/Animals/Dog.tres")
+	build.animal = preload("res://Data/Animals/Deebo.tres")
 
 	build.genes = selected_genes.duplicate()
 	build.moves = selected_moves.duplicate()

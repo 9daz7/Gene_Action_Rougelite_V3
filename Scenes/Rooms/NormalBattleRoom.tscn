@@ -124,9 +124,10 @@ color = Color(0.60733163, 0.4368924, 3.85046e-07, 1)
 [node name="PlayerSpawn" type="Marker2D" parent="." unique_id=2141327694]
 position = Vector2(138, 1055)
 
-[node name="enemies" type="Node2D" parent="." unique_id=1496383845]
+[node name="Enemies" type="Node2D" parent="." unique_id=1496383845]
 
-[node name="RoamingEnemy2" parent="enemies" unique_id=1998266480 instance=ExtResource("5_ujrim")]
+[node name="RoamingEnemy2" parent="Enemies" unique_id=1998266480 instance=ExtResource("5_ujrim")]
+collision_mask = 3
 
 [node name="Exit1" parent="." unique_id=279376350 instance=ExtResource("3_yefhr")]
 position = Vector2(1576, -2)

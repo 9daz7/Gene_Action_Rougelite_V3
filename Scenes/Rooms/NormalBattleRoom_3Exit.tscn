@@ -25,6 +25,7 @@ size = Vector2(862, 54.5)
 [node name="NormalBattleRoom_3Exit" type="Node2D" unique_id=1919136388]
 script = ExtResource("1_0fj0b")
 exits_available_on_entry = false
+spawn_room_player = false
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=807374136]
 offset_right = 1920.0
@@ -124,9 +125,9 @@ color = Color(0.60784316, 0.43529412, 0, 1)
 [node name="PlayerSpawn" type="Marker2D" parent="." unique_id=2089369805]
 position = Vector2(962, 1026)
 
-[node name="enemies" type="Node2D" parent="." unique_id=2117794795]
+[node name="Enemies" type="Node2D" parent="." unique_id=2117794795]
 
-[node name="RoamingEnemy" parent="enemies" unique_id=1998266480 instance=ExtResource("2_fji12")]
+[node name="RoamingEnemy" parent="Enemies" unique_id=1998266480 instance=ExtResource("2_fji12")]
 position = Vector2(1165, 594)
 
 [node name="Exit1" parent="." unique_id=1730805262 instance=ExtResource("3_fji12")]

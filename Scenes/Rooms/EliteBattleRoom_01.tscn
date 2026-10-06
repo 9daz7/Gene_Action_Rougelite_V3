@@ -1,6 +1,5 @@
 [gd_scene format=3 uid="uid://dguwdnvq3j5rt"]
 
-[ext_resource type="Script" uid="uid://ckxjn41pglkmx" path="res://Scenes/Rooms/BattleTrigger.gd" id="1_5fcn1"]
 [ext_resource type="Script" uid="uid://bd4c5xvt4q8t" path="res://Scripts/Rooms/NormalBattleRoom.gd" id="1_m86r0"]
 [ext_resource type="PackedScene" uid="uid://s4vol5fxx17b" path="res://Scenes/Rooms/RoomExit.tscn" id="2_m86r0"]
 
@@ -21,9 +20,6 @@ size = Vector2(569, 20)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ychs0"]
 size = Vector2(936.22504, 20)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_eiowv"]
-size = Vector2(416, 49.000008)
 
 [node name="EliteBattleRoom_01" type="Node2D" unique_id=2002303411]
 script = ExtResource("1_m86r0")
@@ -118,21 +114,6 @@ color = Color(0.60784316, 0.43529412, 0, 1)
 
 [node name="PlayerSpawn" type="Marker2D" parent="." unique_id=1423460349]
 position = Vector2(1889, 826)
-
-[node name="BattleTrigger" type="Area2D" parent="." unique_id=1722878104]
-position = Vector2(761.935, 260.085)
-script = ExtResource("1_5fcn1")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="BattleTrigger" unique_id=1540875694]
-position = Vector2(16.065002, -4.5849915)
-shape = SubResource("RectangleShape2D_eiowv")
-
-[node name="Label" type="Label" parent="BattleTrigger" unique_id=625260450]
-offset_left = -26.0
-offset_top = -12.0
-offset_right = 29.0
-offset_bottom = 11.0
-text = "ENEMY"
 
 [node name="Exit1" parent="." unique_id=1730805262 instance=ExtResource("2_m86r0")]
 position = Vector2(1922, 81)

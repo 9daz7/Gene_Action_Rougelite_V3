@@ -6,7 +6,7 @@ class_name AnimalResource
 # Identity
 # ---------------------------------------
 
-@export var animal_name:String = "Dog"
+@export var animal_name:String = "Deebo"
 
 #@export var description:String
 #@export var icon:Texture2D
