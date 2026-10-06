@@ -160,8 +160,13 @@ func _input(event: InputEvent) -> void:
 	if event.button_index == MOUSE_BUTTON_LEFT:
 
 		if event.pressed:
+
+			if is_aiming:
+				return
+
 			melee_button_held = true
 			_try_melee_attack()
+
 		else:
 			melee_button_held = false
 

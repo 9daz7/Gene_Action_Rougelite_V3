@@ -26,6 +26,7 @@ var action_player_character: ActionPlayerCharacter = null
 var deebo: PlayerAnimal = null
 var action_combat_controller: ActionCombatController = null
 var active_combat_enemy: EnemyAnimal = null
+var action_battle_ui: ActionBattleUI = null
 
 
 # ==================================================
@@ -156,15 +157,6 @@ func _setup_action_player() -> void:
 		)
 	)
 
-	if deebo_controller == null:
-
-		push_error(
-			"NormalBattleRoom: ActionPlayerController "
-			+ "not found on PlayerAnimal."
-		)
-
-		return
-
 	if player_controller == null:
 
 		push_error(
@@ -223,6 +215,15 @@ func _setup_action_player() -> void:
 	player_combat.set_combat_controller(
 		action_combat_controller
 	)
+
+	action_battle_ui = get_node_or_null("ActionBattleUI")
+
+	if action_battle_ui != null:
+		action_battle_ui.setup(
+			deebo,
+			action_player_character,
+			deebo_controller
+		)
 
 	print("================================")
 	print("NORMAL BATTLE ROOM ACTION PLAYER READY")
@@ -354,6 +355,8 @@ func _start_room_battle(
 		enemy_controller
 	)
 
+	enemy_controller.target = deebo
+
 	enemy_controller.set_combat_controller(
 		action_combat_controller
 	)
@@ -398,10 +401,6 @@ func set_battle_active(
 	print(
 		"NormalBattleRoom battle active:",
 		active
-	)
-
-	set_player_controls(
-		not active
 	)
 
 	if active:

@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" uid="uid://bd4c5xvt4q8t" path="res://Scripts/Rooms/NormalBattleRoom.gd" id="1_av6k5"]
 [ext_resource type="PackedScene" uid="uid://s4vol5fxx17b" path="res://Scenes/Rooms/RoomExit.tscn" id="3_yefhr"]
+[ext_resource type="Script" uid="uid://cyxrv2eg82j7j" path="res://Scripts/ActionBattle/ActionTargeting.gd" id="4_iusyf"]
+[ext_resource type="PackedScene" uid="uid://03hih1xoemdv" path="res://Scenes/Battle/ActionBattleUI.tscn" id="5_t2bgp"]
 [ext_resource type="PackedScene" uid="uid://deuudtgda4sb6" path="res://Scenes/Rooms/RoamingEnemy.tscn" id="5_ujrim"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qwfpk"]
@@ -28,9 +30,9 @@ exits_available_on_entry = false
 spawn_room_player = false
 
 [node name="Background" type="ColorRect" parent="." unique_id=1723921837]
-offset_top = -1.0
+offset_top = -2.0
 offset_right = 1921.0
-offset_bottom = 1081.0
+offset_bottom = 1080.0
 color = Color(0, 0.27067333, 0.08999216, 1)
 
 [node name="environment" type="Control" parent="." unique_id=246582724]
@@ -121,12 +123,21 @@ offset_right = 1729.0
 offset_bottom = 296.0
 color = Color(0.60733163, 0.4368924, 3.85046e-07, 1)
 
-[node name="PlayerSpawn" type="Marker2D" parent="." unique_id=2141327694]
+[node name="PlayerSpawn" type="Marker2D" parent="." unique_id=1451983108]
 position = Vector2(138, 1055)
 
 [node name="Enemies" type="Node2D" parent="." unique_id=1496383845]
 
 [node name="RoamingEnemy2" parent="Enemies" unique_id=1998266480 instance=ExtResource("5_ujrim")]
+position = Vector2(719, 487)
+collision_mask = 3
+
+[node name="RoamingEnemy3" parent="Enemies" unique_id=568425942 instance=ExtResource("5_ujrim")]
+position = Vector2(1197, 645)
+collision_mask = 3
+
+[node name="RoamingEnemy4" parent="Enemies" unique_id=642758756 instance=ExtResource("5_ujrim")]
+position = Vector2(1197, 182)
 collision_mask = 3
 
 [node name="Exit1" parent="." unique_id=279376350 instance=ExtResource("3_yefhr")]
@@ -150,3 +161,14 @@ offset_top = 37.730003
 offset_right = 147.52
 offset_bottom = 95.46001
 text = "EXIT 2"
+
+[node name="TargetMarker" type="Polygon2D" parent="." unique_id=1627069221]
+visible = false
+z_index = 10
+color = Color(0.84, 0, 0, 1)
+polygon = PackedVector2Array(0, -5, 3, -4, 5, 0, 3, 4, 0, 5, -3, 4, -5, 0, -3, -4)
+
+[node name="ActionTargeting" type="Node" parent="." unique_id=1495561450]
+script = ExtResource("4_iusyf")
+
+[node name="ActionBattleUI" parent="." unique_id=871756832 instance=ExtResource("5_t2bgp")]

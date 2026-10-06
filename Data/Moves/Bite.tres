@@ -10,3 +10,4 @@ move_name = "Bite"
 description = "Reliable bite attack"
 power = 8
 critical_chance = 2
+cooldown = 0.25

@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://bd4c5xvt4q8t" path="res://Scripts/Rooms/NormalBattleRoom.gd" id="1_sta21"]
 [ext_resource type="PackedScene" uid="uid://deuudtgda4sb6" path="res://Scenes/Rooms/RoamingEnemy.tscn" id="2_p0jvm"]
 [ext_resource type="PackedScene" uid="uid://s4vol5fxx17b" path="res://Scenes/Rooms/RoomExit.tscn" id="2_sta21"]
+[ext_resource type="Script" uid="uid://cyxrv2eg82j7j" path="res://Scripts/ActionBattle/ActionTargeting.gd" id="4_p0jvm"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_p0jvm"]
 size = Vector2(1940, 20)
@@ -138,3 +139,12 @@ offset_top = 37.730003
 offset_right = 147.52
 offset_bottom = 95.46001
 text = "EXIT"
+
+[node name="TargetMarker" type="Polygon2D" parent="." unique_id=702732403]
+visible = false
+z_index = 10
+color = Color(0.84, 0, 0, 1)
+polygon = PackedVector2Array(0, -5, 3, -4, 5, 0, 3, 4, 0, 5, -3, 4, -5, 0, -3, -4)
+
+[node name="ActionTargeting" type="Node" parent="." unique_id=729473757]
+script = ExtResource("4_p0jvm")

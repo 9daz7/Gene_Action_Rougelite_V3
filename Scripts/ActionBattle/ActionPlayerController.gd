@@ -319,7 +319,7 @@ func _execute_attack() -> void:
 
 	selected_target = null
 
-	print("PLAYER ATTACK COMPLETE")
+	print("DEEBO ATTACK COMPLETE")
 
 
 # ==================================================
@@ -328,7 +328,7 @@ func _execute_attack() -> void:
 
 func _try_attack() -> void:
 
-	print("PLAYER ATTACK INPUT")
+	print("DEEBO ATTACK INPUT")
 
 	# --------------------------------------------------
 	# Only allow attacks while idle.
@@ -378,28 +378,35 @@ func _try_attack() -> void:
 		push_warning("No move selected.")
 		return
 
-	print("PLAYER USES:", attack_move.move_name)
+	print("DEEBO USES:", attack_move.move_name)
 
 	# --------------------------------------------------
-	# Selected target approach
+	# Offensive moves require a valid target
 	# --------------------------------------------------
 
-	if selected_target != null:
-
-		var distance := (
-			player.global_position.distance_to(
-				selected_target.global_position
-			)
-		)
+	if selected_target == null:
 
 		print(
-			"TARGET DISTANCE:",
-			distance
+			"PLAYER CANNOT USE MOVE - NO VALID TARGET"
 		)
 
+		return
+
+
 	# --------------------------------------------------
-	# Target already in range
+	# Target distance
 	# --------------------------------------------------
+
+	var distance := (
+		player.global_position.distance_to(
+			selected_target.global_position
+		)
+	)
+
+	print(
+		"TARGET DISTANCE:",
+		distance
+	)
 
 	_start_lunge_toward_target()
 
