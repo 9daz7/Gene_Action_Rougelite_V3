@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bjo4cf8ylnke2"
-path.s3tc="res://.godot/imported/deebo_asset_test_battle.png-349bae868e37b5a61dd77fafb2878f04.s3tc.ctex"
+uid="uid://qiq0kpvsqban"
+path.s3tc="res://.godot/imported/Tree.png-0dac7debc624d47f88ee9d66755e5bae.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://Assets/Sprites/Animals/deebo_asset_test_battle.png"
-dest_files=["res://.godot/imported/deebo_asset_test_battle.png-349bae868e37b5a61dd77fafb2878f04.s3tc.ctex"]
+source_file="res://Assets/Tree.png"
+dest_files=["res://.godot/imported/Tree.png-0dac7debc624d47f88ee9d66755e5bae.s3tc.ctex"]
 
 [params]
 
