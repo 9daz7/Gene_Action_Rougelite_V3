@@ -14,6 +14,24 @@ class_name ActionEnemyController
 
 
 # ==================================================
+# Behaviour
+# ==================================================
+
+enum BehaviorState {
+	GUARDING,
+	ROAMING,
+	ALERTED
+}
+
+var behavior_state: BehaviorState = BehaviorState.ROAMING
+
+@export var can_roam: bool = true
+@export var roam_speed: float = 35.0
+@export var wander_radius: float = 150.0
+@export var detection_radius: float = 180.0
+
+
+# ==================================================
 # Combat
 # ==================================================
 
@@ -115,17 +133,7 @@ func _physics_process(delta: float) -> void:
 	if enemy == null:
 		return
 
-	if combat_controller != null and not combat_controller.is_battle_active():
-		enemy.velocity = Vector2.ZERO
-		return
-
 	if not enemy.is_alive():
-		enemy.velocity = Vector2.ZERO
-		return
-
-	combat_target = _get_closest_combatant()
-
-	if combat_target == null:
 		enemy.velocity = Vector2.ZERO
 		return
 
@@ -135,6 +143,16 @@ func _physics_process(delta: float) -> void:
 
 	if attack_state != AttackState.IDLE:
 		_update_attack_state(delta)
+		return
+
+	if behavior_state != BehaviorState.ALERTED:
+		_update_unalerted_behavior(delta)
+		return
+
+	combat_target = _get_closest_combatant()
+
+	if combat_target == null:
+		enemy.velocity = Vector2.ZERO
 		return
 
 	# --------------------------------------------------
@@ -199,6 +217,18 @@ func _physics_process(delta: float) -> void:
 		* animal_speed
 		* move_speed_multiplier
 	)
+
+	enemy.move_and_slide()
+
+
+func _update_unalerted_behavior(_delta: float) -> void:
+
+	enemy.velocity = Vector2.ZERO
+
+	if can_roam:
+		behavior_state = BehaviorState.ROAMING
+	else:
+		behavior_state = BehaviorState.GUARDING
 
 	enemy.move_and_slide()
 

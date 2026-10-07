@@ -1,0 +1,159 @@
+[gd_scene format=3 uid="uid://cdons40r0xrvg"]
+
+[ext_resource type="Script" uid="uid://dx4y4stkdd42x" path="res://Scenes/Test3D/Test3DCamera.gd" id="1_3rvnw"]
+[ext_resource type="Script" uid="uid://d4icaydoavq6b" path="res://Scenes/Test3D/Test3DPlayer.gd" id="1_oni0s"]
+[ext_resource type="Texture2D" uid="uid://s5nq1sb1o64w" path="res://Assets/Sprites/Animals/Green/walk.png" id="2_oni0s"]
+[ext_resource type="Texture2D" uid="uid://rq85nl11ce4q" path="res://Assets/Sprites/Animals/deebo_asset_test_gene_select.png" id="3_3rvnw"]
+[ext_resource type="Texture2D" uid="uid://btha0go4fr6sq" path="res://Assets/Sprites/enemypng.png" id="4_sepm0"]
+[ext_resource type="Texture2D" uid="uid://c6e161570jr8u" path="res://Assets/treepng.png" id="5_o40u3"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_oaf1g"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_oni0s"]
+albedo_color = Color(0.38431373, 1, 0.078431375, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6jocm"]
+atlas = ExtResource("2_oni0s")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u7gxd"]
+atlas = ExtResource("2_oni0s")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fee26"]
+atlas = ExtResource("2_oni0s")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_guphg"]
+atlas = ExtResource("2_oni0s")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oni0s"]
+atlas = ExtResource("2_oni0s")
+region = Rect2(0, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3rvnw"]
+atlas = ExtResource("2_oni0s")
+region = Rect2(32, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sepm0"]
+atlas = ExtResource("2_oni0s")
+region = Rect2(64, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o40u3"]
+atlas = ExtResource("2_oni0s")
+region = Rect2(96, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1ujl1"]
+atlas = ExtResource("2_oni0s")
+region = Rect2(0, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pin62"]
+atlas = ExtResource("2_oni0s")
+region = Rect2(32, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k0fhl"]
+atlas = ExtResource("2_oni0s")
+region = Rect2(64, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4pn40"]
+atlas = ExtResource("2_oni0s")
+region = Rect2(96, 64, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_oaf1g"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6jocm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u7gxd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fee26")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_guphg")
+}],
+"loop": 1,
+"name": &"walk_down",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oni0s")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3rvnw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sepm0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o40u3")
+}],
+"loop": 1,
+"name": &"walk_side",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1ujl1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pin62")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k0fhl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4pn40")
+}],
+"loop": 1,
+"name": &"walk_up",
+"speed": 5.0
+}]
+
+[node name="TestRoom3d" type="Node3D" unique_id=1242734887]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=55958730]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=178432131]
+transform = Transform3D(0.93327427, 0.3221911, 0.15871999, 0.28958452, -0.9364237, 0.19811977, 0.21246159, -0.13893725, -0.9672417, -251.1941, -121.16391, -37.02444)
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=486337280]
+transform = Transform3D(1, 0, 0, 0, 0.64278764, 0.76604444, 0, -0.76604444, 0.64278764, 0.2832476, 3.7711463, 3.2305596)
+script = ExtResource("1_3rvnw")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=989240237]
+transform = Transform3D(10, 0, 0, 0, 10.000001, 0, 0, 0, 10, 0, 0, 0)
+mesh = SubResource("PlaneMesh_oaf1g")
+surface_material_override/0 = SubResource("StandardMaterial3D_oni0s")
+
+[node name="Player" type="CharacterBody3D" parent="." unique_id=1029424655]
+script = ExtResource("1_oni0s")
+
+[node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="Player" unique_id=1584369862]
+transform = Transform3D(7.058881, -0.19510688, -0.2199046, 0.23626786, 6.909829, 1.4534994, 0.17493534, -1.4595944, 6.910369, 0.17567652, 0.49804533, 0.9241632)
+sprite_frames = SubResource("SpriteFrames_oaf1g")
+animation = &"walk_down"
+
+[node name="Deebo" type="Node3D" parent="." unique_id=1036907364]
+visible = false
+
+[node name="Sprite3D" type="Sprite3D" parent="Deebo" unique_id=698132031]
+transform = Transform3D(0.05491765, -0.002171651, 0.0020823458, 0.001990212, 0.05476865, 0.0046296995, -0.0022563883, -0.0045474176, 0.05476523, -0.16657889, 0.5341965, 1.5212414)
+texture = ExtResource("3_3rvnw")
+
+[node name="Enemy" type="Node3D" parent="." unique_id=1621010506]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.29877126, 0, -2.887399)
+
+[node name="Sprite3D" type="Sprite3D" parent="Enemy" unique_id=1056793907]
+transform = Transform3D(0.04499314, 0, 0.00078594126, -4.652008e-05, 0.044921096, 0.0026631565, -0.0007845633, -0.002663562, 0.044914253, 0.7970289, 0.31460434, 0.045686483)
+texture = ExtResource("4_sepm0")
+
+[node name="Tree" type="Node3D" parent="." unique_id=1799195767]
+
+[node name="Sprite3D" type="Sprite3D" parent="Tree" unique_id=1793696146]
+transform = Transform3D(0.5985652, -0.009924683, 0.49218535, -0.047637768, 0.77003884, 0.073461555, -0.48997504, -0.08699117, 0.594123, -6.538884, 1.3653095, -1.1333048)
+texture = ExtResource("5_o40u3")

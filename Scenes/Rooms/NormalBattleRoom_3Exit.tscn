@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://b515mi4n67ch4"]
 
 [ext_resource type="Script" uid="uid://bd4c5xvt4q8t" path="res://Scripts/Rooms/NormalBattleRoom.gd" id="1_0fj0b"]
-[ext_resource type="PackedScene" uid="uid://deuudtgda4sb6" path="res://Scenes/Rooms/RoamingEnemy.tscn" id="2_fji12"]
+[ext_resource type="PackedScene" uid="uid://b6josfwbrseox" path="res://Scenes/Animals/EnemyAnimal.tscn" id="2_05yg6"]
 [ext_resource type="PackedScene" uid="uid://s4vol5fxx17b" path="res://Scenes/Rooms/RoomExit.tscn" id="3_fji12"]
 [ext_resource type="Script" uid="uid://cyxrv2eg82j7j" path="res://Scripts/ActionBattle/ActionTargeting.gd" id="4_05yg6"]
 
@@ -128,8 +128,14 @@ position = Vector2(962, 1026)
 
 [node name="Enemies" type="Node2D" parent="." unique_id=2117794795]
 
-[node name="RoamingEnemy" parent="Enemies" unique_id=1998266480 instance=ExtResource("2_fji12")]
-position = Vector2(1165, 594)
+[node name="EnemyAnimal" parent="Enemies" unique_id=34476420 instance=ExtResource("2_05yg6")]
+position = Vector2(707, 704)
+
+[node name="EnemyAnimal2" parent="Enemies" unique_id=2112762781 instance=ExtResource("2_05yg6")]
+position = Vector2(1312, 673)
+
+[node name="EnemyAnimal3" parent="Enemies" unique_id=862465488 instance=ExtResource("2_05yg6")]
+position = Vector2(1123, 234)
 
 [node name="Exit1" parent="." unique_id=1730805262 instance=ExtResource("3_fji12")]
 position = Vector2(6, 265)
