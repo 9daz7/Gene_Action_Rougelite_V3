@@ -6,7 +6,6 @@
 
 [resource]
 script = ExtResource("2_lnfkl")
-hitbox_type = 1
 move_name = "Target Punch"
 description = "Applies a Mark target to an enemy."
 effect_type = 3

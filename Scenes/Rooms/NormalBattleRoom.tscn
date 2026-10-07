@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://bmdklddw430wi"]
 
 [ext_resource type="Script" uid="uid://bd4c5xvt4q8t" path="res://Scripts/Rooms/NormalBattleRoom.gd" id="1_av6k5"]
-[ext_resource type="PackedScene" uid="uid://b6josfwbrseox" path="res://Scenes/Animals/EnemyAnimal.tscn" id="2_iusyf"]
 [ext_resource type="PackedScene" uid="uid://s4vol5fxx17b" path="res://Scenes/Rooms/RoomExit.tscn" id="3_yefhr"]
 [ext_resource type="Script" uid="uid://cyxrv2eg82j7j" path="res://Scripts/ActionBattle/ActionTargeting.gd" id="4_iusyf"]
+[ext_resource type="PackedScene" uid="uid://deuudtgda4sb6" path="res://Scenes/Rooms/RoamingEnemy.tscn" id="5_ujrim"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qwfpk"]
 size = Vector2(1940, 20)
@@ -127,14 +127,17 @@ position = Vector2(138, 1055)
 
 [node name="Enemies" type="Node2D" parent="." unique_id=1496383845]
 
-[node name="EnemyAnimal" parent="Enemies" unique_id=34476420 instance=ExtResource("2_iusyf")]
-position = Vector2(739, 626)
+[node name="RoamingEnemy2" parent="Enemies" unique_id=1998266480 instance=ExtResource("5_ujrim")]
+position = Vector2(719, 487)
+collision_mask = 3
 
-[node name="EnemyAnimal2" parent="Enemies" unique_id=1691143910 instance=ExtResource("2_iusyf")]
-position = Vector2(1198, 543)
+[node name="RoamingEnemy3" parent="Enemies" unique_id=568425942 instance=ExtResource("5_ujrim")]
+position = Vector2(1197, 645)
+collision_mask = 3
 
-[node name="EnemyAnimal3" parent="Enemies" unique_id=652942284 instance=ExtResource("2_iusyf")]
-position = Vector2(832, 200)
+[node name="RoamingEnemy4" parent="Enemies" unique_id=642758756 instance=ExtResource("5_ujrim")]
+position = Vector2(1197, 182)
+collision_mask = 3
 
 [node name="Exit1" parent="." unique_id=279376350 instance=ExtResource("3_yefhr")]
 position = Vector2(1576, -2)
