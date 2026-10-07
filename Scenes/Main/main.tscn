@@ -17,6 +17,7 @@
 [ext_resource type="PackedScene" uid="uid://behj6glwxh240" path="res://Scenes/LabHub/LabHub.tscn" id="12_4e4y2"]
 [ext_resource type="Script" uid="uid://cmha305puw7iq" path="res://Scenes/UI/PauseMenu.gd" id="17_koken"]
 [ext_resource type="Script" uid="uid://dewxe3hh4pbyt" path="res://Scenes/Main/ItemShopUI.gd" id="18_1t20g"]
+[ext_resource type="PackedScene" uid="uid://03hih1xoemdv" path="res://Scenes/Battle/ActionBattleUI.tscn" id="19_1t20g"]
 [ext_resource type="Script" uid="uid://duadx32d3o12m" path="res://Scenes/Main/PotionStorageUI.gd" id="19_c4b4r"]
 
 [node name="Main" type="Node" unique_id=1435261983]
@@ -513,6 +514,9 @@ layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
+
+[node name="ActionBattleUI" parent="UI" unique_id=871756832 instance=ExtResource("19_1t20g")]
+visible = false
 
 [node name="Audio" type="Node" parent="." unique_id=1494023738]
 

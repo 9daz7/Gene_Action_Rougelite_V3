@@ -5,8 +5,10 @@
 
 [resource]
 script = ExtResource("2_a8g2t")
+hitbox_type = 1
 move_name = "Quick strike"
-power = 7
 description = "overwhelming speed is used to quickly attack the opponent."
+power = 7
 priority = 4
+cooldown = 2.0
 metadata/_custom_type_script = "uid://bnmm0xqkm6atb"

@@ -350,23 +350,19 @@ func _try_attack() -> void:
 		.get_node_or_null("ActionTargeting")
 	)
 
-	if targeting == null:
-
-		push_warning(
-			"ActionTargeting node not found."
-		)
-
-		return
-
 	# --------------------------------------------------
-	# Get selected target.
+	# Get selected target if one exists.
 	# --------------------------------------------------
 
-	selected_target = targeting.get_selected_target()
+	selected_target = null
 
-	if selected_target != null:
-		if not selected_target.is_alive():
-			selected_target = null
+	if targeting != null:
+
+		selected_target = targeting.get_selected_target()
+
+		if selected_target != null:
+			if not selected_target.is_alive():
+				selected_target = null
 
 	# --------------------------------------------------
 	# Find attack move.
@@ -375,38 +371,35 @@ func _try_attack() -> void:
 	attack_move = selected_move
 
 	if attack_move == null:
+
 		push_warning("No move selected.")
+
 		return
 
 	print("DEEBO USES:", attack_move.move_name)
 
 	# --------------------------------------------------
-	# Offensive moves require a valid target
+	# Target is optional
 	# --------------------------------------------------
 
-	if selected_target == null:
+	if selected_target != null:
+
+		var distance := (
+			player.global_position.distance_to(
+				selected_target.global_position
+			)
+		)
 
 		print(
-			"PLAYER CANNOT USE MOVE - NO VALID TARGET"
+			"TARGET DISTANCE:",
+			distance
 		)
 
-		return
+	else:
 
-
-	# --------------------------------------------------
-	# Target distance
-	# --------------------------------------------------
-
-	var distance := (
-		player.global_position.distance_to(
-			selected_target.global_position
+		print(
+			"NO TARGET SELECTED - ATTACKING FORWARD"
 		)
-	)
-
-	print(
-		"TARGET DISTANCE:",
-		distance
-	)
 
 	_start_lunge_toward_target()
 

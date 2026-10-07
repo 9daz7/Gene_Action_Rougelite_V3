@@ -216,14 +216,25 @@ func _setup_action_player() -> void:
 		action_combat_controller
 	)
 
-	action_battle_ui = get_node_or_null("ActionBattleUI")
+	# ==================================================
+	# Action Battle UI
+	# ==================================================
 
-	if action_battle_ui != null:
-		action_battle_ui.setup(
-			deebo,
-			action_player_character,
-			deebo_controller
-		)
+	action_battle_ui = get_node_or_null(
+		"/root/Main/UI/ActionBattleUI"
+	) as ActionBattleUI
+
+	if action_battle_ui == null:
+		push_error("NormalBattleRoom: Persistent ActionBattleUI not found.")
+		return
+
+	action_battle_ui.setup(
+		deebo,
+		action_player_character,
+		deebo_controller
+	)
+
+	action_battle_ui.visible = true
 
 	print("================================")
 	print("NORMAL BATTLE ROOM ACTION PLAYER READY")

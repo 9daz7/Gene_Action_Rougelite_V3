@@ -3,7 +3,6 @@
 [ext_resource type="Script" uid="uid://bd4c5xvt4q8t" path="res://Scripts/Rooms/NormalBattleRoom.gd" id="1_av6k5"]
 [ext_resource type="PackedScene" uid="uid://s4vol5fxx17b" path="res://Scenes/Rooms/RoomExit.tscn" id="3_yefhr"]
 [ext_resource type="Script" uid="uid://cyxrv2eg82j7j" path="res://Scripts/ActionBattle/ActionTargeting.gd" id="4_iusyf"]
-[ext_resource type="PackedScene" uid="uid://03hih1xoemdv" path="res://Scenes/Battle/ActionBattleUI.tscn" id="5_t2bgp"]
 [ext_resource type="PackedScene" uid="uid://deuudtgda4sb6" path="res://Scenes/Rooms/RoamingEnemy.tscn" id="5_ujrim"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qwfpk"]
@@ -170,5 +169,3 @@ polygon = PackedVector2Array(0, -5, 3, -4, 5, 0, 3, 4, 0, 5, -3, 4, -5, 0, -3, -
 
 [node name="ActionTargeting" type="Node" parent="." unique_id=1495561450]
 script = ExtResource("4_iusyf")
-
-[node name="ActionBattleUI" parent="." unique_id=871756832 instance=ExtResource("5_t2bgp")]
