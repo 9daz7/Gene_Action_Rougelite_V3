@@ -161,7 +161,8 @@ height = 3.150879
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=55958730]
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=178432131]
-transform = Transform3D(-0.88348395, -0.34114003, -0.32106003, 0.3777558, -0.92411256, -0.057588622, -0.27704987, -0.17216092, 0.94530624, -1.542306, 14.8372, 25.172981)
+transform = Transform3D(-0.24157718, 0.9694642, -0.04218732, 0.15470979, 0.08139758, 0.984601, 0.95796937, 0.23133035, -0.16964932, -5.641828, -18.950073, 53.318577)
+light_color = Color(0.5132329, 0.5132329, 0.5132329, 1)
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=486337280]
 transform = Transform3D(1, 0, 0, 0, 0.64278764, 0.76604444, 0, -0.76604444, 0.64278764, 0.2832476, 3.7711463, 3.2305596)
