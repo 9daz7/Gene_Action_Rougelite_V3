@@ -26,6 +26,7 @@ size = Vector3(2.0020142, 0.001, 2.0007172)
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_gs0tk"]
 radius = 0.21484375
+height = 0.956604
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_o40u3"]
 atlas = ExtResource("3_sepm0")
@@ -131,6 +132,7 @@ animations = [{
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_oaf1g"]
 radius = 0.11669922
+height = 0.86517334
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_gs0tk"]
 height = 2.9575195
@@ -159,7 +161,7 @@ height = 3.150879
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=55958730]
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=178432131]
-transform = Transform3D(0.93327427, 0.3221911, 0.15871999, 0.28958452, -0.9364237, 0.19811977, 0.21246159, -0.13893725, -0.9672417, -251.1941, -121.16391, -37.02444)
+transform = Transform3D(-0.88348395, -0.34114003, -0.32106003, 0.3777558, -0.92411256, -0.057588622, -0.27704987, -0.17216092, 0.94530624, -1.542306, 14.8372, 25.172981)
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=486337280]
 transform = Transform3D(1, 0, 0, 0, 0.64278764, 0.76604444, 0, -0.76604444, 0.64278764, 0.2832476, 3.7711463, 3.2305596)
@@ -184,7 +186,7 @@ shape = SubResource("BoxShape3D_gs0tk")
 script = ExtResource("1_oni0s")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Player" unique_id=1915991895]
-transform = Transform3D(0.084729254, 0, -0.9964041, 0.082228646, 0.99658895, 0.006992316, 0.99300534, -0.08252542, 0.08444024, 0.20387459, 0, 0.9143325)
+transform = Transform3D(0.084729254, 0, -0.9964041, 0.082228646, 0.99658895, 0.006992316, 0.99300534, -0.08252542, 0.08444024, 0.20387459, 0.51991844, 0.8712792)
 shape = SubResource("CapsuleShape3D_gs0tk")
 
 [node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="Player" unique_id=1584369862]
@@ -203,7 +205,7 @@ transform = Transform3D(0.05491765, -0.002171651, 0.0020823458, 0.001990212, 0.0
 texture = ExtResource("4_3rvnw")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Deebo" unique_id=1829994611]
-transform = Transform3D(1, 0, 0, 0, 0.9969715, 0.07776775, 0, -0.07776775, 0.9969715, -0.43207476, 0, 1.5544252)
+transform = Transform3D(1, 0, 0, 0, 0.9969715, 0.07776775, 0, -0.07776775, 0.9969715, -0.43207476, 0.5656949, 1.5102988)
 shape = SubResource("CapsuleShape3D_oaf1g")
 
 [node name="Enemy" type="Node3D" parent="." unique_id=1621010506]
