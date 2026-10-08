@@ -4,7 +4,6 @@
 [ext_resource type="Script" uid="uid://d4icaydoavq6b" path="res://Scenes/Test3D/Test3DPlayer.gd" id="1_oni0s"]
 [ext_resource type="Texture2D" uid="uid://s5nq1sb1o64w" path="res://Assets/Sprites/Animals/Green/walk.png" id="3_sepm0"]
 [ext_resource type="Texture2D" uid="uid://bjo4cf8ylnke2" path="res://Assets/Sprites/Animals/deebo_asset_test_battle.png" id="4_3rvnw"]
-[ext_resource type="Script" uid="uid://qvid40gklgss" path="res://Scenes/Test3D/deebo3dTest.gd" id="4_o40u3"]
 [ext_resource type="Texture2D" uid="uid://btha0go4fr6sq" path="res://Assets/Sprites/enemypng.png" id="4_sepm0"]
 [ext_resource type="Texture2D" uid="uid://c6e161570jr8u" path="res://Assets/treepng.png" id="5_o40u3"]
 [ext_resource type="Texture2D" uid="uid://qiq0kpvsqban" path="res://Assets/Tree.png" id="6_oni0s"]
@@ -133,7 +132,7 @@ animations = [{
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_oaf1g"]
 radius = 0.11669922
-height = 0.86517334
+height = 0.82810974
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_npkn0"]
 radius = 0.23779297
@@ -198,22 +197,20 @@ shape = SubResource("CapsuleShape3D_gs0tk")
 
 [node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="Player" unique_id=1584369862]
 transform = Transform3D(7.065, 0, 0, 0, 6.937538, 1.3359591, 0, -1.3359593, 6.937537, 0.17567652, 0.49804533, 0.9241632)
+layers = 2
 sprite_frames = SubResource("SpriteFrames_oaf1g")
 animation = &"walk_up"
 
-[node name="Deebo" type="CharacterBody3D" parent="." unique_id=1408667978 node_paths=PackedStringArray("target")]
-collision_layer = 4
-script = ExtResource("4_o40u3")
-target = NodePath("../Player")
-follow_distance = 0.5
-move_speed = 5.0
+[node name="Deebo" type="CharacterBody3D" parent="." unique_id=1408667978]
+collision_layer = 8
 
 [node name="Sprite3D" type="Sprite3D" parent="Deebo" unique_id=698132031]
-transform = Transform3D(0.05491765, -0.002171651, 0.0020823458, 0.001990212, 0.05476865, 0.0046296995, -0.0022563883, -0.0045474176, 0.05476523, -0.4127254, 0.5341965, 1.5212414)
+transform = Transform3D(0.05491765, -0.002171651, 0.0020823458, 0.001990212, 0.05476865, 0.0046296995, -0.0022563883, -0.0045474176, 0.05476523, 0, 0.4468256, 0)
+layers = 8
 texture = ExtResource("4_3rvnw")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Deebo" unique_id=1829994611]
-transform = Transform3D(1, 0, 0, 0, 0.9969715, 0.07776775, 0, -0.07776775, 0.9969715, -0.43207476, 0.5656949, 1.5102988)
+transform = Transform3D(1, 0, 0, 0, 0.9969715, 0.07776775, 0, -0.07776775, 0.9969715, -0.021950752, 0.40114808, 0.0045653745)
 shape = SubResource("CapsuleShape3D_oaf1g")
 
 [node name="Enemy" type="Node3D" parent="." unique_id=1621010506]
@@ -305,6 +302,5 @@ shape = SubResource("CylinderShape3D_3e1wg")
 script = ExtResource("9_o40u3")
 player_character = NodePath("../Player")
 deebo = NodePath("../Deebo")
-front_distance = 2.0
-back_offset = -0.2
+formation_follow_speed = 5.0
 swap_speed = 6.0

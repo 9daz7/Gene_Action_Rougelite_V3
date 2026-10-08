@@ -27,9 +27,8 @@ var deebo_position: CombatPosition = CombatPosition.BACK
 # Formation
 # ==================================================
 
-@export var front_distance: float = 1.5
-@export var back_distance: float = 1.0
-@export var back_offset: float = 0.8
+@export var formation_distance: float = 2.0
+@export var back_left_offset: float = 0.4
 
 @export var formation_follow_speed: float = 8.0
 
@@ -107,22 +106,40 @@ func _update_formation(delta: float) -> void:
 
 	deebo.global_position = deebo.global_position.lerp(
 		target_position,
-		formation_follow_speed * delta
+		min(formation_follow_speed * delta, 1.0)
+	)
+
+	print(
+		"Player: ", player_character.global_position,
+		" | Deebo: ", deebo.global_position,
+		" | Position: ", CombatPosition.keys()[deebo_position]
 	)
 
 
 func _get_formation_position() -> Vector3:
+
 	var direction := _get_player_direction()
 	var target_position := player_character.global_position
 
+	# Player's left relative to their current facing direction.
+	var left := Vector3(
+		direction.z,
+		0.0,
+		-direction.x
+	)
+
 	if deebo_position == CombatPosition.FRONT:
-		target_position += direction * front_distance
+
+		# Directly in front of the player.
+		target_position += direction * formation_distance
 
 	else:
-		var side := Vector3(-direction.z, 0.0, direction.x)
 
-		target_position -= direction * back_distance
-		target_position += side * back_offset
+		# Behind the player.
+		target_position -= direction * formation_distance
+
+		# Slightly to the player's left.
+		target_position += left * back_left_offset
 
 	target_position.y = deebo.global_position.y
 
@@ -151,30 +168,29 @@ func _start_swap() -> void:
 		return
 
 	var direction := _get_player_direction()
-
-	var side := Vector3(
-		-direction.z,
-		0.0,
-		direction.x
-	)
-
 	var target_position := player_character.global_position
+
+	# Player's left relative to their current facing direction.
+	var left := Vector3(
+		direction.z,
+		0.0,
+		-direction.x
+	)
 
 	if deebo_position == CombatPosition.FRONT:
 
-		# Move deebo to the back-left position.
-		target_position -= direction * back_distance
-		target_position += side * back_offset
+		# FRONT → BACK
+		target_position -= direction * formation_distance
+		target_position += left * back_left_offset
 
 	else:
 
-		# Move deebo to the front.
-		target_position += direction * front_distance
+		# BACK → FRONT
+		target_position += direction * formation_distance
 
 	target_position.y = deebo.global_position.y
 
 	deebo_swap_target = target_position
-
 	is_swapping = true
 
 	print("3D COMBAT SWAP START")
