@@ -135,10 +135,6 @@ animations = [{
 radius = 0.11669922
 height = 0.86517334
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_npkn0"]
-radius = 0.23779297
-height = 0.60754395
-
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_gs0tk"]
 height = 2.9575195
 radius = 0.33691406
@@ -189,7 +185,6 @@ transform = Transform3D(10, 0, 0, 0, 10.000001, 0, 0, 0, 10, -0.0045776367, -0.0
 shape = SubResource("BoxShape3D_gs0tk")
 
 [node name="Player" type="CharacterBody3D" parent="." unique_id=1029424655]
-collision_layer = 2
 script = ExtResource("1_oni0s")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Player" unique_id=1915991895]
@@ -202,7 +197,6 @@ sprite_frames = SubResource("SpriteFrames_oaf1g")
 animation = &"walk_up"
 
 [node name="Deebo" type="CharacterBody3D" parent="." unique_id=1408667978 node_paths=PackedStringArray("target")]
-collision_layer = 4
 script = ExtResource("4_o40u3")
 target = NodePath("../Player")
 follow_distance = 0.5
@@ -219,15 +213,9 @@ shape = SubResource("CapsuleShape3D_oaf1g")
 [node name="Enemy" type="Node3D" parent="." unique_id=1621010506]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.29877126, 0, -2.887399)
 
-[node name="CharacterBody3D" type="CharacterBody3D" parent="Enemy" unique_id=731846261]
-
-[node name="Sprite3D" type="Sprite3D" parent="Enemy/CharacterBody3D" unique_id=1056793907]
+[node name="Sprite3D" type="Sprite3D" parent="Enemy" unique_id=1056793907]
 transform = Transform3D(0.04499314, 0, 0.00078594126, -4.652008e-05, 0.044921096, 0.0026631565, -0.0007845633, -0.002663562, 0.044914253, 0.7970289, 0.31460434, 0.045686483)
 texture = ExtResource("4_sepm0")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Enemy/CharacterBody3D" unique_id=1954160374]
-transform = Transform3D(1, 0, 0, 0, 0.9985837, 0.053202253, 0, -0.053202253, 0.9985837, 0.7799703, 0.31341553, 0.042779922)
-shape = SubResource("CapsuleShape3D_npkn0")
 
 [node name="Environment" type="Node3D" parent="." unique_id=1799195767]
 
@@ -305,6 +293,3 @@ shape = SubResource("CylinderShape3D_3e1wg")
 script = ExtResource("9_o40u3")
 player_character = NodePath("../Player")
 deebo = NodePath("../Deebo")
-front_distance = 2.0
-back_offset = -0.2
-swap_speed = 6.0

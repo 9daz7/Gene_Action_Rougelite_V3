@@ -305,6 +305,3 @@ shape = SubResource("CylinderShape3D_3e1wg")
 script = ExtResource("9_o40u3")
 player_character = NodePath("../Player")
 deebo = NodePath("../Deebo")
-front_distance = 2.0
-back_offset = -0.2
-swap_speed = 6.0

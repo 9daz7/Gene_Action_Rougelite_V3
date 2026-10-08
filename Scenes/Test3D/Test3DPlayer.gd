@@ -2,6 +2,8 @@ extends CharacterBody3D
 
 @export var move_speed: float = 5.0
 
+var facing_direction: Vector3 = Vector3.FORWARD
+
 @onready var animated_sprite: AnimatedSprite3D = $AnimatedSprite3D
 
 
@@ -16,14 +18,20 @@ func _physics_process(_delta: float) -> void:
 
 	if direction.length() > 0.0:
 		direction = direction.normalized()
+
+		facing_direction = direction
+
 		velocity.x = direction.x * move_speed
 		velocity.z = direction.z * move_speed
 
-		animated_sprite.play("walk")
+		#animated_sprite.play("walk")
 	else:
 		velocity.x = 0.0
 		velocity.z = 0.0
 
-		animated_sprite.play("idle")
+		#animated_sprite.play("idle")
 
 	move_and_slide()
+
+func get_facing_direction() -> Vector3:
+	return facing_direction
