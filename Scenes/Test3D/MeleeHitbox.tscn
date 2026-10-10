@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://bkd4u5i4a4oay"]
+
+[ext_resource type="Script" uid="uid://3rc3sbajmkne" path="res://Scenes/Test3D/MeleeHitbox.gd" id="1_n8n3s"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gs0tk"]
+size = Vector3(0.8, 1, 1.8)
+
+[node name="MeleeHitbox" type="Area3D" unique_id=615921863]
+collision_layer = 0
+script = ExtResource("1_n8n3s")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1845319517]
+shape = SubResource("BoxShape3D_gs0tk")

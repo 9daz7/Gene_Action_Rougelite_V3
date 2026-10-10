@@ -109,11 +109,11 @@ func _update_formation(delta: float) -> void:
 		min(formation_follow_speed * delta, 1.0)
 	)
 
-	print(
-		"Player: ", player_character.global_position,
-		" | Deebo: ", deebo.global_position,
-		" | Position: ", CombatPosition.keys()[deebo_position]
-	)
+	#print(
+		#"Player: ", player_character.global_position,
+		#" | Deebo: ", deebo.global_position,
+		#" | Position: ", CombatPosition.keys()[deebo_position]
+	#)
 
 
 func _get_formation_position() -> Vector3:
