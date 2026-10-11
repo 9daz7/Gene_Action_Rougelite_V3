@@ -52,6 +52,13 @@ func show_damage_number(amount: float) -> void:
 	damage_number.global_position = global_position + Vector3.UP * 1.0
 	damage_number.set_damage(amount)
 
+	print(
+		"DAMAGE NUMBER CREATED: ",
+		damage_number.global_position,
+		" | Amount: ",
+		amount
+	)
+
 
 func _die() -> void:
 

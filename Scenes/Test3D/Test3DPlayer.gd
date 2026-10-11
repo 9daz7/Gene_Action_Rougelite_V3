@@ -126,6 +126,7 @@ func _play_slam_animation() -> void:
 func _physics_process(delta: float) -> void:
 
 	if is_dead:
+		print("PLAYER MOVEMENT STOPPED: is_dead = true")
 		velocity = Vector3.ZERO
 		move_and_slide()
 		return
@@ -344,6 +345,8 @@ func take_damage(amount: float) -> void:
 
 	if is_dead or amount <= 0.0:
 		return
+
+	print("PLAYER HIT: ", amount, " damage. Current health: ", current_health)
 
 	current_health = maxf(current_health - amount, 0.0)
 

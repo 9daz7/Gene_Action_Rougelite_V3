@@ -11,6 +11,9 @@ func _ready() -> void:
 
 
 func _on_body_entered(body: Node3D) -> void:
+
+	print("HITBOX DETECTED BODY: ", body.name)
+
 	var target: Node = body
 
 	while target != null and not target.has_method("take_damage"):
@@ -20,6 +23,7 @@ func _on_body_entered(body: Node3D) -> void:
 		return
 
 	hit_targets.append(target)
+	print("HITBOX DEALING DAMAGE: ", target.name, " | ", damage)
 	target.take_damage(damage)
 	print("Stab hit: ", target.name)
 

@@ -15,21 +15,45 @@ extends Node
 # --------------------------------------------------
 
 @export var move_speed: float = 2.5
-@export var detection_range: float = 6.0
+@export var detection_range: float = 7.5
 @export_range(1.0, 360.0, 1.0) var vision_angle: float = 100.0
 
 @export var attack_range: float = 1.8
 @export var stop_distance: float = 1.3
 
-var is_player_detected: bool = false
+enum AwarenessState {
+	ROAMING,
+	INVESTIGATING,
+	SEARCHING,
+	ALERTED
+}
+
+var awareness_state: AwarenessState = AwarenessState.ROAMING
+
 var last_known_player_position: Vector3 = Vector3.ZERO
+var last_heard_position: Vector3 = Vector3.ZERO
+
+@export var search_duration: float = 3.0
+var search_timer: float = 0.0
+
+@export var search_radius: float = 1.5
+@export var search_move_speed: float = 1.2
+@export var search_pause_min: float = 0.3
+@export var search_pause_max: float = 0.7
+
+var search_target: Vector3 = Vector3.ZERO
+var search_pause_timer: float = 0.0
+
+@export_group("Enemy Separation")
+@export var separation_radius: float = 0.5
+@export var separation_strength: float = 1.0
 
 
 # --------------------------------------------------
 # Roaming
 # --------------------------------------------------
 
-@export var roaming_radius: float = 4.0
+@export var roaming_radius: float = 3.0
 @export var roaming_pause_min: float = 1.0
 @export var roaming_pause_max: float = 3.0
 @export var roaming_arrival_distance: float = 0.3
@@ -38,6 +62,7 @@ var spawn_position: Vector3
 var roaming_target: Vector3
 var roaming_timer: float = 0.0
 var is_roaming: bool = false
+var roaming_center: Vector3
 
 
 # --------------------------------------------------
@@ -47,7 +72,14 @@ var is_roaming: bool = false
 @export var walking_noise_range: float = 6.0
 @export var sprinting_noise_range: float = 12.0
 @export var crouching_noise_range: float = 2.0
-@export var dashing_noise_range: float = 15.0
+@export var dashing_noise_range: float = 14.0
+
+
+# --------------------------------------------------
+# Pack Alerts
+# --------------------------------------------------
+
+@export var pack_alert_radius: float = 10.0
 
 
 # --------------------------------------------------
@@ -76,7 +108,8 @@ func _ready() -> void:
 	spawn_position = enemy.global_position
 	roaming_target = spawn_position
 	roaming_timer = randf_range(roaming_pause_min, roaming_pause_max)
-
+	roaming_center = enemy.global_position
+	add_to_group("enemies_3d")
 
 # --------------------------------------------------
 # Vision
@@ -169,9 +202,23 @@ func _can_hear_player() -> bool:
 
 func _update_detection() -> void:
 
+	# Seeing the player overrides every non-alerted state.
 	if _can_see_player():
-		is_player_detected = true
-		last_known_player_position = player.global_position
+		if awareness_state != AwarenessState.ALERTED:
+			awareness_state = AwarenessState.ALERTED
+			last_known_player_position = player.global_position
+			_broadcast_visual_alert(last_known_player_position)
+		else:
+			last_known_player_position = player.global_position
+
+		return
+
+	# Only roaming Wolves investigate new sounds.
+	if awareness_state == AwarenessState.ROAMING:
+		if _can_hear_player():
+			last_heard_position = player.global_position
+			awareness_state = AwarenessState.INVESTIGATING
+			_broadcast_pack_alert(last_heard_position)
 
 
 func _physics_process(delta: float) -> void:
@@ -181,9 +228,96 @@ func _physics_process(delta: float) -> void:
 
 	_update_detection()
 
+	# Visual detection immediately interrupts investigation and searching.
+	if awareness_state == AwarenessState.ALERTED:
+		var distance_to_player: float = enemy.global_position.distance_to(
+			player.global_position
+		)
+
+		#print(
+			#"ALERTED | Distance: ",
+			#snappedf(distance_to_player, 0.1),
+			#" | Attacking: ",
+			#is_attacking,
+			#" | Can attack: ",
+			#can_attack
+		#)
+
+		# Continue into the chase and attack logic below.
+		pass
+
 	# Roam until the player has been seen.
-	if not is_player_detected:
+	if awareness_state == AwarenessState.ROAMING:
 		_update_roaming(delta)
+		enemy.move_and_slide()
+		return
+
+	# Investigate the location where the sound was heard.
+	if awareness_state == AwarenessState.INVESTIGATING \
+	and awareness_state != AwarenessState.ALERTED:
+		var sound_offset: Vector3 = last_heard_position - enemy.global_position
+		sound_offset.y = 0.0
+
+		if sound_offset.length() <= roaming_arrival_distance:
+			awareness_state = AwarenessState.SEARCHING
+			search_timer = search_duration
+			roaming_center = last_heard_position
+			search_target = _get_search_target()
+			search_pause_timer = 0.0
+			enemy.velocity.x = 0.0
+			enemy.velocity.z = 0.0
+		else:
+			var sound_direction: Vector3 = sound_offset.normalized()
+			enemy.velocity.x = sound_direction.x * move_speed * 0.75
+			enemy.velocity.z = sound_direction.z * move_speed * 0.75
+
+		enemy.move_and_slide()
+		return
+
+	# Search only while the Wolf has not become alerted.
+	if awareness_state == AwarenessState.SEARCHING \
+	and awareness_state != AwarenessState.ALERTED:
+		search_timer -= delta
+
+		if search_timer <= 0.0:
+			awareness_state = AwarenessState.ROAMING
+			roaming_timer = randf_range(
+				roaming_pause_min,
+				roaming_pause_max
+			)
+			roaming_target = _get_roaming_target()
+			enemy.velocity.x = 0.0
+			enemy.velocity.z = 0.0
+			enemy.move_and_slide()
+			return
+
+		# Pause briefly before choosing another search point.
+		if search_pause_timer > 0.0:
+			search_pause_timer -= delta
+			enemy.velocity.x = 0.0
+			enemy.velocity.z = 0.0
+			enemy.move_and_slide()
+			return
+
+		var search_offset: Vector3 = (
+			search_target - enemy.global_position
+		)
+		search_offset.y = 0.0
+
+		# Choose another point when the current one is reached.
+		if search_offset.length() <= roaming_arrival_distance:
+			search_target = _get_search_target()
+			search_pause_timer = randf_range(
+				search_pause_min,
+				search_pause_max
+			)
+			enemy.velocity.x = 0.0
+			enemy.velocity.z = 0.0
+		else:
+			var search_direction: Vector3 = search_offset.normalized()
+			enemy.velocity.x = search_direction.x * search_move_speed
+			enemy.velocity.z = search_direction.z * search_move_speed
+
 		enemy.move_and_slide()
 		return
 
@@ -192,14 +326,14 @@ func _physics_process(delta: float) -> void:
 
 	var distance: float = offset.length()
 
-	# The enemy ignores the player until detected.
-	if distance > detection_range:
-		enemy.velocity.x = 0.0
-		enemy.velocity.z = 0.0
-		enemy.move_and_slide()
-		return
+	## The enemy ignores the player until detected.
+	#if distance > detection_range:
+		#enemy.velocity.x = 0.0
+		#enemy.velocity.z = 0.0
+		#enemy.move_and_slide()
+		#return
 
-	# Attack when close enough.
+	# Attack whenever this Wolf is within attack range.
 	if distance <= attack_range:
 		enemy.velocity.x = 0.0
 		enemy.velocity.z = 0.0
@@ -212,11 +346,16 @@ func _physics_process(delta: float) -> void:
 
 	# Chase the player.
 	if not is_attacking and distance > stop_distance:
-		var direction: Vector3 = offset.normalized()
+		var chase_direction: Vector3 = offset.normalized()
+		var separation_direction: Vector3 = _get_separation_direction()
 
-		enemy.velocity.x = direction.x * move_speed
-		enemy.velocity.z = direction.z * move_speed
-		
+		var move_direction: Vector3 = (
+			chase_direction + separation_direction * separation_strength
+		).normalized()
+
+		enemy.velocity.x = move_direction.x * move_speed
+		enemy.velocity.z = move_direction.z * move_speed
+
 		## Face the direction of movement.
 		#enemy.look_at(
 			#enemy.global_position + direction,
@@ -297,7 +436,116 @@ func _get_roaming_target() -> Vector3:
 		randf_range(-roaming_radius, roaming_radius)
 	)
 
-	return spawn_position + random_offset
+	return roaming_center + random_offset
+
+
+func _get_search_target() -> Vector3:
+
+	var random_offset := Vector3(
+		randf_range(-search_radius, search_radius),
+		0.0,
+		randf_range(-search_radius, search_radius)
+	)
+
+	return roaming_center + random_offset
+
+
+func _broadcast_pack_alert(alert_position: Vector3) -> void:
+
+	for controller in get_tree().get_nodes_in_group("enemies_3d"):
+		if controller == self:
+			continue
+
+		if not controller.has_method("receive_pack_alert"):
+			continue
+
+		var other_enemy: CharacterBody3D = controller.get_parent() as CharacterBody3D
+
+		if other_enemy == null:
+			continue
+
+		var distance: float = enemy.global_position.distance_to(
+			other_enemy.global_position
+		)
+
+		if distance <= pack_alert_radius:
+			controller.receive_pack_alert(alert_position)
+
+
+func _broadcast_visual_alert(player_position: Vector3) -> void:
+
+	for controller in get_tree().get_nodes_in_group("enemies_3d"):
+		if controller == self:
+			continue
+
+		if not controller.has_method("receive_visual_alert"):
+			continue
+
+		controller.receive_visual_alert(player_position)
+
+
+func receive_pack_alert(alert_position: Vector3) -> void:
+
+	# Only unalerted Wolves need to receive a new disturbance.
+	if is_dead or awareness_state != AwarenessState.ROAMING:
+		return
+
+	last_heard_position = alert_position
+	awareness_state = AwarenessState.INVESTIGATING
+
+	# Relay the alert so it can spread through the pack.
+	_broadcast_pack_alert(alert_position)
+
+
+func receive_visual_alert(player_position: Vector3) -> void:
+
+	if is_dead:
+		return
+
+	# Check whether this Wolf already knows about the threat.
+	var was_already_alerted: bool = (
+		awareness_state == AwarenessState.ALERTED
+	)
+
+	# A visual alert confirms the threat.
+	awareness_state = AwarenessState.ALERTED
+	last_known_player_position = player_position
+
+	# Only relay the alert when this Wolf becomes alerted for the first time.
+	if not was_already_alerted:
+		_broadcast_visual_alert(player_position)
+
+
+func _get_separation_direction() -> Vector3:
+
+	var separation := Vector3.ZERO
+
+	for controller in get_tree().get_nodes_in_group("enemies_3d"):
+		if controller == self:
+			continue
+
+		if controller.is_dead:
+			continue
+
+		var other_enemy := controller.get_parent() as CharacterBody3D
+		if other_enemy == null:
+			continue
+
+		var offset: Vector3 = (
+			enemy.global_position - other_enemy.global_position
+		)
+		offset.y = 0.0
+
+		var distance := offset.length()
+
+		if distance > 0.01 and distance < separation_radius:
+			var weight := 1.0 - (distance / separation_radius)
+			separation += offset.normalized() * weight
+
+	if separation.length_squared() > 0.001:
+		return separation.normalized()
+
+	return Vector3.ZERO
 
 
 func stop_ai() -> void:
