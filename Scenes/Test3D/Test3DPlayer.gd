@@ -17,16 +17,20 @@ const MELEE_HITBOX_SCENE: PackedScene = preload(
 	"res://Scenes/Test3D/MeleeHitbox.tscn"
 )
 
+@export var melee_lunge_distance: float = 0.5
+@export var melee_lunge_duration: float = 0.1
+
 @export var stab_offset: float = 1.0
 @export var stab_duration: float = 0.15
+@export var stab_damage: float = 8.0
 
 @export var swipe_offset: float = 0.9
 @export var swipe_duration: float = 0.2
-@export var swipe_damage: float = 12.0
+@export var swipe_damage: float = 8.0
 
 @export var slam_offset: float = 1.2
 @export var slam_duration: float = 0.35
-@export var slam_damage: float = 20.0
+@export var slam_damage: float = 12.0
 @export var slam_height: float = 0.8
 
 @export var attack_origin_offset: float = 0.5
@@ -40,6 +44,54 @@ var combo_timer: float = 0.0
 func _ready() -> void:
 
 	sprite_rest_position = animated_sprite.position
+
+
+func _play_melee_lunge(aim_direction: Vector3) -> void:
+
+	var start_position := global_position
+	var target_position := start_position + aim_direction * melee_lunge_distance
+
+	var tween := create_tween()
+	tween.tween_property(
+		self,
+		"global_position",
+		target_position,
+		melee_lunge_duration
+	).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+
+	await tween.finished
+
+
+func _play_slam_animation() -> void:
+
+	if is_slam_animating:
+		return
+
+	is_slam_animating = true
+
+	var tween := create_tween()
+
+	# Wind up: raise the sprite.
+	tween.tween_property(
+		animated_sprite,
+		"position",
+		sprite_rest_position + Vector3.UP * slam_height,
+		0.15
+	).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+
+	# Slam down: return to the original position.
+	tween.tween_property(
+		animated_sprite,
+		"position",
+		sprite_rest_position,
+		0.08
+	).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+
+	await tween.finished
+
+	# Ensure the sprite finishes exactly where it started.
+	animated_sprite.position = sprite_rest_position
+	is_slam_animating = false
 
 
 func _physics_process(_delta: float) -> void:
@@ -125,6 +177,8 @@ func _perform_melee_attack() -> void:
 	can_attack = false
 
 	var aim_direction := get_mouse_aim_direction()
+	_play_melee_lunge(aim_direction)
+
 	var hitbox := MELEE_HITBOX_SCENE.instantiate() as Area3D
 	var attack_size := Vector3(0.8, 1.0, 1.8)
 
@@ -142,6 +196,7 @@ func _perform_melee_attack() -> void:
 			attack_name = "STAB"
 			attack_duration = stab_duration
 			attack_offset = stab_offset
+			hitbox.damage = stab_damage
 
 		1:
 			attack_name = "SWIPE"
@@ -172,6 +227,9 @@ func _perform_melee_attack() -> void:
 		-aim_direction.x,
 		-aim_direction.z
 	)
+
+	if combo_step == 2:
+		_play_slam_animation()
 
 	print(attack_name, " HITBOX SPAWNED — aim: ", aim_direction)
 

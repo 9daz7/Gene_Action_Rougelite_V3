@@ -218,18 +218,58 @@ transform = Transform3D(1, 0, 0, 0, 0.9969715, 0.07776775, 0, -0.07776775, 0.996
 shape = SubResource("CapsuleShape3D_oaf1g")
 
 [node name="Enemies" type="Node3D" parent="." unique_id=1621010506]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.29877126, 0, -2.887399)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.55740845, 0, -3.558912)
 
 [node name="Wolf" type="CharacterBody3D" parent="Enemies" unique_id=731846261]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.0300214, 0, 0)
 script = ExtResource("5_ku37b")
 enemy_data = ExtResource("6_ku37b")
 
 [node name="Sprite3D" type="Sprite3D" parent="Enemies/Wolf" unique_id=1056793907]
-transform = Transform3D(0.04499314, 0, 0.00078594126, -4.652008e-05, 0.044921096, 0.0026631565, -0.0007845633, -0.002663562, 0.044914253, 0.7970289, 0.31460434, 0.045686483)
+transform = Transform3D(0.04499314, 0, 0.00078594126, -4.652008e-05, 0.044921096, 0.0026631565, -0.0007845633, -0.002663562, 0.044914253, 0.32193494, 0.31460434, 0.045686483)
 texture = ExtResource("4_sepm0")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Enemies/Wolf" unique_id=1954160374]
-transform = Transform3D(1, 0, 0, 0, 0.9985837, 0.053202253, 0, -0.053202253, 0.9985837, 0.7799703, 0.31341553, 0.042779922)
+transform = Transform3D(1, 0, 0, 0, 0.9985837, 0.053202253, 0, -0.053202253, 0.9985837, 0.34578943, 0.31341553, 0.042779922)
+shape = SubResource("CapsuleShape3D_npkn0")
+
+[node name="Wolf2" type="CharacterBody3D" parent="Enemies" unique_id=408762629]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2835009, 0, 0)
+script = ExtResource("5_ku37b")
+enemy_data = ExtResource("6_ku37b")
+
+[node name="Sprite3D" type="Sprite3D" parent="Enemies/Wolf2" unique_id=479774220]
+transform = Transform3D(0.04499314, 0, 0.00078594126, -4.652008e-05, 0.044921096, 0.0026631565, -0.0007845633, -0.002663562, 0.044914253, 0.32193494, 0.31460434, 0.045686483)
+texture = ExtResource("4_sepm0")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Enemies/Wolf2" unique_id=1670684363]
+transform = Transform3D(1, 0, 0, 0, 0.9985837, 0.053202253, 0, -0.053202253, 0.9985837, 0.34578943, 0.31341553, 0.042779922)
+shape = SubResource("CapsuleShape3D_npkn0")
+
+[node name="Wolf3" type="CharacterBody3D" parent="Enemies" unique_id=1418156203]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7458589, 0, -0.8517058)
+script = ExtResource("5_ku37b")
+enemy_data = ExtResource("6_ku37b")
+
+[node name="Sprite3D" type="Sprite3D" parent="Enemies/Wolf3" unique_id=413934105]
+transform = Transform3D(0.04499314, 0, 0.00078594126, -4.652008e-05, 0.044921096, 0.0026631565, -0.0007845633, -0.002663562, 0.044914253, 0.32193494, 0.31460434, 0.045686483)
+texture = ExtResource("4_sepm0")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Enemies/Wolf3" unique_id=1045944642]
+transform = Transform3D(1, 0, 0, 0, 0.9985837, 0.053202253, 0, -0.053202253, 0.9985837, 0.34578943, 0.31341553, 0.042779922)
+shape = SubResource("CapsuleShape3D_npkn0")
+
+[node name="Wolf4" type="CharacterBody3D" parent="Enemies" unique_id=216108274]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4436717, 0, -0.49890447)
+script = ExtResource("5_ku37b")
+enemy_data = ExtResource("6_ku37b")
+
+[node name="Sprite3D" type="Sprite3D" parent="Enemies/Wolf4" unique_id=903069164]
+transform = Transform3D(0.04499314, 0, 0.00078594126, -4.652008e-05, 0.044921096, 0.0026631565, -0.0007845633, -0.002663562, 0.044914253, 0.32193494, 0.31460434, 0.045686483)
+texture = ExtResource("4_sepm0")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Enemies/Wolf4" unique_id=753956658]
+transform = Transform3D(1, 0, 0, 0, 0.9985837, 0.053202253, 0, -0.053202253, 0.9985837, 0.34578943, 0.31341553, 0.042779922)
 shape = SubResource("CapsuleShape3D_npkn0")
 
 [node name="Environment" type="Node3D" parent="." unique_id=1799195767]
