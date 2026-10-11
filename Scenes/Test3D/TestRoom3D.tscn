@@ -251,6 +251,10 @@ texture = ExtResource("4_sepm0")
 transform = Transform3D(1, 0, 0, 0, 0.9985837, 0.053202253, 0, -0.053202253, 0.9985837, 0.34578943, 0.31341553, 0.042779922)
 shape = SubResource("CapsuleShape3D_npkn0")
 
+[node name="ActionEnemyController3D" type="Node" parent="Enemies/Wolf2" unique_id=1317070962 node_paths=PackedStringArray("player")]
+script = ExtResource("8_5akbt")
+player = NodePath("../../../Player")
+
 [node name="Wolf3" type="CharacterBody3D" parent="Enemies" unique_id=1418156203]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6145477, 0, -2.6317651)
 script = ExtResource("5_ku37b")
@@ -264,6 +268,10 @@ texture = ExtResource("4_sepm0")
 transform = Transform3D(1, 0, 0, 0, 0.9985837, 0.053202253, 0, -0.053202253, 0.9985837, 0.34578943, 0.31341553, 0.042779922)
 shape = SubResource("CapsuleShape3D_npkn0")
 
+[node name="ActionEnemyController3D" type="Node" parent="Enemies/Wolf3" unique_id=196752153 node_paths=PackedStringArray("player")]
+script = ExtResource("8_5akbt")
+player = NodePath("../../../Player")
+
 [node name="Wolf4" type="CharacterBody3D" parent="Enemies" unique_id=216108274]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4436717, 0, -3.200999)
 script = ExtResource("5_ku37b")
@@ -276,6 +284,10 @@ texture = ExtResource("4_sepm0")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Enemies/Wolf4" unique_id=753956658]
 transform = Transform3D(1, 0, 0, 0, 0.9985837, 0.053202253, 0, -0.053202253, 0.9985837, 0.34578943, 0.31341553, 0.042779922)
 shape = SubResource("CapsuleShape3D_npkn0")
+
+[node name="ActionEnemyController3D" type="Node" parent="Enemies/Wolf4" unique_id=567977092 node_paths=PackedStringArray("player")]
+script = ExtResource("8_5akbt")
+player = NodePath("../../../Player")
 
 [node name="Environment" type="Node3D" parent="." unique_id=1799195767]
 

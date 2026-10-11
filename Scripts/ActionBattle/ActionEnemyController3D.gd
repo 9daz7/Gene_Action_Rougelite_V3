@@ -15,7 +15,7 @@ extends Node
 # --------------------------------------------------
 
 @export var move_speed: float = 2.5
-@export var detection_range: float = 10.0
+@export var detection_range: float = 6.0
 @export_range(1.0, 360.0, 1.0) var vision_angle: float = 100.0
 
 @export var attack_range: float = 1.8
@@ -23,6 +23,31 @@ extends Node
 
 var is_player_detected: bool = false
 var last_known_player_position: Vector3 = Vector3.ZERO
+
+
+# --------------------------------------------------
+# Roaming
+# --------------------------------------------------
+
+@export var roaming_radius: float = 4.0
+@export var roaming_pause_min: float = 1.0
+@export var roaming_pause_max: float = 3.0
+@export var roaming_arrival_distance: float = 0.3
+
+var spawn_position: Vector3
+var roaming_target: Vector3
+var roaming_timer: float = 0.0
+var is_roaming: bool = false
+
+
+# --------------------------------------------------
+# Sound Detection
+# --------------------------------------------------
+
+@export var walking_noise_range: float = 6.0
+@export var sprinting_noise_range: float = 12.0
+@export var crouching_noise_range: float = 2.0
+@export var dashing_noise_range: float = 15.0
 
 
 # --------------------------------------------------
@@ -47,6 +72,11 @@ func _ready() -> void:
 		push_error("ActionEnemyController3D: Player reference is missing.")
 
 	enemy.rotation.y = 0.0
+
+	spawn_position = enemy.global_position
+	roaming_target = spawn_position
+	roaming_timer = randf_range(roaming_pause_min, roaming_pause_max)
+
 
 # --------------------------------------------------
 # Vision
@@ -98,6 +128,45 @@ func _can_see_player() -> bool:
 	return true
 
 
+# --------------------------------------------------
+# Sound
+# --------------------------------------------------
+
+func _can_hear_player() -> bool:
+
+	if not is_instance_valid(player):
+		return false
+
+	if not player.has_method("get_movement_noise"):
+		return false
+
+	var noise_level: float = player.get_movement_noise()
+	if noise_level <= 0.0:
+		return false
+
+	var noise_range: float = walking_noise_range
+
+	if player.is_dashing:
+		noise_range = dashing_noise_range
+	elif player.is_crouching:
+		noise_range = crouching_noise_range
+	elif player.is_sprinting:
+		noise_range = sprinting_noise_range
+
+	#return enemy.global_position.distance_to(
+		#player.global_positions
+	#) <= noise_range
+
+	var can_hear: bool = enemy.global_position.distance_to(
+		player.global_position
+	) <= noise_range
+
+	if can_hear:
+		print("Wolf can hear player. Noise range: ", noise_range)
+
+	return can_hear
+
+
 func _update_detection() -> void:
 
 	if _can_see_player():
@@ -105,17 +174,16 @@ func _update_detection() -> void:
 		last_known_player_position = player.global_position
 
 
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
 
 	if is_dead or enemy == null or not is_instance_valid(player):
 		return
 
 	_update_detection()
 
-	# Do not chase until the player has been seen.
+	# Roam until the player has been seen.
 	if not is_player_detected:
-		enemy.velocity.x = 0.0
-		enemy.velocity.z = 0.0
+		_update_roaming(delta)
 		enemy.move_and_slide()
 		return
 
@@ -195,6 +263,41 @@ func _perform_attack() -> void:
 
 	if not is_dead:
 		can_attack = true
+
+func _update_roaming(delta: float) -> void:
+
+	if roaming_timer > 0.0:
+		roaming_timer -= delta
+		enemy.velocity.x = 0.0
+		enemy.velocity.z = 0.0
+		return
+
+	var offset: Vector3 = roaming_target - enemy.global_position
+	offset.y = 0.0
+
+	if offset.length() <= roaming_arrival_distance:
+		roaming_target = _get_roaming_target()
+		roaming_timer = randf_range(
+			roaming_pause_min,
+			roaming_pause_max
+		)
+		enemy.velocity.x = 0.0
+		enemy.velocity.z = 0.0
+		return
+
+	var direction: Vector3 = offset.normalized()
+	enemy.velocity.x = direction.x * move_speed * 0.5
+	enemy.velocity.z = direction.z * move_speed * 0.5
+
+func _get_roaming_target() -> Vector3:
+
+	var random_offset := Vector3(
+		randf_range(-roaming_radius, roaming_radius),
+		0.0,
+		randf_range(-roaming_radius, roaming_radius)
+	)
+
+	return spawn_position + random_offset
 
 
 func stop_ai() -> void:
