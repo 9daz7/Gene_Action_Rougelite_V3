@@ -7,6 +7,10 @@ extends Node
 
 @export var player: CharacterBody3D
 
+@export var deebo: CharacterBody3D
+@export var damage_share_distance: float = 3.0
+@export_range(0.0, 1.0) var primary_damage_ratio: float = 0.7
+
 @onready var enemy: CharacterBody3D = get_parent() as CharacterBody3D
 
 
@@ -103,6 +107,12 @@ func _ready() -> void:
 	if player == null:
 		push_error("ActionEnemyController3D: Player reference is missing.")
 
+	if deebo == null:
+		deebo = get_tree().current_scene.get_node_or_null("Deebo") as CharacterBody3D
+
+	if deebo == null:
+		push_warning("ActionEnemyController3D: Deebo reference is missing.")
+
 	enemy.rotation.y = 0.0
 
 	spawn_position = enemy.global_position
@@ -110,6 +120,8 @@ func _ready() -> void:
 	roaming_timer = randf_range(roaming_pause_min, roaming_pause_max)
 	roaming_center = enemy.global_position
 	add_to_group("enemies_3d")
+	add_to_group("enemy_controllers_3d")
+
 
 # --------------------------------------------------
 # Vision
@@ -378,30 +390,148 @@ func _start_attack() -> void:
 
 func _perform_attack() -> void:
 
-	await get_tree().create_timer(attack_windup).timeout
+	var scene := get_tree().current_scene
 
-	if is_dead or not is_instance_valid(player):
+	if scene == null or scene.get("run_failed") == true:
 		is_attacking = false
 		return
 
-	var distance: float = enemy.global_position.distance_to(
-		player.global_position
-	)
+	await get_tree().create_timer(attack_windup).timeout
 
-	# Check range again so the player can dodge the attack.
-	var flat_offset: Vector3 = player.global_position - enemy.global_position
-	flat_offset.y = 0.0
+	# The run may have failed during the windup.
+	scene = get_tree().current_scene
 
-	if flat_offset.length() <= attack_range:
-		if player.has_method("take_damage"):
-			player.take_damage(attack_damage)
+	if (
+		scene == null
+		or scene.get("run_failed") == true
+		or is_dead
+		or not is_instance_valid(enemy)
+	):
+		is_attacking = false
+		return
+
+	# Recheck range after the windup so attacks can be dodged.
+	var targets: Array[CharacterBody3D] = []
+
+	if _can_receive_damage(player):
+		targets.append(player)
+
+	if _can_receive_damage(deebo):
+		targets.append(deebo)
+
+	var in_range := false
+
+	for target in targets:
+		var offset: Vector3 = target.global_position - enemy.global_position
+		offset.y = 0.0
+
+		if offset.length() <= attack_range:
+			in_range = true
+			break
+
+	if in_range:
+		_apply_attack_damage()
 
 	is_attacking = false
 
+	scene = get_tree().current_scene
+
+	if scene == null or scene.get("run_failed") == true:
+		return
+
 	await get_tree().create_timer(attack_cooldown).timeout
 
-	if not is_dead:
+	scene = get_tree().current_scene
+
+	if (
+		not is_dead
+		and scene != null
+		and scene.get("run_failed") != true
+	):
 		can_attack = true
+
+
+func _apply_attack_damage() -> void:
+
+	var scene := get_tree().current_scene
+
+	if scene == null or scene.get("run_failed") == true:
+		return
+
+	if not is_instance_valid(enemy) or is_dead:
+		return
+
+	var targets: Array[CharacterBody3D] = []
+
+	if _can_receive_damage(player):
+		targets.append(player)
+
+	if _can_receive_damage(deebo):
+		targets.append(deebo)
+
+	if targets.is_empty():
+		return
+
+	# Find the eligible character closest to the attacking enemy.
+	var closest_target: CharacterBody3D = targets[0]
+	var closest_distance: float = enemy.global_position.distance_to(
+		closest_target.global_position
+	)
+
+	for target in targets:
+		var distance: float = enemy.global_position.distance_to(
+			target.global_position
+		)
+
+		if distance < closest_distance:
+			closest_target = target
+			closest_distance = distance
+
+	var other_target: CharacterBody3D = null
+
+	for target in targets:
+		if target != closest_target:
+			other_target = target
+			break
+
+	if (
+		other_target != null
+		and closest_target.global_position.distance_to(
+			other_target.global_position
+		) <= damage_share_distance
+	):
+		closest_target.take_damage(
+			attack_damage * primary_damage_ratio
+		)
+
+		# The first hit may have ended the run.
+		scene = get_tree().current_scene
+
+		if scene == null or scene.get("run_failed") == true:
+			return
+
+		# Recheck that the second target can still receive damage.
+		if _can_receive_damage(other_target):
+			other_target.take_damage(
+				attack_damage * (1.0 - primary_damage_ratio)
+			)
+	else:
+		closest_target.take_damage(attack_damage)
+
+
+func _can_receive_damage(target: CharacterBody3D) -> bool:
+
+	if not is_instance_valid(target):
+		return false
+
+	if not target.has_method("take_damage"):
+		return false
+
+	if target.get("is_dead") == true:
+		return false
+
+	return true
+
 
 func _update_roaming(delta: float) -> void:
 
@@ -427,6 +557,7 @@ func _update_roaming(delta: float) -> void:
 	var direction: Vector3 = offset.normalized()
 	enemy.velocity.x = direction.x * move_speed * 0.5
 	enemy.velocity.z = direction.z * move_speed * 0.5
+
 
 func _get_roaming_target() -> Vector3:
 

@@ -228,11 +228,11 @@ func _setup_action_player() -> void:
 		push_error("NormalBattleRoom: Persistent ActionBattleUI not found.")
 		return
 
-	action_battle_ui.setup(
-		deebo,
-		action_player_character,
-		deebo_controller
-	)
+	#action_battle_ui.setup(
+		#deebo,
+		#action_player_character,
+		#deebo_controller
+	#)
 
 	action_battle_ui.visible = true
 

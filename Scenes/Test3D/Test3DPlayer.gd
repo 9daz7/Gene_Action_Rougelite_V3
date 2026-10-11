@@ -1,5 +1,10 @@
 extends CharacterBody3D
 
+
+signal health_changed(current_health: float, max_health: float)
+signal died
+
+
 # --------------------------------------------------
 # Movement
 # --------------------------------------------------
@@ -66,6 +71,7 @@ var combo_timer: float = 0.0
 @export var max_health: float = 100.0
 var current_health: float = 100.0
 var is_dead: bool = false
+var death_processed: bool = false
 
 
 func _ready() -> void:
@@ -126,7 +132,6 @@ func _play_slam_animation() -> void:
 func _physics_process(delta: float) -> void:
 
 	if is_dead:
-		print("PLAYER MOVEMENT STOPPED: is_dead = true")
 		velocity = Vector3.ZERO
 		move_and_slide()
 		return
@@ -333,7 +338,14 @@ func _perform_melee_attack() -> void:
 	if is_instance_valid(hitbox):
 		hitbox.queue_free()
 
+	if is_dead:
+		return
+
 	await get_tree().create_timer(attack_cooldown).timeout
+
+	if is_dead:
+		return
+
 	can_attack = true
 
 
@@ -349,6 +361,7 @@ func take_damage(amount: float) -> void:
 	print("PLAYER HIT: ", amount, " damage. Current health: ", current_health)
 
 	current_health = maxf(current_health - amount, 0.0)
+	health_changed.emit(current_health, max_health)
 
 	print("Player took ", amount, " damage. Health: ",
 		current_health, "/", max_health)
@@ -363,6 +376,19 @@ func _die() -> void:
 		return
 
 	is_dead = true
+
+	# Stop movement and prevent further combat actions.
 	velocity = Vector3.ZERO
+	is_dashing = false
+	dash_timer = 0.0
+	can_attack = false
+
+	## Stop any active player tweens.
+	#for tween in get_tree().get_processed_tweens():
+		#if tween.is_valid() and tween.is_running():
+			#if tween.bind_node == self:
+				#tween.kill()
+
+	died.emit()
 
 	print("Player has been defeated.")

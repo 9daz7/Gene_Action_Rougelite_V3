@@ -4,7 +4,28 @@ extends CharacterBody3D
 @export var follow_distance: float = 1.5
 @export var move_speed: float = 4.0
 
+signal health_changed(current_health: float, max_health: float)
+signal died
+
+@export var max_health: float = 100.0
+
+var current_health: float = 100.0
+var is_dead: bool = false
+
+
+func _ready() -> void:
+
+	current_health = max_health
+	health_changed.emit(current_health, max_health)
+
+
 func _physics_process(_delta: float) -> void:
+
+	if is_dead:
+		velocity = Vector3.ZERO
+		move_and_slide()
+		return
+
 	if target == null:
 		return
 
@@ -23,3 +44,29 @@ func _physics_process(_delta: float) -> void:
 		velocity.z = 0.0
 
 	move_and_slide()
+
+
+func take_damage(amount: float) -> void:
+
+	if is_dead or amount <= 0.0:
+		return
+
+	current_health = maxf(current_health - amount, 0.0)
+	health_changed.emit(current_health, max_health)
+
+	print("Deebo health: ", current_health, "/", max_health)
+
+	if current_health <= 0.0:
+		_die()
+
+
+func _die() -> void:
+
+	if is_dead:
+		return
+
+	is_dead = true
+	velocity = Vector3.ZERO
+	died.emit()
+
+	print("Deebo has been defeated.")

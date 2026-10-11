@@ -6,10 +6,9 @@ class_name ActionBattleUI
 # References
 # ==================================================
 
-var deebo: PlayerAnimal
-var player_character: ActionPlayerCharacter
+var player: CharacterBody3D
+var deebo: CharacterBody3D
 
-var player_controller: ActionPlayerController
 
 # ==================================================
 # UI
@@ -32,31 +31,36 @@ var player_controller: ActionPlayerController
 # ==================================================
 
 func setup(
-	deebo_ref: PlayerAnimal,
-	player_ref: ActionPlayerCharacter,
-	player_controller_ref: ActionPlayerController
+	player_ref: CharacterBody3D,
+	deebo_ref: CharacterBody3D
 ) -> void:
 
+	player = player_ref
 	deebo = deebo_ref
-	player_character = player_ref
-	player_controller = player_controller_ref
 
-	_connect_health_signals()
+	if player == null:
+		push_error("ActionBattleUI: Player reference is missing.")
+		return
 
-	if not player_controller.move_cooldown_changed.is_connected(
-		_on_move_cooldown_changed
-	):
-		player_controller.move_cooldown_changed.connect(
-			_on_move_cooldown_changed
-	)
+	if deebo == null:
+		push_error("ActionBattleUI: Deebo reference is missing.")
+		return
 
-	update_move_names()
+	# Player health
+	if player.has_signal("health_changed"):
+		if not player.health_changed.is_connected(_on_player_health_changed):
+			player.health_changed.connect(_on_player_health_changed)
 
-	deebo_hp.max_value = deebo.get_max_hp()
-	deebo_hp.value = deebo.get_current_hp()
+	player_hp.max_value = player.max_health
+	player_hp.value = player.current_health
 
-	player_hp.max_value = player_character.max_health
-	player_hp.value = player_character.health
+	# Deebo health
+	if deebo.has_signal("health_changed"):
+		if not deebo.health_changed.is_connected(_on_deebo_health_changed):
+			deebo.health_changed.connect(_on_deebo_health_changed)
+
+	deebo_hp.max_value = deebo.max_health
+	deebo_hp.value = deebo.current_health
 
 
 # ==================================================
@@ -65,20 +69,7 @@ func setup(
 
 func _ready() -> void:
 
-	GameEvents.animal_hp_changed.connect(
-		_on_animal_hp_changed
-	)
-
-
-func _connect_health_signals() -> void:
-
-	if player_character != null:
-		if not player_character.health_changed.is_connected(
-			_on_player_health_changed
-		):
-			player_character.health_changed.connect(
-				_on_player_health_changed
-			)
+	pass
 
 
 # ==================================================
@@ -94,76 +85,85 @@ func _on_player_health_changed(
 	player_hp.value = current_health
 
 
-func _on_animal_hp_changed(
-	animal: AnimalBase,
-	current_hp: int,
-	maximum_hp: int
+func _on_deebo_health_changed(
+	current_health: float,
+	maximum_health: float
 ) -> void:
 
-	if animal != deebo:
-		return
-
-	deebo_hp.max_value = maximum_hp
-	deebo_hp.value = current_hp
+	deebo_hp.max_value = maximum_health
+	deebo_hp.value = current_health
 
 
-# ==================================================
-# Move Names
-# ==================================================
-
-func update_move_names() -> void:
-
-	if deebo == null:
-		return
-
-	if not deebo.has_method("get_battle_moves"):
-		return
-
-	var moves = deebo.get_battle_moves()
-
-	var name_labels = [
-		move_1_name,
-		move_2_name,
-		move_3_name
-	]
-
-	for i in range(name_labels.size()):
-
-		if i < moves.size() and moves[i] != null:
-
-			name_labels[i].text = moves[i].move_name.to_upper()
-
-		else:
-
-			name_labels[i].text = ""
-
-
-func _on_move_cooldown_changed(
-	move: MoveResource,
-	remaining: float
-) -> void:
-
-	var moves = deebo.get_battle_moves()
-
-	var cooldown_labels = [
-		move_1_cooldown,
-		move_2_cooldown,
-		move_3_cooldown
-	]
-
-	for i in range(moves.size()):
-
-		if moves[i] != move:
-			continue
-
-		if remaining > 0.0:
-
-			cooldown_labels[i].text = "%.1f" % remaining
-			cooldown_labels[i].visible = true
-
-		else:
-
-			cooldown_labels[i].text = ""
-			cooldown_labels[i].visible = false
-
-		return
+#func _on_animal_hp_changed(
+	#animal: AnimalBase,
+	#current_hp: int,
+	#maximum_hp: int
+#) -> void:
+#
+	#if animal != deebo:
+		#return
+#
+	#deebo_hp.max_value = maximum_hp
+	#deebo_hp.value = current_hp
+#
+#
+## ==================================================
+## Move Names
+## ==================================================
+#
+#func update_move_names() -> void:
+#
+	#if deebo == null:
+		#return
+#
+	#if not deebo.has_method("get_battle_moves"):
+		#return
+#
+	#var moves = deebo.get_battle_moves()
+#
+	#var name_labels = [
+		#move_1_name,
+		#move_2_name,
+		#move_3_name
+	#]
+#
+	#for i in range(name_labels.size()):
+#
+		#if i < moves.size() and moves[i] != null:
+#
+			#name_labels[i].text = moves[i].move_name.to_upper()
+#
+		#else:
+#
+			#name_labels[i].text = ""
+#
+#
+#func _on_move_cooldown_changed(
+	#move: MoveResource,
+	#remaining: float
+#) -> void:
+#
+	#var moves = deebo.get_battle_moves()
+#
+	#var cooldown_labels = [
+		#move_1_cooldown,
+		#move_2_cooldown,
+		#move_3_cooldown
+	#]
+#
+	#for i in range(moves.size()):
+#
+		#if moves[i] != move:
+			#continue
+#
+		#if remaining > 0.0:
+#
+			#cooldown_labels[i].text = "%.1f" % remaining
+			#cooldown_labels[i].visible = true
+#
+		#else:
+#
+			#cooldown_labels[i].text = ""
+			#cooldown_labels[i].visible = false
+#
+		#return

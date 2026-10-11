@@ -1,16 +1,19 @@
 [gd_scene format=3 uid="uid://cdons40r0xrvg"]
 
 [ext_resource type="Script" uid="uid://dx4y4stkdd42x" path="res://Scenes/Test3D/Test3DCamera.gd" id="1_3rvnw"]
+[ext_resource type="Script" uid="uid://btneur56gh502" path="res://Scripts/Battle/TestRoom3D.gd" id="1_5l7fv"]
 [ext_resource type="Script" uid="uid://d4icaydoavq6b" path="res://Scenes/Test3D/Test3DPlayer.gd" id="1_oni0s"]
 [ext_resource type="Texture2D" uid="uid://s5nq1sb1o64w" path="res://Assets/Sprites/Animals/Green/walk.png" id="3_sepm0"]
 [ext_resource type="Texture2D" uid="uid://bjo4cf8ylnke2" path="res://Assets/Sprites/Animals/deebo_asset_test_battle.png" id="4_3rvnw"]
 [ext_resource type="Texture2D" uid="uid://btha0go4fr6sq" path="res://Assets/Sprites/enemypng.png" id="4_sepm0"]
 [ext_resource type="Script" uid="uid://cspmv2g4l51rq" path="res://Scenes/Test3D/Test3DEnemy.gd" id="5_ku37b"]
 [ext_resource type="Texture2D" uid="uid://c6e161570jr8u" path="res://Assets/treepng.png" id="5_o40u3"]
+[ext_resource type="Script" uid="uid://qvid40gklgss" path="res://Scenes/Test3D/Deebo3DTest.gd" id="5_sgn75"]
 [ext_resource type="Resource" uid="uid://cxemne4dnlwhj" path="res://Data/Enemies/Normal/Wolf.tres" id="6_ku37b"]
 [ext_resource type="Texture2D" uid="uid://qiq0kpvsqban" path="res://Assets/Tree.png" id="6_oni0s"]
 [ext_resource type="Script" uid="uid://caeq3yct13bj5" path="res://Scripts/ActionBattle/ActionEnemyController3D.gd" id="8_5akbt"]
 [ext_resource type="Script" uid="uid://dnsixjjeqsb7n" path="res://Scripts/ActionBattle3D/ActionCombatController3D.gd" id="9_o40u3"]
+[ext_resource type="PackedScene" uid="uid://03hih1xoemdv" path="res://Scenes/Battle/ActionBattleUI.tscn" id="12_fv6r3"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vmgny"]
 albedo_color = Color(0.9843137, 0.73333335, 0, 1)
@@ -164,6 +167,7 @@ height = 3.1499023
 height = 3.150879
 
 [node name="TestRoom3d" type="Node3D" unique_id=1242734887]
+script = ExtResource("1_5l7fv")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=55958730]
 
@@ -205,9 +209,11 @@ layers = 2
 sprite_frames = SubResource("SpriteFrames_oaf1g")
 animation = &"walk_up"
 
-[node name="Deebo" type="CharacterBody3D" parent="." unique_id=1408667978]
+[node name="Deebo" type="CharacterBody3D" parent="." unique_id=1408667978 node_paths=PackedStringArray("target")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.15300274, 0, 7.603506)
 collision_layer = 4
+script = ExtResource("5_sgn75")
+target = NodePath("../Player")
 
 [node name="Sprite3D" type="Sprite3D" parent="Deebo" unique_id=698132031]
 transform = Transform3D(0.05491765, -0.002171651, 0.0020823458, 0.001990212, 0.05476865, 0.0046296995, -0.0022563883, -0.0045474176, 0.05476523, 0, 0.4468256, 0.005795598)
@@ -377,3 +383,5 @@ formation_distance = 1.0
 back_left_offset = 0.5
 formation_follow_speed = 7.0
 swap_speed = 6.0
+
+[node name="ActionBattleUI" parent="." unique_id=871756832 instance=ExtResource("12_fv6r3")]
