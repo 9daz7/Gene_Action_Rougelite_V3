@@ -1,6 +1,25 @@
 extends CharacterBody3D
 
-@export var move_speed: float = 5.0
+# --------------------------------------------------
+# Movement
+# --------------------------------------------------
+
+@export var walk_speed: float = 3.0
+@export var sprint_speed: float = 5.5
+@export var crouch_speed: float = 1.5
+
+var current_move_speed: float = 3.0
+var is_sprinting: bool = false
+var is_crouching: bool = false
+
+@export var dash_speed: float = 12.0
+@export var dash_duration: float = 0.18
+@export var dash_cooldown: float = 0.8
+
+var is_dashing: bool = false
+var dash_direction: Vector3 = Vector3.ZERO
+var dash_timer: float = 0.0
+var dash_cooldown_timer: float = 0.0
 
 @export var attack_cooldown: float = 0.4
 
@@ -40,10 +59,20 @@ const MELEE_HITBOX_SCENE: PackedScene = preload(
 var combo_step: int = 0
 var combo_timer: float = 0.0
 
+# --------------------------------------------------
+# Health
+# --------------------------------------------------
+
+@export var max_health: float = 100.0
+var current_health: float = 100.0
+var is_dead: bool = false
+
 
 func _ready() -> void:
 
 	sprite_rest_position = animated_sprite.position
+	current_health = max_health
+	current_move_speed = walk_speed
 
 
 func _play_melee_lunge(aim_direction: Vector3) -> void:
@@ -94,49 +123,111 @@ func _play_slam_animation() -> void:
 	is_slam_animating = false
 
 
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
 
-	#if is_slam_animating:
-		#return
+	if is_dead:
+		velocity = Vector3.ZERO
+		move_and_slide()
+		return
 
-	var input := Input.get_vector("move_left", "move_right", "move_up", "move_down")
-
-	var direction := Vector3(
-		input.x,
-		0.0,
-		input.y
+	# Update dash cooldown.
+	dash_cooldown_timer = maxf(
+		dash_cooldown_timer - delta, 0.0
 	)
 
-	if direction.length() > 0.0:
-		direction = direction.normalized()
+	# Read movement input.
+	var input := Input.get_vector(
+		"move_left", "move_right", "move_up", "move_down"
+	)
 
+	var direction := Vector3(input.x, 0.0, input.y)
+
+	if direction.length_squared() > 0.0:
+		direction = direction.normalized()
 		facing_direction = direction
 
-		velocity.x = direction.x * move_speed
-		velocity.z = direction.z * move_speed
+	# Dash takes priority over normal movement.
+	if Input.is_action_just_pressed("ui_accept") \
+			and not is_dashing \
+			and dash_cooldown_timer <= 0.0:
+		_start_dash(direction)
 
-		#animated_sprite.play("walk")
+	if is_dashing:
+		dash_timer -= delta
+		velocity.x = dash_direction.x * dash_speed
+		velocity.z = dash_direction.z * dash_speed
+
+		if dash_timer <= 0.0:
+			is_dashing = false
+			velocity.x = 0.0
+			velocity.z = 0.0
 	else:
-		velocity.x = 0.0
-		velocity.z = 0.0
+		# Sprint and crouch cannot be active together.
+		is_crouching = Input.is_action_pressed("crouch")
 
-		#animated_sprite.play("idle")
+		is_sprinting = (
+			Input.is_action_pressed("sprint")
+			and not is_crouching
+			and direction.length_squared() > 0.0
+		)
+
+		if is_crouching:
+			current_move_speed = crouch_speed
+		elif is_sprinting:
+			current_move_speed = sprint_speed
+		else:
+			current_move_speed = walk_speed
+
+		velocity.x = direction.x * current_move_speed
+		velocity.z = direction.z * current_move_speed
 
 	move_and_slide()
 
+	# Update melee combo reset timer.
 	if combo_step > 0:
-		combo_timer -= _delta
+		combo_timer -= delta
 
 		if combo_timer <= 0.0:
 			combo_step = 0
 
-	if Input.is_action_pressed("player_attack") and can_attack:
+	if Input.is_action_pressed("player_attack") \
+			and can_attack \
+			and not is_dashing:
 		_perform_melee_attack()
+
+
+func _start_dash(direction: Vector3) -> void:
+
+	if direction.length_squared() <= 0.001:
+		direction = facing_direction
+
+	dash_direction = direction.normalized()
+	dash_timer = dash_duration
+	dash_cooldown_timer = dash_cooldown
+	is_dashing = true
+
+	# A dash interrupts crouching and sprinting.
+	is_crouching = false
+	is_sprinting = false
 
 
 func get_facing_direction() -> Vector3:
 
 	return facing_direction
+
+
+func get_movement_noise() -> float:
+
+	if is_dashing:
+		return 1.0
+	if is_crouching:
+		return 0.1
+	if is_sprinting:
+		return 0.8
+	if velocity.length() > 0.1:
+		return 0.35
+
+	return 0.0
 
 
 func get_mouse_aim_direction() -> Vector3:
@@ -243,3 +334,32 @@ func _perform_melee_attack() -> void:
 
 	await get_tree().create_timer(attack_cooldown).timeout
 	can_attack = true
+
+
+# --------------------------------------------------
+# Damage and Death
+# --------------------------------------------------
+
+func take_damage(amount: float) -> void:
+
+	if is_dead or amount <= 0.0:
+		return
+
+	current_health = maxf(current_health - amount, 0.0)
+
+	print("Player took ", amount, " damage. Health: ",
+		current_health, "/", max_health)
+
+	if current_health <= 0.0:
+		_die()
+
+
+func _die() -> void:
+
+	if is_dead:
+		return
+
+	is_dead = true
+	velocity = Vector3.ZERO
+
+	print("Player has been defeated.")
