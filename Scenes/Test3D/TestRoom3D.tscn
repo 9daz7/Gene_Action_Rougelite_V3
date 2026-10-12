@@ -16,6 +16,7 @@
 [ext_resource type="PackedScene" uid="uid://03hih1xoemdv" path="res://Scenes/Battle/ActionBattleUI.tscn" id="12_fv6r3"]
 [ext_resource type="Resource" uid="uid://cfsalnn48dv3f" path="res://Data/Moves/Bite.tres" id="14_u7gxd"]
 [ext_resource type="Resource" uid="uid://crr33q35e1har" path="res://Data/Moves/UnstoppableCharge.tres" id="16_guphg"]
+[ext_resource type="Script" uid="uid://c80ox85jyhgoo" path="res://Scripts/ActionBattle3D/RoomExit3D.gd" id="17_u7gxd"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vmgny"]
 albedo_color = Color(0.9843137, 0.73333335, 0, 1)
@@ -167,6 +168,13 @@ height = 3.1499023
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_3e1wg"]
 height = 3.150879
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_gs0tk"]
+height = 1.3255615
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_agc68"]
+height = 1.6782227
+radius = 1.1
 
 [node name="TestRoom3d" type="Node3D" unique_id=1242734887]
 script = ExtResource("1_5l7fv")
@@ -390,3 +398,23 @@ formation_follow_speed = 7.0
 swap_speed = 6.0
 
 [node name="ActionBattleUI" parent="." unique_id=871756832 instance=ExtResource("12_fv6r3")]
+
+[node name="RoomExit3D" type="Area3D" parent="." unique_id=1528946842]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9.923497)
+collision_layer = 3
+collision_mask = 3
+script = ExtResource("17_u7gxd")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="RoomExit3D" unique_id=643095455]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6679077, 0)
+mesh = SubResource("CylinderMesh_gs0tk")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RoomExit3D" unique_id=183701087]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8289795, 0)
+shape = SubResource("CylinderShape3D_agc68")
+
+[node name="InteractionPrompt" type="Label3D" parent="RoomExit3D" unique_id=472562943]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7776307, 0.17346478)
+visible = false
+billboard = 1
+text = "[E] Interact"

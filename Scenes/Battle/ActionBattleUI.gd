@@ -76,6 +76,31 @@ func _ready() -> void:
 	pass
 
 
+func update_move_names() -> void:
+
+	var moves: Array[MoveResource] = [
+		combat_controller.bite_move,
+		null,
+		combat_controller.gene_move
+	]
+
+	var name_labels: Array[Label] = [
+		move_1_name,
+		move_2_name,
+		move_3_name
+	]
+
+	for index in range(name_labels.size()):
+		var move: MoveResource = moves[index]
+
+		if move == null:
+			name_labels[index].text = ""
+			name_labels[index].visible = false
+		else:
+			name_labels[index].text = move.move_name
+			name_labels[index].visible = true
+
+
 func _process(_delta: float) -> void:
 
 	if combat_controller == null:

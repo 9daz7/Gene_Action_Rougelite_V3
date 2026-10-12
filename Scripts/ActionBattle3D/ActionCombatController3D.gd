@@ -179,6 +179,10 @@ func _physics_process(delta: float) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 
+	var scene := get_tree().current_scene
+	if scene == null or scene.get("run_failed") == true:
+		return
+
 	if not event is InputEventKey:
 		return
 
@@ -647,6 +651,11 @@ func _reset_deebo_attack_cooldown() -> void:
 # ==================================================
 
 func _update_swap(delta: float) -> void:
+
+	var scene := get_tree().current_scene
+	if scene == null or scene.get("run_failed") == true:
+		is_swapping = false
+		return
 
 	var direction := (
 		deebo_swap_target
