@@ -14,6 +14,8 @@
 [ext_resource type="Script" uid="uid://caeq3yct13bj5" path="res://Scripts/ActionBattle/ActionEnemyController3D.gd" id="8_5akbt"]
 [ext_resource type="Script" uid="uid://dnsixjjeqsb7n" path="res://Scripts/ActionBattle3D/ActionCombatController3D.gd" id="9_o40u3"]
 [ext_resource type="PackedScene" uid="uid://03hih1xoemdv" path="res://Scenes/Battle/ActionBattleUI.tscn" id="12_fv6r3"]
+[ext_resource type="Resource" uid="uid://cfsalnn48dv3f" path="res://Data/Moves/Bite.tres" id="14_u7gxd"]
+[ext_resource type="Resource" uid="uid://crr33q35e1har" path="res://Data/Moves/UnstoppableCharge.tres" id="16_guphg"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vmgny"]
 albedo_color = Color(0.9843137, 0.73333335, 0, 1)
@@ -194,10 +196,11 @@ surface_material_override/0 = SubResource("StandardMaterial3D_oni0s")
 transform = Transform3D(10, 0, 0, 0, 10.000001, 0, 0, 0, 10, -0.0045776367, -0.009648323, -0.013961792)
 shape = SubResource("BoxShape3D_gs0tk")
 
-[node name="Player" type="CharacterBody3D" parent="." unique_id=1029424655]
+[node name="Player" type="CharacterBody3D" parent="." unique_id=1029424655 node_paths=PackedStringArray("combat_controller")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 7.362984)
 collision_layer = 2
 script = ExtResource("1_oni0s")
+combat_controller = NodePath("../ActionCombatController3D")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Player" unique_id=1915991895]
 transform = Transform3D(0.084729254, 0, -0.9964041, 0.082228646, 0.99658895, 0.006992316, 0.99300534, -0.08252542, 0.08444024, 0.16645107, 0.51991844, -0.055985928)
@@ -379,6 +382,8 @@ shape = SubResource("CylinderShape3D_3e1wg")
 script = ExtResource("9_o40u3")
 player_character = NodePath("../Player")
 deebo = NodePath("../Deebo")
+bite_move = ExtResource("14_u7gxd")
+gene_move = ExtResource("16_guphg")
 formation_distance = 1.0
 back_left_offset = 0.5
 formation_follow_speed = 7.0

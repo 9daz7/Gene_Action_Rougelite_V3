@@ -4,13 +4,14 @@ extends Node3D
 @onready var player: CharacterBody3D = $Player
 @onready var deebo: CharacterBody3D = $Deebo
 @onready var action_battle_ui: ActionBattleUI = $ActionBattleUI
+@onready var combat_controller: ActionCombatController3D = $ActionCombatController3D
 
 var run_failed: bool = false
 
 
 func _ready() -> void:
 
-	action_battle_ui.setup(player, deebo)
+	action_battle_ui.setup(player, deebo, combat_controller)
 
 	if player.has_signal("died"):
 		player.died.connect(_on_required_character_died)

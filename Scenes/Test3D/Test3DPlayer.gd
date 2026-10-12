@@ -29,6 +29,7 @@ var dash_cooldown_timer: float = 0.0
 @export var attack_cooldown: float = 0.4
 
 var can_attack: bool = true
+var is_melee_attacking: bool = false
 
 var facing_direction: Vector3 = Vector3.FORWARD
 
@@ -36,6 +37,10 @@ var facing_direction: Vector3 = Vector3.FORWARD
 
 var sprite_rest_position: Vector3
 var is_slam_animating: bool = false
+
+# --------------------------------------------------
+# Combat
+# --------------------------------------------------
 
 const MELEE_HITBOX_SCENE: PackedScene = preload(
 	"res://Scenes/Test3D/MeleeHitbox.tscn"
@@ -61,8 +66,20 @@ const MELEE_HITBOX_SCENE: PackedScene = preload(
 
 @export var combo_reset_time: float = 0.9
 
+@export var combat_controller: ActionCombatController3D
+
 var combo_step: int = 0
 var combo_timer: float = 0.0
+
+@export var slam_recovery: float = 0.25
+@export var slam_knockback: float = 8.0
+
+var is_performing_slam: bool = false
+
+@export var back_slam_travel_distance: float = 2.0
+@export var back_slam_travel_duration: float = 0.23
+@export var back_slam_landing_offset: float = 0.2
+
 
 # --------------------------------------------------
 # Health
@@ -129,12 +146,145 @@ func _play_slam_animation() -> void:
 	is_slam_animating = false
 
 
+func _perform_back_slam() -> void:
+
+	if is_performing_slam or is_dead or is_dashing:
+		return
+
+	if combat_controller == null:
+		return
+
+	if not combat_controller.begin_action(&"player_slam"):
+		return
+
+	is_performing_slam = true
+	can_attack = false
+
+	var aim_direction: Vector3 = get_mouse_aim_direction()
+	var deebo_start_position: Vector3 = combat_controller.deebo.global_position
+
+	# landing toward Deebo's starting position.
+	var horizontal_to_deebo: Vector3 = deebo_start_position - global_position
+	horizontal_to_deebo.y = 0.0
+
+	var landing_direction: Vector3 = aim_direction
+
+	if horizontal_to_deebo.length_squared() > 0.001:
+		landing_direction = horizontal_to_deebo.normalized()
+
+	var landing_position: Vector3 = (
+		global_position
+		+ landing_direction * back_slam_travel_distance
+	)
+
+	if horizontal_to_deebo.length() > 0.001:
+		landing_position = (
+			deebo_start_position
+			+ landing_direction * back_slam_landing_offset
+		)
+
+	landing_position.y = global_position.y
+
+	# Jump visually and travel forward at the same time.
+	var travel_tween := create_tween()
+	travel_tween.tween_property(
+		self,
+		"global_position",
+		landing_position,
+		back_slam_travel_duration
+	).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+
+	_play_slam_animation()
+
+	await travel_tween.finished
+
+	if is_dead:
+		combat_controller.finish_action(&"player_slam")
+		is_performing_slam = false
+		return
+
+	var hitbox := MELEE_HITBOX_SCENE.instantiate() as Area3D
+
+	if hitbox == null:
+		push_error("MeleeHitbox scene root must be an Area3D.")
+		combat_controller.finish_action(&"player_slam")
+		is_performing_slam = false
+		can_attack = true
+		return
+
+	get_tree().current_scene.add_child(hitbox)
+
+	hitbox.configure_hitbox(
+		Vector3(2.4, 1.0, 2.4),
+		slam_damage
+	)
+
+	hitbox.knockback_strength = slam_knockback
+
+	hitbox.global_position = (
+		global_position
+		+ aim_direction * slam_offset
+		+ Vector3.UP * 0.5
+	)
+
+	hitbox.global_rotation.y = atan2(
+		-aim_direction.x,
+		-aim_direction.z
+	)
+
+	# Keep the hitbox active briefly to detect nearby enemies.
+	await get_tree().create_timer(slam_duration).timeout
+
+	if is_instance_valid(hitbox):
+		hitbox.queue_free()
+
+	if is_dead:
+		combat_controller.finish_action(&"player_slam")
+		is_performing_slam = false
+		return
+
+	# Move Deebo behind the player, making the player FRONT.
+	combat_controller.start_slam_swap()
+
+	while combat_controller.is_swapping:
+		await get_tree().process_frame
+
+	await get_tree().create_timer(slam_recovery).timeout
+
+	combat_controller.finish_action(&"player_slam")
+
+	is_performing_slam = false
+	can_attack = true
+
+
 func _physics_process(delta: float) -> void:
 
 	if is_dead:
 		velocity = Vector3.ZERO
 		move_and_slide()
 		return
+
+	var action_movement_multiplier: float = 1.0
+
+	if (
+		combat_controller != null
+		and combat_controller.is_action_locked
+		and combat_controller.current_action != &"swap"
+	):
+		action_movement_multiplier = 0.6
+
+	if can_attack == false:
+		action_movement_multiplier = minf(
+			action_movement_multiplier,
+			0.6
+		)
+
+	if (
+		combat_controller != null
+		and combat_controller.is_action_locked
+		and combat_controller.current_action != &"swap"
+	):
+		action_movement_multiplier = 0.6
 
 	# Update dash cooldown.
 	dash_cooldown_timer = maxf(
@@ -160,8 +310,16 @@ func _physics_process(delta: float) -> void:
 
 	if is_dashing:
 		dash_timer -= delta
-		velocity.x = dash_direction.x * dash_speed
-		velocity.z = dash_direction.z * dash_speed
+		velocity.x = (
+			dash_direction.x
+			* dash_speed
+			* action_movement_multiplier
+		)
+		velocity.z = (
+			dash_direction.z
+			* dash_speed
+			* action_movement_multiplier
+		)
 
 		if dash_timer <= 0.0:
 			is_dashing = false
@@ -184,8 +342,12 @@ func _physics_process(delta: float) -> void:
 		else:
 			current_move_speed = walk_speed
 
-		velocity.x = direction.x * current_move_speed
-		velocity.z = direction.z * current_move_speed
+		var effective_move_speed: float = (
+			current_move_speed * action_movement_multiplier
+		)
+
+		velocity.x = direction.x * effective_move_speed
+		velocity.z = direction.z * effective_move_speed
 
 	move_and_slide()
 
@@ -198,8 +360,16 @@ func _physics_process(delta: float) -> void:
 
 	if Input.is_action_pressed("player_attack") \
 			and can_attack \
-			and not is_dashing:
-		_perform_melee_attack()
+			and not is_dashing \
+			and combat_controller != null:
+
+		if combat_controller.player_position \
+				== ActionCombatController3D.CombatPosition.FRONT:
+			_perform_melee_attack()
+
+		elif combat_controller.player_position \
+				== ActionCombatController3D.CombatPosition.BACK:
+			_perform_back_slam()
 
 
 func _start_dash(direction: Vector3) -> void:
@@ -274,7 +444,7 @@ func _perform_melee_attack() -> void:
 	can_attack = false
 
 	var aim_direction := get_mouse_aim_direction()
-	_play_melee_lunge(aim_direction)
+	await _play_melee_lunge(aim_direction)
 
 	var hitbox := MELEE_HITBOX_SCENE.instantiate() as Area3D
 	var attack_size := Vector3(0.8, 1.0, 1.8)

@@ -4,6 +4,11 @@ extends CharacterBody3D
 @export var follow_distance: float = 1.5
 @export var move_speed: float = 4.0
 
+
+# --------------------------------------------------
+# Health
+# --------------------------------------------------
+
 signal health_changed(current_health: float, max_health: float)
 signal died
 
@@ -11,6 +16,17 @@ signal died
 
 var current_health: float = 100.0
 var is_dead: bool = false
+
+
+# --------------------------------------------------
+# Basic Attack
+# --------------------------------------------------
+
+@export var attack_damage: float = 10.0
+@export var attack_range: float = 2.0
+@export var attack_cooldown: float = 0.8
+
+var can_attack: bool = true
 
 
 func _ready() -> void:

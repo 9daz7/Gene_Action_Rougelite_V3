@@ -9,6 +9,8 @@ class_name ActionBattleUI
 var player: CharacterBody3D
 var deebo: CharacterBody3D
 
+var combat_controller: ActionCombatController3D
+
 
 # ==================================================
 # UI
@@ -32,11 +34,13 @@ var deebo: CharacterBody3D
 
 func setup(
 	player_ref: CharacterBody3D,
-	deebo_ref: CharacterBody3D
+	deebo_ref: CharacterBody3D,
+	controller_ref: ActionCombatController3D = null
 ) -> void:
 
 	player = player_ref
 	deebo = deebo_ref
+	combat_controller = controller_ref
 
 	if player == null:
 		push_error("ActionBattleUI: Player reference is missing.")
@@ -70,6 +74,28 @@ func setup(
 func _ready() -> void:
 
 	pass
+
+
+func _process(_delta: float) -> void:
+
+	if combat_controller == null:
+		return
+
+	_update_cooldown_label(move_1_cooldown, &"bite")
+	_update_cooldown_label(move_3_cooldown, &"gene_move")
+
+
+func _update_cooldown_label(
+	label: Label,
+	move_name: StringName
+) -> void:
+
+	var remaining := combat_controller.get_move_cooldown_remaining(
+		move_name
+	)
+
+	label.visible = remaining > 0.0
+	label.text = "%.1f" % remaining if remaining > 0.0 else ""
 
 
 # ==================================================
