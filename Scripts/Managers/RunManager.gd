@@ -920,7 +920,7 @@ func _create_room_for_node(
 	if node.layer == 0:
 
 		return _duplicate_room_template(
-			_get_random_room_with_exit_count(
+			get_random_room(
 				RoomResource.RoomType.BATTLE,
 				node.next_nodes.size()
 			)

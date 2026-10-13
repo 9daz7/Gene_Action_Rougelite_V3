@@ -1,6 +1,8 @@
 extends Node3D
 
 
+signal room_exit_selected(exit_id: int)
+
 @onready var player: CharacterBody3D = $Player
 @onready var deebo: CharacterBody3D = $Deebo
 @onready var action_battle_ui: ActionBattleUI = $ActionBattleUI
@@ -83,10 +85,11 @@ func _on_enemy_died() -> void:
 
 func _on_room_exit_entered(exit_id: int) -> void:
 
-	if not room_completed:
+	if run_failed or not room_completed:
 		return
 
 	print("Room exit selected: ", exit_id)
+	room_exit_selected.emit(exit_id)
 
 
 func _stop_combat() -> void:
