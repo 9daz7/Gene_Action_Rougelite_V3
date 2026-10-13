@@ -265,6 +265,16 @@ func open_room_scene(room: RoomResource) -> void:
 
 		return
 
+	# --------------------------------------------------
+	# Connect 3D Room Exit Signal
+	# --------------------------------------------------
+
+	if active_room_scene.has_signal("room_exit_selected"):
+		active_room_scene.connect(
+			"room_exit_selected",
+			Callable(self, "_on_room_exit_entered")
+		)
+
 	get_tree().current_scene.add_child(
 		active_room_scene
 	)
