@@ -212,7 +212,7 @@ func load_room_pools() -> void:
 
 	initialize_room_pools()
 
-
+	#2d
 	_add_room_to_pool(
 		"res://Data/Rooms/StartRoom.tres"
 	)
@@ -222,29 +222,43 @@ func load_room_pools() -> void:
 	# ==================================================
 
 	_add_room_to_pool(
-		"res://Data/Rooms/NormalBattle_00.tres"
+		"res://Data/Rooms/TestBattle3D.tres"
 	)
 
 	_add_room_to_pool(
-		"res://Data/Rooms/NormalBattle_01.tres"
+		"res://Data/Rooms/TestBattle3D2exit.tres"
 	)
 
 	_add_room_to_pool(
-		"res://Data/Rooms/NormalBattle_02.tres"
+		"res://Data/Rooms/TestBattle3D3exit.tres"
 	)
 
-	_add_room_to_pool(
-		"res://Data/Rooms/NormalBattle_03.tres"
-	)
-
-	_add_room_to_pool(
-		"res://Data/Rooms/NormalBattle_04.tres"
-	)
+	#2D
+	#_add_room_to_pool(
+		#"res://Data/Rooms/NormalBattle_00.tres"
+	#)
+#
+	#_add_room_to_pool(
+		#"res://Data/Rooms/NormalBattle_01.tres"
+	#)
+#
+	#_add_room_to_pool(
+		#"res://Data/Rooms/NormalBattle_02.tres"
+	#)
+#
+	#_add_room_to_pool(
+		#"res://Data/Rooms/NormalBattle_03.tres"
+	#)
+#
+	#_add_room_to_pool(
+		#"res://Data/Rooms/NormalBattle_04.tres"
+	#)
 
 	# ==================================================
 	# Elite Rooms
 	# ==================================================
 
+	# 2D
 	_add_room_to_pool(
 		"res://Data/Rooms/EliteBattle_01.tres"
 	)
@@ -261,6 +275,7 @@ func load_room_pools() -> void:
 	# Treasure Rooms
 	# ==================================================
 
+#2D
 	_add_room_to_pool(
 		"res://Data/Rooms/Treasure_01.tres"
 	)
@@ -273,6 +288,7 @@ func load_room_pools() -> void:
 	# Shop Rooms
 	# ==================================================
 
+#2D
 	_add_room_to_pool(
 		"res://Data/Rooms/Merchant_01.tres"
 	)
@@ -282,6 +298,7 @@ func load_room_pools() -> void:
 	# Rest Rooms
 	# ==================================================
 
+#2D
 	_add_room_to_pool(
 		"res://Data/Rooms/Rest_01.tres"
 	)
@@ -290,18 +307,20 @@ func load_room_pools() -> void:
 	# Event Rooms
 	# ==================================================
 
+#2D
 	_add_room_to_pool(
 		"res://Data/Rooms/Event_01.tres"
 	)
 
-	#_add_room_to_pool(
-		#"res://Data/Rooms/Event_02.tres"
-	#)
+	_add_room_to_pool(
+		"res://Data/Rooms/Event_02.tres"
+	)
 
 	# ==================================================
 	# Lab Rooms
 	# ==================================================
 
+#2D
 	_add_room_to_pool(
 		"res://Data/Rooms/AbandonedLab_01.tres"
 	)
@@ -318,6 +337,7 @@ func load_room_pools() -> void:
 	# Boss Room
 	# ==================================================
 
+#2D
 	_add_room_to_pool(
 		"res://Data/Rooms/Boss_01.tres"
 	)

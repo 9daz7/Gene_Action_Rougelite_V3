@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="RoomResource" format=3 uid="uid://clppa70u417lf"]
+
+[ext_resource type="PackedScene" uid="uid://caegyp5l52j0t" path="res://Scenes/Test3D/TestRoom3D3exit.tscn" id="1_76nki"]
+[ext_resource type="Script" uid="uid://0k05qgpjl5gm" path="res://Data/Rooms/RoomResource.gd" id="2_lpqj4"]
+
+[resource]
+script = ExtResource("2_lpqj4")
+room_name = "3D TestrBattle"
+room_scene = ExtResource("1_76nki")
+exit_count = 3
+metadata/_custom_type_script = "uid://0k05qgpjl5gm"
