@@ -78,7 +78,7 @@ func _on_body_entered(body: Node3D) -> void:
 
 	print("EXIT AREA DETECTED BODY: ", body.name)
 
-	if body.name != "Player":
+	if not body.is_in_group("player"):
 		return
 
 	player_in_range = true
@@ -89,7 +89,7 @@ func _on_body_entered(body: Node3D) -> void:
 
 func _on_body_exited(body: Node3D) -> void:
 
-	if body.name != "Player":
+	if not body.is_in_group("player"):
 		return
 
 	player_in_range = false
