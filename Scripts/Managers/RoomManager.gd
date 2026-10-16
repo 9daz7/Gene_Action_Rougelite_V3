@@ -275,6 +275,12 @@ func open_room_scene(room: RoomResource) -> void:
 			Callable(self, "_on_room_exit_entered")
 		)
 
+	if active_room_scene.has_signal("room_finished"):
+		active_room_scene.connect(
+			"room_finished",
+			Callable(self, "_on_active_room_finished")
+		)
+
 	get_tree().current_scene.add_child(
 		active_room_scene
 	)
@@ -314,11 +320,6 @@ func open_room_scene(room: RoomResource) -> void:
 			"Exits available on entry:",
 			active_room_scene.exits_available_on_entry
 		)
-
-
-func _on_active_room_finished() -> void:
-
-	complete_room()
 
 
 # ==================================================
@@ -409,6 +410,11 @@ func _on_room_exit_entered(exit_id: int) -> void:
 # --------------------------------------------------
 # Complete Room
 # --------------------------------------------------
+
+func _on_active_room_finished() -> void:
+
+	complete_room()
+
 
 func complete_room() -> void:
 
