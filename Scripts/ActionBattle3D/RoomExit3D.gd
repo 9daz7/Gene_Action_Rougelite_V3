@@ -43,6 +43,8 @@ func _unhandled_input(event: InputEvent) -> void:
 	if not enabled or not player_in_range:
 		return
 
+	#print("EXIT RECEIVED INPUT: ", event.as_text())
+
 	if not event.is_action_pressed("interact"):
 		return
 
@@ -77,6 +79,12 @@ func set_enabled(value: bool) -> void:
 func _on_body_entered(body: Node3D) -> void:
 
 	print("EXIT AREA DETECTED BODY: ", body.name)
+	#print(
+		#"EXIT BODY ENTERED: ",
+		#body.name,
+		#" | In player group: ",
+		#body.is_in_group("player")
+	#)
 
 	if not body.is_in_group("player"):
 		return
