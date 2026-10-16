@@ -303,6 +303,9 @@ func load_room_pools() -> void:
 		"res://Data/Rooms/Rest_01.tres"
 	)
 
+	_add_room_to_pool(
+		"res://Data/Rooms/Rest_02.tres"
+	)
 	# ==================================================
 	# Event Rooms
 	# ==================================================

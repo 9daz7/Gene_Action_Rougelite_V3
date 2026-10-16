@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://1gv465q738tl" path="res://Scripts/Rooms/RestRoom_UI.gd" id="1_6y63p"]
 
-[node name="RestRoom" type="Control" unique_id=436275297]
+[node name="RestRoom_UI" type="Control" unique_id=436275297]
 layout_mode = 3
 anchors_preset = 0
 offset_left = 364.01

@@ -1,11 +1,11 @@
 [gd_resource type="Resource" script_class="RoomResource" format=3 uid="uid://cg6vfqgsm6058"]
 
+[ext_resource type="PackedScene" uid="uid://da6cjlpvsh7ms" path="res://Scenes/Rooms/RestRoom3D.tscn" id="1_m3wj6"]
 [ext_resource type="Script" uid="uid://0k05qgpjl5gm" path="res://Data/Rooms/RoomResource.gd" id="1_ukmke"]
-[ext_resource type="PackedScene" uid="uid://bf0cp4av36iqo" path="res://Scenes/Rooms/RestRoom_01.tscn" id="3_vypbt"]
 
 [resource]
 script = ExtResource("1_ukmke")
 room_type = 7
 room_name = "Rest Room"
-room_scene = ExtResource("3_vypbt")
+room_scene = ExtResource("1_m3wj6")
 metadata/_custom_type_script = "uid://0k05qgpjl5gm"

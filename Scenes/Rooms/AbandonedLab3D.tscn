@@ -1,0 +1,189 @@
+[gd_scene format=3 uid="uid://c0tc2avxsv21s"]
+
+[ext_resource type="Texture2D" uid="uid://c6e161570jr8u" path="res://Assets/treepng.png" id="1_wk86w"]
+[ext_resource type="Texture2D" uid="uid://qiq0kpvsqban" path="res://Assets/Tree.png" id="2_5d3vp"]
+[ext_resource type="PackedScene" uid="uid://03hih1xoemdv" path="res://Scenes/Battle/ActionBattleUI.tscn" id="3_wktep"]
+[ext_resource type="Script" uid="uid://c80ox85jyhgoo" path="res://Scripts/ActionBattle3D/RoomExit3D.gd" id="4_03ma3"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vmgny"]
+albedo_color = Color(0.9843137, 0.73333335, 0, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_brxma"]
+material = SubResource("StandardMaterial3D_vmgny")
+size = Vector2(11.575, 14.155)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_fxear"]
+size = Vector2(2.5, 2.5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_oa6ad"]
+albedo_color = Color(0.38431373, 1, 0.078431375, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_r8pgc"]
+size = Vector3(2.0020142, 0.001, 2.0007172)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7hlye"]
+albedo_color = Color(0.9843137, 0.73333335, 0, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_xdrho"]
+material = SubResource("StandardMaterial3D_7hlye")
+size = Vector2(19.33, 9.785)
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_whoag"]
+height = 2.9575195
+radius = 0.33691406
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_iis0a"]
+height = 4.4057617
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_335sk"]
+height = 3.3134766
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_28bdy"]
+height = 3.475586
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_boqbt"]
+height = 3.3154297
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_8b25n"]
+height = 3.1499023
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_qq2os"]
+height = 3.150879
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_fqhwf"]
+height = 1.3255615
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_s7qqn"]
+height = 1.6782227
+radius = 1.1
+
+[node name="AbandonedLab3d" type="Node3D" unique_id=1088890068]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=147631214]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1655635530]
+transform = Transform3D(-0.24157718, 0.9694642, -0.04218732, 0.15470979, 0.08139758, 0.984601, 0.95796937, 0.23133035, -0.16964932, -5.641828, -18.950073, 53.318577)
+light_color = Color(0.5132329, 0.5132329, 0.5132329, 1)
+
+[node name="Ground" type="StaticBody3D" parent="." unique_id=900760093]
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Ground" unique_id=1298821318]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.296811, 0.01, -3.4589767)
+mesh = SubResource("PlaneMesh_brxma")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground" unique_id=1307816276]
+transform = Transform3D(10, 0, 0, 0, 10.000001, 0, 0, 0, 10, 0, 0, 0)
+mesh = SubResource("PlaneMesh_fxear")
+surface_material_override/0 = SubResource("StandardMaterial3D_oa6ad")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground" unique_id=1759386798]
+transform = Transform3D(10, 0, 0, 0, 10.000001, 0, 0, 0, 10, -0.0045776367, -0.009648323, -0.013961792)
+shape = SubResource("BoxShape3D_r8pgc")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Ground" unique_id=2078806177]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5577669, 0.01, 6.9066286)
+mesh = SubResource("PlaneMesh_xdrho")
+
+[node name="PlayerSpawn" type="Marker3D" parent="." unique_id=1421787230]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.331398, 0, 10.7991905)
+
+[node name="Environment" type="Node3D" parent="." unique_id=1620375122]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Environment" unique_id=365041733]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.318498, 0, 0)
+
+[node name="Tree" type="Sprite3D" parent="Environment/StaticBody3D" unique_id=659524522]
+transform = Transform3D(0.47110873, -0.052796796, 0.61310214, -0.07810661, 0.7607675, 0.12553003, -0.6103941, -0.13809758, 0.45713583, -6.538884, 1.1407608, -1.1333048)
+texture = ExtResource("1_wk86w")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/StaticBody3D" unique_id=1589232044]
+transform = Transform3D(0.47110873, -0.052797686, 0.61310214, -0.07810661, 0.76077056, 0.12553, -0.6103941, -0.13809721, 0.45713583, -6.5136065, 0.776536, -1.067188)
+shape = SubResource("CylinderShape3D_whoag")
+
+[node name="StaticBody3D2" type="StaticBody3D" parent="Environment" unique_id=1538508111]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0164647, 0, 0)
+
+[node name="Tree2" type="Sprite3D" parent="Environment/StaticBody3D2" unique_id=510411699]
+transform = Transform3D(0.4173588, -0.11955231, -0.49711046, 0.18872188, 0.6324108, 0.0063538547, 0.4751797, -0.14616288, 0.43409753, 6.9106975, 1.3128674, -0.6075058)
+texture = ExtResource("2_5d3vp")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/StaticBody3D2" unique_id=1379301617]
+transform = Transform3D(0.41735852, -0.11955231, -0.49711046, 0.18872178, 0.6324108, 0.0063538454, 0.4751794, -0.14616288, 0.43409753, 7.0281773, 1.2324264, -0.38432986)
+shape = SubResource("CylinderShape3D_iis0a")
+
+[node name="StaticBody3D3" type="StaticBody3D" parent="Environment" unique_id=1352312790]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.177383, 0, 0)
+
+[node name="Tree3" type="Sprite3D" parent="Environment/StaticBody3D3" unique_id=2003892342]
+transform = Transform3D(0.4173588, -0.11955231, -0.49711046, 0.18872188, 0.6324108, 0.0063538547, 0.4751797, -0.14616288, 0.43409753, 6.9106975, 1.3128674, -1.6632266)
+texture = ExtResource("2_5d3vp")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/StaticBody3D3" unique_id=484707133]
+transform = Transform3D(0.41735852, -0.11955231, -0.49711046, 0.18872178, 0.6324108, 0.0063538454, 0.4751794, -0.14616288, 0.43409753, 7.1099005, 0.8975386, -1.3724092)
+shape = SubResource("CylinderShape3D_335sk")
+
+[node name="StaticBody3D4" type="StaticBody3D" parent="Environment" unique_id=1724950738]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.9067688, 0, 0)
+
+[node name="Tree4" type="Sprite3D" parent="Environment/StaticBody3D4" unique_id=1510365157]
+transform = Transform3D(0.4173588, -0.11955231, -0.49711046, 0.18872188, 0.6324108, 0.0063538547, 0.4751797, -0.14616288, 0.43409753, 6.9106975, 1.3128674, 0.39492416)
+texture = ExtResource("2_5d3vp")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/StaticBody3D4" unique_id=909319786]
+transform = Transform3D(0.41735852, -0.11955231, -0.49711046, 0.18872178, 0.6324108, 0.0063538454, 0.4751794, -0.14616288, 0.43409753, 7.172475, 0.8462794, 0.6461658)
+shape = SubResource("CylinderShape3D_28bdy")
+
+[node name="StaticBody3D5" type="StaticBody3D" parent="Environment" unique_id=416899214]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5775385, 0, 0)
+
+[node name="Tree5" type="Sprite3D" parent="Environment/StaticBody3D5" unique_id=394789548]
+transform = Transform3D(0.4173588, -0.11955231, -0.49711046, 0.18872188, 0.6324108, 0.0063538547, 0.4751797, -0.14616288, 0.43409753, 6.449227, 1.3128674, -5.7067146)
+texture = ExtResource("2_5d3vp")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/StaticBody3D5" unique_id=1631998795]
+transform = Transform3D(0.41735852, -0.11955231, -0.49711046, 0.18872178, 0.6324108, 0.0063538454, 0.4751794, -0.14616288, 0.43409753, 6.6553783, 0.89692175, -5.423088)
+shape = SubResource("CylinderShape3D_boqbt")
+
+[node name="StaticBody3D6" type="StaticBody3D" parent="Environment" unique_id=21103242]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.34039, 0, 0)
+
+[node name="Tree6" type="Sprite3D" parent="Environment/StaticBody3D6" unique_id=320834865]
+transform = Transform3D(0.5546841, 0.014010654, 0.3573922, -0.08263785, 0.6466694, 0.10290513, -0.34798932, -0.1312332, 0.5452349, -7.2507777, 1.3128674, -4.330881)
+texture = ExtResource("2_5d3vp")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/StaticBody3D6" unique_id=1900906129]
+transform = Transform3D(0.55468404, 0.0140107395, 0.35739204, -0.082637794, 0.6466694, 0.102905154, -0.3479893, -0.13123314, 0.5452349, -7.0851994, 0.9410633, -4.417897)
+shape = SubResource("CylinderShape3D_8b25n")
+
+[node name="StaticBody3D7" type="StaticBody3D" parent="Environment" unique_id=574849796]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.9606304, 0, 0)
+
+[node name="Tree7" type="Sprite3D" parent="Environment/StaticBody3D7" unique_id=1655971683]
+transform = Transform3D(0.5546841, 0.014010654, 0.3573922, -0.08263785, 0.6466694, 0.10290513, -0.34798932, -0.1312332, 0.5452349, -6.786505, 1.3128674, 1.025425)
+texture = ExtResource("2_5d3vp")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/StaticBody3D7" unique_id=751021545]
+transform = Transform3D(0.55468404, 0.0140107395, 0.35739204, -0.082637794, 0.6466694, 0.102905154, -0.3479893, -0.13123314, 0.5452349, -6.6175947, 0.9407482, 0.9554773)
+shape = SubResource("CylinderShape3D_qq2os")
+
+[node name="ActionBattleUI" parent="." unique_id=871756832 instance=ExtResource("3_wktep")]
+
+[node name="RoomExit3D" type="Area3D" parent="." unique_id=1498621803]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9.923497)
+collision_layer = 3
+collision_mask = 3
+script = ExtResource("4_03ma3")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="RoomExit3D" unique_id=883582722]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6679077, 0)
+mesh = SubResource("CylinderMesh_fqhwf")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RoomExit3D" unique_id=1011717373]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8289795, 0)
+shape = SubResource("CylinderShape3D_s7qqn")
+
+[node name="InteractionPrompt" type="Label3D" parent="RoomExit3D" unique_id=1049542034]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7776307, 0.17346478)
+visible = false
+billboard = 1
+text = "[E] Interact"
