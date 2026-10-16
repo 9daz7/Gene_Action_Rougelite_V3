@@ -419,6 +419,7 @@ func start_run():
 	)
 
 	run_manager.start_run()
+	room_manager.create_player_party()
 
 	GameEvents.run_started.emit()
 
@@ -516,6 +517,9 @@ func close_run_worlds() -> void:
 	print("================================")
 	print("CLOSING RUN WORLDS")
 	print("================================")
+
+	room_manager.close_active_room()
+	room_manager.close_player_party()
 
 	map_manager.disable_scanner()
 	map_ui.hide()

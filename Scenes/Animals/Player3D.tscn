@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://dnsixjjeqsb7n" path="res://Scripts/ActionBattle3D/ActionCombatController3D.gd" id="5_2hs53"]
 [ext_resource type="Resource" uid="uid://cfsalnn48dv3f" path="res://Data/Moves/Bite.tres" id="6_u0e30"]
 [ext_resource type="Resource" uid="uid://crr33q35e1har" path="res://Data/Moves/UnstoppableCharge.tres" id="7_6eser"]
+[ext_resource type="Script" uid="uid://dx4y4stkdd42x" path="res://Scenes/Test3D/Test3DCamera.gd" id="8_u0e30"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_u0e30"]
 radius = 0.13330078
@@ -118,13 +119,12 @@ animations = [{
 radius = 0.08154297
 height = 0.82810974
 
-[node name="Player3d" type="Node3D" unique_id=652518589]
+[node name="Player3D" type="Node3D" unique_id=652518589]
 
 [node name="Player" type="CharacterBody3D" parent="." unique_id=388044305 node_paths=PackedStringArray("combat_controller")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.077953875, 0, -0.049144268)
 collision_layer = 2
 script = ExtResource("1_5wp5u")
-combat_controller = NodePath("")
+combat_controller = NodePath("../ActionCombatController3D")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Player" unique_id=944549268]
 transform = Transform3D(0.084729254, 0, -0.9964041, 0.082228646, 0.99658895, 0.006992316, 0.99300534, -0.08252542, 0.08444024, 0.16645107, 0.51991844, -0.055985928)
@@ -140,9 +140,9 @@ animation = &"walk_up"
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.075048864, 0, 0.19137764)
 collision_layer = 4
 script = ExtResource("3_c2khf")
-target = NodePath("")
+target = NodePath("../Player")
 
-[node name="Sprite3D" type="Sprite3D" parent="Deebo" unique_id=904448666]
+[node name="Sprite3D" type="Sprite3D" parent="Deebo" unique_id=904448666 groups=["player"]]
 transform = Transform3D(0.05491765, -0.002171651, 0.0020823458, 0.001990212, 0.05476865, 0.0046296995, -0.0022563883, -0.0045474176, 0.05476523, 0, 0.4468256, 0.005795598)
 layers = 4
 texture = ExtResource("4_2hs53")
@@ -153,11 +153,16 @@ shape = SubResource("CapsuleShape3D_o5ld3")
 
 [node name="ActionCombatController3D" type="Node" parent="." unique_id=11737797 node_paths=PackedStringArray("player_character", "deebo")]
 script = ExtResource("5_2hs53")
-player_character = NodePath("")
-deebo = NodePath("")
+player_character = NodePath("../Player")
+deebo = NodePath("../Deebo")
 bite_move = ExtResource("6_u0e30")
 gene_move = ExtResource("7_6eser")
 formation_distance = 1.0
 back_left_offset = 0.5
 formation_follow_speed = 7.0
 swap_speed = 6.0
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1928206541 node_paths=PackedStringArray("target")]
+transform = Transform3D(1, 0, 0, 0, 0.64278764, 0.76604444, 0, -0.76604444, 0.64278764, 0.009, 3.771, 2.11)
+script = ExtResource("8_u0e30")
+target = NodePath("../Player")

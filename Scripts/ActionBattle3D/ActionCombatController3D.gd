@@ -157,6 +157,31 @@ func finish_action(action_name: StringName) -> void:
 	#print("3D ACTION COMBAT CONTROLLER READY")
 
 
+func reset_formation() -> void:
+
+	if not is_instance_valid(player_character):
+		return
+
+	if not is_instance_valid(deebo):
+		return
+
+	# Reset combat positioning for the new room.
+	player_position = CombatPosition.FRONT
+	deebo_position = CombatPosition.BACK
+
+	is_swapping = false
+	is_action_locked = false
+	current_action = &""
+	is_deebo_animating = false
+
+	# Place Deebo behind the Player using the current formation rules.
+	deebo.global_position = _get_formation_position()
+
+	print("FORMATION RESET")
+	print("Player: ", player_character.global_position)
+	print("Deebo: ", deebo.global_position)
+
+
 # ==================================================
 # Physics
 # ==================================================

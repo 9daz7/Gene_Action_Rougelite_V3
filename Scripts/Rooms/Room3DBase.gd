@@ -14,8 +14,8 @@ signal room_finished
 # Room References
 # ==================================================
 
-@onready var player: CharacterBody3D = get_node_or_null("Player")
-@onready var deebo: CharacterBody3D = get_node_or_null("Deebo")
+var player: CharacterBody3D = null
+var deebo: CharacterBody3D = null
 
 var room_exits: Array[RoomExit3D] = []
 
@@ -32,6 +32,15 @@ var room_completed: bool = false
 # Initialization
 # ==================================================
 
+func configure_party(
+	player_ref: CharacterBody3D,
+	deebo_ref: CharacterBody3D
+) -> void:
+
+	player = player_ref
+	deebo = deebo_ref
+
+
 func _ready() -> void:
 
 	if is_instance_valid(player):
@@ -47,6 +56,18 @@ func _ready() -> void:
 				deebo.died.connect(_on_required_character_died)
 
 	_register_room_exits()
+
+	_configure_enemy_references()
+
+
+func _configure_enemy_references() -> void:
+
+	for node in find_children("*", "", true, false):
+		if node.get_script() == preload(
+			"res://Scripts/ActionBattle/ActionEnemyController3D.gd"
+		):
+			node.set("player", player)
+			node.set("deebo", deebo)
 
 
 # ==================================================

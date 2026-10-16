@@ -101,17 +101,17 @@ var is_dead: bool = false
 
 func _ready() -> void:
 
-	if player == null:
-		player = get_tree().current_scene.get_node_or_null("Player") as CharacterBody3D
-
-	if player == null:
-		push_error("ActionEnemyController3D: Player reference is missing.")
-
-	if deebo == null:
-		deebo = get_tree().current_scene.get_node_or_null("Deebo") as CharacterBody3D
-
-	if deebo == null:
-		push_warning("ActionEnemyController3D: Deebo reference is missing.")
+	#if player == null:
+		#player = get_tree().current_scene.get_node_or_null("Player") as CharacterBody3D
+#
+	#if player == null:
+		#push_error("ActionEnemyController3D: Player reference is missing.")
+#
+	#if deebo == null:
+		#deebo = get_tree().current_scene.get_node_or_null("Deebo") as CharacterBody3D
+#
+	#if deebo == null:
+		#push_warning("ActionEnemyController3D: Deebo reference is missing.")
 
 	enemy.rotation.y = 0.0
 

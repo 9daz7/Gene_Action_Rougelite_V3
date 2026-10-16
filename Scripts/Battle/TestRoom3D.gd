@@ -2,7 +2,7 @@ extends Room3DBase
 
 
 @onready var action_battle_ui: ActionBattleUI = $ActionBattleUI
-@onready var combat_controller: ActionCombatController3D = $ActionCombatController3D
+var combat_controller: ActionCombatController3D = null
 
 var remaining_enemies: int = 0
 
@@ -11,7 +11,33 @@ func _ready() -> void:
 
 	super._ready()
 
-	action_battle_ui.setup(player, deebo, combat_controller)
+	if not is_instance_valid(player):
+		push_error("TestRoom3D: Player reference is missing.")
+		return
+
+	var party_root := player.get_parent()
+
+	if party_root == null:
+		push_error("TestRoom3D: Player has no party root.")
+		return
+
+	combat_controller = party_root.get_node_or_null(
+		"ActionCombatController3D"
+	) as ActionCombatController3D
+
+	if combat_controller == null:
+		push_error(
+			"TestRoom3D: ActionCombatController3D "
+			+ "was not found in Player3D."
+		)
+		return
+
+	action_battle_ui.setup(
+		player,
+		deebo,
+		combat_controller
+	)
+
 	action_battle_ui.update_move_names()
 
 	_register_enemies()

@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://q1f8biai6jwu"]
 
 [ext_resource type="Script" uid="uid://cu1odikuu35rg" path="res://Scripts/Rooms/Room3DBase.gd" id="1_6c8tf"]
-[ext_resource type="Script" uid="uid://dx4y4stkdd42x" path="res://Scenes/Test3D/Test3DCamera.gd" id="1_n3c6e"]
 [ext_resource type="Script" uid="uid://cspmv2g4l51rq" path="res://Scenes/Test3D/Test3DEnemy.gd" id="6_gnl7j"]
 [ext_resource type="Resource" uid="uid://cxemne4dnlwhj" path="res://Data/Enemies/Normal/Wolf.tres" id="7_y3bux"]
 [ext_resource type="Texture2D" uid="uid://btha0go4fr6sq" path="res://Assets/Sprites/enemypng.png" id="8_pvvar"]
@@ -75,10 +74,6 @@ script = ExtResource("1_6c8tf")
 transform = Transform3D(-0.24157718, 0.9694642, -0.04218732, 0.15470979, 0.08139758, 0.984601, 0.95796937, 0.23133035, -0.16964932, -5.641828, -18.950073, 53.318577)
 light_color = Color(0.5132329, 0.5132329, 0.5132329, 1)
 
-[node name="Camera3D" type="Camera3D" parent="." unique_id=2134651646]
-transform = Transform3D(1, 0, 0, 0, 0.64278764, 0.76604444, 0, -0.76604444, 0.64278764, 0.2832476, 3.7711463, 10.593544)
-script = ExtResource("1_n3c6e")
-
 [node name="Ground" type="StaticBody3D" parent="." unique_id=1373092576]
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="Ground" unique_id=1988543145]
@@ -95,6 +90,7 @@ transform = Transform3D(10, 0, 0, 0, 10.000001, 0, 0, 0, 10, -0.0045776367, -0.0
 shape = SubResource("BoxShape3D_rr0df")
 
 [node name="PlayerSpawn" type="Marker3D" parent="." unique_id=1460646211]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 8.402363)
 
 [node name="Enemies" type="Node3D" parent="." unique_id=1960342530]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.55740845, 0, -3.558912)
@@ -114,9 +110,8 @@ texture = ExtResource("8_pvvar")
 transform = Transform3D(1, 0, 0, 0, 0.9985837, 0.053202253, 0, -0.053202253, 0.9985837, 0.38519, 0.31341553, 0.042779922)
 shape = SubResource("CapsuleShape3D_f137e")
 
-[node name="ActionEnemyController3D" type="Node" parent="Enemies/Wolf" unique_id=1241073914 node_paths=PackedStringArray("player")]
+[node name="ActionEnemyController3D" type="Node" parent="Enemies/Wolf" unique_id=1241073914]
 script = ExtResource("9_cov1b")
-player = NodePath("")
 
 [node name="Wolf2" type="CharacterBody3D" parent="Enemies" unique_id=982020182]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.189138, 0, 2.1788213)
@@ -133,9 +128,8 @@ texture = ExtResource("8_pvvar")
 transform = Transform3D(1, 0, 0, 0, 0.9985837, 0.053202253, 0, -0.053202253, 0.9985837, 0.32392025, 0.31341553, 0.042779922)
 shape = SubResource("CapsuleShape3D_f137e")
 
-[node name="ActionEnemyController3D" type="Node" parent="Enemies/Wolf2" unique_id=1515952127 node_paths=PackedStringArray("player")]
+[node name="ActionEnemyController3D" type="Node" parent="Enemies/Wolf2" unique_id=1515952127]
 script = ExtResource("9_cov1b")
-player = NodePath("")
 
 [node name="Wolf3" type="CharacterBody3D" parent="Enemies" unique_id=1333036540]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.38011205, 0, -0.6778729)
@@ -152,9 +146,8 @@ texture = ExtResource("8_pvvar")
 transform = Transform3D(1, 0, 0, 0, 0.9985837, 0.053202253, 0, -0.053202253, 0.9985837, 0.31251585, 0.31341553, 0.042779922)
 shape = SubResource("CapsuleShape3D_f137e")
 
-[node name="ActionEnemyController3D" type="Node" parent="Enemies/Wolf3" unique_id=1520777008 node_paths=PackedStringArray("player")]
+[node name="ActionEnemyController3D" type="Node" parent="Enemies/Wolf3" unique_id=1520777008]
 script = ExtResource("9_cov1b")
-player = NodePath("")
 
 [node name="Wolf4" type="CharacterBody3D" parent="Enemies" unique_id=680659018]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4436717, 0, -3.200999)
@@ -171,9 +164,8 @@ texture = ExtResource("8_pvvar")
 transform = Transform3D(1, 0, 0, 0, 0.9985837, 0.053202253, 0, -0.053202253, 0.9985837, 0.30731928, 0.31341553, 0.042779922)
 shape = SubResource("CapsuleShape3D_f137e")
 
-[node name="ActionEnemyController3D" type="Node" parent="Enemies/Wolf4" unique_id=251470971 node_paths=PackedStringArray("player")]
+[node name="ActionEnemyController3D" type="Node" parent="Enemies/Wolf4" unique_id=251470971]
 script = ExtResource("9_cov1b")
-player = NodePath("")
 
 [node name="Environment" type="Node3D" parent="." unique_id=1347097990]
 

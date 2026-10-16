@@ -39,27 +39,32 @@ func _physics_process(_delta: float) -> void:
 
 	if is_dead:
 		velocity = Vector3.ZERO
-		move_and_slide()
-		return
 
-	if target == null:
-		return
-
-	var offset := target.global_position - global_position
-	offset.y = 0.0
-
-	var distance := offset.length()
-
-	if distance > follow_distance:
-		var direction := offset.normalized()
-
-		velocity.x = direction.x * move_speed
-		velocity.z = direction.z * move_speed
-	else:
-		velocity.x = 0.0
-		velocity.z = 0.0
-
-	move_and_slide()
+#func _physics_process(_delta: float) -> void:
+#
+	#if is_dead:
+		#velocity = Vector3.ZERO
+		#move_and_slide()
+		#return
+#
+	#if target == null:
+		#return
+#
+	#var offset := target.global_position - global_position
+	#offset.y = 0.0
+#
+	#var distance := offset.length()
+#
+	#if distance > follow_distance:
+		#var direction := offset.normalized()
+#
+		#velocity.x = direction.x * move_speed
+		#velocity.z = direction.z * move_speed
+	#else:
+		#velocity.x = 0.0
+		#velocity.z = 0.0
+#
+	#move_and_slide()
 
 
 func take_damage(amount: float) -> void:

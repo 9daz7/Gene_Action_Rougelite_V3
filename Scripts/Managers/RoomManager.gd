@@ -2,6 +2,15 @@ extends Node
 class_name RoomManager
 
 
+const PLAYER_PARTY_SCENE: PackedScene = preload(
+	"res://Scenes/Animals/Player3D.tscn"
+)
+
+var player_party: Node3D = null
+var player_character: CharacterBody3D = null
+var deebo_character: CharacterBody3D = null
+
+
 # ==================================================
 # Managers
 # ==================================================
@@ -108,6 +117,32 @@ func create_room(
 	)
 
 	return room
+
+
+func create_player_party() -> void:
+
+	if is_instance_valid(player_party):
+		return
+
+	player_party = PLAYER_PARTY_SCENE.instantiate() as Node3D
+
+	if player_party == null:
+		push_error("RoomManager: Failed to create Player3d.")
+		return
+
+	player_character = player_party.get_node_or_null("Player") as CharacterBody3D
+	deebo_character = player_party.get_node_or_null("Deebo") as CharacterBody3D
+
+	if player_character == null or deebo_character == null:
+		push_error("RoomManager: Player3d is missing Player or Deebo.")
+		player_party.queue_free()
+		player_party = null
+		player_character = null
+		deebo_character = null
+		return
+
+	get_tree().current_scene.add_child(player_party)
+
 
 
 # ==================================================
@@ -257,13 +292,25 @@ func open_room_scene(room: RoomResource) -> void:
 	active_room_scene = room.room_scene.instantiate()
 
 	if active_room_scene == null:
-
 		push_error(
 			"RoomManager: Failed to instantiate room scene: "
 			+ room.room_name
 		)
-
 		return
+
+	# --------------------------------------------------
+	# Configure Persistent Party
+	# --------------------------------------------------
+
+	if active_room_scene.has_method("configure_party"):
+		if (
+			is_instance_valid(player_character)
+			and is_instance_valid(deebo_character)
+		):
+			active_room_scene.configure_party(
+				player_character,
+				deebo_character
+			)
 
 	# --------------------------------------------------
 	# Connect 3D Room Exit Signal
@@ -284,6 +331,8 @@ func open_room_scene(room: RoomResource) -> void:
 	get_tree().current_scene.add_child(
 		active_room_scene
 	)
+
+	_place_party_at_room_spawn(active_room_scene)
 
 	# --------------------------------------------------
 	# Track Active Battle Room
@@ -339,6 +388,42 @@ func open_room_scene(room: RoomResource) -> void:
 
 		_:
 			pass
+
+
+func _place_party_at_room_spawn(room: Node) -> void:
+
+	if not is_instance_valid(player_party):
+		push_warning("RoomManager: Player party has not been created.")
+		return
+
+	var spawn_node := room.find_child("PlayerSpawn", true, false)
+
+	if not spawn_node is Marker3D:
+		push_warning(
+			"RoomManager: Room '%s' has no Marker3D named PlayerSpawn."
+			% room.name
+		)
+		return
+
+	player_party.global_transform = spawn_node.global_transform
+
+	# Reset the party members relative to the new spawn.
+	player_character.position = Vector3.ZERO
+	deebo_character.position = Vector3(0.075049, 0.0, 0.191378)
+
+	var combat_controller = player_party.get_node_or_null(
+		"ActionCombatController3D"
+	)
+
+	if combat_controller != null:
+		combat_controller.reset_formation()
+
+	print(
+		"SPAWN CHECK | Room: ", room.name,
+		" | Marker: ", spawn_node.global_position,
+		" | Party: ", player_party.global_position
+	)
+
 
 # ==================================================
 # Room Exits
@@ -1050,3 +1135,13 @@ func close_active_room() -> void:
 		active_room_scene.queue_free()
 
 	active_room_scene = null
+
+
+func close_player_party() -> void:
+
+	if is_instance_valid(player_party):
+		player_party.queue_free()
+
+	player_party = null
+	player_character = null
+	deebo_character = null

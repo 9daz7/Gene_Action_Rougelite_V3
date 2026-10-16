@@ -78,6 +78,13 @@ func _ready() -> void:
 
 func update_move_names() -> void:
 
+	if not is_instance_valid(combat_controller):
+		push_warning(
+			"ActionBattleUI: Cannot update move names "
+			+ "without a combat controller."
+		)
+		return
+
 	var moves: Array[MoveResource] = [
 		combat_controller.bite_move,
 		null,
