@@ -934,14 +934,14 @@ func _create_room_for_node(
 	)
 
 	# ==================================================
-	# Opening Battle
+	# Start Room
 	# ==================================================
 
 	if node.layer == 0:
 
 		return _duplicate_room_template(
 			get_random_room(
-				RoomResource.RoomType.BATTLE,
+				RoomResource.RoomType.START,
 				node.next_nodes.size()
 			)
 		)

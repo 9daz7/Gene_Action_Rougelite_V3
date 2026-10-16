@@ -321,6 +321,24 @@ func open_room_scene(room: RoomResource) -> void:
 			active_room_scene.exits_available_on_entry
 		)
 
+	# --------------------------------------------------
+	# Complete Optional Rooms On Entry
+	# --------------------------------------------------
+
+	match room.room_type:
+		RoomResource.RoomType.START, \
+		RoomResource.RoomType.LAB, \
+		RoomResource.RoomType.REWARD, \
+		RoomResource.RoomType.SHOP, \
+		RoomResource.RoomType.REST, \
+		RoomResource.RoomType.TREASURE:
+			if active_room_scene.has_method("complete_room"):
+				active_room_scene.complete_room()
+			else:
+				complete_room()
+
+		_:
+			pass
 
 # ==================================================
 # Room Exits

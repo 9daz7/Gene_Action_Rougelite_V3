@@ -147,7 +147,7 @@ func _on_event_finished() -> void:
 	# Restore Player
 	# --------------------------------------------------
 
-	room_manager.complete_room()
+	complete_room()
 
 	if room_player != null:
 

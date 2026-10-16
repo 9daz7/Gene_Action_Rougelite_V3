@@ -217,7 +217,6 @@ func set_player_controls(
 func complete_room() -> void:
 
 	if room_manager == null:
-
 		push_error(
 			"RoomWorld: RoomManager not found."
 		)

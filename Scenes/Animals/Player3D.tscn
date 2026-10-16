@@ -1,0 +1,163 @@
+[gd_scene format=3 uid="uid://t8h24wyxl0q3"]
+
+[ext_resource type="Script" uid="uid://d4icaydoavq6b" path="res://Scenes/Test3D/Test3DPlayer.gd" id="1_5wp5u"]
+[ext_resource type="Texture2D" uid="uid://s5nq1sb1o64w" path="res://Assets/Sprites/Animals/Green/walk.png" id="2_d8m3p"]
+[ext_resource type="Script" uid="uid://qvid40gklgss" path="res://Scenes/Test3D/Deebo3DTest.gd" id="3_c2khf"]
+[ext_resource type="Texture2D" uid="uid://bjo4cf8ylnke2" path="res://Assets/Sprites/Animals/deebo_asset_test_battle.png" id="4_2hs53"]
+[ext_resource type="Script" uid="uid://dnsixjjeqsb7n" path="res://Scripts/ActionBattle3D/ActionCombatController3D.gd" id="5_2hs53"]
+[ext_resource type="Resource" uid="uid://cfsalnn48dv3f" path="res://Data/Moves/Bite.tres" id="6_u0e30"]
+[ext_resource type="Resource" uid="uid://crr33q35e1har" path="res://Data/Moves/UnstoppableCharge.tres" id="7_6eser"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_u0e30"]
+radius = 0.13330078
+height = 0.956604
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o40u3"]
+atlas = ExtResource("2_d8m3p")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ku37b"]
+atlas = ExtResource("2_d8m3p")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5akbt"]
+atlas = ExtResource("2_d8m3p")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fv6r3"]
+atlas = ExtResource("2_d8m3p")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5l7fv"]
+atlas = ExtResource("2_d8m3p")
+region = Rect2(0, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sgn75"]
+atlas = ExtResource("2_d8m3p")
+region = Rect2(32, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ypuw0"]
+atlas = ExtResource("2_d8m3p")
+region = Rect2(64, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6jocm"]
+atlas = ExtResource("2_d8m3p")
+region = Rect2(96, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u7gxd"]
+atlas = ExtResource("2_d8m3p")
+region = Rect2(0, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fee26"]
+atlas = ExtResource("2_d8m3p")
+region = Rect2(32, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_guphg"]
+atlas = ExtResource("2_d8m3p")
+region = Rect2(64, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1ujl1"]
+atlas = ExtResource("2_d8m3p")
+region = Rect2(96, 64, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_6eser"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o40u3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ku37b")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5akbt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fv6r3")
+}],
+"loop": 1,
+"name": &"walk_down",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5l7fv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sgn75")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ypuw0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6jocm")
+}],
+"loop": 1,
+"name": &"walk_side",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u7gxd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fee26")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_guphg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1ujl1")
+}],
+"loop": 1,
+"name": &"walk_up",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_o5ld3"]
+radius = 0.08154297
+height = 0.82810974
+
+[node name="Player3d" type="Node3D" unique_id=652518589]
+
+[node name="Player" type="CharacterBody3D" parent="." unique_id=388044305 node_paths=PackedStringArray("combat_controller")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.077953875, 0, -0.049144268)
+collision_layer = 2
+script = ExtResource("1_5wp5u")
+combat_controller = NodePath("")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player" unique_id=944549268]
+transform = Transform3D(0.084729254, 0, -0.9964041, 0.082228646, 0.99658895, 0.006992316, 0.99300534, -0.08252542, 0.08444024, 0.16645107, 0.51991844, -0.055985928)
+shape = SubResource("CapsuleShape3D_u0e30")
+
+[node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="Player" unique_id=1991733114]
+transform = Transform3D(7.065, 0, 0, 0, 6.937538, 1.3359591, 0, -1.3359593, 6.937537, 0.17567652, 0.49804533, -0.046143353)
+layers = 2
+sprite_frames = SubResource("SpriteFrames_6eser")
+animation = &"walk_up"
+
+[node name="Deebo" type="CharacterBody3D" parent="." unique_id=235934098 node_paths=PackedStringArray("target")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.075048864, 0, 0.19137764)
+collision_layer = 4
+script = ExtResource("3_c2khf")
+target = NodePath("")
+
+[node name="Sprite3D" type="Sprite3D" parent="Deebo" unique_id=904448666]
+transform = Transform3D(0.05491765, -0.002171651, 0.0020823458, 0.001990212, 0.05476865, 0.0046296995, -0.0022563883, -0.0045474176, 0.05476523, 0, 0.4468256, 0.005795598)
+layers = 4
+texture = ExtResource("4_2hs53")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Deebo" unique_id=392420064]
+transform = Transform3D(1, 0, 0, 0, 0.9969715, 0.07776775, 0, -0.07776775, 0.9969715, 0.0032458603, 0.40114808, 0.012093544)
+shape = SubResource("CapsuleShape3D_o5ld3")
+
+[node name="ActionCombatController3D" type="Node" parent="." unique_id=11737797 node_paths=PackedStringArray("player_character", "deebo")]
+script = ExtResource("5_2hs53")
+player_character = NodePath("")
+deebo = NodePath("")
+bite_move = ExtResource("6_u0e30")
+gene_move = ExtResource("7_6eser")
+formation_distance = 1.0
+back_left_offset = 0.5
+formation_follow_speed = 7.0
+swap_speed = 6.0
