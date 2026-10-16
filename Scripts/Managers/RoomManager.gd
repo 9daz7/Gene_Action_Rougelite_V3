@@ -316,6 +316,11 @@ func open_room_scene(room: RoomResource) -> void:
 		)
 
 
+func _on_active_room_finished() -> void:
+
+	complete_room()
+
+
 # ==================================================
 # Room Exits
 # ==================================================
