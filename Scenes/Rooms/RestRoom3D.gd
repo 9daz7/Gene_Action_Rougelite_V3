@@ -14,6 +14,8 @@ var rest_ui: Control = null
 var run_manager: RunManager = null
 var room_manager: RoomManager = null
 
+var previous_mouse_mode: Input.MouseMode = Input.MOUSE_MODE_VISIBLE
+
 
 func _ready() -> void:
 
@@ -50,6 +52,11 @@ func _on_rest_interacted() -> void:
 		push_error("RestRoom3D: RoomManager is missing.")
 		return
 
+	var player := room_manager.player_character
+
+	if is_instance_valid(player) and player.has_method("set_controls_enabled"):
+		player.call("set_controls_enabled", false)
+
 	rest_ui = REST_UI_SCENE.instantiate() as Control
 
 	if rest_ui == null:
@@ -65,11 +72,15 @@ func _on_rest_interacted() -> void:
 		return
 
 	ui_layer.add_child(rest_ui)
-	rest_ui.set_anchors_and_offsets_preset(
-		Control.PRESET_FULL_RECT
-	)
+	#rest_ui.set_anchors_and_offsets_preset(
+		#Control.PRESET_FULL_RECT
+	#)
 
 	rest_ui.rest_finished.connect(_on_rest_finished)
+
+	previous_mouse_mode = Input.mouse_mode
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+
 	rest_ui.open(run_manager)
 
 
@@ -78,3 +89,11 @@ func _on_rest_finished() -> void:
 	if is_instance_valid(rest_ui):
 		rest_ui.queue_free()
 		rest_ui = null
+
+	if is_instance_valid(room_manager):
+		var player := room_manager.player_character
+
+		if is_instance_valid(player) and player.has_method("set_controls_enabled"):
+			player.call("set_controls_enabled", true)
+
+	Input.mouse_mode = previous_mouse_mode

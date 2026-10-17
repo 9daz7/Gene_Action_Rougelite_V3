@@ -9,6 +9,8 @@ signal died
 # Movement
 # --------------------------------------------------
 
+var controls_enabled: bool = true
+
 @export var walk_speed: float = 3.0
 @export var sprint_speed: float = 5.5
 @export var crouch_speed: float = 1.5
@@ -257,9 +259,26 @@ func _perform_back_slam() -> void:
 	can_attack = true
 
 
+func set_controls_enabled(enabled: bool) -> void:
+
+	controls_enabled = enabled
+
+	if not enabled:
+		velocity = Vector3.ZERO
+		is_dashing = false
+		dash_timer = 0.0
+		is_sprinting = false
+		is_crouching = false
+
+
 func _physics_process(delta: float) -> void:
 
 	if is_dead:
+		velocity = Vector3.ZERO
+		move_and_slide()
+		return
+
+	if not controls_enabled:
 		velocity = Vector3.ZERO
 		move_and_slide()
 		return

@@ -6,7 +6,7 @@
 [resource]
 script = ExtResource("2_bv4qk")
 move_name = "attack"
-power = 6
 description = "a basic attack"
+power = 1
 critical_chance = 2
 metadata/_custom_type_script = "uid://bnmm0xqkm6atb"
