@@ -4,7 +4,10 @@
 
 [node name="RestRoom_UI" type="Control" unique_id=436275297]
 layout_mode = 3
-anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_6y63p")
 
 [node name="CenterContainer" type="CenterContainer" parent="." unique_id=1847433381]
@@ -12,10 +15,8 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 960.0
-offset_top = 477.0
-offset_right = 1027.0
-offset_bottom = 570.00006
+offset_top = 2.0
+offset_bottom = 2.0
 grow_horizontal = 2
 grow_vertical = 2
 
