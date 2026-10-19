@@ -73,12 +73,6 @@ func _on_rest_interacted() -> void:
 
 	ui_layer.add_child(rest_ui)
 
-	print("REST UI PARENT:", rest_ui.get_parent())
-	print("REST UI SIZE:", rest_ui.size)
-	print("REST UI GLOBAL RECT:", rest_ui.get_global_rect())
-	print("REST UI ANCHORS:", rest_ui.anchor_left, ", ", rest_ui.anchor_top, ", ", rest_ui.anchor_right, ", ", rest_ui.anchor_bottom)
-	print("UI LAYER SIZE:", ui_layer.get_viewport().get_visible_rect())
-
 	#rest_ui.set_anchors_and_offsets_preset(
 		#Control.PRESET_FULL_RECT
 	#)

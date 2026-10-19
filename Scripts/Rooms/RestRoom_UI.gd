@@ -52,22 +52,6 @@ func _ready() -> void:
 			_leave_pressed
 	)
 
-	heal_button.gui_input.connect(
-		_on_button_gui_input.bind("HealButton")
-	)
-
-	leave_button.gui_input.connect(
-		_on_button_gui_input.bind("LeaveButton")
-	)
-
-# temp func
-func _on_button_gui_input(
-	event: InputEvent,
-	button_name: String
-) -> void:
-
-	if event is InputEventMouseButton and event.pressed:
-		print("BUTTON GUI INPUT: ", button_name, " | ", event)
 
 # ==================================================
 # Public Functions
@@ -151,21 +135,6 @@ func _input(event: InputEvent) -> void:
 			leave_button.get_global_rect()
 		)
 
-	print(
-		"HOVERED CONTROL: ",
-		get_viewport().gui_get_hovered_control()
-	)
-	print(
-		"HEAL | visible: ", heal_button.is_visible_in_tree(),
-		" | disabled: ", heal_button.disabled,
-		" | mouse_filter: ", heal_button.mouse_filter
-	)
-	print(
-		"LEAVE | visible: ", leave_button.is_visible_in_tree(),
-		" | disabled: ", leave_button.disabled,
-		" | mouse_filter: ", leave_button.mouse_filter
-	)
-
 # ==================================================
 # Leave
 # ==================================================
@@ -173,5 +142,4 @@ func _input(event: InputEvent) -> void:
 
 func _leave_pressed() -> void:
 
-	print("REST UI: LEAVE BUTTON PRESSED")
 	rest_finished.emit()
