@@ -88,7 +88,7 @@ var is_performing_slam: bool = false
 # --------------------------------------------------
 
 @export var max_health: float = 100.0
-var current_health: float = 100.0
+var current_health: float = -1.0
 var is_dead: bool = false
 var death_processed: bool = false
 
@@ -96,8 +96,12 @@ var death_processed: bool = false
 func _ready() -> void:
 
 	sprite_rest_position = animated_sprite.position
-	current_health = max_health
+
+	if current_health < 0.0:
+		current_health = max_health
+
 	current_move_speed = walk_speed
+	health_changed.emit(current_health, max_health)
 
 
 func _play_melee_lunge(aim_direction: Vector3) -> void:
@@ -557,6 +561,8 @@ func take_damage(amount: float) -> void:
 
 	if current_health <= 0.0:
 		_die()
+
+	print("PLAYER HEALTH TRACE | ", current_health, "/", max_health)
 
 
 func _die() -> void:

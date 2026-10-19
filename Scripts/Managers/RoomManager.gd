@@ -121,6 +121,11 @@ func create_room(
 
 func create_player_party() -> void:
 
+	print(
+		"PARTY CHECK | Existing party valid: ",
+		is_instance_valid(player_party)
+	)
+
 	if is_instance_valid(player_party):
 		return
 
@@ -143,6 +148,16 @@ func create_player_party() -> void:
 
 	get_tree().current_scene.add_child(player_party)
 
+	print(
+		"PARTY CREATED | Player ID: ",
+		player_character.get_instance_id(),
+		" | Player HP: ",
+		player_character.current_health,
+		" | Deebo ID: ",
+		deebo_character.get_instance_id(),
+		" | Deebo HP: ",
+		deebo_character.current_health
+	)
 
 
 # ==================================================
@@ -405,6 +420,17 @@ func _place_party_at_room_spawn(room: Node) -> void:
 		)
 		return
 
+	print(
+		"BEFORE ROOM PLACEMENT | Player ID: ",
+		player_character.get_instance_id(),
+		" | Player HP: ",
+		player_character.current_health,
+		" | Deebo ID: ",
+		deebo_character.get_instance_id(),
+		" | Deebo HP: ",
+		deebo_character.current_health
+	)
+
 	player_party.global_transform = spawn_node.global_transform
 
 	# Reset the party members relative to the new spawn.
@@ -417,6 +443,13 @@ func _place_party_at_room_spawn(room: Node) -> void:
 
 	if combat_controller != null:
 		combat_controller.reset_formation()
+
+	print(
+		"AFTER ROOM PLACEMENT | Player HP: ",
+		player_character.current_health,
+		" | Deebo HP: ",
+		deebo_character.current_health
+	)
 
 	print(
 		"SPAWN CHECK | Room: ", room.name,

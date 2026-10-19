@@ -14,7 +14,7 @@ signal died
 
 @export var max_health: float = 100.0
 
-var current_health: float = 100.0
+var current_health: float = -1.0
 var is_dead: bool = false
 
 
@@ -31,7 +31,9 @@ var can_attack: bool = true
 
 func _ready() -> void:
 
-	current_health = max_health
+	if current_health < 0.0:
+		current_health = max_health
+
 	health_changed.emit(current_health, max_health)
 
 
