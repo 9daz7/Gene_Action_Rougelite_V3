@@ -546,6 +546,19 @@ func _perform_melee_attack() -> void:
 # Damage and Death
 # --------------------------------------------------
 
+func heal(amount: float) -> void:
+
+	if is_dead or amount <= 0.0:
+		return
+
+	var previous_health := current_health
+	current_health = minf(current_health + amount, max_health)
+
+	if current_health != previous_health:
+		health_changed.emit(current_health, max_health)
+		print("PLAYER HEALED: ", current_health, "/", max_health)
+
+
 func take_damage(amount: float) -> void:
 
 	if is_dead or amount <= 0.0:

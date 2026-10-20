@@ -24,6 +24,9 @@ signal rest_finished
 var run_manager: RunManager = null
 var healed: bool = false
 
+var player_character: CharacterBody3D = null
+var deebo_character: CharacterBody3D = null
+
 
 # ==================================================
 # Initialization
@@ -59,23 +62,27 @@ func _ready() -> void:
 
 
 func open(
-	manager: RunManager
+	manager: RunManager,
+	player_ref: CharacterBody3D,
+	deebo_ref: CharacterBody3D
 ) -> void:
 
 	if manager == null:
-
 		push_error(
 			"RestRoom_UI: RunManager is missing."
 		)
+		return
 
+	if player_ref == null or deebo_ref == null:
+		push_error("RestRoom_UI: Player or Deebo reference is missing.")
 		return
 
 	run_manager = manager
+	player_character = player_ref
+	deebo_character = deebo_ref
 
 	show()
-
 	healed = false
-
 	heal_button.disabled = false
 
 
@@ -91,34 +98,36 @@ func close():
 
 func _heal_pressed() -> void:
 
-	print("REST UI: HEAL BUTTON PRESSED")
-
 	if healed:
 		return
 
-	if run_manager == null:
-		push_error(
-			"RestRoom_UI: RunManager is missing."
-		)
-
+	if not is_instance_valid(player_character):
+		push_error("RestRoom_UI: Player reference is invalid.")
 		return
 
-	var heal_amount: int = int(
-		run_manager.max_hp * 0.35
-	)
+	if not is_instance_valid(deebo_character):
+		push_error("RestRoom_UI: Deebo reference is invalid.")
+		return
 
-	run_manager.heal_player(
-		heal_amount
-	)
+	var player_heal: float = player_character.max_health * 0.35
+	var deebo_heal: float = deebo_character.max_health * 0.35
+
+	player_character.heal(player_heal)
+	deebo_character.heal(deebo_heal)
 
 	healed = true
+	heal_button.disabled = true
 
 	print(
-		"Rest healed player for:",
-		heal_amount
+		"REST COMPLETE | Player: ",
+		player_character.current_health,
+		"/",
+		player_character.max_health,
+		" | Deebo: ",
+		deebo_character.current_health,
+		"/",
+		deebo_character.max_health
 	)
-
-	heal_button.disabled = true
 
 
 func _input(event: InputEvent) -> void:

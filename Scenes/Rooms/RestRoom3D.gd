@@ -82,7 +82,15 @@ func _on_rest_interacted() -> void:
 	previous_mouse_mode = Input.mouse_mode
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
-	rest_ui.open(run_manager)
+	var deebo := room_manager.deebo_character
+
+	if not is_instance_valid(player) or not is_instance_valid(deebo):
+		push_error("RestRoom3D: Player or Deebo reference is missing.")
+		rest_ui.queue_free()
+		rest_ui = null
+		return
+
+	rest_ui.open(run_manager, player, deebo)
 
 
 func _on_rest_finished() -> void:
