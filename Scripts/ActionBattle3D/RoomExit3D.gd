@@ -40,12 +40,18 @@ func _ready() -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 
-	if not enabled or not player_in_range:
+	if not event.is_action_pressed("interact"):
 		return
 
-	#print("EXIT RECEIVED INPUT: ", event.as_text())
+	print(
+		"EXIT INPUT CHECK | ",
+		name,
+		" | Enabled: ", enabled,
+		" | Player in range: ", player_in_range,
+		" | Event: ", event.as_text()
+	)
 
-	if not event.is_action_pressed("interact"):
+	if not enabled or not player_in_range:
 		return
 
 	enabled = false

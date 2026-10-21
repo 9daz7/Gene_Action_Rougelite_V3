@@ -1,4 +1,4 @@
-extends Node3D
+extends Room3DBase
 
 
 const REST_UI_SCENE = preload(
@@ -9,6 +9,8 @@ const REST_UI_SCENE = preload(
 @onready var rest_interactable: RestInteractable3D = (
 	$RestInteractable
 )
+
+@onready var action_battle_ui: ActionBattleUI = $ActionBattleUI
 
 var rest_ui: Control = null
 var run_manager: RunManager = null
@@ -37,6 +39,26 @@ func _ready() -> void:
 		rest_interactable.interacted.connect(
 			_on_rest_interacted
 		)
+
+	if not is_instance_valid(action_battle_ui):
+		push_error("RestRoom3D: ActionBattleUI is missing.")
+		return
+
+	if not is_instance_valid(room_manager.player_character):
+		push_error("RestRoom3D: Player character is missing.")
+		return
+
+	if not is_instance_valid(room_manager.deebo_character):
+		push_error("RestRoom3D: Deebo character is missing.")
+		return
+
+	action_battle_ui.setup(
+		room_manager.player_character,
+		room_manager.deebo_character
+	)
+
+	super._ready()
+	complete_room()
 
 
 func _on_rest_interacted() -> void:
