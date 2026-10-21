@@ -1,11 +1,11 @@
 [gd_resource type="Resource" script_class="RoomResource" format=3 uid="uid://dyv15c4n6ooj5"]
 
+[ext_resource type="PackedScene" uid="uid://b6sgw5gft74ig" path="res://Scenes/Rooms/MerchantRoom3D.tscn" id="1_menu7"]
 [ext_resource type="Script" uid="uid://0k05qgpjl5gm" path="res://Data/Rooms/RoomResource.gd" id="1_y1mir"]
-[ext_resource type="PackedScene" uid="uid://xx8kok50mvue" path="res://Scenes/Rooms/MerchantRoom_01.tscn" id="4_eifb2"]
 
 [resource]
 script = ExtResource("1_y1mir")
 room_type = 4
 room_name = "Merchant"
-room_scene = ExtResource("4_eifb2")
+room_scene = ExtResource("1_menu7")
 metadata/_custom_type_script = "uid://0k05qgpjl5gm"
