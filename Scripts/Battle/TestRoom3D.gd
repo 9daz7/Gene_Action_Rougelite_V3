@@ -38,6 +38,14 @@ func _ready() -> void:
 		combat_controller
 	)
 
+	print(
+		"TEST ROOM HEALTH AFTER UI SETUP | ",
+		"Player: ", player.current_health,
+		"/", player.max_health,
+		" | Deebo: ", deebo.current_health,
+		"/", deebo.max_health
+	)
+
 	action_battle_ui.update_move_names()
 
 	_register_enemies()

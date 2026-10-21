@@ -66,6 +66,22 @@ func setup(
 	deebo_hp.max_value = deebo.max_health
 	deebo_hp.value = deebo.current_health
 
+	print(
+		"ACTION UI SETUP | Player: ",
+		player.current_health, "/", player.max_health,
+		" | Player bar: ", player_hp.value,
+		" | Deebo: ", deebo.current_health, "/", deebo.max_health,
+		" | Deebo bar: ", deebo_hp.value
+	)
+
+	print(
+		"HEALTH BARS INITIALIZED | ",
+		"Player: ", player_hp.value,
+		"/", player_hp.max_value,
+		" | Deebo: ", deebo_hp.value,
+		"/", deebo_hp.max_value
+	)
+
 
 # ==================================================
 # Health Connections
@@ -73,7 +89,7 @@ func setup(
 
 func _ready() -> void:
 
-	pass
+	print("ACTION UI READY | Path: ", get_path())
 
 
 func update_move_names() -> void:
@@ -139,6 +155,8 @@ func _on_player_health_changed(
 	maximum_health: float
 ) -> void:
 
+	print("PLAYER BAR UPDATE: ", current_health, "/", maximum_health)
+
 	player_hp.max_value = maximum_health
 	player_hp.value = current_health
 
@@ -147,6 +165,8 @@ func _on_deebo_health_changed(
 	current_health: float,
 	maximum_health: float
 ) -> void:
+
+	print("DEEBO BAR UPDATE: ", current_health, "/", maximum_health)
 
 	deebo_hp.max_value = maximum_health
 	deebo_hp.value = current_health
