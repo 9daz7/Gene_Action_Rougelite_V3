@@ -1,0 +1,286 @@
+[gd_scene format=3 uid="uid://bdm2elrvhj28r"]
+
+[ext_resource type="Script" uid="uid://c66sh1alyt7b3" path="res://Scripts/Battle/EliteRoom3D.gd" id="1_lrsqs"]
+[ext_resource type="Script" uid="uid://cspmv2g4l51rq" path="res://Scenes/Test3D/Test3DEnemy.gd" id="2_4iid4"]
+[ext_resource type="Resource" uid="uid://dgdnawbfe4yqm" path="res://Data/Enemies/Elite/AlphaBoar.tres" id="3_lrsqs"]
+[ext_resource type="Texture2D" uid="uid://dh8ufv1o3j0v8" path="res://Assets/Sprites/boar.png" id="4_4iid4"]
+[ext_resource type="Script" uid="uid://caeq3yct13bj5" path="res://Scripts/ActionBattle/ActionEnemyController3D.gd" id="5_qckft"]
+[ext_resource type="Texture2D" uid="uid://c6e161570jr8u" path="res://Assets/treepng.png" id="6_utchl"]
+[ext_resource type="Texture2D" uid="uid://qiq0kpvsqban" path="res://Assets/Tree.png" id="7_hb3s3"]
+[ext_resource type="PackedScene" uid="uid://03hih1xoemdv" path="res://Scenes/Battle/ActionBattleUI.tscn" id="8_ftnrc"]
+[ext_resource type="Script" uid="uid://c80ox85jyhgoo" path="res://Scripts/ActionBattle3D/RoomExit3D.gd" id="9_f0rv6"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_a3fal"]
+albedo_color = Color(0.9843137, 0.73333335, 0, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_04tbm"]
+material = SubResource("StandardMaterial3D_a3fal")
+size = Vector2(28.435, 12.66)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_c3anm"]
+size = Vector2(4, 2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_k1xt6"]
+albedo_color = Color(0.38431373, 1, 0.078431375, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_v3plt"]
+size = Vector3(2.0020142, 0.001, 2.0007172)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0rxgp"]
+albedo_color = Color(0.9843137, 0.73333335, 0, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_08d26"]
+material = SubResource("StandardMaterial3D_0rxgp")
+size = Vector2(5, 5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_te56j"]
+albedo_color = Color(0.9843137, 0.73333335, 0, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_rwfu3"]
+material = SubResource("StandardMaterial3D_te56j")
+size = Vector2(14, 4)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_l4lsx"]
+radius = 0.27783203
+height = 0.78834534
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_l4lsx"]
+height = 2.9575195
+radius = 0.33691406
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_a3b7c"]
+height = 4.4057617
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_aunoq"]
+height = 3.3134766
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_3gfh1"]
+height = 3.475586
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_j45lr"]
+height = 3.3154297
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_j7r2j"]
+height = 3.1499023
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_nr7jx"]
+height = 3.150879
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_plfam"]
+height = 1.3255615
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_ehtly"]
+height = 1.6782227
+radius = 1.1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_lrsqs"]
+height = 1.3255615
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_4iid4"]
+height = 1.6782227
+radius = 1.1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_0flaa"]
+height = 1.3255615
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_62paw"]
+height = 1.6782227
+radius = 1.1
+
+[node name="EliteBattleRoom3D_03" type="Node3D" unique_id=1035086339]
+script = ExtResource("1_lrsqs")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1615605556]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1333818235]
+transform = Transform3D(-0.24157718, 0.9694642, -0.04218732, 0.15470979, 0.08139758, 0.984601, 0.95796937, 0.23133035, -0.16964932, -5.641828, -18.950073, 53.318577)
+light_color = Color(0.5132329, 0.5132329, 0.5132329, 1)
+
+[node name="Ground" type="StaticBody3D" parent="." unique_id=1581255006]
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Ground" unique_id=755345439]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3808589, 0.01, 2.4494553)
+mesh = SubResource("PlaneMesh_04tbm")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground" unique_id=310775383]
+transform = Transform3D(10, 0, 0, 0, 10.000001, 0, 0, 0, 10, 0, 0, 0)
+mesh = SubResource("PlaneMesh_c3anm")
+surface_material_override/0 = SubResource("StandardMaterial3D_k1xt6")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground" unique_id=854252956]
+transform = Transform3D(10, 0, 0, 0, 10.000001, 0, 0, 0, 10, -0.0045776367, -0.009648323, -0.013961792)
+shape = SubResource("BoxShape3D_v3plt")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Ground" unique_id=1725349230]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.335941, 0.01, -6.2717776)
+mesh = SubResource("PlaneMesh_08d26")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="Ground" unique_id=704105377]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8985524, 0.01, -6.7618775)
+mesh = SubResource("PlaneMesh_rwfu3")
+
+[node name="PlayerSpawn" type="Marker3D" parent="." unique_id=783515065]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 7.40103)
+
+[node name="Enemies" type="Node3D" parent="." unique_id=1908604824]
+
+[node name="Wolf" type="CharacterBody3D" parent="Enemies" unique_id=1408486610]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.0062656, 0, -2.048126)
+collision_layer = 8
+script = ExtResource("2_4iid4")
+enemy_data = ExtResource("3_lrsqs")
+
+[node name="Sprite3D" type="Sprite3D" parent="Enemies/Wolf" unique_id=198678286]
+transform = Transform3D(0.16499975, 0.00028797914, -1.8189866e-12, -0.0002874723, 0.1647093, 0.0097855525, 1.7079004e-05, -0.009785536, 0.16470958, 0.38309002, 0.44197524, 0.046000004)
+layers = 8
+texture = ExtResource("4_4iid4")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Enemies/Wolf" unique_id=185845944]
+transform = Transform3D(1, 0, 0, 0, 0.9985837, 0.053202253, 0, -0.053202253, 0.9985837, 0.38519, 0.2902093, 0.04401636)
+shape = SubResource("CapsuleShape3D_l4lsx")
+
+[node name="ActionEnemyController3D" type="Node" parent="Enemies/Wolf" unique_id=649885131]
+script = ExtResource("5_qckft")
+
+[node name="Environment" type="Node3D" parent="." unique_id=1683898163]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Environment" unique_id=1636819912]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.74613, 0, 0)
+
+[node name="Tree" type="Sprite3D" parent="Environment/StaticBody3D" unique_id=1247796273]
+transform = Transform3D(0.47110873, -0.052796796, 0.61310214, -0.07810661, 0.7607675, 0.12553003, -0.6103941, -0.13809758, 0.45713583, -6.538884, 1.1407608, -1.1333048)
+texture = ExtResource("6_utchl")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/StaticBody3D" unique_id=1570269970]
+transform = Transform3D(0.47110873, -0.052797686, 0.61310214, -0.07810661, 0.76077056, 0.12553, -0.6103941, -0.13809721, 0.45713583, -6.5136065, 0.776536, -1.067188)
+shape = SubResource("CylinderShape3D_l4lsx")
+
+[node name="StaticBody3D2" type="StaticBody3D" parent="Environment" unique_id=1551487005]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.162949, 0, 0)
+
+[node name="Tree2" type="Sprite3D" parent="Environment/StaticBody3D2" unique_id=1190352552]
+transform = Transform3D(0.4173588, -0.11955231, -0.49711046, 0.18872188, 0.6324108, 0.0063538547, 0.4751797, -0.14616288, 0.43409753, 6.9106975, 1.3128674, -0.6075058)
+texture = ExtResource("7_hb3s3")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/StaticBody3D2" unique_id=932261136]
+transform = Transform3D(0.41735852, -0.11955231, -0.49711046, 0.18872178, 0.6324108, 0.0063538454, 0.4751794, -0.14616288, 0.43409753, 7.0281773, 1.2324264, -0.38432986)
+shape = SubResource("CylinderShape3D_a3b7c")
+
+[node name="StaticBody3D3" type="StaticBody3D" parent="Environment" unique_id=1941073635]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.384948, 0, 0)
+
+[node name="Tree3" type="Sprite3D" parent="Environment/StaticBody3D3" unique_id=1361415068]
+transform = Transform3D(0.4173588, -0.11955231, -0.49711046, 0.18872188, 0.6324108, 0.0063538547, 0.4751797, -0.14616288, 0.43409753, 6.9106975, 1.3128674, -1.6632266)
+texture = ExtResource("7_hb3s3")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/StaticBody3D3" unique_id=1769591213]
+transform = Transform3D(0.41735852, -0.11955231, -0.49711046, 0.18872178, 0.6324108, 0.0063538454, 0.4751794, -0.14616288, 0.43409753, 7.1099005, 0.8975386, -1.3724092)
+shape = SubResource("CylinderShape3D_aunoq")
+
+[node name="StaticBody3D4" type="StaticBody3D" parent="Environment" unique_id=1056271614]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.195275, 0, 0)
+
+[node name="Tree4" type="Sprite3D" parent="Environment/StaticBody3D4" unique_id=681652121]
+transform = Transform3D(0.4173588, -0.11955231, -0.49711046, 0.18872188, 0.6324108, 0.0063538547, 0.4751797, -0.14616288, 0.43409753, 6.9106975, 1.3128674, 0.39492416)
+texture = ExtResource("7_hb3s3")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/StaticBody3D4" unique_id=2092247023]
+transform = Transform3D(0.41735852, -0.11955231, -0.49711046, 0.18872178, 0.6324108, 0.0063538454, 0.4751794, -0.14616288, 0.43409753, 7.172475, 0.8462794, 0.6461658)
+shape = SubResource("CylinderShape3D_3gfh1")
+
+[node name="StaticBody3D5" type="StaticBody3D" parent="Environment" unique_id=764005994]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.142079, 0, 0)
+
+[node name="Tree5" type="Sprite3D" parent="Environment/StaticBody3D5" unique_id=871731330]
+transform = Transform3D(0.4173588, -0.11955231, -0.49711046, 0.18872188, 0.6324108, 0.0063538547, 0.4751797, -0.14616288, 0.43409753, 6.449227, 1.3128674, -5.7067146)
+texture = ExtResource("7_hb3s3")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/StaticBody3D5" unique_id=2067472981]
+transform = Transform3D(0.41735852, -0.11955231, -0.49711046, 0.18872178, 0.6324108, 0.0063538454, 0.4751794, -0.14616288, 0.43409753, 6.6553783, 0.89692175, -5.423088)
+shape = SubResource("CylinderShape3D_j45lr")
+
+[node name="StaticBody3D6" type="StaticBody3D" parent="Environment" unique_id=690495469]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.358685, 0, 0)
+
+[node name="Tree6" type="Sprite3D" parent="Environment/StaticBody3D6" unique_id=1699655356]
+transform = Transform3D(0.5546841, 0.014010654, 0.3573922, -0.08263785, 0.6466694, 0.10290513, -0.34798932, -0.1312332, 0.5452349, -7.2507777, 1.3128674, -4.330881)
+texture = ExtResource("7_hb3s3")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/StaticBody3D6" unique_id=1824512637]
+transform = Transform3D(0.55468404, 0.0140107395, 0.35739204, -0.082637794, 0.6466694, 0.102905154, -0.3479893, -0.13123314, 0.5452349, -7.0851994, 0.9410633, -4.417897)
+shape = SubResource("CylinderShape3D_j7r2j")
+
+[node name="StaticBody3D7" type="StaticBody3D" parent="Environment" unique_id=1041154840]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.162298, 0, 0)
+
+[node name="Tree7" type="Sprite3D" parent="Environment/StaticBody3D7" unique_id=901706557]
+transform = Transform3D(0.5546841, 0.014010654, 0.3573922, -0.08263785, 0.6466694, 0.10290513, -0.34798932, -0.1312332, 0.5452349, -6.786505, 1.3128674, 1.025425)
+texture = ExtResource("7_hb3s3")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/StaticBody3D7" unique_id=1409881404]
+transform = Transform3D(0.55468404, 0.0140107395, 0.35739204, -0.082637794, 0.6466694, 0.102905154, -0.3479893, -0.13123314, 0.5452349, -6.6175947, 0.9407482, 0.9554773)
+shape = SubResource("CylinderShape3D_nr7jx")
+
+[node name="ActionBattleUI" parent="." unique_id=871756832 instance=ExtResource("8_ftnrc")]
+
+[node name="RoomExit3D" type="Area3D" parent="." unique_id=1385223278]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.3207026, 0, -9.923497)
+collision_layer = 3
+collision_mask = 3
+script = ExtResource("9_f0rv6")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="RoomExit3D" unique_id=1499025880]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6679077, 0)
+mesh = SubResource("CylinderMesh_plfam")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RoomExit3D" unique_id=164023949]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8289795, 0)
+shape = SubResource("CylinderShape3D_ehtly")
+
+[node name="InteractionPrompt" type="Label3D" parent="RoomExit3D" unique_id=1440690785]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7776307, 0.17346478)
+visible = false
+billboard = 1
+text = "[E] Interact"
+
+[node name="RoomExit3D2" type="Area3D" parent="." unique_id=726247116]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9.923497)
+collision_layer = 3
+collision_mask = 3
+script = ExtResource("9_f0rv6")
+exit_id = 1
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="RoomExit3D2" unique_id=1992675467]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6679077, 0)
+mesh = SubResource("CylinderMesh_lrsqs")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RoomExit3D2" unique_id=324657137]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8289795, 0)
+shape = SubResource("CylinderShape3D_4iid4")
+
+[node name="InteractionPrompt" type="Label3D" parent="RoomExit3D2" unique_id=1980735165]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7776307, 0.17346478)
+visible = false
+billboard = 1
+text = "[E] Interact"
+
+[node name="RoomExit3D3" type="Area3D" parent="." unique_id=1505167486]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.591867, 0, -9.923497)
+collision_layer = 3
+collision_mask = 3
+script = ExtResource("9_f0rv6")
+exit_id = 2
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="RoomExit3D3" unique_id=295171312]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6679077, 0)
+mesh = SubResource("CylinderMesh_0flaa")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RoomExit3D3" unique_id=1571342347]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8289795, 0)
+shape = SubResource("CylinderShape3D_62paw")
+
+[node name="InteractionPrompt" type="Label3D" parent="RoomExit3D3" unique_id=1942508122]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7776307, 0.17346478)
+visible = false
+billboard = 1
+text = "[E] Interact"

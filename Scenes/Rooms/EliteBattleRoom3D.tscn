@@ -1,9 +1,14 @@
 [gd_scene format=3 uid="uid://dusofrxxga030"]
 
 [ext_resource type="Texture2D" uid="uid://c6e161570jr8u" path="res://Assets/treepng.png" id="1_0rxgp"]
+[ext_resource type="Script" uid="uid://c66sh1alyt7b3" path="res://Scripts/Battle/EliteRoom3D.gd" id="1_08d26"]
+[ext_resource type="Script" uid="uid://cspmv2g4l51rq" path="res://Scenes/Test3D/Test3DEnemy.gd" id="2_04tbm"]
 [ext_resource type="Texture2D" uid="uid://qiq0kpvsqban" path="res://Assets/Tree.png" id="2_08d26"]
+[ext_resource type="Resource" uid="uid://dy4ad2xrgeisp" path="res://Data/Enemies/Elite/GiantMarten.tres" id="3_c3anm"]
 [ext_resource type="PackedScene" uid="uid://03hih1xoemdv" path="res://Scenes/Battle/ActionBattleUI.tscn" id="3_te56j"]
+[ext_resource type="Texture2D" uid="uid://c8adc0sn8sma7" path="res://Assets/Sprites/mustelid.webp" id="4_k1xt6"]
 [ext_resource type="Script" uid="uid://c80ox85jyhgoo" path="res://Scripts/ActionBattle3D/RoomExit3D.gd" id="4_rwfu3"]
+[ext_resource type="Script" uid="uid://caeq3yct13bj5" path="res://Scripts/ActionBattle/ActionEnemyController3D.gd" id="5_v3plt"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_a3fal"]
 albedo_color = Color(0.9843137, 0.73333335, 0, 1)
@@ -35,6 +40,10 @@ albedo_color = Color(0.9843137, 0.73333335, 0, 1)
 material = SubResource("StandardMaterial3D_te56j")
 size = Vector2(14, 4)
 
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_l4lsx"]
+radius = 0.27783203
+height = 0.78834534
+
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_l4lsx"]
 height = 2.9575195
 radius = 0.33691406
@@ -64,7 +73,8 @@ height = 1.3255615
 height = 1.6782227
 radius = 1.1
 
-[node name="EliteBattleRoom3d" type="Node3D" unique_id=1035086339]
+[node name="EliteBattleRoom3D" type="Node3D" unique_id=1035086339]
+script = ExtResource("1_08d26")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1615605556]
 
@@ -97,6 +107,26 @@ mesh = SubResource("PlaneMesh_rwfu3")
 
 [node name="PlayerSpawn" type="Marker3D" parent="." unique_id=783515065]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 7.40103)
+
+[node name="Enemies" type="Node3D" parent="." unique_id=1908604824]
+
+[node name="Wolf" type="CharacterBody3D" parent="Enemies" unique_id=1408486610]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.0062656, 0, -2.048126)
+collision_layer = 8
+script = ExtResource("2_04tbm")
+enemy_data = ExtResource("3_c3anm")
+
+[node name="Sprite3D" type="Sprite3D" parent="Enemies/Wolf" unique_id=198678286]
+transform = Transform3D(0.16499975, 0.0002879792, 0, -0.0002874723, 0.16470931, 0.0097855525, 1.7079003e-05, -0.009785537, 0.16470958, 0.38309002, 0.30897617, 0.046000004)
+layers = 8
+texture = ExtResource("4_k1xt6")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Enemies/Wolf" unique_id=185845944]
+transform = Transform3D(1, 0, 0, 0, 0.9985837, 0.053202253, 0, -0.053202253, 0.9985837, 0.38519, 0.2902093, 0.04401636)
+shape = SubResource("CapsuleShape3D_l4lsx")
+
+[node name="ActionEnemyController3D" type="Node" parent="Enemies/Wolf" unique_id=649885131]
+script = ExtResource("5_v3plt")
 
 [node name="Environment" type="Node3D" parent="." unique_id=1683898163]
 

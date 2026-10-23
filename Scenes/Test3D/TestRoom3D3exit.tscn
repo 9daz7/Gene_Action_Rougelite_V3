@@ -103,9 +103,8 @@ texture = ExtResource("9_ms3lg")
 transform = Transform3D(1, 0, 0, 0, 0.9985837, 0.053202253, 0, -0.053202253, 0.9985837, 0.38519, 0.31341553, 0.042779922)
 shape = SubResource("CapsuleShape3D_npkn0")
 
-[node name="ActionEnemyController3D" type="Node" parent="Enemies/Wolf" unique_id=2020354482 node_paths=PackedStringArray("player")]
+[node name="ActionEnemyController3D" type="Node" parent="Enemies/Wolf" unique_id=2020354482]
 script = ExtResource("10_ny7xs")
-player = NodePath("")
 
 [node name="Wolf2" type="CharacterBody3D" parent="Enemies" unique_id=408762629]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.1250358, 0, -1.3033965)
@@ -122,9 +121,8 @@ texture = ExtResource("9_ms3lg")
 transform = Transform3D(1, 0, 0, 0, 0.9985837, 0.053202253, 0, -0.053202253, 0.9985837, 0.32392025, 0.31341553, 0.042779922)
 shape = SubResource("CapsuleShape3D_npkn0")
 
-[node name="ActionEnemyController3D" type="Node" parent="Enemies/Wolf2" unique_id=1317070962 node_paths=PackedStringArray("player")]
+[node name="ActionEnemyController3D" type="Node" parent="Enemies/Wolf2" unique_id=1317070962]
 script = ExtResource("10_ny7xs")
-player = NodePath("")
 
 [node name="Wolf3" type="CharacterBody3D" parent="Enemies" unique_id=1418156203]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6145477, 0, -2.6317651)
@@ -141,9 +139,8 @@ texture = ExtResource("9_ms3lg")
 transform = Transform3D(1, 0, 0, 0, 0.9985837, 0.053202253, 0, -0.053202253, 0.9985837, 0.31251585, 0.31341553, 0.042779922)
 shape = SubResource("CapsuleShape3D_npkn0")
 
-[node name="ActionEnemyController3D" type="Node" parent="Enemies/Wolf3" unique_id=196752153 node_paths=PackedStringArray("player")]
+[node name="ActionEnemyController3D" type="Node" parent="Enemies/Wolf3" unique_id=196752153]
 script = ExtResource("10_ny7xs")
-player = NodePath("")
 
 [node name="Wolf4" type="CharacterBody3D" parent="Enemies" unique_id=216108274]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4436717, 0, -3.200999)
@@ -160,9 +157,8 @@ texture = ExtResource("9_ms3lg")
 transform = Transform3D(1, 0, 0, 0, 0.9985837, 0.053202253, 0, -0.053202253, 0.9985837, 0.30731928, 0.31341553, 0.042779922)
 shape = SubResource("CapsuleShape3D_npkn0")
 
-[node name="ActionEnemyController3D" type="Node" parent="Enemies/Wolf4" unique_id=567977092 node_paths=PackedStringArray("player")]
+[node name="ActionEnemyController3D" type="Node" parent="Enemies/Wolf4" unique_id=567977092]
 script = ExtResource("10_ny7xs")
-player = NodePath("")
 
 [node name="Environment" type="Node3D" parent="." unique_id=1799195767]
 

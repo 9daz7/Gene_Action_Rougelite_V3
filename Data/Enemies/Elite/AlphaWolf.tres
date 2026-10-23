@@ -7,7 +7,7 @@
 [ext_resource type="Resource" uid="uid://drakyvl6jwh0f" path="res://Data/Moves/FerociousBite.tres" id="4_oq5mc"]
 [ext_resource type="Resource" uid="uid://dssodq4lr1182" path="res://Data/Moves/Protect.tres" id="5_5werd"]
 [ext_resource type="Resource" uid="uid://bjcqdkaq6oa1o" path="res://Data/Genes/WolfFangs.tres" id="7_hsgvl"]
-[ext_resource type="Texture2D" uid="uid://btha0go4fr6sq" path="res://Assets/Sprites/enemypng.png" id="8_hsgvl"]
+[ext_resource type="Texture2D" uid="uid://bh17sww21iml8" path="res://Assets/Sprites/wolf.png" id="8_hsgvl"]
 
 [resource]
 script = ExtResource("2_yk136")

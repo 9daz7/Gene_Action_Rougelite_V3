@@ -12,6 +12,6 @@ hitbox_radius = 100.0
 move_name = "Ferocious bite"
 description = "The user lunges forward and deals damage through a ferocious bite."
 effect_type = 3
-power = 7
+power = 4
 effects = Array[ExtResource("1_plpxg")]([ExtResource("2_eudcy")])
 metadata/_custom_type_script = "uid://bnmm0xqkm6atb"

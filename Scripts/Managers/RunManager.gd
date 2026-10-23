@@ -16,6 +16,17 @@ class_name RunManager
 
 
 # ==================================================
+# Room Spawn Chances
+# ==================================================
+
+#const ELITE_ROOM_CHANCE: float = 0.10
+#const BATTLE_ROOM_CHANCE: float = 0.45
+const ELITE_ROOM_CHANCE: float = 0.70
+const BATTLE_ROOM_CHANCE: float = 0.10
+# Remaining chance goes to non-battle rooms.
+
+
+# ==================================================
 # Dependencies
 # ==================================================
 
@@ -651,10 +662,10 @@ func _get_random_mixed_room(
 	var roll := randf()
 
 	# ==================================================
-	# Elite - 10%
+	# Elite
 	# ==================================================
 
-	if roll < 0.10:
+	if roll < ELITE_ROOM_CHANCE:
 
 		var elite := _get_random_room_with_exit_count(
 			RoomResource.RoomType.ELITE,
@@ -662,15 +673,13 @@ func _get_random_mixed_room(
 		)
 
 		if elite != null:
-
 			return elite
 
-
 	# ==================================================
-	# Normal Battle - 45%
+	# Normal Battle
 	# ==================================================
 
-	if roll < 0.55:
+	if roll < ELITE_ROOM_CHANCE + BATTLE_ROOM_CHANCE:
 
 		var battle := _get_random_room_with_exit_count(
 			RoomResource.RoomType.BATTLE,
@@ -678,17 +687,13 @@ func _get_random_mixed_room(
 		)
 
 		if battle != null:
-
 			return battle
 
-
 	# ==================================================
-	# Non-Battle - 45%
+	# Non-Battle
 	# ==================================================
 
-	return _get_random_non_battle_room(
-			exit_count
-	)
+	return _get_random_non_battle_room(exit_count)
 
 
 func _get_random_boss_room() -> RoomResource:
@@ -1044,11 +1049,20 @@ func _create_world_one_room(
 	total_layers: int
 ) -> RoomResource:
 
+	#if node.layer == 1:
+#
+		#return _duplicate_room_template(
+			#get_random_room(
+				#RoomResource.RoomType.BATTLE,
+				#exit_count
+			#)
+		#)
+
 	if node.layer == 1:
 
 		return _duplicate_room_template(
 			get_random_room(
-				RoomResource.RoomType.BATTLE,
+				RoomResource.RoomType.ELITE,
 				exit_count
 			)
 		)
