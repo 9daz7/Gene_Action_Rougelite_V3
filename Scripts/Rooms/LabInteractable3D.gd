@@ -2,7 +2,7 @@ extends Area3D
 class_name LabEntranceInteractable3D
 
 const LAB_INTERIOR_SCENE: PackedScene = preload(
-	"res://Scenes/Rooms/LabInterior3D.tscn"
+    "res://Scenes/Rooms/LabInterior3D.tscn"
 )
 
 @export var interaction_text: String = "[E] Enter Abandoned Lab"
@@ -10,7 +10,7 @@ const LAB_INTERIOR_SCENE: PackedScene = preload(
 var player_in_range: bool = false
 
 @onready var interaction_prompt: Label3D = (
-	get_node_or_null("InteractionPrompt") as Label3D
+	get_node_or_null("Label3D") as Label3D
 )
 
 

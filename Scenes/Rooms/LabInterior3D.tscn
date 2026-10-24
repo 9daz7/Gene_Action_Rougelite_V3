@@ -1,15 +1,27 @@
 [gd_scene format=3 uid="uid://cby8r2e1164x5"]
 
+[ext_resource type="PackedScene" uid="uid://03hih1xoemdv" path="res://Scenes/Battle/ActionBattleUI.tscn" id="1_27rae"]
+[ext_resource type="Script" uid="uid://cu1odikuu35rg" path="res://Scripts/Rooms/Room3DBase.gd" id="1_ia2xq"]
+[ext_resource type="Script" uid="uid://dlhu2ggbygnqo" path="res://Scripts/Rooms/LabWorkstation3D.gd" id="2_gyned"]
+[ext_resource type="Script" uid="uid://dx27dhnmd17cs" path="res://Scripts/Rooms/LabExit3D.gd" id="4_vim04"]
+
 [sub_resource type="PlaneMesh" id="PlaneMesh_w5l4r"]
 size = Vector2(2.5, 2.5)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_27rae"]
 albedo_color = Color(0.80048305, 0.8414173, 0.9737353, 1)
 
+[sub_resource type="PlaneMesh" id="PlaneMesh_gs0tk"]
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_ia2xq"]
 size = Vector3(2.0020142, 0.001, 2.0007172)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_gyned"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_27rae"]
+
 [node name="LabInterior3D" type="Node3D" unique_id=1335364918]
+script = ExtResource("1_ia2xq")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=330927204]
 
@@ -24,8 +36,39 @@ transform = Transform3D(10, 0, 0, 0, 10.000001, 0, 0, 0, 10, 0, 0, 0)
 mesh = SubResource("PlaneMesh_w5l4r")
 surface_material_override/0 = SubResource("StandardMaterial3D_27rae")
 
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Room" unique_id=67197707]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.342344, 0.07585955, 10.364154)
+mesh = SubResource("PlaneMesh_gs0tk")
+
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Room" unique_id=372109642]
 transform = Transform3D(10, 0, 0, 0, 10.000001, 0, 0, 0, 10, -0.0045776367, -0.009648323, -0.013961792)
 shape = SubResource("BoxShape3D_ia2xq")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Room" unique_id=241500970]
+
+[node name="PlayerSpawn" type="Marker3D" parent="." unique_id=824986573]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.331398, 0, 10.7991905)
+
+[node name="LabWorkstation" type="Area3D" parent="." unique_id=1006378323]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.488758, 0.5036645, -2.5840912)
+collision_mask = 6
+script = ExtResource("2_gyned")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LabWorkstation" unique_id=746256649]
+shape = SubResource("BoxShape3D_gyned")
+
+[node name="Label3D" type="Label3D" parent="LabWorkstation" unique_id=722842682]
+text = "Workstation [E]"
+
+[node name="ActionBattleUI" parent="." unique_id=871756832 instance=ExtResource("1_27rae")]
+
+[node name="LabExit" type="Area3D" parent="." unique_id=867877414]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.1228285, 0.5067622, 12.36485)
+collision_mask = 6
+script = ExtResource("4_vim04")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LabExit" unique_id=1355955099]
+shape = SubResource("BoxShape3D_27rae")
+
+[node name="Label3D" type="Label3D" parent="LabExit" unique_id=430218453]
+text = "Interact [E]"

@@ -72,6 +72,10 @@ var saved_run_room_process_mode: Node.ProcessMode = Node.PROCESS_MODE_INHERIT
 var has_saved_run_room_party_transform: bool = false
 
 
+var saved_player_transform: Transform3D
+var saved_deebo_transform: Transform3D
+
+
 # --------------------------------------------------
 # temporary Map System
 # --------------------------------------------------
@@ -469,6 +473,32 @@ func _place_party_at_room_spawn(room: Node) -> void:
 	)
 
 
+func _place_party_at_temporary_spawn(room: Node) -> void:
+
+	if not is_instance_valid(player_party):
+		push_error("RoomManager: Player party is missing.")
+		return
+
+	var spawn_node := room.find_child(
+		"PlayerSpawn",
+		true,
+		false
+	)
+
+	if not spawn_node is Marker3D:
+		push_error(
+			"RoomManager: Temporary interior has no PlayerSpawn marker."
+		)
+		return
+
+	player_party.global_transform = spawn_node.global_transform
+
+	print(
+		"TEMPORARY INTERIOR SPAWN | Party: ",
+		player_party.global_position
+	)
+
+
 # ==================================================
 # Temporary Interior Transitions
 # ==================================================
@@ -487,32 +517,40 @@ func enter_temporary_interior(interior_scene: PackedScene) -> void:
 		push_error("RoomManager: Interior scene is missing.")
 		return
 
-	if not is_instance_valid(player_party):
-		push_error("RoomManager: Player party is missing.")
+	if (
+		not is_instance_valid(player_party)
+		or not is_instance_valid(player_character)
+		or not is_instance_valid(deebo_character)
+	):
+		push_error("RoomManager: Party references are missing.")
 		return
 
-	# Save the exact party transform before changing environments.
+	# Save the exact exterior position and character-local transforms.
 	saved_run_room_party_transform = player_party.global_transform
+	saved_player_transform = player_character.transform
+	saved_deebo_transform = deebo_character.transform
 	has_saved_run_room_party_transform = true
 
-	# Preserve the room's existing processing mode.
+	# Save the exterior's current processing mode.
 	saved_run_room_process_mode = active_room_scene.process_mode
 
-	# Pause and hide the original run room without freeing it.
+	# Hide and disable the exterior without freeing it.
 	active_room_scene.hide()
 	active_room_scene.process_mode = Node.PROCESS_MODE_DISABLED
 
 	# Create the temporary interior.
 	active_temporary_interior_scene = interior_scene.instantiate()
 
-	if active_temporary_interior_scene == null:
+	if not is_instance_valid(active_temporary_interior_scene):
+		active_temporary_interior_scene = null
 		active_room_scene.show()
 		active_room_scene.process_mode = saved_run_room_process_mode
 		has_saved_run_room_party_transform = false
+
 		push_error("RoomManager: Failed to instantiate interior.")
 		return
 
-	# Configure the existing party before adding the interior.
+	# Give the interior references to the persistent party.
 	if active_temporary_interior_scene.has_method("configure_party"):
 		active_temporary_interior_scene.configure_party(
 			player_character,
@@ -523,12 +561,14 @@ func enter_temporary_interior(interior_scene: PackedScene) -> void:
 		active_temporary_interior_scene
 	)
 
-	# Position the party at the interior's PlayerSpawn.
-	_place_party_at_room_spawn(
+	_place_party_at_temporary_spawn(
 		active_temporary_interior_scene
 	)
 
-	print("Entered temporary interior: ", active_temporary_interior_scene.name)
+	print(
+		"Entered temporary interior: ",
+		active_temporary_interior_scene.name
+	)
 
 
 func return_from_temporary_interior() -> void:
@@ -543,21 +583,32 @@ func return_from_temporary_interior() -> void:
 	active_temporary_interior_scene.queue_free()
 	active_temporary_interior_scene = null
 
-	# Restore the original run room.
+	# Restore the original exterior room.
 	if is_instance_valid(active_room_scene):
 		active_room_scene.show()
 		active_room_scene.process_mode = saved_run_room_process_mode
 
-	# Restore the exact party transform without resetting health
+	# Restore the party to its original exterior position.
 	if (
 		has_saved_run_room_party_transform
 		and is_instance_valid(player_party)
+		and is_instance_valid(player_character)
+		and is_instance_valid(deebo_character)
 	):
 		player_party.global_transform = saved_run_room_party_transform
+		player_character.transform = saved_player_transform
+		deebo_character.transform = saved_deebo_transform
+	else:
+		push_warning(
+			"RoomManager: Could not restore all saved party transforms."
+		)
 
 	has_saved_run_room_party_transform = false
 
-	print("Returned to run room: ", current_room.room_name if current_room != null else "Unknown")
+	print(
+		"Returned to run room: ",
+		current_room.room_name if current_room != null else "Unknown"
+	)
 
 
 # ==================================================

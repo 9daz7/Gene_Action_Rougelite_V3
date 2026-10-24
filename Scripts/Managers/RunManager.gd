@@ -337,13 +337,13 @@ func load_room_pools() -> void:
 		"res://Data/Rooms/AbandonedLab_01.tres"
 	)
 
-	_add_room_to_pool(
-		"res://Data/Rooms/AbandonedLab_02.tres"
-	)
-
-	_add_room_to_pool(
-		"res://Data/Rooms/AbandonedLab_03.tres"
-	)
+	#_add_room_to_pool(
+		#"res://Data/Rooms/AbandonedLab_02.tres"
+	#)
+#
+	#_add_room_to_pool(
+		#"res://Data/Rooms/AbandonedLab_03.tres"
+	#)
 
 	# ==================================================
 	# Boss Room
@@ -1060,7 +1060,7 @@ func _create_world_one_room(
 
 		return _duplicate_room_template(
 			get_random_room(
-				RoomResource.RoomType.ELITE,
+				RoomResource.RoomType.LAB,
 				exit_count
 			)
 		)
