@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://c0tc2avxsv21s"]
 
+[ext_resource type="Script" uid="uid://dwunwp3fmx2wa" path="res://Scripts/Rooms/LabInteractable3D.gd" id="1_5d3vp"]
 [ext_resource type="Texture2D" uid="uid://c6e161570jr8u" path="res://Assets/treepng.png" id="1_wk86w"]
 [ext_resource type="Texture2D" uid="uid://qiq0kpvsqban" path="res://Assets/Tree.png" id="2_5d3vp"]
 [ext_resource type="PackedScene" uid="uid://03hih1xoemdv" path="res://Scenes/Battle/ActionBattleUI.tscn" id="3_wktep"]
@@ -27,6 +28,9 @@ albedo_color = Color(0.9843137, 0.73333335, 0, 1)
 [sub_resource type="PlaneMesh" id="PlaneMesh_xdrho"]
 material = SubResource("StandardMaterial3D_7hlye")
 size = Vector2(19.33, 9.785)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_5d3vp"]
+size = Vector3(4.95166, 1, 6.8410645)
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_whoag"]
 height = 2.9575195
@@ -57,7 +61,7 @@ height = 1.3255615
 height = 1.6782227
 radius = 1.1
 
-[node name="AbandonedLab3d" type="Node3D" unique_id=1088890068]
+[node name="AbandonedLab3D" type="Node3D" unique_id=1088890068]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=147631214]
 
@@ -86,6 +90,17 @@ mesh = SubResource("PlaneMesh_xdrho")
 
 [node name="PlayerSpawn" type="Marker3D" parent="." unique_id=1421787230]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.331398, 0, 10.7991905)
+
+[node name="LabInteractable3D" type="Area3D" parent="." unique_id=1923358405]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.412342, 0.51278067, -2.057901)
+script = ExtResource("1_5d3vp")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LabInteractable3D" unique_id=97471897]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5480957, 0, 0.2869873)
+shape = SubResource("BoxShape3D_5d3vp")
+
+[node name="Label3D" type="Label3D" parent="LabInteractable3D" unique_id=1150776023]
+text = "Enter Lab [E]"
 
 [node name="Environment" type="Node3D" parent="." unique_id=1620375122]
 

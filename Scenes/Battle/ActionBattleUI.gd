@@ -55,16 +55,13 @@ func setup(
 		if not player.health_changed.is_connected(_on_player_health_changed):
 			player.health_changed.connect(_on_player_health_changed)
 
-	player_hp.max_value = player.max_health
-	player_hp.value = player.current_health
-
 	# Deebo health
 	if deebo.has_signal("health_changed"):
 		if not deebo.health_changed.is_connected(_on_deebo_health_changed):
 			deebo.health_changed.connect(_on_deebo_health_changed)
 
-	deebo_hp.max_value = deebo.max_health
-	deebo_hp.value = deebo.current_health
+	_refresh_health_bars()
+	call_deferred("_refresh_health_bars")
 
 	print(
 		"ACTION UI SETUP | Player: ",
@@ -149,6 +146,26 @@ func _update_cooldown_label(
 # ==================================================
 # Health Updates
 # ==================================================
+
+func _refresh_health_bars() -> void:
+
+	if not is_instance_valid(player) or not is_instance_valid(deebo):
+		return
+
+	player_hp.min_value = 0.0
+	player_hp.max_value = player.max_health
+	player_hp.value = player.current_health
+
+	deebo_hp.min_value = 0.0
+	deebo_hp.max_value = deebo.max_health
+	deebo_hp.value = deebo.current_health
+
+	print(
+		"HEALTH BAR REFRESH | Player: ",
+		player_hp.value, "/", player_hp.max_value,
+		" | Deebo: ", deebo_hp.value, "/", deebo_hp.max_value
+	)
+
 
 func _on_player_health_changed(
 	current_health: float,

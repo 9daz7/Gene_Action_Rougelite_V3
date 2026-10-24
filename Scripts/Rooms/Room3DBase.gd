@@ -59,6 +59,9 @@ func _ready() -> void:
 
 	_configure_enemy_references()
 
+	# Initialize health UI after room setup.
+	call_deferred("_setup_action_battle_ui")
+
 
 func _configure_enemy_references() -> void:
 
@@ -70,6 +73,27 @@ func _configure_enemy_references() -> void:
 			node.set("deebo", deebo)
 
 
+func _setup_action_battle_ui() -> void:
+
+	if not is_instance_valid(player) or not is_instance_valid(deebo):
+		push_warning("Room3DBase: Cannot initialize UI; party references are missing.")
+		return
+
+	for node in find_children("*", "", true, false):
+		if node is ActionBattleUI:
+			var action_ui := node as ActionBattleUI
+			var controller: ActionCombatController3D = null
+
+			for child in find_children("*", "", true, false):
+				if child is ActionCombatController3D:
+					controller = child as ActionCombatController3D
+					break
+
+			action_ui.setup(player, deebo, controller)
+			print("ROOM BASE: ActionBattleUI initialized.")
+			return
+
+	print("ROOM BASE: No ActionBattleUI found in this room.")
 # ==================================================
 # Room Exits
 # ==================================================

@@ -19,10 +19,8 @@ class_name RunManager
 # Room Spawn Chances
 # ==================================================
 
-#const ELITE_ROOM_CHANCE: float = 0.10
-#const BATTLE_ROOM_CHANCE: float = 0.45
-const ELITE_ROOM_CHANCE: float = 0.70
-const BATTLE_ROOM_CHANCE: float = 0.10
+const ELITE_ROOM_CHANCE: float = 0.10
+const BATTLE_ROOM_CHANCE: float = 0.45
 # Remaining chance goes to non-battle rooms.
 
 

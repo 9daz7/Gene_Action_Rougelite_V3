@@ -61,6 +61,17 @@ var active_room_scene: Node = null
 var current_run_node: RunMapNode = null
 
 
+# ==================================================
+# Temporary Interior
+# ==================================================
+
+var active_temporary_interior_scene: Node = null
+
+var saved_run_room_party_transform: Transform3D
+var saved_run_room_process_mode: Node.ProcessMode = Node.PROCESS_MODE_INHERIT
+var has_saved_run_room_party_transform: bool = false
+
+
 # --------------------------------------------------
 # temporary Map System
 # --------------------------------------------------
@@ -456,6 +467,97 @@ func _place_party_at_room_spawn(room: Node) -> void:
 		" | Marker: ", spawn_node.global_position,
 		" | Party: ", player_party.global_position
 	)
+
+
+# ==================================================
+# Temporary Interior Transitions
+# ==================================================
+
+func enter_temporary_interior(interior_scene: PackedScene) -> void:
+
+	if not is_instance_valid(active_room_scene):
+		push_error("RoomManager: No active run room to leave.")
+		return
+
+	if is_instance_valid(active_temporary_interior_scene):
+		push_warning("RoomManager: Already inside a temporary interior.")
+		return
+
+	if interior_scene == null:
+		push_error("RoomManager: Interior scene is missing.")
+		return
+
+	if not is_instance_valid(player_party):
+		push_error("RoomManager: Player party is missing.")
+		return
+
+	# Save the exact party transform before changing environments.
+	saved_run_room_party_transform = player_party.global_transform
+	has_saved_run_room_party_transform = true
+
+	# Preserve the room's existing processing mode.
+	saved_run_room_process_mode = active_room_scene.process_mode
+
+	# Pause and hide the original run room without freeing it.
+	active_room_scene.hide()
+	active_room_scene.process_mode = Node.PROCESS_MODE_DISABLED
+
+	# Create the temporary interior.
+	active_temporary_interior_scene = interior_scene.instantiate()
+
+	if active_temporary_interior_scene == null:
+		active_room_scene.show()
+		active_room_scene.process_mode = saved_run_room_process_mode
+		has_saved_run_room_party_transform = false
+		push_error("RoomManager: Failed to instantiate interior.")
+		return
+
+	# Configure the existing party before adding the interior.
+	if active_temporary_interior_scene.has_method("configure_party"):
+		active_temporary_interior_scene.configure_party(
+			player_character,
+			deebo_character
+		)
+
+	get_tree().current_scene.add_child(
+		active_temporary_interior_scene
+	)
+
+	# Position the party at the interior's PlayerSpawn.
+	_place_party_at_room_spawn(
+		active_temporary_interior_scene
+	)
+
+	print("Entered temporary interior: ", active_temporary_interior_scene.name)
+
+
+func return_from_temporary_interior() -> void:
+
+	if not is_instance_valid(active_temporary_interior_scene):
+		push_warning("RoomManager: No temporary interior to leave.")
+		return
+
+	print("Returning to the original run room.")
+
+	# Remove the interior, not the persistent party.
+	active_temporary_interior_scene.queue_free()
+	active_temporary_interior_scene = null
+
+	# Restore the original run room.
+	if is_instance_valid(active_room_scene):
+		active_room_scene.show()
+		active_room_scene.process_mode = saved_run_room_process_mode
+
+	# Restore the exact party transform without resetting health
+	if (
+		has_saved_run_room_party_transform
+		and is_instance_valid(player_party)
+	):
+		player_party.global_transform = saved_run_room_party_transform
+
+	has_saved_run_room_party_transform = false
+
+	print("Returned to run room: ", current_room.room_name if current_room != null else "Unknown")
 
 
 # ==================================================

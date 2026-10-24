@@ -31,6 +31,10 @@ const REWARD_BUTTON = preload("res://Scenes/UI/RewardButton.tscn")
 var run_manager: RunManager = null
 var selected_reward = null
 
+var player_character: CharacterBody3D = null
+var deebo_character: CharacterBody3D = null
+
+
 # ==================================================
 # Initialization
 # ==================================================
@@ -53,23 +57,21 @@ func _ready() -> void:
 
 
 func open(
-	manager: RunManager
+	manager: RunManager,
+	player_ref: CharacterBody3D = null,
+	deebo_ref: CharacterBody3D = null
 ) -> void:
 
 	if manager == null:
-
-		push_error(
-			"TreasureRoom_UI: RunManager is missing."
-		)
-
+		push_error("TreasureRoom_UI: RunManager is missing.")
 		return
 
 	run_manager = manager
+	player_character = player_ref
+	deebo_character = deebo_ref
 
 	show()
-
 	selected_reward = null
-
 	continue_button.disabled = true
 
 	_create_test_rewards()
@@ -97,12 +99,9 @@ func _create_test_rewards() -> void:
 			"gold": 50,
 		},
 		{
-			"text": "Random Gene",
+			"text": "Restore 15 HP Each",
 			"gold": 0,
-		},
-		{
-			"text": "Heal 25 HP",
-			"gold": 0,
+			"heal": 15,
 		},
 	]
 
@@ -190,3 +189,22 @@ func _apply_reward() -> void:
 			"Run gold:",
 			run_manager.gold
 		)
+
+	# --------------------------------------------------
+	# Heal Player and Deebo
+	# --------------------------------------------------
+
+	var heal_amount: float = float(
+		selected_reward.get("heal", 0)
+	)
+
+	if heal_amount > 0.0:
+		if is_instance_valid(player_character):
+			player_character.call("heal", heal_amount)
+		else:
+			push_warning("Treasure reward: Player reference is missing.")
+
+		if is_instance_valid(deebo_character):
+			deebo_character.call("heal", heal_amount)
+		else:
+			push_warning("Treasure reward: Deebo reference is missing.")
