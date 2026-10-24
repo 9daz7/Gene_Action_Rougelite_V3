@@ -19,7 +19,7 @@ light_color = Color(0.5132329, 0.5132329, 0.5132329, 1)
 
 [node name="Room" type="StaticBody3D" parent="." unique_id=375347342]
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Room" unique_id=461398705]
+[node name="Floor" type="MeshInstance3D" parent="Room" unique_id=461398705]
 transform = Transform3D(10, 0, 0, 0, 10.000001, 0, 0, 0, 10, 0, 0, 0)
 mesh = SubResource("PlaneMesh_w5l4r")
 surface_material_override/0 = SubResource("StandardMaterial3D_27rae")
@@ -27,3 +27,5 @@ surface_material_override/0 = SubResource("StandardMaterial3D_27rae")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Room" unique_id=372109642]
 transform = Transform3D(10, 0, 0, 0, 10.000001, 0, 0, 0, 10, -0.0045776367, -0.009648323, -0.013961792)
 shape = SubResource("BoxShape3D_ia2xq")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Room" unique_id=241500970]
