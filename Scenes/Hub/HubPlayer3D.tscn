@@ -1,0 +1,132 @@
+[gd_scene format=3 uid="uid://cd16i334rbcr1"]
+
+[ext_resource type="Script" uid="uid://biwxcadm1jhnp" path="res://Scenes/Hub/HubPlayer3D.gd" id="1_xc7ro"]
+[ext_resource type="Texture2D" uid="uid://s5nq1sb1o64w" path="res://Assets/Sprites/Animals/Green/walk.png" id="2_8w2cq"]
+[ext_resource type="Script" uid="uid://dx4y4stkdd42x" path="res://Scenes/Test3D/Test3DCamera.gd" id="8_jj0h6"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_u0e30"]
+radius = 0.13330078
+height = 0.956604
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o40u3"]
+atlas = ExtResource("2_8w2cq")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ku37b"]
+atlas = ExtResource("2_8w2cq")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5akbt"]
+atlas = ExtResource("2_8w2cq")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fv6r3"]
+atlas = ExtResource("2_8w2cq")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5l7fv"]
+atlas = ExtResource("2_8w2cq")
+region = Rect2(0, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sgn75"]
+atlas = ExtResource("2_8w2cq")
+region = Rect2(32, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ypuw0"]
+atlas = ExtResource("2_8w2cq")
+region = Rect2(64, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6jocm"]
+atlas = ExtResource("2_8w2cq")
+region = Rect2(96, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u7gxd"]
+atlas = ExtResource("2_8w2cq")
+region = Rect2(0, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fee26"]
+atlas = ExtResource("2_8w2cq")
+region = Rect2(32, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_guphg"]
+atlas = ExtResource("2_8w2cq")
+region = Rect2(64, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1ujl1"]
+atlas = ExtResource("2_8w2cq")
+region = Rect2(96, 64, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_6eser"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o40u3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ku37b")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5akbt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fv6r3")
+}],
+"loop": 1,
+"name": &"walk_down",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5l7fv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sgn75")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ypuw0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6jocm")
+}],
+"loop": 1,
+"name": &"walk_side",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u7gxd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fee26")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_guphg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1ujl1")
+}],
+"loop": 1,
+"name": &"walk_up",
+"speed": 5.0
+}]
+
+[node name="HubPlayer3D" type="Node3D" unique_id=652518589]
+
+[node name="Player" type="CharacterBody3D" parent="." unique_id=388044305]
+collision_layer = 2
+script = ExtResource("1_xc7ro")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player" unique_id=944549268]
+transform = Transform3D(0.084729254, 0, -0.9964041, 0.082228646, 0.99658895, 0.006992316, 0.99300534, -0.08252542, 0.08444024, 0.16645107, 0.51991844, -0.055985928)
+shape = SubResource("CapsuleShape3D_u0e30")
+
+[node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="Player" unique_id=1991733114]
+transform = Transform3D(7.065, 0, 0, 0, 6.937538, 1.3359591, 0, -1.3359593, 6.937537, 0.17567652, 0.49804533, -0.046143353)
+layers = 2
+sprite_frames = SubResource("SpriteFrames_6eser")
+animation = &"walk_up"
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1928206541 node_paths=PackedStringArray("target")]
+transform = Transform3D(1, 0, 0, 0, 0.64278764, 0.76604444, 0, -0.76604444, 0.64278764, 0.009, 3.771, 2.11)
+script = ExtResource("8_jj0h6")
+target = NodePath("../Player")
