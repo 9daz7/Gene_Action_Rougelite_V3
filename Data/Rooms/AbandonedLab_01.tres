@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="RoomResource" format=3 uid="uid://batufr3ukcxvo"]
 
 [ext_resource type="Script" uid="uid://0k05qgpjl5gm" path="res://Data/Rooms/RoomResource.gd" id="1_8ev51"]
-[ext_resource type="Resource" uid="uid://b78utut2u5sa8" path="res://Data/Labs/CriticalLab.tres" id="1_8njnb"]
+[ext_resource type="Resource" uid="uid://llthls2sj18m" path="res://Data/Labs/StableLab.tres" id="1_8njnb"]
 [ext_resource type="PackedScene" uid="uid://c0tc2avxsv21s" path="res://Scenes/Rooms/AbandonedLab3D.tscn" id="2_8njnb"]
 
 [resource]

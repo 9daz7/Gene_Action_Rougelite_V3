@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dwunwp3fmx2wa" path="res://Scripts/Rooms/LabInteractable3D.gd" id="1_5d3vp"]
 [ext_resource type="Texture2D" uid="uid://c6e161570jr8u" path="res://Assets/treepng.png" id="1_wk86w"]
+[ext_resource type="Script" uid="uid://bgpuc6h4am3oc" path="res://Scripts/Rooms/AbandonedLab3D.gd" id="1_wktep"]
 [ext_resource type="Texture2D" uid="uid://qiq0kpvsqban" path="res://Assets/Tree.png" id="2_5d3vp"]
 [ext_resource type="PackedScene" uid="uid://03hih1xoemdv" path="res://Scenes/Battle/ActionBattleUI.tscn" id="3_wktep"]
 [ext_resource type="Script" uid="uid://c80ox85jyhgoo" path="res://Scripts/ActionBattle3D/RoomExit3D.gd" id="4_03ma3"]
@@ -62,6 +63,7 @@ height = 1.6782227
 radius = 1.1
 
 [node name="AbandonedLab3D" type="Node3D" unique_id=1088890068]
+script = ExtResource("1_wktep")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=147631214]
 
@@ -93,6 +95,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.331398, 0, 10.7991905)
 
 [node name="LabInteractable3D" type="Area3D" parent="." unique_id=1923358405]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.412342, 0.51278067, -2.057901)
+collision_mask = 6
 script = ExtResource("1_5d3vp")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="LabInteractable3D" unique_id=97471897]
@@ -185,8 +188,7 @@ shape = SubResource("CylinderShape3D_qq2os")
 
 [node name="RoomExit3D" type="Area3D" parent="." unique_id=1498621803]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9.923497)
-collision_layer = 3
-collision_mask = 3
+collision_mask = 6
 script = ExtResource("4_03ma3")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="RoomExit3D" unique_id=883582722]

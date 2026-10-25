@@ -3,6 +3,8 @@
 [ext_resource type="PackedScene" uid="uid://03hih1xoemdv" path="res://Scenes/Battle/ActionBattleUI.tscn" id="1_27rae"]
 [ext_resource type="Script" uid="uid://cu1odikuu35rg" path="res://Scripts/Rooms/Room3DBase.gd" id="1_ia2xq"]
 [ext_resource type="Script" uid="uid://dlhu2ggbygnqo" path="res://Scripts/Rooms/LabWorkstation3D.gd" id="2_gyned"]
+[ext_resource type="Resource" uid="uid://b78utut2u5sa8" path="res://Data/Labs/CriticalLab.tres" id="3_bf644"]
+[ext_resource type="Texture2D" uid="uid://c7s0f0icm3a10" path="res://Assets/shop.png" id="3_farma"]
 [ext_resource type="Script" uid="uid://dx27dhnmd17cs" path="res://Scripts/Rooms/LabExit3D.gd" id="4_vim04"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_w5l4r"]
@@ -17,6 +19,15 @@ albedo_color = Color(0.80048305, 0.8414173, 0.9737353, 1)
 size = Vector3(2.0020142, 0.001, 2.0007172)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_gyned"]
+size = Vector3(3.0163574, 1, 1.3186035)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gs0tk"]
+size = Vector3(1.7211914, 1, 0.33792114)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_vim04"]
+top_radius = 0.39990234
+bottom_radius = 0.39990234
+height = 1.1800995
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_27rae"]
 
@@ -51,14 +62,28 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.331398, 0, 10.7991905)
 
 [node name="LabWorkstation" type="Area3D" parent="." unique_id=1006378323]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.488758, 0.5036645, -2.5840912)
+collision_layer = 7
 collision_mask = 6
 script = ExtResource("2_gyned")
+lab_data = ExtResource("3_bf644")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="LabWorkstation" unique_id=746256649]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.17565918, 0, -0.020141602)
 shape = SubResource("BoxShape3D_gyned")
 
 [node name="Label3D" type="Label3D" parent="LabWorkstation" unique_id=722842682]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.87564576, 0.22204018)
 text = "Workstation [E]"
+
+[node name="Sprite3D" type="Sprite3D" parent="LabWorkstation" unique_id=1024933389]
+transform = Transform3D(0.13, 0, 0, 0, 0.13, 0, 0, 0, 0.13, 0, 0.4939134, 0)
+texture = ExtResource("3_farma")
+
+[node name="WorkstationBody" type="StaticBody3D" parent="LabWorkstation" unique_id=1070867705]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LabWorkstation/WorkstationBody" unique_id=1890003347]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0041503906, 0, -0.06047058)
+shape = SubResource("BoxShape3D_gs0tk")
 
 [node name="ActionBattleUI" parent="." unique_id=871756832 instance=ExtResource("1_27rae")]
 
@@ -67,8 +92,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.1228285, 0.5067622, 12.36
 collision_mask = 6
 script = ExtResource("4_vim04")
 
+[node name="MeshInstance3D" type="MeshInstance3D" parent="LabExit" unique_id=202546690]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.04018408, 0)
+mesh = SubResource("CylinderMesh_vim04")
+
 [node name="CollisionShape3D" type="CollisionShape3D" parent="LabExit" unique_id=1355955099]
 shape = SubResource("BoxShape3D_27rae")
 
 [node name="Label3D" type="Label3D" parent="LabExit" unique_id=430218453]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8066028, 0)
 text = "Interact [E]"

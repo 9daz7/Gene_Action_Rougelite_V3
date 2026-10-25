@@ -279,6 +279,16 @@ func start_critical_lab() -> void:
 
 	# Prevent this UI from blocking BattleUI input.
 	hide()
+	_set_lab_exit_locked(true)
+
+
+func _set_lab_exit_locked(value: bool) -> void:
+
+	for node in get_tree().get_nodes_in_group(
+		"lab_interior_exit"
+	):
+		if node.has_method("set_exit_locked"):
+			node.set_exit_locked(value)
 
 
 # ==================================================
@@ -294,6 +304,8 @@ func critical_battle_won() -> void:
 	if current_room == null:
 
 		return
+
+	_set_lab_exit_locked(false)
 
 
 	# ==================================================
