@@ -42,6 +42,11 @@ func _physics_process(delta: float) -> void:
 		move_and_slide()
 		return
 
+	# Interact with the nearby hub building.
+	if Input.is_action_just_pressed("interact"):
+		if is_instance_valid(nearby_interactable):
+			nearby_interactable.interact()
+
 	dash_cooldown_timer = maxf(dash_cooldown_timer - delta, 0.0)
 
 	var input := Input.get_vector(

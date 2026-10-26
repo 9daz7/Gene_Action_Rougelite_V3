@@ -1,0 +1,144 @@
+[gd_scene format=3 uid="uid://8m1cebs7q8cx"]
+
+[ext_resource type="Script" uid="uid://djvnl5dbs22k0" path="res://Scripts/Hub/HubWorld3D.gd" id="1_1kd6w"]
+[ext_resource type="PackedScene" uid="uid://cd16i334rbcr1" path="res://Scenes/Hub/HubPlayer3D.tscn" id="1_o4xh3"]
+[ext_resource type="Texture2D" uid="uid://b66jvsxl5int" path="res://Assets/House.png" id="2_v746e"]
+[ext_resource type="Texture2D" uid="uid://c7s0f0icm3a10" path="res://Assets/shop.png" id="3_x7f16"]
+[ext_resource type="Script" uid="uid://ctqrmdd2a8ub3" path="res://Scripts/Hub/HubInteractable3D.gd" id="3_ynmio"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_o40u3"]
+albedo_color = Color(0.9843137, 0.73333335, 0, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_oqjik"]
+material = SubResource("StandardMaterial3D_o40u3")
+size = Vector2(29, 19)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_o4xh3"]
+size = Vector2(6, 4)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_v746e"]
+albedo_color = Color(0.38431373, 1, 0.078431375, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_x7f16"]
+size = Vector3(6.0155106, 0.001, 4.012541)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_oaf1g"]
+albedo_color = Color(0.9843137, 0.73333335, 0, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_gs0tk"]
+material = SubResource("StandardMaterial3D_oaf1g")
+size = Vector2(9, 10)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gs0tk"]
+size = Vector3(5.5264893, 3.8234863, 2.3034668)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ynmio"]
+size = Vector3(2.2617188, 3.381958, 5.194275)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1kd6w"]
+size = Vector3(1.9111328, 2.2401123, 3.1594849)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_age2f"]
+size = Vector3(2.0605469, 2.2423096, 3.4296265)
+
+[node name="HubWorld3D" type="Node3D" unique_id=949440772]
+script = ExtResource("1_1kd6w")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1940830718]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=239761350]
+transform = Transform3D(-0.24157718, 0.9694642, -0.04218732, 0.15470979, 0.08139758, 0.984601, 0.95796937, 0.23133035, -0.16964932, -5.641828, -18.950073, 53.318577)
+light_color = Color(0.5132329, 0.5132329, 0.5132329, 1)
+
+[node name="Ground" type="StaticBody3D" parent="." unique_id=177933606]
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Ground" unique_id=438851023]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.01, 0)
+mesh = SubResource("PlaneMesh_oqjik")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground" unique_id=1175997654]
+transform = Transform3D(10, 0, 0, 0, 10.000001, 0, 0, 0, 10, 0, 0, 0)
+mesh = SubResource("PlaneMesh_o4xh3")
+surface_material_override/0 = SubResource("StandardMaterial3D_v746e")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground" unique_id=1129894484]
+transform = Transform3D(10, 0, 0, 0, 10.000001, 0, 0, 0, 10, 0.018119812, -0.009648323, 0.011224747)
+shape = SubResource("BoxShape3D_x7f16")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Ground" unique_id=493875839]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.957596, 0.01, 4.495697)
+mesh = SubResource("PlaneMesh_gs0tk")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="Ground" unique_id=177083079]
+transform = Transform3D(0.0021403795, 0, -0.9999977, 0, 1, 0, 0.9999977, 0, 0.0021403795, 9.489215, 0.01, -13.967341)
+mesh = SubResource("PlaneMesh_gs0tk")
+
+[node name="HubPlayer3D" parent="." unique_id=652518589 instance=ExtResource("1_o4xh3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.2535515, 0, -10.228062)
+
+[node name="Buildings" type="Node3D" parent="." unique_id=1302280791]
+
+[node name="House" type="Node3D" parent="Buildings" unique_id=835209585]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.883974, 0, -11.709421)
+
+[node name="House" type="Sprite3D" parent="Buildings/House" unique_id=1023974996]
+transform = Transform3D(1, 0, 0, 0, 0.9935877, 0.11306514, 0, -0.11306514, 0.9935877, 0.05159521, 2.5361261, -0.37340927)
+texture = ExtResource("2_v746e")
+
+[node name="Area3D" type="Area3D" parent="Buildings/House" unique_id=716756276]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.11348629, 0, -0.14041805)
+collision_mask = 6
+script = ExtResource("3_ynmio")
+interaction_name = "Storage"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Buildings/House/Area3D" unique_id=269406137]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.089782715, 1.0850472, 0.37194824)
+shape = SubResource("BoxShape3D_gs0tk")
+
+[node name="AnimalLab" type="Node3D" parent="Buildings" unique_id=416309112]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.409687, 0, 4.1873965)
+
+[node name="AnimalLab" type="Sprite3D" parent="Buildings/AnimalLab" unique_id=887303104]
+transform = Transform3D(0.09241924, 0, -0.99572015, 0, 1, 0, 0.99572015, 0, 0.09241924, -0.052757263, 2.602972, 0.003932953)
+texture = ExtResource("2_v746e")
+
+[node name="Area3D" type="Area3D" parent="Buildings/AnimalLab" unique_id=1151141317]
+collision_mask = 6
+script = ExtResource("3_ynmio")
+interaction_name = "Animal Lab"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Buildings/AnimalLab/Area3D" unique_id=1275999250]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6308594, 1.7180343, 0.0121154785)
+shape = SubResource("BoxShape3D_ynmio")
+
+[node name="ItemShop" type="Node3D" parent="Buildings" unique_id=493967312]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.814754, 0, -4.3313484)
+
+[node name="ItemShop" type="Sprite3D" parent="Buildings/ItemShop" unique_id=768020606]
+transform = Transform3D(0.036051527, 0.0035998186, 0.13523066, 0.00072945794, 0.1399432, -0.0039197304, -0.13527657, 0.0017139824, 0.036018148, -0.049653053, 1.1116903, 0.93988776)
+texture = ExtResource("3_x7f16")
+
+[node name="Area3D" type="Area3D" parent="Buildings/ItemShop" unique_id=104164060]
+collision_mask = 6
+script = ExtResource("3_ynmio")
+interaction_name = "Item Shop"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Buildings/ItemShop/Area3D" unique_id=649584012]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4555664, 1.1288376, 0.92770386)
+shape = SubResource("BoxShape3D_1kd6w")
+
+[node name="UpgradeShop" type="Node3D" parent="Buildings" unique_id=1605294749]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.850483, 0, 3.104168)
+
+[node name="UpgradeShop" type="Sprite3D" parent="Buildings/UpgradeShop" unique_id=411908152]
+transform = Transform3D(0.025559258, 0, 0.13764709, 0, 0.14, 0, -0.13764709, 0, 0.025559258, -0.11489582, 1.1071601, 0.92563915)
+texture = ExtResource("3_x7f16")
+
+[node name="Area3D" type="Area3D" parent="Buildings/UpgradeShop" unique_id=163772032]
+collision_mask = 6
+script = ExtResource("3_ynmio")
+interaction_name = "Upgrades"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Buildings/UpgradeShop/Area3D" unique_id=1178208600]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.53027344, 1.133479, 0.7362366)
+shape = SubResource("BoxShape3D_age2f")
