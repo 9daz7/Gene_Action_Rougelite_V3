@@ -87,7 +87,8 @@ var is_performing_slam: bool = false
 # Health
 # --------------------------------------------------
 
-@export var max_health: float = 100.0
+@export var base_health: float = 100.0
+var max_health: float = 100.0
 var current_health: float = -1.0
 var is_dead: bool = false
 var death_processed: bool = false
@@ -98,10 +99,10 @@ func _ready() -> void:
 	sprite_rest_position = animated_sprite.position
 
 	if current_health < 0.0:
-		current_health = max_health
+		current_health = base_health
 
 	current_move_speed = walk_speed
-	health_changed.emit(current_health, max_health)
+	health_changed.emit(current_health, base_health)
 
 
 func _play_melee_lunge(aim_direction: Vector3) -> void:
@@ -552,11 +553,11 @@ func heal(amount: float) -> void:
 		return
 
 	var previous_health := current_health
-	current_health = minf(current_health + amount, max_health)
+	current_health = minf(current_health + amount, base_health)
 
 	if current_health != previous_health:
-		health_changed.emit(current_health, max_health)
-		print("PLAYER HEALED: ", current_health, "/", max_health)
+		health_changed.emit(current_health, base_health)
+		print("PLAYER HEALED: ", current_health, "/", base_health)
 
 
 func take_damage(amount: float) -> void:
@@ -567,15 +568,15 @@ func take_damage(amount: float) -> void:
 	print("PLAYER HIT: ", amount, " damage. Current health: ", current_health)
 
 	current_health = maxf(current_health - amount, 0.0)
-	health_changed.emit(current_health, max_health)
+	health_changed.emit(current_health, base_health)
 
 	print("Player took ", amount, " damage. Health: ",
-		current_health, "/", max_health)
+		current_health, "/", base_health)
 
 	if current_health <= 0.0:
 		_die()
 
-	print("PLAYER HEALTH TRACE | ", current_health, "/", max_health)
+	print("PLAYER HEALTH TRACE | ", current_health, "/", base_health)
 
 
 func _die() -> void:
