@@ -44,6 +44,12 @@ var starting_gold_level: int = 0
 var damage_level: int = 0
 var map_upgrade_level: int = 0
 
+const MAX_MAP_UPGRADE_LEVEL: int = 2
+
+const MAP_UPGRADE_COSTS: Array[int] = [
+	50,  # Level 0 -> 1
+	100  # Level 1 -> 2
+]
 
 
 # ==================================================
@@ -109,6 +115,40 @@ func spend_currency(amount: int) -> bool:
 		amount,
 		"Remaining:",
 		permanent_currency
+	)
+
+	return true
+
+
+# ==================================================
+# Map Visibility Upgrade
+# ==================================================
+
+func get_map_upgrade_cost() -> int:
+
+	if map_upgrade_level >= MAX_MAP_UPGRADE_LEVEL:
+		return 0
+
+	return MAP_UPGRADE_COSTS[map_upgrade_level]
+
+
+func purchase_map_upgrade() -> bool:
+
+	if map_upgrade_level >= MAX_MAP_UPGRADE_LEVEL:
+		print("Map visibility upgrade is already max level.")
+		return false
+
+	var cost := get_map_upgrade_cost()
+
+	if not spend_currency(cost):
+		print("Not enough permanent currency for map upgrade.")
+		return false
+
+	map_upgrade_level += 1
+
+	print(
+		"Map visibility upgraded to level:",
+		map_upgrade_level
 	)
 
 	return true
