@@ -26,11 +26,19 @@ extends Node
 # ==================================================
 # World
 # ==================================================
-
+#2d world
 @onready var hub_world: HubWorld = $World/HubWorld
+
+@onready var upgrade_shop_ui: UpgradeShopUI = $UI/UpgradeShopUI
 
 @onready var map_ui = $UI/MapUI
 @onready var room_manager = $Managers/RoomManager
+
+#3d world
+@onready var hub_world_3d: HubWorld3D = $World3D/HubWorld3D
+
+@onready var potion_storage_ui: PotionStorageUI = $UI/PotionStorageUI
+@onready var item_shop_ui: ItemShopUI = $UI/ItemShopUI
 
 const LAB_HUB_SCENE = preload(
 	"res://Scenes/LabHub/LabHub.tscn"
@@ -76,6 +84,13 @@ func _ready():
 		run_manager
 	)
 
+	if not upgrade_shop_ui.purchase_completed.is_connected(
+		save_game
+	):
+		upgrade_shop_ui.purchase_completed.connect(
+			save_game
+		)
+
 	run_manager.initialize_starting_collection(
 		gene_database
 	)
@@ -93,6 +108,14 @@ func _ready():
 	hub_world.setup(
 		run_manager,
 		gene_database
+	)
+
+	hub_world_3d.setup(
+		run_manager,
+		gene_database,
+		potion_storage_ui,
+		item_shop_ui,
+		upgrade_shop_ui
 	)
 
 	if not hub_world.animal_lab_requested.is_connected(

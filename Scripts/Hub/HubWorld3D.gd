@@ -9,15 +9,23 @@ var gene_database: Node = null
 
 var potion_storage_ui: PotionStorageUI = null
 var item_shop_ui: ItemShopUI = null
+var upgrade_shop_ui: UpgradeShopUI = null
 
 
 func setup(
 	p_run_manager: Node,
-	p_gene_database: Node
+	p_gene_database: Node,
+	p_potion_storage_ui: PotionStorageUI = null,
+	p_item_shop_ui: ItemShopUI = null,
+	p_upgrade_shop_ui: UpgradeShopUI = null
 ) -> void:
 
 	run_manager = p_run_manager
 	gene_database = p_gene_database
+
+	potion_storage_ui = p_potion_storage_ui
+	item_shop_ui = p_item_shop_ui
+	upgrade_shop_ui = p_upgrade_shop_ui
 
 
 func open() -> void:
@@ -106,6 +114,14 @@ func _on_item_shop_interacted() -> void:
 func _on_upgrade_shop_interacted() -> void:
 
 	print("HubWorld3D: Upgrade shop requested")
+
+	if upgrade_shop_ui == null:
+		push_warning(
+			"HubWorld3D: UpgradeShopUI has not been assigned."
+		)
+		return
+
+	upgrade_shop_ui.open()
 
 
 func _on_animal_lab_interacted() -> void:
