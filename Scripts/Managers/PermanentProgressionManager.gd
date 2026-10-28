@@ -42,6 +42,8 @@ const GENE_STORAGE_PER_UPGRADE: int = 5
 var max_health_level: int = 0
 var starting_gold_level: int = 0
 var damage_level: int = 0
+var map_upgrade_level: int = 0
+
 
 
 # ==================================================

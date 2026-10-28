@@ -1775,7 +1775,20 @@ func create_run_map() -> void:
 
 	push_warning("CREATE_RUN_MAP: AFTER MAP MANAGER SET")
 
-	map_manager.scanner_view_range = 0
+	print(
+		"PERMANENT MAP UPGRADE LEVEL: ",
+		PermanentProgressionManager.map_upgrade_level
+	)
+
+	map_manager.scanner_view_range = (
+		PermanentProgressionManager.map_upgrade_level
+	)
+
+	print(
+		"APPLIED SCANNER VIEW RANGE: ",
+		map_manager.scanner_view_range
+	)
+
 	push_warning("CREATE_RUN_MAP: BEFORE ENABLE SCANNER")
 	map_manager.enable_scanner()
 

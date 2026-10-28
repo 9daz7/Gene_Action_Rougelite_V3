@@ -95,7 +95,10 @@ func save_game(
 				permanent_manager.starting_gold_level,
 
 			"damage_level":
-				permanent_manager.damage_level
+				permanent_manager.damage_level,
+
+			"map_upgrade_level":
+				permanent_manager.map_upgrade_level
 		},
 
 		# --------------------------------------------------
@@ -353,6 +356,13 @@ func load_game(
 			permanent_manager.damage_level = int(
 				upgrades.get(
 					"damage_level",
+					0
+				)
+			)
+
+			permanent_manager.map_upgrade_level = int(
+				upgrades.get(
+					"map_upgrade_level",
 					0
 				)
 			)
