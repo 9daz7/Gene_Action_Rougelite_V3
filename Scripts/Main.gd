@@ -125,6 +125,13 @@ func _ready():
 			_on_animal_lab_requested
 		)
 
+	if not hub_world_3d.animal_lab_requested.is_connected(
+		_on_animal_lab_requested
+	):
+		hub_world_3d.animal_lab_requested.connect(
+			_on_animal_lab_requested
+		)
+
 	# ==================================================
 	# Map Setup
 	# ==================================================
@@ -133,7 +140,7 @@ func _ready():
 
 	print("Opening Hub World")
 
-	hub_world.open()
+	hub_world_3d.open()
 
 	if is_instance_valid(lab_hub):
 		lab_hub.hide()
@@ -211,6 +218,7 @@ func open_lab_hub() -> void:
 	map_ui.close_map()
 
 	hub_world.close()
+	hub_world_3d.close()
 
 	if not is_instance_valid(lab_hub):
 		push_error("LabHub instance is missing.")
@@ -412,7 +420,7 @@ func _on_lab_hub_closed() -> void:
 
 	lab_hub.hide()
 
-	hub_world.open()
+	hub_world_3d.open()
 
 
 func _on_animal_lab_requested() -> void:
@@ -447,6 +455,7 @@ func start_run():
 	GameEvents.run_started.emit()
 
 	hub_world.close()
+	hub_world_3d.close()
 	lab_hub.hide()
 
 	print("HubWorld visible after close:", hub_world.visible)
@@ -532,7 +541,7 @@ func open_victory_screen():
 
 	save_game()
 
-	hub_world.open()
+	hub_world_3d.open()
 
 
 func close_run_worlds() -> void:
@@ -614,7 +623,7 @@ func _on_return_home_requested() -> void:
 		"Returning to HubWorld."
 	)
 
-	hub_world.open()
+	hub_world_3d.open()
 
 	map_ui.hide()
 

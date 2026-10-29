@@ -9,7 +9,11 @@ var gene_database: Node = null
 
 var potion_storage_ui: PotionStorageUI = null
 var item_shop_ui: ItemShopUI = null
+var item_shop_data: ItemShopData = ItemShopData.new()
 var upgrade_shop_ui: UpgradeShopUI = null
+
+var hub_player_start_transform: Transform3D
+var hub_player_start_transform_saved: bool = false
 
 
 func setup(
@@ -32,6 +36,26 @@ func open() -> void:
 
 	is_open = true
 	process_mode = Node.PROCESS_MODE_INHERIT
+
+	var player := get_node_or_null(
+		"HubPlayer3D/Player"
+	) as HubPlayer3D
+
+	if player != null:
+		# Restore the original hub spawn position.
+		if hub_player_start_transform_saved:
+			player.global_transform = hub_player_start_transform
+
+		# Clear any stale interaction.
+		player.set_nearby_interactable(null)
+
+		# Re-enable movement and interaction.
+		player.set_controls_enabled(true)
+	else:
+		push_warning(
+			"HubWorld3D: Could not find the hub player."
+		)
+
 	show()
 
 
@@ -54,6 +78,18 @@ func _ready() -> void:
 	_connect_building("ItemShop", "_on_item_shop_interacted")
 	_connect_building("UpgradeShop", "_on_upgrade_shop_interacted")
 	_connect_building("AnimalLab", "_on_animal_lab_interacted")
+
+	var player := get_node_or_null(
+		"HubPlayer3D/Player"
+	) as HubPlayer3D
+
+	if player != null:
+		hub_player_start_transform = player.global_transform
+		hub_player_start_transform_saved = true
+	else:
+		push_warning(
+			"HubWorld3D: Could not save the player spawn transform."
+		)
 
 
 func _connect_building(
@@ -92,23 +128,13 @@ func _on_storage_interacted() -> void:
 
 func _on_item_shop_interacted() -> void:
 
+	print("HubWorld3D: Item Shop callback received")
+
 	if item_shop_ui == null:
-		push_warning(
-			"HubWorld3D: ItemShopUI has not been assigned."
-		)
+		push_warning("HubWorld3D: ItemShopUI has not been assigned.")
 		return
 
-	var shop := get_node_or_null(
-		"Buildings/ItemShop"
-	) as ItemShop
-
-	if shop == null:
-		push_error(
-			"HubWorld3D: ItemShop node not found."
-		)
-		return
-
-	item_shop_ui.open(shop)
+	item_shop_ui.open(item_shop_data)
 
 
 func _on_upgrade_shop_interacted() -> void:

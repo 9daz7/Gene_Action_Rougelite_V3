@@ -39,7 +39,7 @@ class_name ItemShopUI
 # State
 # ==================================================
 
-var current_shop: ItemShop = null
+var current_shop: ItemShopData = null
 
 
 # ==================================================
@@ -71,7 +71,7 @@ func _ready() -> void:
 # Open
 # ==================================================
 
-func open(shop: ItemShop) -> void:
+func open(shop: ItemShopData) -> void:
 
 	if shop == null:
 
@@ -88,7 +88,6 @@ func open(shop: ItemShop) -> void:
 	print("================================")
 
 	_refresh()
-
 	show()
 
 
