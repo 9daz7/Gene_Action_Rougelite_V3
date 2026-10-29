@@ -1,15 +1,15 @@
 [gd_scene format=3 uid="uid://cedb6l4k7ejsf"]
 
-[ext_resource type="Texture2D" uid="uid://b66jvsxl5int" path="res://Assets/House.png" id="1_l370f"]
-[ext_resource type="Script" uid="uid://dyj6c1l0hul3f" path="res://Scenes/Hub/HubWorld.gd" id="1_va13n"]
-[ext_resource type="PackedScene" uid="uid://fager0gtnvbd" path="res://Scenes/Hub/HubPlayer.tscn" id="1_ve7n7"]
-[ext_resource type="Texture2D" uid="uid://c7s0f0icm3a10" path="res://Assets/shop.png" id="2_25iap"]
-[ext_resource type="Script" uid="uid://csjgqa1kcrfgr" path="res://Scripts/Hub/Interactable.gd" id="3_25iap"]
-[ext_resource type="Texture2D" uid="uid://ccsr4dcgj8vms" path="res://Assets/Sprites/world/Tileset/Slice 1.png" id="3_va13n"]
-[ext_resource type="PackedScene" uid="uid://cgn0n075o0ysl" path="res://Scenes/Hub/AnimalLab.tscn" id="4_txqr2"]
-[ext_resource type="Script" uid="uid://dujrji3acqxot" path="res://Scenes/UI/InteractionPrompt.gd" id="5_y1qvb"]
-[ext_resource type="Script" uid="uid://b6dnfpyp14huw" path="res://Scenes/Hub/House.gd" id="7_hgbl1"]
-[ext_resource type="Script" uid="uid://c0tdhdiiqass0" path="res://Scenes/Hub/ItemShop.gd" id="8_kibel"]
+[ext_resource type="Script" uid="uid://dyj6c1l0hul3f" path="res://Scenes/Hub/HubWorld.gd" id="1_5a50j"]
+[ext_resource type="PackedScene" uid="uid://fager0gtnvbd" path="res://Scenes/Hub/HubPlayer.tscn" id="2_fhcyu"]
+[ext_resource type="Texture2D" uid="uid://ccsr4dcgj8vms" path="res://Assets/Sprites/world/Tileset/Slice 1.png" id="3_ax8in"]
+[ext_resource type="PackedScene" uid="uid://cgn0n075o0ysl" path="res://Scenes/Hub/AnimalLab.tscn" id="4_hwb75"]
+[ext_resource type="Texture2D" uid="uid://b66jvsxl5int" path="res://Assets/House.png" id="5_37tsb"]
+[ext_resource type="Script" uid="uid://csjgqa1kcrfgr" path="res://Scripts/Hub/Interactable.gd" id="6_n8ok1"]
+[ext_resource type="Script" uid="uid://b6dnfpyp14huw" path="res://Scenes/Hub/House.gd" id="7_7salk"]
+[ext_resource type="Texture2D" uid="uid://c7s0f0icm3a10" path="res://Assets/shop.png" id="8_j1x8k"]
+[ext_resource type="Script" uid="uid://c0tdhdiiqass0" path="res://Scenes/Hub/ItemShop.gd" id="9_7n1b4"]
+[ext_resource type="Script" uid="uid://dujrji3acqxot" path="res://Scenes/UI/InteractionPrompt.gd" id="10_ctts0"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gs0tk"]
 size = Vector2(112, 82)
@@ -56,9 +56,9 @@ size = Vector2(11.000061, 1099)
 [sub_resource type="CircleShape2D" id="CircleShape2D_oaf1g"]
 
 [node name="HubWorld" type="Node2D" unique_id=636739777]
-script = ExtResource("1_va13n")
+script = ExtResource("1_5a50j")
 
-[node name="HubPlayer" parent="." unique_id=1058320588 instance=ExtResource("1_ve7n7")]
+[node name="HubPlayer" parent="." unique_id=1058320588 instance=ExtResource("2_fhcyu")]
 
 [node name="World" type="Node2D" parent="." unique_id=1123594653]
 
@@ -66,35 +66,35 @@ script = ExtResource("1_va13n")
 
 [node name="grass" type="Sprite2D" parent="World/Ground" unique_id=1420459630]
 position = Vector2(610, 500)
-texture = ExtResource("3_va13n")
+texture = ExtResource("3_ax8in")
 
 [node name="grass3" type="Sprite2D" parent="World/Ground" unique_id=1357941995]
 position = Vector2(593, 510)
-texture = ExtResource("3_va13n")
+texture = ExtResource("3_ax8in")
 
 [node name="grass2" type="Sprite2D" parent="World/Ground" unique_id=1858121496]
 position = Vector2(609, 520)
-texture = ExtResource("3_va13n")
+texture = ExtResource("3_ax8in")
 
 [node name="grass5" type="Sprite2D" parent="World/Ground" unique_id=1310912538]
 position = Vector2(576, 519)
-texture = ExtResource("3_va13n")
+texture = ExtResource("3_ax8in")
 
 [node name="grass4" type="Sprite2D" parent="World/Ground" unique_id=564133816]
 position = Vector2(593, 529)
-texture = ExtResource("3_va13n")
+texture = ExtResource("3_ax8in")
 
 [node name="grass6" type="Sprite2D" parent="World/Ground" unique_id=74081134]
 position = Vector2(579, 539)
-texture = ExtResource("3_va13n")
+texture = ExtResource("3_ax8in")
 
 [node name="grass7" type="Sprite2D" parent="World/Ground" unique_id=803599051]
 position = Vector2(609, 538)
-texture = ExtResource("3_va13n")
+texture = ExtResource("3_ax8in")
 
 [node name="grass8" type="Sprite2D" parent="World/Ground" unique_id=799774011]
 position = Vector2(595, 548)
-texture = ExtResource("3_va13n")
+texture = ExtResource("3_ax8in")
 
 [node name="ColorRect" type="ColorRect" parent="World/Ground" unique_id=1161722296]
 z_index = -1
@@ -130,7 +130,7 @@ color = Color(0, 0.27058825, 0.09019608, 1)
 
 [node name="Environment" type="Node2D" parent="." unique_id=1399107644]
 
-[node name="AnimalLab" parent="." unique_id=1259764970 instance=ExtResource("4_txqr2")]
+[node name="AnimalLab" parent="." unique_id=1259764970 instance=ExtResource("4_hwb75")]
 position = Vector2(797.62524, 933.3593)
 scale = Vector2(9.601826, 9.601826)
 
@@ -138,7 +138,7 @@ scale = Vector2(9.601826, 9.601826)
 position = Vector2(0.24732208, 0.76138306)
 rotation = 9.431868e-05
 scale = Vector2(0.026036715, 0.026036715)
-texture = ExtResource("1_l370f")
+texture = ExtResource("5_37tsb")
 
 [node name="StaticBody2D2" type="StaticBody2D" parent="AnimalLab" unique_id=1039759154]
 position = Vector2(-0.91339874, 1.1227722)
@@ -159,7 +159,7 @@ rotation = 0.598648
 shape = SubResource("RectangleShape2D_npkn0")
 
 [node name="Interactable2" type="Area2D" parent="AnimalLab" unique_id=1185801349]
-script = ExtResource("3_25iap")
+script = ExtResource("6_n8ok1")
 interaction_text = "[E] Interact"
 metadata/_custom_type_script = "uid://csjgqa1kcrfgr"
 
@@ -174,13 +174,13 @@ theme_override_colors/font_color = Color(0.43134022, 0.43134025, 0.43134025, 1)
 text = "AnimalLab"
 
 [node name="House" type="Node2D" parent="." unique_id=463546807]
-script = ExtResource("7_hgbl1")
+script = ExtResource("7_7salk")
 
 [node name="House" type="Sprite2D" parent="House" unique_id=1616726704]
 position = Vector2(1091.035, 75.955)
 rotation = -0.0022137603
 scale = Vector2(0.25, 0.25)
-texture = ExtResource("1_l370f")
+texture = ExtResource("5_37tsb")
 
 [node name="Label" type="Label" parent="House" unique_id=1427734938]
 anchors_preset = -1
@@ -210,7 +210,7 @@ shape = SubResource("RectangleShape2D_evdtt")
 
 [node name="Interactable" type="Area2D" parent="House" unique_id=1343583886]
 position = Vector2(1090, 88)
-script = ExtResource("3_25iap")
+script = ExtResource("6_n8ok1")
 interaction_text = "[E] Enter Storage"
 metadata/_custom_type_script = "uid://csjgqa1kcrfgr"
 
@@ -224,7 +224,7 @@ shape = SubResource("RectangleShape2D_e7ewj")
 position = Vector2(700, 500)
 rotation = 0.0010443344
 scale = Vector2(0.045, 0.045)
-texture = ExtResource("2_25iap")
+texture = ExtResource("8_j1x8k")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="UpgradeShop" unique_id=178012336]
 
@@ -243,13 +243,13 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "Upgrade Shop"
 
 [node name="ItemShop" type="StaticBody2D" parent="." unique_id=88798912]
-script = ExtResource("8_kibel")
+script = ExtResource("9_7n1b4")
 
 [node name="Sprite2D" type="Sprite2D" parent="ItemShop" unique_id=500807375]
 position = Vector2(700, 356.21)
 rotation = -0.0020035903
 scale = Vector2(0.045, 0.045)
-texture = ExtResource("2_25iap")
+texture = ExtResource("8_j1x8k")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ItemShop" unique_id=773131680]
 position = Vector2(700, 356.5)
@@ -267,7 +267,7 @@ text = "Item Shop"
 
 [node name="Interactable" type="Area2D" parent="ItemShop" unique_id=2039498135]
 position = Vector2(700, 354)
-script = ExtResource("3_25iap")
+script = ExtResource("6_n8ok1")
 interaction_text = "[E] Buy Potions"
 metadata/_custom_type_script = "uid://csjgqa1kcrfgr"
 
@@ -278,7 +278,7 @@ shape = SubResource("RectangleShape2D_qwfpk")
 [node name="RunEntrance" type="Node2D" parent="." unique_id=1981127881]
 
 [node name="Interactable" type="Area2D" parent="RunEntrance" unique_id=1385515555]
-script = ExtResource("3_25iap")
+script = ExtResource("6_n8ok1")
 metadata/_custom_type_script = "uid://csjgqa1kcrfgr"
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=901308114]
@@ -290,7 +290,7 @@ offset_left = 941.0
 offset_top = 360.0
 offset_right = 981.0
 offset_bottom = 400.0
-script = ExtResource("5_y1qvb")
+script = ExtResource("10_ctts0")
 metadata/_custom_type_script = "uid://dujrji3acqxot"
 
 [node name="Label" type="Label" parent="UI/InteractionPrompt" unique_id=2028111194]
@@ -349,7 +349,7 @@ position = Vector2(700, 355)
 scale = Vector2(8.035, 8.035)
 
 [node name="Interactable" type="Area2D" parent="Interactables" unique_id=1748787867]
-script = ExtResource("3_25iap")
+script = ExtResource("6_n8ok1")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Interactables/Interactable" unique_id=739325170]
 shape = SubResource("CircleShape2D_oaf1g")

@@ -27,7 +27,7 @@ extends Node
 # World
 # ==================================================
 #2d world
-@onready var hub_world: HubWorld = $World/HubWorld
+#@onready var hub_world: HubWorld = $World/HubWorld
 
 @onready var upgrade_shop_ui: UpgradeShopUI = $UI/UpgradeShopUI
 
@@ -105,10 +105,10 @@ func _ready():
 	# Hub World Setup
 	# ==================================================
 
-	hub_world.setup(
-		run_manager,
-		gene_database
-	)
+	#hub_world.setup(
+		#run_manager,
+		#gene_database
+	#)
 
 	hub_world_3d.setup(
 		run_manager,
@@ -118,12 +118,12 @@ func _ready():
 		upgrade_shop_ui
 	)
 
-	if not hub_world.animal_lab_requested.is_connected(
-		_on_animal_lab_requested
-	):
-		hub_world.animal_lab_requested.connect(
-			_on_animal_lab_requested
-		)
+	#if not hub_world.animal_lab_requested.is_connected(
+		#_on_animal_lab_requested
+	#):
+		#hub_world.animal_lab_requested.connect(
+			#_on_animal_lab_requested
+		#)
 
 	if not hub_world_3d.animal_lab_requested.is_connected(
 		_on_animal_lab_requested
@@ -217,7 +217,7 @@ func open_lab_hub() -> void:
 	map_manager.disable_scanner()
 	map_ui.close_map()
 
-	hub_world.close()
+	#hub_world.close()
 	hub_world_3d.close()
 
 	if not is_instance_valid(lab_hub):
@@ -454,26 +454,26 @@ func start_run():
 
 	GameEvents.run_started.emit()
 
-	hub_world.close()
+	#hub_world.close()
 	hub_world_3d.close()
 	lab_hub.hide()
 
-	print("HubWorld visible after close:", hub_world.visible)
-	print("HubWorld process mode after close:", hub_world.process_mode)
+	#print("HubWorld visible after close:", hub_world.visible)
+	#print("HubWorld process mode after close:", hub_world.process_mode)
 
-	var hub_player := hub_world.get_node_or_null("HubPlayer")
-
-	if hub_player != null:
-
-		print(
-			"HubPlayer visible after close:",
-			hub_player.visible
-		)
-
-		print(
-			"HubPlayer process mode after close:",
-			hub_player.process_mode
-		)
+	#var hub_player := hub_world.get_node_or_null("HubPlayer")
+#
+	#if hub_player != null:
+#
+		#print(
+			#"HubPlayer visible after close:",
+			#hub_player.visible
+		#)
+#
+		#print(
+			#"HubPlayer process mode after close:",
+			#hub_player.process_mode
+		#)
 
 	# ==================================================
 	# Enable Run Worlds
