@@ -42,12 +42,6 @@ var deebo_character: CharacterBody3D = null
 # Room Scenes
 # ==================================================
 
-
-const TREASURE_SCENE = preload("res://Scenes/Rooms/TreasureRoom_01.tscn")
-#const MERCHANT_SCENE = preload("res://Scenes/Rooms/MerchantRoom.tscn")
-#const REST_SCENE = preload("res://Scenes/Rooms/RestRoom.tscn")
-#const ABANDONED_LAB_SCENE = preload("res://Scenes/Rooms/AbandonedLab.tscn")
-#const MYSTERY_SCENE = preload("res://Scenes/Rooms/MysteryRoom.tscn")
 const REWARD_SCENE = preload("res://Scenes/Rooms/RewardRoom.tscn")
 
 
@@ -99,7 +93,7 @@ var reward_room = null
 # Active Battle Room
 # --------------------------------------------------
 
-var active_battle_room: NormalBattleRoom = null
+#var active_battle_room: NormalBattleRoom = null
 
 
 # --------------------------------------------------
@@ -368,13 +362,13 @@ func open_room_scene(room: RoomResource) -> void:
 	# Track Active Battle Room
 	# --------------------------------------------------
 
-	if active_room_scene is NormalBattleRoom:
-
-		active_battle_room = active_room_scene
-
-	else:
-
-		active_battle_room = null
+	#if active_room_scene is NormalBattleRoom:
+#
+		#active_battle_room = active_room_scene
+#
+	#else:
+#
+		#active_battle_room = null
 
 	print("================================")
 	print("ROOM SCENE OPENED")
@@ -382,12 +376,12 @@ func open_room_scene(room: RoomResource) -> void:
 	print("Scene:", active_room_scene.name)
 	print("================================")
 
-	if active_battle_room != null:
-
-		print(
-			"Active battle room:",
-			active_battle_room.name
-		)
+	#if active_battle_room != null:
+#
+		#print(
+			#"Active battle room:",
+			#active_battle_room.name
+		#)
 
 	# --------------------------------------------------
 	# RoomWorld handles its own exits
@@ -1039,26 +1033,26 @@ func _on_reward_finished(reward) -> void:
 	# Return To Battle Room
 	# ==================================================
 
-	if active_battle_room != null:
-
-		print(
-			"Returning to NormalBattleRoom"
-		)
-
-		active_battle_room.set_battle_active(
-			false
-		)
-
-	else:
-
-		push_error(
-			"RoomManager: Current scene has no return_to_map()."
-		)
-
-	print("================================")
-	print("RETURNED TO NORMAL BATTLE ROOM")
-	print("PLAYER CONTROLS RESTORED")
-	print("================================")
+	#if active_battle_room != null:
+#
+		#print(
+			#"Returning to NormalBattleRoom"
+		#)
+#
+		#active_battle_room.set_battle_active(
+			#false
+		#)
+#
+	#else:
+#
+		#push_error(
+			#"RoomManager: Current scene has no return_to_map()."
+		#)
+#
+	#print("================================")
+	#print("RETURNED TO NORMAL BATTLE ROOM")
+	#print("PLAYER CONTROLS RESTORED")
+	#print("================================")
 
 
 func apply_reward(

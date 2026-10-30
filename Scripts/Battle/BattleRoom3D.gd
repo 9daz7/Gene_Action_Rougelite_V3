@@ -12,13 +12,13 @@ func _ready() -> void:
 	super._ready()
 
 	if not is_instance_valid(player):
-		push_error("TestRoom3D: Player reference is missing.")
+		push_error("BattleRoom3D: Player reference is missing.")
 		return
 
 	var party_root := player.get_parent()
 
 	if party_root == null:
-		push_error("TestRoom3D: Player has no party root.")
+		push_error("BattleRoom3D: Player has no party root.")
 		return
 
 	combat_controller = party_root.get_node_or_null(
@@ -27,7 +27,7 @@ func _ready() -> void:
 
 	if combat_controller == null:
 		push_error(
-			"TestRoom3D: ActionCombatController3D "
+			"BattleRoom3D: ActionCombatController3D "
 			+ "was not found in Player3D."
 		)
 		return

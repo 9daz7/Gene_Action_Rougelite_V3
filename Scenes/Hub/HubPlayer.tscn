@@ -1,7 +1,149 @@
-[gd_scene format=3 uid="uid://fager0gtnvbd"]
+[gd_scene format=3 uid="uid://bf37syeulmogf"]
 
-[ext_resource type="Script" uid="uid://bokt7i83h556u" path="res://Scenes/Hub/HubPlayer.gd" id="1_pbl33"]
 [ext_resource type="Texture2D" uid="uid://rq85nl11ce4q" path="res://Assets/Sprites/Animals/deebo_asset_test_gene_select.png" id="2_7ptil"]
+
+[sub_resource type="GDScript" id="GDScript_pbl33"]
+script/source = "extends CharacterBody2D
+class_name HubPlayer
+
+
+# ==================================================
+# Movement
+# ==================================================
+
+@export var move_speed: float = 200.0
+
+@export var sprint_speed: float = 300.0
+@export var crouch_speed: float = 100.0
+
+
+# ==================================================
+# State
+# ==================================================
+
+var is_sprinting: bool = false
+var is_crouching: bool = false
+
+
+# ==================================================
+# Interaction
+# ==================================================
+
+var nearby_interactable: Interactable = null
+
+
+# ==================================================
+# Initialization
+# ==================================================
+
+func _ready() -> void:
+
+	print(\"HubPlayer ready\")
+
+	pass
+
+
+# ==================================================
+# Physics
+# ==================================================
+
+
+func _physics_process(_delta: float) -> void:
+
+	var hub_world := get_parent()
+
+	if hub_world is HubWorld and not hub_world.is_open:
+
+		velocity = Vector2.ZERO
+
+		is_sprinting = false
+		is_crouching = false
+
+		return
+
+
+	# ==================================================
+	# Movement Input
+	# ==================================================
+
+	var direction := Input.get_vector(
+		\"move_left\",
+		\"move_right\",
+		\"move_up\",
+		\"move_down\"
+	)
+
+
+	# ==================================================
+	# Sprint / Crouch
+	# ==================================================
+
+	is_sprinting = (
+		Input.is_action_pressed(\"sprint\")
+		and
+		direction != Vector2.ZERO
+	)
+
+	is_crouching = (
+		Input.is_action_pressed(\"crouch\")
+		and
+		not is_sprinting
+	)
+
+
+	# ==================================================
+	# Move
+	# ==================================================
+
+	velocity = direction * _get_current_move_speed()
+
+	move_and_slide()
+
+	_handle_interaction()
+
+
+# ==================================================
+# Movement Speed
+# ==================================================
+
+func _get_current_move_speed() -> float:
+
+	if is_sprinting:
+
+		return sprint_speed
+
+	if is_crouching:
+
+		return crouch_speed
+
+	return move_speed
+
+
+# ==================================================
+# Interaction
+# ==================================================
+
+func _handle_interaction() -> void:
+
+	if not Input.is_action_just_pressed(\"interact\"):
+		return
+
+	if nearby_interactable == null:
+		return
+
+	nearby_interactable.interact()
+
+
+# ==================================================
+# Interaction Detection
+# ==================================================
+
+func set_nearby_interactable(
+	interactable: Interactable
+) -> void:
+
+	nearby_interactable = interactable
+"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gs0tk"]
 size = Vector2(11.999992, 31)
@@ -11,7 +153,7 @@ radius = 29.62261
 
 [node name="HubPlayer" type="CharacterBody2D" unique_id=1058320588]
 position = Vector2(15.695, 0)
-script = ExtResource("1_pbl33")
+script = SubResource("GDScript_pbl33")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1977358198]
 position = Vector2(945.305, 381)

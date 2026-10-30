@@ -1,8 +1,122 @@
-[gd_scene format=3 uid="uid://cb07lkvwrm5xp"]
+[gd_scene format=3 uid="uid://bd78vhb1tx6qr"]
 
 [ext_resource type="Script" uid="uid://csjgqa1kcrfgr" path="res://Scripts/Hub/Interactable.gd" id="1_o4w1x"]
-[ext_resource type="Script" uid="uid://cfrn7ky83lcue" path="res://Scenes/Rooms/MerchantRoom.gd" id="1_q34tw"]
 [ext_resource type="PackedScene" uid="uid://s4vol5fxx17b" path="res://Scenes/Rooms/RoomExit.tscn" id="2_q34tw"]
+
+[sub_resource type="GDScript" id="GDScript_o4w1x"]
+script/source = "extends RoomWorld
+class_name MerchantRoom
+
+
+# ==================================================
+# Scenes
+# ==================================================
+
+const SHOP_UI_SCENE = preload(
+	\"res://Scenes/Rooms/MerchantRoom_UI.tscn\"
+)
+
+
+# ==================================================
+# Managers
+# ==================================================
+
+@onready var run_manager: RunManager = get_node(
+	\"../Managers/RunManager\"
+)
+
+
+# ==================================================
+# Interaction
+# ==================================================
+
+@onready var merchant_interactable: Interactable = $MerchantInteractable
+
+
+# ==================================================
+# State
+# ==================================================
+
+var shop_ui: Control = null
+
+
+# ==================================================
+# Initialization
+# ==================================================
+
+func _ready() -> void:
+
+	super._ready()
+
+	if not merchant_interactable.interacted.is_connected(
+		_on_merchant_interacted
+	):
+
+		merchant_interactable.interacted.connect(
+			_on_merchant_interacted
+	)
+
+
+# ==================================================
+# Merchant
+# ==================================================
+
+func _on_merchant_interacted() -> void:
+
+	if is_instance_valid(shop_ui):
+		return
+
+	if room_player != null:
+
+		room_player.set_controls_enabled(
+			false
+		)
+
+	shop_ui = SHOP_UI_SCENE.instantiate()
+
+	get_tree().current_scene.get_node(\"UI\").add_child(
+		shop_ui
+	)
+
+	if shop_ui is Control:
+
+		shop_ui.set_anchors_and_offsets_preset(
+			Control.PRESET_FULL_RECT
+		)
+
+	if not shop_ui.merchant_finished.is_connected(
+		_on_merchant_finished
+	):
+
+		shop_ui.merchant_finished.connect(
+			_on_merchant_finished
+		)
+
+	shop_ui.open(
+		run_manager
+	)
+
+
+# ==================================================
+# Merchant Closed
+# ==================================================
+
+func _on_merchant_finished() -> void:
+
+	print(\"SHOP UI CLOSED\")
+
+	if is_instance_valid(shop_ui):
+
+		shop_ui.queue_free()
+
+		shop_ui = null
+
+	if room_player != null:
+
+		room_player.set_controls_enabled(
+			true
+		)
+"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2hdkt"]
 size = Vector2(1960, 20)
@@ -20,7 +134,7 @@ size = Vector2(1960, 20.25)
 size = Vector2(128.14001, 297)
 
 [node name="MerchantRoom02" type="Node2D" unique_id=2109744645]
-script = ExtResource("1_q34tw")
+script = SubResource("GDScript_o4w1x")
 
 [node name="Background" type="ColorRect" parent="." unique_id=228548756]
 offset_right = 1919.0

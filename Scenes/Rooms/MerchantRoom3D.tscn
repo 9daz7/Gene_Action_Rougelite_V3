@@ -70,7 +70,7 @@ height = 1.3255615
 height = 1.6782227
 radius = 1.1
 
-[node name="MerchantRoom3d" type="Node3D" unique_id=367315331]
+[node name="MerchantRoom3D" type="Node3D" unique_id=367315331]
 script = ExtResource("1_tf528")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=396947156]

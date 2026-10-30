@@ -231,15 +231,15 @@ func load_room_pools() -> void:
 	# ==================================================
 
 	_add_room_to_pool(
-		"res://Data/Rooms/TestBattle3D.tres"
+		"res://Data/Rooms/BattleRoom3D.tres"
 	)
 
 	_add_room_to_pool(
-		"res://Data/Rooms/TestBattle3D2exit.tres"
+		"res://Data/Rooms/BattleRoom3D_02.tres"
 	)
 
 	_add_room_to_pool(
-		"res://Data/Rooms/TestBattle3D3exit.tres"
+		"res://Data/Rooms/BattleRoom3D_03.tres"
 	)
 
 	#2D
@@ -293,6 +293,10 @@ func load_room_pools() -> void:
 		"res://Data/Rooms/Treasure_02.tres"
 	)
 
+	_add_room_to_pool(
+		"res://Data/Rooms/Treasure_03.tres"
+	)
+
 	# ==================================================
 	# Shop Rooms
 	# ==================================================
@@ -302,6 +306,13 @@ func load_room_pools() -> void:
 		"res://Data/Rooms/Merchant_01.tres"
 	)
 
+	_add_room_to_pool(
+		"res://Data/Rooms/Merchant_02.tres"
+	)
+
+	_add_room_to_pool(
+		"res://Data/Rooms/Merchant_03.tres"
+	)
 
 	# ==================================================
 	# Rest Rooms
@@ -315,6 +326,7 @@ func load_room_pools() -> void:
 	_add_room_to_pool(
 		"res://Data/Rooms/Rest_02.tres"
 	)
+
 	# ==================================================
 	# Event Rooms
 	# ==================================================
@@ -326,6 +338,10 @@ func load_room_pools() -> void:
 
 	_add_room_to_pool(
 		"res://Data/Rooms/Event_02.tres"
+	)
+
+	_add_room_to_pool(
+		"res://Data/Rooms/Event_03.tres"
 	)
 
 	# ==================================================
@@ -1060,7 +1076,7 @@ func _create_world_one_room(
 
 		return _duplicate_room_template(
 			get_random_room(
-				RoomResource.RoomType.LAB,
+				RoomResource.RoomType.ELITE,
 				exit_count
 			)
 		)

@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="RoomResource" format=3 uid="uid://clr5oxokyf2xw"]
+
+[ext_resource type="Script" uid="uid://0k05qgpjl5gm" path="res://Data/Rooms/RoomResource.gd" id="1_ijcxx"]
+[ext_resource type="PackedScene" uid="uid://be85ym3nkig0i" path="res://Scenes/Rooms/EventRoom3D_03.tscn" id="1_kmsvk"]
+
+[resource]
+script = ExtResource("1_ijcxx")
+room_type = 5
+room_name = "Event"
+room_scene = ExtResource("1_kmsvk")
+exit_count = 3
+metadata/_custom_type_script = "uid://0k05qgpjl5gm"
