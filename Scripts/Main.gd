@@ -224,7 +224,7 @@ func open_lab_hub() -> void:
 		push_error("LabHub instance is missing.")
 		return
 
-	lab_hub.show()
+	lab_hub.open()
 
 	print("LabHub visible:",
 		lab_hub.visible
