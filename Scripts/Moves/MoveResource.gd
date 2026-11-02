@@ -76,6 +76,7 @@ var attack_hit_point: float = 1.0
 
 @export var move_name: String = "Unnamed Move"
 @export_multiline var description: String = ""
+@export var icon: Texture2D
 
 @export var effect_type: MoveEffectType = MoveEffectType.DAMAGE
 @export var category: MoveCategory = MoveCategory.BIOLOGICAL

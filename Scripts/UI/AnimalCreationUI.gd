@@ -93,15 +93,24 @@ func open():
 	selected_genes.clear()
 	selected_moves.clear()
 	available_moves.clear()
-	
+
 	_clear_move_buttons()
 
 	_load_owned_genes()
+
+	var saved_build := run_manager.current_animal_build
+
+	if saved_build != null:
+
+		selected_genes = saved_build.genes.duplicate()
+		selected_moves = saved_build.moves.duplicate()
+
+	update_availabe_moves()
 	_build_gene_buttons()
-	
+
 	show()
-		
-		
+
+
 func close():
 	
 	hide()
@@ -206,7 +215,8 @@ func _on_gene_selected(gene:GeneResource):
 func _on_move_selected(move:MoveResource):
 	
 	if selected_moves.has(move):
-		print("Already selected")
+		selected_moves.erase(move)
+		print("Deselected move:", move.move_name)
 		return
 
 	if selected_moves.size() >= MAX_MOVES:
@@ -216,8 +226,8 @@ func _on_move_selected(move:MoveResource):
 	selected_moves.append(move)
 
 	print("Selected move:", move.move_name)
-	
-	
+
+
 func update_availabe_moves():
 	available_moves.clear()
 

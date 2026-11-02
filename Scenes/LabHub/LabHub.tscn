@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://bt88ti68bhrxf" path="res://Scenes/LabHub/LabHub.gd" id="1_n326t"]
 [ext_resource type="Script" uid="uid://c35qlyaynfr6s" path="res://Scenes/LabHub/StartRunButton.gd" id="2_3lbnj"]
 [ext_resource type="Texture2D" uid="uid://bdlu6g54uhyaa" path="res://Assets/backgrounds/labhub_temp.jpg" id="2_8b6v6"]
-[ext_resource type="Script" uid="uid://bgvjsg4fcjj6y" path="res://Scenes/LabHub/AnimalCreationUI.gd" id="3_b8a4m"]
+[ext_resource type="Script" uid="uid://bgvjsg4fcjj6y" path="res://Scripts/UI/AnimalCreationUI.gd" id="3_b8a4m"]
 [ext_resource type="Texture2D" uid="uid://rq85nl11ce4q" path="res://Assets/Sprites/Animals/deebo_asset_test_gene_select.png" id="4_gg2au"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_npkn0"]
@@ -137,6 +137,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="AnimalName" type="LineEdit" parent="AnimalCreationUI" unique_id=349907153]
+visible = false
 custom_minimum_size = Vector2(400, 50)
 layout_mode = 0
 offset_left = 1286.13
@@ -144,30 +145,6 @@ offset_top = 60.85
 offset_right = 1686.13
 offset_bottom = 110.85
 theme_override_styles/normal = SubResource("StyleBoxFlat_gs0tk")
-
-[node name="AnimalPreview" type="Control" parent="AnimalCreationUI" unique_id=1763062572]
-custom_minimum_size = Vector2(500, 800)
-anchors_preset = 0
-offset_left = 1232.0
-offset_top = 119.0
-offset_right = 1732.0
-offset_bottom = 919.0
-
-[node name="Sprite2D" type="Sprite2D" parent="AnimalCreationUI/AnimalPreview" unique_id=1976096219]
-position = Vector2(252, 362)
-scale = Vector2(0.24310575, 0.26286283)
-texture = ExtResource("4_gg2au")
-
-[node name="Label" type="Label" parent="AnimalCreationUI/AnimalPreview" unique_id=365054302]
-custom_minimum_size = Vector2(1.845, 0)
-layout_mode = 0
-offset_left = 57.0
-offset_top = -106.0
-offset_right = 234.96
-offset_bottom = -68.520004
-theme_override_font_sizes/font_size = 23
-theme_override_styles/normal = SubResource("StyleBoxFlat_oaf1g")
-text = " Animal Name:"
 
 [node name="GeneSelection" type="Control" parent="AnimalCreationUI" unique_id=2131818571]
 custom_minimum_size = Vector2(300, 400)
@@ -219,6 +196,31 @@ layout_mode = 2
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
+
+[node name="AnimalPreview" type="Control" parent="AnimalCreationUI" unique_id=1763062572]
+custom_minimum_size = Vector2(500, 800)
+anchors_preset = 0
+offset_left = 1232.0
+offset_top = 119.0
+offset_right = 1732.0
+offset_bottom = 919.0
+
+[node name="Sprite2D" type="Sprite2D" parent="AnimalCreationUI/AnimalPreview" unique_id=1976096219]
+position = Vector2(252, 362)
+scale = Vector2(0.24310575, 0.26286283)
+texture = ExtResource("4_gg2au")
+
+[node name="Label" type="Label" parent="AnimalCreationUI/AnimalPreview" unique_id=365054302]
+visible = false
+custom_minimum_size = Vector2(1.845, 0)
+layout_mode = 0
+offset_left = 57.0
+offset_top = -106.0
+offset_right = 234.96
+offset_bottom = -68.520004
+theme_override_font_sizes/font_size = 23
+theme_override_styles/normal = SubResource("StyleBoxFlat_oaf1g")
+text = " Animal Name:"
 
 [node name="ConfirmButton" type="Button" parent="AnimalCreationUI" unique_id=166928209]
 layout_mode = 0
