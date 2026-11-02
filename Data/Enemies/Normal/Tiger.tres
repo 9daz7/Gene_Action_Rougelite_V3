@@ -6,7 +6,7 @@
 [ext_resource type="Script" uid="uid://bnmm0xqkm6atb" path="res://Scripts/Moves/MoveResource.gd" id="2_qr4im"]
 [ext_resource type="Resource" uid="uid://cfsalnn48dv3f" path="res://Data/Moves/Bite.tres" id="3_aadt6"]
 [ext_resource type="Resource" uid="uid://dssodq4lr1182" path="res://Data/Moves/Protect.tres" id="4_l0ws3"]
-[ext_resource type="Resource" uid="uid://deobyt5he5kb8" path="res://Data/Moves/Quick strike.tres" id="5_syoiu"]
+[ext_resource type="Resource" uid="uid://deobyt5he5kb8" path="res://Data/Moves/QuickStrike.tres" id="5_syoiu"]
 [ext_resource type="Texture2D" uid="uid://btha0go4fr6sq" path="res://Assets/Sprites/enemypng.png" id="8_syoiu"]
 
 [resource]

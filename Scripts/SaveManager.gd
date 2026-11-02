@@ -109,6 +109,13 @@ func save_game(
 			_serialize_potion_storage(),
 
 		# --------------------------------------------------
+		# Animal Build
+		# --------------------------------------------------
+
+		"animal_build":
+			_serialize_animal_build(run_manager),
+
+		# --------------------------------------------------
 		# Player Potion Pockets
 		# --------------------------------------------------
 
@@ -303,6 +310,17 @@ func load_game(
 				permanent_manager.gene_counts[
 					gene.gene_name
 				] = count
+
+	# ==================================================
+	# Load Last-Used Deebo Build
+	# ==================================================
+
+	if data.has("animal_build"):
+
+		_deserialize_animal_build(
+			data["animal_build"],
+			run_manager
+		)
 
 	# ==================================================
 	# Load Gene Storage Upgrade
@@ -678,3 +696,102 @@ func _find_gene(
 			return gene
 
 	return null
+
+
+func _serialize_animal_build(
+	run_manager: RunManager
+) -> Dictionary:
+
+	var build: AnimalBuildResource = run_manager.current_animal_build
+
+	if build == null:
+		return {}
+
+	if build.animal == null or build.animal.resource_path.is_empty():
+		push_warning("Cannot save animal build: Animal resource has no valid path")
+		return {}
+
+	var gene_paths: Array[String] = []
+	for gene in build.genes:
+		if gene == null:
+			continue
+
+		if gene.resource_path.is_empty():
+			push_warning("Cannot save gene in animal build: Resource has no valid path")
+			continue
+
+		gene_paths.append(gene.resource_path)
+
+	var move_paths: Array[String] = []
+	for move in build.moves:
+		if move == null:
+			continue
+
+		if move.resource_path.is_empty():
+			push_warning("Cannot save move in animal build: Resource has no valid path")
+			continue
+
+		move_paths.append(move.resource_path)
+
+	return {
+		"animal_name": build.animal_name,
+		"animal_path": build.animal.resource_path,
+		"gene_paths": gene_paths,
+		"move_paths": move_paths,
+		"adaptation_limit": build.adaptation_limit
+	}
+
+
+func _deserialize_animal_build(
+	saved_build: Variant,
+	run_manager: RunManager
+) -> void:
+
+	if not saved_build is Dictionary:
+		return
+
+	var animal_path: String = str(saved_build.get("animal_path", ""))
+
+	if animal_path.is_empty():
+		push_warning("Could not restore animal build: Missing animal resource path")
+		return
+
+	var animal := load(animal_path) as AnimalResource
+
+	if animal == null:
+		push_warning("Could not load saved animal resource: " + animal_path)
+		return
+
+	var build := AnimalBuildResource.new()
+	build.animal_name = str(saved_build.get("animal_name", "Deebo"))
+	build.animal = animal
+	build.adaptation_limit = int(saved_build.get("adaptation_limit", 6))
+
+	var saved_gene_paths = saved_build.get("gene_paths", [])
+	if saved_gene_paths is Array:
+		for path in saved_gene_paths:
+			var gene := load(str(path)) as GeneResource
+
+			if gene == null:
+				push_warning("Could not load saved build gene: " + str(path))
+				continue
+
+			build.genes.append(gene)
+
+	var saved_move_paths = saved_build.get("move_paths", [])
+	if saved_move_paths is Array:
+		for path in saved_move_paths:
+			var move := load(str(path)) as MoveResource
+
+			if move == null:
+				push_warning("Could not load saved build move: " + str(path))
+				continue
+
+			build.moves.append(move)
+
+	build.calculate_stats()
+	run_manager.set_animal_build(build)
+
+	print("RESTORED ANIMAL BUILD:", build.animal_name)
+	print("Restored genes:", build.genes)
+	print("Restored moves:", build.moves)

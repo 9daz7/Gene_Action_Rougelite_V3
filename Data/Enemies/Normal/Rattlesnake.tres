@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cnlwwn0eoa0pn" path="res://Scripts/Genes/GeneResource.gd" id="1_lm88q"]
 [ext_resource type="Script" uid="uid://bnmm0xqkm6atb" path="res://Scripts/Moves/MoveResource.gd" id="2_lm88q"]
-[ext_resource type="Resource" uid="uid://deobyt5he5kb8" path="res://Data/Moves/Quick strike.tres" id="3_6ntmi"]
+[ext_resource type="Resource" uid="uid://deobyt5he5kb8" path="res://Data/Moves/QuickStrike.tres" id="3_6ntmi"]
 [ext_resource type="Script" uid="uid://byxi3hsf2x8dx" path="res://Scripts/Enemies/EnemyResource.gd" id="3_47fc4"]
 [ext_resource type="Resource" uid="uid://dssodq4lr1182" path="res://Data/Moves/Protect.tres" id="4_2kc6e"]
 [ext_resource type="Resource" uid="uid://bk4tdmsrim677" path="res://Data/Moves/PoisonBite.tres" id="5_81s2l"]

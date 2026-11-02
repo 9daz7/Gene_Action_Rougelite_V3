@@ -157,6 +157,26 @@ func create_player_party() -> void:
 
 	get_tree().current_scene.add_child(player_party)
 
+	var combat_controller := player_party.get_node_or_null(
+		"ActionCombatController3D"
+	) as ActionCombatController3D
+
+	if combat_controller == null:
+		push_error(
+			"RoomManager: ActionCombatController3D is missing from Player3D."
+		)
+		return
+
+	if run_manager.current_animal_build == null:
+		push_error(
+			"RoomManager: No animal build available for combat configuration."
+		)
+		return
+
+	combat_controller.configure_build(
+		run_manager.current_animal_build
+	)
+
 	print(
 		"PARTY CREATED | Player ID: ",
 		player_character.get_instance_id(),

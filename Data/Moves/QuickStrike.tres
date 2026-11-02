@@ -1,10 +1,10 @@
 [gd_resource type="Resource" script_class="MoveResource" format=3 uid="uid://deobyt5he5kb8"]
 
-[ext_resource type="Script" uid="uid://cedh0hgwqddn4" path="res://Resources/StatusEffect.gd" id="1_m7xhl"]
-[ext_resource type="Script" uid="uid://bnmm0xqkm6atb" path="res://Scripts/Moves/MoveResource.gd" id="2_a8g2t"]
+[ext_resource type="Script" uid="uid://cedh0hgwqddn4" path="res://Resources/StatusEffect.gd" id="1_h24xy"]
+[ext_resource type="Script" uid="uid://bnmm0xqkm6atb" path="res://Scripts/Moves/MoveResource.gd" id="2_8ln2h"]
 
 [resource]
-script = ExtResource("2_a8g2t")
+script = ExtResource("2_8ln2h")
 hitbox_type = 1
 move_name = "Quick strike"
 description = "overwhelming speed is used to quickly attack the opponent."

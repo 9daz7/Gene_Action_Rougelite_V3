@@ -2487,8 +2487,6 @@ func reset_run() -> void:
 
 	enemies_defeated = 0
 
-	current_animal_build = null
-
 	if run_mutagen_manager != null:
 
 		run_mutagen_manager.reset()

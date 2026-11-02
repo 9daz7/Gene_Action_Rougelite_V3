@@ -27,10 +27,35 @@ var deebo_position: CombatPosition = CombatPosition.BACK
 # Combat
 # ==================================================
 
+const MOVE_HITBOX_SCENE: PackedScene = preload(
+	"res://Scenes/Battle/MoveHitbox3D.tscn"
+)
+
 @export_group("Deebo Moves")
 @export var bite_move: MoveResource
 #@export var protect_move: MoveResource
 @export var gene_move: MoveResource
+
+
+func configure_build(build: AnimalBuildResource) -> void:
+
+	if build == null:
+		push_warning("ACTION COMBAT: Cannot configure moves — build is null.")
+		return
+
+	# Move 1: Default biological attack (Bite).
+	# Move 2: Protect remains reserved for future use.
+	# Move 3: Selected gene move.
+	gene_move = null
+
+	if build.moves.size() > 0:
+		gene_move = build.moves[0]
+
+	print("DEEB0 MOVE CONFIGURATION")
+	print("Move 1: ", bite_move.move_name if bite_move != null else "MISSING")
+	print("Move 2: Protect (currently disabled)")
+	print("Move 3: ", gene_move.move_name if gene_move != null else "NONE SELECTED")
+
 
 @export_group("Bite")
 @export var bite_lunge_distance: float = 1.2
@@ -96,6 +121,56 @@ var deebo_swap_target: Vector3
 
 var is_action_locked: bool = false
 var current_action: StringName = &""
+
+
+# ==================================================
+# Move Hitboxes
+# ==================================================
+
+func _spawn_move_hitbox(
+	move: MoveResource,
+	hitbox_owner: Node3D,
+	direction: Vector3
+) -> void:
+
+	if move == null or hitbox_owner == null:
+		return
+
+	var scene := get_tree().current_scene
+
+	if scene == null:
+		return
+
+	var hitbox := MOVE_HITBOX_SCENE.instantiate() as MoveHitbox3D
+
+	if hitbox == null:
+		push_error("COMBAT: Failed to create MoveHitbox3D.")
+		return
+
+	scene.add_child(hitbox)
+
+	hitbox.configure(move, hitbox_owner)
+
+	if hitbox.collision_shape.shape == null:
+		hitbox.queue_free()
+		return
+
+	# Keep the attack direction horizontal.
+	var attack_direction := direction
+	attack_direction.y = 0.0
+
+	if attack_direction.length_squared() < 0.001:
+		attack_direction = Vector3.FORWARD
+	else:
+		attack_direction = attack_direction.normalized()
+
+	# Position the hitbox in front of the attacker.
+	hitbox.global_position = (
+		hitbox_owner.global_position
+		+ attack_direction * (move.hitbox_offset / 100.0)
+	)
+
+	hitbox.activate()
 
 
 func begin_action(action_name: StringName) -> bool:
@@ -444,25 +519,12 @@ func _perform_gene_move() -> void:
 		_finish_deebo_move()
 		return
 
-	# Damage nearby enemies.
-	for enemy_node in get_tree().get_nodes_in_group("enemies_3d"):
-		if not is_instance_valid(enemy_node):
-			continue
-
-		var enemy: Node = enemy_node.get_parent()
-		if not is_instance_valid(enemy):
-			continue
-
-		if not enemy is CharacterBody3D:
-			continue
-
-		if not enemy.has_method("take_damage"):
-			continue
-
-		var enemy_body: CharacterBody3D = enemy as CharacterBody3D
-
-		if enemy_body.global_position.distance_to(deebo.global_position) <= 1.5:
-			enemy_body.take_damage(move.power)
+	# Spawn the configured move hitbox.
+	_spawn_move_hitbox(
+		move,
+		deebo,
+		aim_direction
+	)
 
 	# Return Deebo to his starting position.
 	if is_instance_valid(deebo):

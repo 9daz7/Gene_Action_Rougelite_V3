@@ -6,7 +6,7 @@
 [ext_resource type="Resource" uid="uid://mlgg5l341ho" path="res://Data/Genes/CheetahSpeedGene.tres" id="4_dkwka"]
 [ext_resource type="Resource" uid="uid://73ylas6rloet" path="res://Data/Moves/Outspeed.tres" id="5_5lqpm"]
 [ext_resource type="Resource" uid="uid://dssodq4lr1182" path="res://Data/Moves/Protect.tres" id="5_qvu7r"]
-[ext_resource type="Resource" uid="uid://deobyt5he5kb8" path="res://Data/Moves/Quick strike.tres" id="6_5bc27"]
+[ext_resource type="Resource" uid="uid://deobyt5he5kb8" path="res://Data/Moves/QuickStrike.tres" id="6_5bc27"]
 [ext_resource type="Texture2D" uid="uid://btha0go4fr6sq" path="res://Assets/Sprites/enemypng.png" id="8_qvu7r"]
 
 [resource]
