@@ -1,0 +1,33 @@
+[gd_scene format=3 uid="uid://ddgu5mvg18w5x"]
+
+[ext_resource type="Script" uid="uid://bfkgfvhlqcjqh" path="res://Scripts/UI/BuildSlot.gd" id="1_om558"]
+
+[node name="BuildSlot" type="Button" unique_id=1884493439]
+custom_minimum_size = Vector2(110, 100)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -1810.0
+offset_bottom = -980.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_om558")
+
+[node name="SlotContent" type="VBoxContainer" parent="." unique_id=1635635498]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="SlotName" type="Label" parent="SlotContent" unique_id=265606800]
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="SlotDescription" type="Label" parent="SlotContent" unique_id=1364577595]
+custom_maximum_size = Vector2(100, 90)
+layout_mode = 2
+horizontal_alignment = 1
+autowrap_mode = 2

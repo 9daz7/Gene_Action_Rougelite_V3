@@ -3,8 +3,7 @@
 [ext_resource type="Script" uid="uid://bt88ti68bhrxf" path="res://Scenes/LabHub/LabHub.gd" id="1_n326t"]
 [ext_resource type="Script" uid="uid://c35qlyaynfr6s" path="res://Scenes/LabHub/StartRunButton.gd" id="2_3lbnj"]
 [ext_resource type="Texture2D" uid="uid://bdlu6g54uhyaa" path="res://Assets/backgrounds/labhub_temp.jpg" id="2_8b6v6"]
-[ext_resource type="Script" uid="uid://bgvjsg4fcjj6y" path="res://Scripts/UI/AnimalCreationUI.gd" id="3_b8a4m"]
-[ext_resource type="Texture2D" uid="uid://rq85nl11ce4q" path="res://Assets/Sprites/Animals/deebo_asset_test_gene_select.png" id="4_gg2au"]
+[ext_resource type="PackedScene" uid="uid://bjqn1y4cmld73" path="res://Scenes/UI/AnimalCreationUI.tscn" id="4_gg2au"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_npkn0"]
 bg_color = Color(0.07284262, 0.072842635, 0.072842576, 1)
@@ -24,54 +23,6 @@ border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0.20392157, 0.20392157, 0.20392157, 1)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gs0tk"]
-bg_color = Color(0.16078432, 0.16078432, 0.16078432, 0.4509804)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(0.89492244, 0.89492244, 0.8949223, 1)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oaf1g"]
-bg_color = Color(0.07450981, 0.07450981, 0.07450981, 1)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(0.20392157, 0.20392157, 0.20392157, 1)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oa181"]
-bg_color = Color(0.07450981, 0.07450981, 0.07450981, 1)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(0.20392157, 0.20392157, 0.20392157, 1)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7rd3d"]
-bg_color = Color(0.07450981, 0.07450981, 0.07450981, 1)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
 border_color = Color(0.20392157, 0.20392157, 0.20392157, 1)
 corner_radius_top_left = 8
 corner_radius_top_right = 8
@@ -118,124 +69,5 @@ offset_bottom = 940.0
 theme_override_font_sizes/font_size = 24
 text = "Gene Storage: 0 / 10"
 
-[node name="AnimalCreationUI" type="Control" parent="." unique_id=1094525652]
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-script = ExtResource("3_b8a4m")
-
-[node name="AnimalPanel" type="Panel" parent="AnimalCreationUI" unique_id=483790985]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 1295.0
-offset_top = 154.0
-offset_right = 1632.0
-offset_bottom = 762.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="AnimalName" type="LineEdit" parent="AnimalCreationUI" unique_id=349907153]
-visible = false
-custom_minimum_size = Vector2(400, 50)
+[node name="AnimalCreationUI" parent="." unique_id=1843400017 instance=ExtResource("4_gg2au")]
 layout_mode = 0
-offset_left = 1286.13
-offset_top = 60.85
-offset_right = 1686.13
-offset_bottom = 110.85
-theme_override_styles/normal = SubResource("StyleBoxFlat_gs0tk")
-
-[node name="GeneSelection" type="Control" parent="AnimalCreationUI" unique_id=2131818571]
-custom_minimum_size = Vector2(300, 400)
-anchors_preset = 0
-offset_left = 150.0
-offset_top = 300.0
-offset_right = 450.0
-offset_bottom = 700.00006
-
-[node name="RarityTabs" type="HBoxContainer" parent="AnimalCreationUI/GeneSelection" unique_id=970615012]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="GeneList" type="ScrollContainer" parent="AnimalCreationUI/GeneSelection" unique_id=512336167]
-custom_minimum_size = Vector2(300, 500)
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="GeneContainer" type="VBoxContainer" parent="AnimalCreationUI/GeneSelection/GeneList" unique_id=1670732218]
-custom_minimum_size = Vector2(300, 500)
-layout_mode = 2
-
-[node name="SelectedGenes" type="HBoxContainer" parent="AnimalCreationUI/GeneSelection" unique_id=1680196876]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="MoveSelection" type="Control" parent="AnimalCreationUI" unique_id=60119982]
-custom_minimum_size = Vector2(300, 400)
-anchors_preset = 0
-offset_left = 485.055
-offset_top = 300.0
-offset_right = 785.05505
-offset_bottom = 700.003
-
-[node name="AvailabelMoves" type="ScrollContainer" parent="AnimalCreationUI/MoveSelection" unique_id=2134931958]
-custom_minimum_size = Vector2(300, 500)
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="MoveContainer" type="VBoxContainer" parent="AnimalCreationUI/MoveSelection/AvailabelMoves" unique_id=1294086813]
-custom_minimum_size = Vector2(300, 500)
-layout_mode = 2
-
-[node name="SelectedMoves" type="HBoxContainer" parent="AnimalCreationUI/MoveSelection" unique_id=262138431]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="AnimalPreview" type="Control" parent="AnimalCreationUI" unique_id=1763062572]
-custom_minimum_size = Vector2(500, 800)
-anchors_preset = 0
-offset_left = 1232.0
-offset_top = 119.0
-offset_right = 1732.0
-offset_bottom = 919.0
-
-[node name="Sprite2D" type="Sprite2D" parent="AnimalCreationUI/AnimalPreview" unique_id=1976096219]
-position = Vector2(252, 362)
-scale = Vector2(0.24310575, 0.26286283)
-texture = ExtResource("4_gg2au")
-
-[node name="Label" type="Label" parent="AnimalCreationUI/AnimalPreview" unique_id=365054302]
-visible = false
-custom_minimum_size = Vector2(1.845, 0)
-layout_mode = 0
-offset_left = 57.0
-offset_top = -106.0
-offset_right = 234.96
-offset_bottom = -68.520004
-theme_override_font_sizes/font_size = 23
-theme_override_styles/normal = SubResource("StyleBoxFlat_oaf1g")
-text = " Animal Name:"
-
-[node name="ConfirmButton" type="Button" parent="AnimalCreationUI" unique_id=166928209]
-layout_mode = 0
-offset_left = 250.0
-offset_top = 850.0
-offset_right = 325.0
-offset_bottom = 885.0
-theme_override_styles/normal = SubResource("StyleBoxFlat_oa181")
-text = "confirm"
-
-[node name="CancelButton" type="Button" parent="AnimalCreationUI" unique_id=241583471]
-layout_mode = 0
-offset_left = 350.0
-offset_top = 850.0
-offset_right = 425.0
-offset_bottom = 885.0
-theme_override_styles/normal = SubResource("StyleBoxFlat_7rd3d")
-text = "cancel"
