@@ -32,9 +32,10 @@ const BITE_MOVE_PATH = (
 const PROTECT_MOVE_PATH = (
 	"res://Data/Moves/Protect.tres"
 )
-const GENE_MOVE_PATH = (
-	"res://Data/Moves/UnstoppableCharge.tres"
-)
+
+#const GENE_MOVE_PATH = (
+	#"res://Data/Moves/UnstoppableCharge.tres"
+#)
 
 const ACTION_COMBAT_CONTROLLER = preload(
 	"res://Scripts/ActionBattle/ActionCombatController.gd"

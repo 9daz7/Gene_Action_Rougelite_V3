@@ -64,9 +64,9 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 1295.0
+offset_left = 1228.57
 offset_top = 154.0
-offset_right = 1632.0
+offset_right = 1565.57
 offset_bottom = 762.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -136,10 +136,10 @@ mouse_filter = 2
 [node name="AnimalPreview" type="Control" parent="AnimalBuildDisplay" unique_id=1776680361]
 custom_minimum_size = Vector2(500, 800)
 anchors_preset = 0
-offset_left = 1232.0
-offset_top = 119.0
-offset_right = 1732.0
-offset_bottom = 919.0
+offset_left = 1154.7949
+offset_top = 122.0
+offset_right = 1654.7949
+offset_bottom = 922.0
 mouse_filter = 2
 
 [node name="Sprite2D" type="Sprite2D" parent="AnimalBuildDisplay/AnimalPreview" unique_id=1159895179]
@@ -159,12 +159,20 @@ theme_override_font_sizes/font_size = 23
 theme_override_styles/normal = SubResource("StyleBoxFlat_oaf1g")
 text = " Animal Name:"
 
+[node name="Label" type="Label" parent="AnimalBuildDisplay" unique_id=1722230815]
+layout_mode = 0
+offset_left = 931.0
+offset_top = 272.0
+offset_right = 1041.0
+offset_bottom = 295.0
+text = "Genes"
+
 [node name="GeneSlots" type="GridContainer" parent="AnimalBuildDisplay" unique_id=775497699]
 layout_mode = 0
-offset_left = 1056.205
-offset_top = 300.0
-offset_right = 1280.2052
-offset_bottom = 608.0
+offset_left = 932.0
+offset_top = 303.0
+offset_right = 1216.0
+offset_bottom = 671.0
 mouse_filter = 2
 columns = 2
 
@@ -186,18 +194,33 @@ layout_mode = 2
 [node name="GeneSlot6" parent="AnimalBuildDisplay/GeneSlots" unique_id=1827834631 instance=ExtResource("3_hndwb")]
 layout_mode = 2
 
-[node name="MoveSlots" type="VBoxContainer" parent="AnimalBuildDisplay" unique_id=1692715302]
+[node name="MoveSlots" type="GridContainer" parent="AnimalBuildDisplay" unique_id=1934950793]
 layout_mode = 0
-offset_left = 1685.0
-offset_top = 300.0
-offset_right = 1795.0
-offset_bottom = 504.0
+offset_left = 1618.7949
+offset_top = 303.0
+offset_right = 1902.7949
+offset_bottom = 601.0
 
-[node name="BiteSlot" parent="AnimalBuildDisplay/MoveSlots" unique_id=88225102 instance=ExtResource("3_hndwb")]
+[node name="Label" type="Label" parent="AnimalBuildDisplay/MoveSlots" unique_id=894708665]
+layout_mode = 2
+text = "Default Moves"
+
+[node name="DefaultMoveSlots" type="HBoxContainer" parent="AnimalBuildDisplay/MoveSlots" unique_id=486722279]
 layout_mode = 2
 
-[node name="GeneMoveSlot" parent="AnimalBuildDisplay/MoveSlots" unique_id=1247394645 instance=ExtResource("3_hndwb")]
+[node name="BiteSlot" parent="AnimalBuildDisplay/MoveSlots/DefaultMoveSlots" unique_id=88225102 instance=ExtResource("3_hndwb")]
 layout_mode = 2
+
+[node name="ProtectSlot" parent="AnimalBuildDisplay/MoveSlots/DefaultMoveSlots" unique_id=1279001011 instance=ExtResource("3_hndwb")]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="AnimalBuildDisplay/MoveSlots" unique_id=338844119]
+layout_mode = 2
+text = "Gene Move"
+
+[node name="GeneMoveSlot" parent="AnimalBuildDisplay/MoveSlots" unique_id=1597472437 instance=ExtResource("3_hndwb")]
+layout_mode = 2
+size_flags_horizontal = 0
 
 [node name="Buttons" type="Control" parent="." unique_id=611260888]
 anchors_preset = 0

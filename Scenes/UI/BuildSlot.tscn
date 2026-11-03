@@ -2,15 +2,28 @@
 
 [ext_resource type="Script" uid="uid://bfkgfvhlqcjqh" path="res://Scripts/UI/BuildSlot.gd" id="1_om558"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pqlo4"]
+bg_color = Color(0.14044744, 0.14044744, 0.14044744, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0, 0.19171384, 0.0012939952, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
 [node name="BuildSlot" type="Button" unique_id=1884493439]
-custom_minimum_size = Vector2(110, 100)
+custom_minimum_size = Vector2(140, 120)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = -1810.0
-offset_bottom = -980.0
+offset_right = -1780.0
+offset_bottom = -960.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/pressed = SubResource("StyleBoxFlat_pqlo4")
 script = ExtResource("1_om558")
 
 [node name="SlotContent" type="VBoxContainer" parent="." unique_id=1635635498]
@@ -27,7 +40,8 @@ layout_mode = 2
 horizontal_alignment = 1
 
 [node name="SlotDescription" type="Label" parent="SlotContent" unique_id=1364577595]
-custom_maximum_size = Vector2(100, 90)
+custom_minimum_size = Vector2(0, 40)
+custom_maximum_size = Vector2(140, 90)
 layout_mode = 2
 horizontal_alignment = 1
 autowrap_mode = 2

@@ -32,9 +32,8 @@ const MOVE_HITBOX_SCENE: PackedScene = preload(
 )
 
 @export_group("Deebo Moves")
-@export var bite_move: MoveResource
-#@export var protect_move: MoveResource
-@export var gene_move: MoveResource
+var default_move: MoveResource
+var gene_move: MoveResource
 
 
 func configure_build(build: AnimalBuildResource) -> void:
@@ -43,18 +42,21 @@ func configure_build(build: AnimalBuildResource) -> void:
 		push_warning("ACTION COMBAT: Cannot configure moves — build is null.")
 		return
 
-	# Move 1: Default biological attack (Bite).
-	# Move 2: Protect remains reserved for future use.
-	# Move 3: Selected gene move.
+	default_move = build.selected_default_move
 	gene_move = null
 
 	if build.moves.size() > 0:
 		gene_move = build.moves[0]
 
-	print("DEEB0 MOVE CONFIGURATION")
-	print("Move 1: ", bite_move.move_name if bite_move != null else "MISSING")
-	print("Move 2: Protect (currently disabled)")
-	print("Move 3: ", gene_move.move_name if gene_move != null else "NONE SELECTED")
+	print("DEEBO MOVE CONFIGURATION")
+	print(
+		"Move 1: ",
+		default_move.move_name if default_move != null else "MISSING"
+	)
+	print(
+		"Move 3: ",
+		gene_move.move_name if gene_move != null else "NONE SELECTED"
+	)
 
 
 @export_group("Bite")

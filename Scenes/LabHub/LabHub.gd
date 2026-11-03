@@ -10,6 +10,9 @@ signal start_run_requested
 signal build_confirmed(build: AnimalBuildResource)
 #signal lab_closed
 
+var run_manager: RunManager
+var save_manager
+
 
 # ==================================================
 # Onready Variables
@@ -42,6 +45,10 @@ func setup(
 	new_run_manager: RunManager,
 	new_gene_database: GeneDatabase
 ) -> void:
+
+	run_manager = new_run_manager
+
+	save_manager = run_manager.save_manager
 
 	animal_creation.setup(
 		new_run_manager,
@@ -152,6 +159,13 @@ func _on_build_confirmed(
 	print(
 		"LabHub received build:",
 		build.animal_name
+	)
+
+	run_manager.set_animal_build(build)
+
+	save_manager.save_game(
+		PermanentProgressionManager,
+		run_manager
 	)
 
 	build_confirmed.emit(build)

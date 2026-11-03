@@ -733,11 +733,24 @@ func _serialize_animal_build(
 
 		move_paths.append(move.resource_path)
 
+	var default_move_path := ""
+
+	if build.selected_default_move != null:
+
+		if not build.selected_default_move.resource_path.is_empty():
+			default_move_path = build.selected_default_move.resource_path
+
+		else:
+			push_warning(
+				"Cannot save default move: Resource has no valid path"
+			)
+
 	return {
 		"animal_name": build.animal_name,
 		"animal_path": build.animal.resource_path,
 		"gene_paths": gene_paths,
 		"move_paths": move_paths,
+		"default_move_path": default_move_path,
 		"adaptation_limit": build.adaptation_limit
 	}
 
@@ -788,6 +801,31 @@ func _deserialize_animal_build(
 				continue
 
 			build.moves.append(move)
+
+	# --------------------------------------------------
+	# Restore Selected Default Move
+	# --------------------------------------------------
+
+	var default_move_path: String = str(
+		saved_build.get(
+			"default_move_path",
+			"res://Data/Moves/Bite.tres"
+		)
+	)
+
+	if default_move_path.is_empty():
+		default_move_path = "res://Data/Moves/Bite.tres"
+
+	var default_move := load(
+		default_move_path
+	) as MoveResource
+
+	if default_move != null:
+		build.selected_default_move = default_move
+	else:
+		push_warning(
+			"Could not load saved default move: " + default_move_path
+		)
 
 	build.calculate_stats()
 	run_manager.set_animal_build(build)

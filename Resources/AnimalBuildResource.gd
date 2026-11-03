@@ -16,6 +16,10 @@ class_name AnimalBuildResource
 @export var genes:Array[GeneResource] = []
 @export var moves:Array[MoveResource] = []
 
+@export var selected_default_move: MoveResource = preload(
+	"res://Data/Moves/Bite.tres"
+)
+
 # --------------------------------------------------
 # Adaptations
 # --------------------------------------------------
