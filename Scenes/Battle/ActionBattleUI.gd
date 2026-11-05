@@ -99,7 +99,7 @@ func update_move_names() -> void:
 		return
 
 	var moves: Array[MoveResource] = [
-		combat_controller.bite_move,
+		combat_controller.default_move,
 		null,
 		combat_controller.gene_move
 	]
@@ -126,7 +126,7 @@ func _process(_delta: float) -> void:
 	if combat_controller == null:
 		return
 
-	_update_cooldown_label(move_1_cooldown, &"bite")
+	_update_cooldown_label(move_1_cooldown, &"default_move")
 	_update_cooldown_label(move_3_cooldown, &"gene_move")
 
 
