@@ -17,6 +17,9 @@ signal died
 var current_health: float = -1.0
 var is_dead: bool = false
 
+var protect_timer: float = 0.0
+var protect_reduction: float = 0.6
+
 
 # --------------------------------------------------
 # Basic Attack
@@ -37,7 +40,10 @@ func _ready() -> void:
 	health_changed.emit(current_health, max_health)
 
 
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
+
+	if protect_timer > 0.0:
+		protect_timer = maxf(protect_timer - delta, 0.0)
 
 	if is_dead:
 		velocity = Vector3.ZERO
@@ -82,12 +88,17 @@ func heal(amount: float) -> void:
 		print("DEEBO HEALED: ", current_health, "/", max_health)
 
 
-func take_damage(amount: float) -> void:
+func take_damage(amount: float, attacker: Node3D = null) -> void:
 
 	if is_dead or amount <= 0.0:
 		return
 
-	current_health = maxf(current_health - amount, 0.0)
+	var final_damage := amount
+
+	if protect_timer > 0.0:
+		final_damage *= (1.0 - protect_reduction)
+
+	current_health = maxf(current_health - final_damage, 0.0)
 	health_changed.emit(current_health, max_health)
 
 	print("Deebo health: ", current_health, "/", max_health)

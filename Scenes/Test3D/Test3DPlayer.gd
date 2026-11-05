@@ -93,6 +93,11 @@ var current_health: float = -1.0
 var is_dead: bool = false
 var death_processed: bool = false
 
+var protect_timer: float = 0.0
+var protect_reduction: float = 0.6
+
+@export var protect_screening_radius: float = 1.0
+
 
 func _ready() -> void:
 
@@ -277,6 +282,9 @@ func set_controls_enabled(enabled: bool) -> void:
 
 
 func _physics_process(delta: float) -> void:
+
+	if protect_timer > 0.0:
+		protect_timer = maxf(protect_timer - delta, 0.0)
 
 	if is_dead:
 		velocity = Vector3.ZERO
@@ -560,23 +568,69 @@ func heal(amount: float) -> void:
 		print("PLAYER HEALED: ", current_health, "/", base_health)
 
 
-func take_damage(amount: float) -> void:
+func take_damage(amount: float, attacker: Node3D = null) -> void:
 
 	if is_dead or amount <= 0.0:
 		return
 
-	print("PLAYER HIT: ", amount, " damage. Current health: ", current_health)
+	var final_damage := amount
 
-	current_health = maxf(current_health - amount, 0.0)
+	if protect_timer > 0.0 and _is_deebo_screening_attacker(attacker):
+		final_damage *= (1.0 - protect_reduction)
+
+	print("PLAYER HIT: ", final_damage, " damage. Current health: ", current_health)
+
+	current_health = maxf(current_health - final_damage, 0.0)
 	health_changed.emit(current_health, base_health)
 
-	print("Player took ", amount, " damage. Health: ",
+	print("Player took ", final_damage, " damage. Health: ",
 		current_health, "/", base_health)
 
 	if current_health <= 0.0:
 		_die()
 
 	print("PLAYER HEALTH TRACE | ", current_health, "/", base_health)
+
+
+func _is_deebo_screening_attacker(attacker: Node3D) -> bool:
+
+	if not is_instance_valid(attacker):
+		return false
+
+	if combat_controller == null:
+		return false
+
+	var deebo_character := combat_controller.deebo
+
+	if not is_instance_valid(deebo_character):
+		return false
+
+	var attacker_position := attacker.global_position
+	var player_position := global_position
+	var deebo_position := deebo_character.global_position
+
+	# Use horizontal positions only.
+	attacker_position.y = 0.0
+	player_position.y = 0.0
+	deebo_position.y = 0.0
+
+	var attack_line := player_position - attacker_position
+
+	if attack_line.length_squared() <= 0.001:
+		return false
+
+	# Find Deebo's position along the attacker-to-player line.
+	var projection := (
+		deebo_position - attacker_position
+	).dot(attack_line) / attack_line.length_squared()
+
+	# Deebo must be between the attacker and Player.
+	if projection <= 0.0 or projection >= 1.0:
+		return false
+
+	var closest_point := attacker_position + attack_line * projection
+
+	return deebo_position.distance_to(closest_point) <= protect_screening_radius
 
 
 func _die() -> void:

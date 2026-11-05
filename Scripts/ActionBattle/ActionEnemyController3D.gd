@@ -501,7 +501,8 @@ func _apply_attack_damage() -> void:
 		) <= damage_share_distance
 	):
 		closest_target.take_damage(
-			attack_damage * primary_damage_ratio
+			attack_damage * primary_damage_ratio,
+			enemy
 		)
 
 		# The first hit may have ended the run.
@@ -513,10 +514,11 @@ func _apply_attack_damage() -> void:
 		# Recheck that the second target can still receive damage.
 		if _can_receive_damage(other_target):
 			other_target.take_damage(
-				attack_damage * (1.0 - primary_damage_ratio)
+				attack_damage * (1.0 - primary_damage_ratio),
+				enemy
 			)
 	else:
-		closest_target.take_damage(attack_damage)
+		closest_target.take_damage(attack_damage, enemy)
 
 
 func _can_receive_damage(target: CharacterBody3D) -> bool:

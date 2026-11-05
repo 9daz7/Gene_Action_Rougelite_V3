@@ -65,6 +65,13 @@ func configure_build(build: AnimalBuildResource) -> void:
 @export var bite_return_duration: float = 0.12
 
 
+@export_group("Protect")
+@export var protect_duration: float = 2.0
+@export var protect_cooldown: float = 5.0
+@export_range(0.0, 1.0, 0.05)
+var protect_damage_reduction: float = 0.6
+
+
 # ==================================================
 # Move Cooldowns
 # ==================================================
@@ -72,7 +79,7 @@ func configure_build(build: AnimalBuildResource) -> void:
 var is_deebo_animating: bool = false
 
 var move_cooldowns: Dictionary = {
-	&"bite": 0.0,
+	&"default_move": 0.0,
 	&"gene_move": 0.0
 }
 
@@ -298,7 +305,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		_start_swap()
 
 	if event.is_action_pressed("select_move_1"):
-		_try_deebo_move(&"bite")
+		_try_deebo_move(&"default_move")
 	#elif event.is_action_pressed("select_move_2"):
 		#_try_deebo_move(&"protect")
 	elif event.is_action_pressed("select_move_3"):
@@ -321,21 +328,27 @@ func _try_deebo_move(action_name: StringName) -> void:
 			return
 
 	match action_name:
-		&"bite":
-			if bite_move == null:
-				push_error("Bite resource is not assigned.")
+
+		&"default_move":
+			if default_move == null:
+				push_error("Default Deebo move is not assigned.")
 				return
 
 			is_deebo_animating = true
-			_perform_bite()
 
+			match default_move.effect_type:
+				MoveResource.MoveEffectType.DAMAGE:
+					_perform_bite()
 
-		#&"protect":
-			#if protect_move == null:
-				#push_error("Protect resource is not assigned.")
-				#finish_action(action_name)
-				#return
-			#_perform_protect()
+				MoveResource.MoveEffectType.PROTECT:
+					_perform_protect()
+
+				_:
+					push_warning(
+						"Unsupported default move: "
+						+ default_move.move_name
+					)
+					_finish_deebo_move()
 
 		&"gene_move":
 			if gene_move == null:
@@ -348,12 +361,12 @@ func _try_deebo_move(action_name: StringName) -> void:
 
 func _perform_bite() -> void:
 
-	if not is_instance_valid(deebo) or bite_move == null:
+	if not is_instance_valid(deebo) or default_move == null:
 		_finish_deebo_move()
 		return
 
 	# Start Bite's cooldown independently from its animation.
-	start_move_cooldown(&"bite", bite_move.cooldown)
+	start_move_cooldown(&"default_move", default_move.cooldown)
 
 	# Bring Deebo to the front before attacking.
 	if deebo_position == CombatPosition.BACK:
@@ -455,7 +468,7 @@ func _perform_bite() -> void:
 
 	# Apply Bite damage if an enemy was found.
 	if is_instance_valid(closest_enemy):
-		closest_enemy.take_damage(bite_move.power)
+		closest_enemy.take_damage(default_move.power)
 
 	# Return Deebo to the starting position.
 	if is_instance_valid(deebo):
@@ -471,8 +484,42 @@ func _perform_bite() -> void:
 
 	# Brief recovery is part of the animation lock, not the cooldown.
 	await get_tree().create_timer(
-		bite_move.hitbox_duration + bite_move.action_recovery_duration
+		default_move.hitbox_duration + default_move.action_recovery_duration
 	).timeout
+
+	_finish_deebo_move()
+
+
+func _perform_protect() -> void:
+
+	if not is_instance_valid(player_character) \
+	or not is_instance_valid(deebo):
+		_finish_deebo_move()
+		return
+
+	if default_move == null:
+		_finish_deebo_move()
+		return
+
+
+	var cooldown := maxf(
+		5.0,
+		maxf(protect_cooldown, default_move.cooldown)
+	)
+
+	start_move_cooldown(&"default_move", cooldown)
+
+	# Protect Deebo unconditionally.
+	deebo.set("protect_timer", protect_duration)
+	deebo.set("protect_reduction", protect_damage_reduction)
+
+	# Player damage reduction still requires Deebo to screen the attacker.
+	player_character.set("protect_timer", protect_duration)
+	player_character.set("protect_reduction", protect_damage_reduction)
+
+	print("PROTECT ACTIVATED")
+	print("Duration: ", protect_duration)
+	print("Damage reduction: ", protect_damage_reduction * 100.0, "%")
 
 	_finish_deebo_move()
 

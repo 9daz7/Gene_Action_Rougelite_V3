@@ -5,7 +5,6 @@
 [ext_resource type="Script" uid="uid://qvid40gklgss" path="res://Scenes/Test3D/Deebo3DTest.gd" id="3_c2khf"]
 [ext_resource type="Texture2D" uid="uid://bjo4cf8ylnke2" path="res://Assets/Sprites/Animals/deebo_asset_test_battle.png" id="4_2hs53"]
 [ext_resource type="Script" uid="uid://dnsixjjeqsb7n" path="res://Scripts/ActionBattle3D/ActionCombatController3D.gd" id="5_2hs53"]
-[ext_resource type="Resource" uid="uid://cfsalnn48dv3f" path="res://Data/Moves/Bite.tres" id="6_u0e30"]
 [ext_resource type="Script" uid="uid://dx4y4stkdd42x" path="res://Scenes/Test3D/Test3DCamera.gd" id="8_u0e30"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_u0e30"]
@@ -154,7 +153,6 @@ shape = SubResource("CapsuleShape3D_o5ld3")
 script = ExtResource("5_2hs53")
 player_character = NodePath("../Player")
 deebo = NodePath("../Deebo")
-bite_move = ExtResource("6_u0e30")
 formation_distance = 1.0
 back_left_offset = 0.5
 formation_follow_speed = 7.0
