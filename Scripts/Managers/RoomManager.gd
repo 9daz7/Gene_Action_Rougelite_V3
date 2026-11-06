@@ -18,6 +18,7 @@ var deebo_character: CharacterBody3D = null
 
 @onready var run_manager = $"../RunManager"
 @onready var save_manager = $"../SaveManager"
+@onready var reward_manager: RewardManager = $"../RewardManager"
 
 @onready var run_mutagen_manager: RunMutagenManager = get_node(
 	"../RunMutagenManager"
@@ -372,6 +373,12 @@ func open_room_scene(room: RoomResource) -> void:
 			Callable(self, "_on_active_room_finished")
 		)
 
+	if active_room_scene.has_signal("reward_requested"):
+		active_room_scene.connect(
+			"reward_requested",
+			Callable(self, "_on_reward_requested")
+		)
+
 	get_tree().current_scene.add_child(
 		active_room_scene
 	)
@@ -432,6 +439,32 @@ func open_room_scene(room: RoomResource) -> void:
 
 		_:
 			pass
+
+
+func _on_reward_requested(enemy_data: EnemyResource) -> void:
+
+	if enemy_data == null:
+		push_error("RoomManager: Reward request has no EnemyResource.")
+		return
+
+	if is_instance_valid(reward_room):
+		push_warning("RoomManager: A reward selection is already open.")
+		return
+
+	if reward_manager == null:
+		push_error("RoomManager: RewardManager reference is missing.")
+		return
+
+	print("================================")
+	print("GENERATING ROOM REWARD")
+	print("Enemy: ", enemy_data.enemy_name)
+	print("================================")
+
+	var rewards: RewardData = reward_manager.generate_rewards(
+		enemy_data
+	)
+
+	open_reward(rewards)
 
 
 func _place_party_at_room_spawn(room: Node) -> void:
@@ -1010,15 +1043,15 @@ func _on_reward_finished(reward) -> void:
 	print("ROOM MANAGER: REWARD FINISHED")
 	print("================================")
 
-	if reward:
+	print("Chosen: ", reward)
 
+	if reward:
 		print(
 			"Chosen:",
 			reward
 		)
 
 	else:
-
 		print("Skipped reward")
 
 	# ==================================================
@@ -1026,7 +1059,6 @@ func _on_reward_finished(reward) -> void:
 	# ==================================================
 
 	if reward:
-
 		apply_reward(
 			reward
 		)
@@ -1036,7 +1068,6 @@ func _on_reward_finished(reward) -> void:
 	# ==================================================
 
 	if is_instance_valid(reward_room):
-
 		reward_room.queue_free()
 
 	reward_room = null
@@ -1045,9 +1076,20 @@ func _on_reward_finished(reward) -> void:
 	# Complete Current Room
 	# ==================================================
 
-	if current_room != null:
+	if is_instance_valid(active_room_scene):
+		if active_room_scene.has_method("complete_room"):
+			print("COMPLETING ACTIVE 3D ROOM")
+			active_room_scene.complete_room()
 
-		complete_room()
+		else:
+			push_error(
+				"RoomManager: Active room has no complete_room() method."
+			)
+
+	else:
+		push_error(
+			"RoomManager: Active room scene is invalid."
+		)
 
 	# ==================================================
 	# Return To Battle Room

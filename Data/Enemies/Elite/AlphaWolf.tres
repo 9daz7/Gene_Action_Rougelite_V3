@@ -12,6 +12,7 @@
 [resource]
 script = ExtResource("2_yk136")
 enemy_name = "Alpha Wolf"
+enemy_type = 1
 aggression = 2.5
 defense = 1.5
 status_preference = 1.5

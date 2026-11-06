@@ -18,6 +18,9 @@ var combat_controller: ActionCombatController3D = null
 var remaining_enemies: int = 0
 var battle_initialized: bool = false
 
+var reward_enemy_data: EnemyResource = null
+var reward_requested_once: bool = false
+
 
 # ==================================================
 # Initialization
@@ -99,6 +102,13 @@ func _register_enemies() -> void:
 
 		connected_enemies.append(enemy)
 
+		# Store the highest-tier enemy resource for this encounter.
+		var enemy_data := enemy.get("enemy_data") as EnemyResource
+
+		if enemy_data != null:
+			if reward_enemy_data == null or enemy_data.enemy_type > reward_enemy_data.enemy_type:
+				reward_enemy_data = enemy_data
+
 		if not enemy.died.is_connected(_on_enemy_died):
 			enemy.died.connect(_on_enemy_died)
 
@@ -137,11 +147,22 @@ func _on_enemy_died() -> void:
 
 func _on_elite_defeated() -> void:
 
-	if room_completed or run_failed:
+	if room_completed or run_failed or reward_requested_once:
 		return
+
+	if reward_enemy_data == null:
+		push_error(
+			"EliteRoom3D: Cannot generate reward. "
+			+ "EnemyResource is missing."
+		)
+		return
+
+	reward_requested_once = true
 
 	print("================================")
 	print("ELITE ENCOUNTER DEFEATED")
+	print("REQUESTING ELITE REWARD")
+	print("Enemy: ", reward_enemy_data.enemy_name)
 	print("================================")
 
-	complete_room()
+	reward_requested.emit(reward_enemy_data)

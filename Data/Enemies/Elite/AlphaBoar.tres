@@ -12,6 +12,7 @@
 [resource]
 script = ExtResource("2_epcwc")
 enemy_name = "Alpha Boar"
+enemy_type = 1
 aggression = 1.5
 defense = 2.0
 base_hp = 95

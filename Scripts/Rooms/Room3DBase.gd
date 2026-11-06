@@ -8,6 +8,7 @@ class_name Room3DBase
 
 signal room_exit_selected(exit_id: int)
 signal room_finished
+signal reward_requested(enemy_data: EnemyResource)
 
 
 # ==================================================

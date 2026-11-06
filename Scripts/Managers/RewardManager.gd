@@ -22,56 +22,67 @@ class_name RewardManager
 # ==================================================
 
 func generate_rewards(
-	enemy: EnemyAnimal
+	enemy_data: EnemyResource
 ) -> RewardData:
 
 	var rewards := RewardData.new()
 
-	# ==================================================
-	# Gold
-	# ==================================================
+	if enemy_data == null:
+		push_error("RewardManager: EnemyResource is missing.")
+		return rewards
 
-	rewards.gold = generate_gold(
-		enemy.enemy_data.enemy_type
-	)
+	# Gene choices
+	rewards.gene_choices = generate_enemy_genes(enemy_data)
 
-	# ==================================================
-	# Gene
-	# ==================================================
-
-	rewards.gene_choices = generate_enemy_genes(enemy)
-
-	# ==================================================
-	# Mutagen
-	# ==================================================
-
+	# Mutagen choices
 	rewards.mutagen_choices = generate_mutagen_rewards()
 
-	# ==================================================
-	# Other Resources
-	# ==================================================
-
-	rewards.resources = generate_resources(enemy.enemy_data.enemy_type)
-
-	print("Rewards generated:")
-
-	for gene in rewards.gene_choices:
-		print("Gene:", gene.gene_name)
-
-	for mutagen in rewards.mutagen_choices:
-
-		print(
-			"Mutagen:",
-			mutagen.mutagen_name,
-			"| Family:",
-			mutagen.get_family_name(),
-			"| Tier:",
-			mutagen.tier
-		)
-
+	print("================================")
+	print("REWARDS GENERATED")
+	print("Enemy: ", enemy_data.enemy_name)
+	print("Enemy type: ", enemy_data.enemy_type)
+	print("Gene choices: ", rewards.gene_choices.size())
+	print("Mutagen choices: ", rewards.mutagen_choices.size())
 	print("================================")
 
 	return rewards
+
+
+func generate_enemy_genes(
+	enemy_data: EnemyResource
+) -> Array[GeneResource]:
+
+	var choices: Array[GeneResource] = []
+
+	if enemy_data == null:
+		return choices
+
+	var amount := 1
+
+	match enemy_data.enemy_type:
+
+		EnemyResource.EnemyType.NORMAL:
+			amount = 1
+
+		EnemyResource.EnemyType.ELITE:
+			amount = 2
+
+		EnemyResource.EnemyType.BOSS:
+			amount = 2
+
+		EnemyResource.EnemyType.CRITICAL_LAB:
+			amount = 2
+
+	var pool: Array[GeneResource] = (
+		enemy_data.drop_gene_pool.duplicate()
+	)
+
+	pool.shuffle()
+
+	for i in range(mini(amount, pool.size())):
+		choices.append(pool[i])
+
+	return choices
 
 
 func generate_gold(enemy_type: EnemyResource.EnemyType) -> int:
@@ -89,41 +100,6 @@ func generate_gold(enemy_type: EnemyResource.EnemyType) -> int:
 
 		_:
 			return 0
-
-
-func generate_enemy_genes(enemy: EnemyAnimal) -> Array[GeneResource]:
-	
-	var choices: Array[GeneResource] = []
-	
-	if enemy == null:
-		print("ERROR: No enemy")
-		return choices
-	
-	if enemy.enemy_data == null:
-		print("ERROR: Enemy has no data")
-		return choices
-
-	var amount := 1
-
-	match enemy.enemy_data.enemy_type:
-
-		EnemyResource.EnemyType.NORMAL:
-			amount = 1
-
-		EnemyResource.EnemyType.ELITE:
-			amount = randi_range(1, 2)
-
-		EnemyResource.EnemyType.BOSS:
-			amount = 2
-			
-	var pool: Array[GeneResource] = enemy.enemy_data.drop_gene_pool.duplicate()
-
-	pool.shuffle()
-
-	for i in range(min(amount, pool.size())):
-		choices.append(pool[i])
-
-	return choices
 
 
 func generate_gene_rewards(amount : int = 3) -> Array[GeneResource]:

@@ -12,6 +12,7 @@
 [resource]
 script = ExtResource("2_i4ky3")
 enemy_name = "Giant Marten"
+enemy_type = 1
 aggression = 2.0
 status_preference = 1.5
 base_hp = 60

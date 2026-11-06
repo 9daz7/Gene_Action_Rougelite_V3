@@ -6,6 +6,9 @@ var combat_controller: ActionCombatController3D = null
 
 var remaining_enemies: int = 0
 
+var reward_enemy_data: EnemyResource = null
+var reward_requested_once: bool = false
+
 
 func _ready() -> void:
 
@@ -66,6 +69,7 @@ func _register_enemies() -> void:
 
 	#var enemies := get_tree().get_nodes_in_group("enemies_3d")
 	var connected_enemies: Array[Node] = []
+	var combined_gene_pool: Array[GeneResource] = []
 
 	for controller in find_children("*", "", true, false):
 		if not controller.is_in_group("enemies_3d"):
@@ -78,17 +82,41 @@ func _register_enemies() -> void:
 
 		connected_enemies.append(enemy)
 
+		# Get this enemy's resource.
+		var enemy_data := enemy.get("enemy_data") as EnemyResource
+
+		if enemy_data != null:
+
+			# Use the first valid enemy as the encounter reward source.
+			if reward_enemy_data == null:
+				reward_enemy_data = enemy_data
+
+			# Combine gene pools from all enemies.
+			for gene in enemy_data.drop_gene_pool:
+				if not combined_gene_pool.has(gene):
+					combined_gene_pool.append(gene)
+
 		if enemy.has_signal("died"):
 			if not enemy.died.is_connected(_on_enemy_died):
 				enemy.died.connect(_on_enemy_died)
 
 	remaining_enemies = connected_enemies.size()
+
+	# Give the encounter reward access to every enemy's gene pool.
+	if reward_enemy_data != null:
+		reward_enemy_data = reward_enemy_data.duplicate()
+		reward_enemy_data.drop_gene_pool = combined_gene_pool
+
 	print("Enemies registered: ", remaining_enemies)
+	print("Encounter gene pool: ", combined_gene_pool.size())
+
+	if remaining_enemies == 0:
+		push_error("BattleRoom3D: No enemies registered.")
 
 
 func _on_enemy_died() -> void:
 
-	if room_completed:
+	if room_completed or run_failed or reward_requested_once:
 		return
 
 	remaining_enemies = maxi(remaining_enemies - 1, 0)
@@ -96,7 +124,30 @@ func _on_enemy_died() -> void:
 	print("Enemies remaining: ", remaining_enemies)
 
 	if remaining_enemies == 0:
-		complete_room()
+		_on_battle_defeated()
+
+
+func _on_battle_defeated() -> void:
+
+	if room_completed or run_failed or reward_requested_once:
+		return
+
+	if reward_enemy_data == null:
+		push_error(
+			"BattleRoom3D: Cannot generate reward. "
+			+ "EnemyResource is missing."
+		)
+		return
+
+	reward_requested_once = true
+
+	print("================================")
+	print("BATTLE ENCOUNTER DEFEATED")
+	print("REQUESTING BATTLE REWARD")
+	print("Enemy: ", reward_enemy_data.enemy_name)
+	print("================================")
+
+	reward_requested.emit(reward_enemy_data)
 
 
 #func _register_room_exits() -> void:
