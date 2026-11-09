@@ -35,6 +35,13 @@ text = "Manage Mutagen"
 layout_mode = 2
 text = "Heal 50%"
 
+[node name="UploadGenesButton" type="Button" parent="VBoxContainer/OperationContainer" unique_id=1521460567]
+layout_mode = 2
+text = "Upload Genes"
+
+[node name="UploadStatusLabel" type="Label" parent="VBoxContainer" unique_id=1453282473]
+layout_mode = 2
+
 [node name="ContinueButton" type="Button" parent="VBoxContainer" unique_id=2134840465]
 layout_mode = 2
 text = "Continue"

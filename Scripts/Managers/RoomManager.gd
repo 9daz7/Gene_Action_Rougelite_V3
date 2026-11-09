@@ -1217,6 +1217,66 @@ func apply_reward(
 
 
 # ==================================================
+# Pending Gene Upload
+# ==================================================
+
+func upload_pending_genes() -> Dictionary:
+
+	if run_manager == null:
+		push_error("RoomManager: RunManager is missing.")
+		return {"uploaded": 0, "remaining": 0}
+
+	if save_manager == null:
+		push_error("RoomManager: SaveManager is missing.")
+		return {
+			"uploaded": 0,
+			"remaining": run_manager.pending_genes.size()
+		}
+
+	if run_manager.pending_genes.is_empty():
+		print("No pending genes to upload.")
+		return {"uploaded": 0, "remaining": 0}
+
+	var remaining_genes: Array[GeneResource] = []
+	var uploaded_count: int = 0
+
+	for gene in run_manager.pending_genes:
+
+		if PermanentProgressionManager.add_gene(gene):
+			uploaded_count += 1
+
+			print(
+				"GENE UPLOADED:",
+				gene.gene_name
+			)
+
+		else:
+			remaining_genes.append(gene)
+
+	# Only successfully uploaded genes are removed.
+	run_manager.pending_genes = remaining_genes
+
+	# Save once after the entire upload operation.
+	if uploaded_count > 0:
+
+		save_manager.save_game(
+			PermanentProgressionManager,
+			run_manager
+		)
+
+	print("================================")
+	print("GENE UPLOAD COMPLETE")
+	print("Uploaded:", uploaded_count)
+	print("Still pending:", remaining_genes.size())
+	print("================================")
+
+	return {
+		"uploaded": uploaded_count,
+		"remaining": remaining_genes.size()
+	}
+
+
+# ==================================================
 # Room Exits
 # ==================================================
 
@@ -1351,11 +1411,32 @@ func close_active_room() -> void:
 	print("ROOM MANAGER: CLOSING ACTIVE ROOM")
 	print("================================")
 
-	if active_room_scene == null:
+	# ==================================================
+	# Close Temporary Interior
+	# ==================================================
 
-		print("No active room scene.")
+	if is_instance_valid(active_temporary_interior_scene):
 
-		return
+		print(
+			"Closing temporary interior:",
+			active_temporary_interior_scene.name
+		)
+
+		active_temporary_interior_scene.queue_free()
+
+		active_temporary_interior_scene = null
+
+
+	# ==================================================
+	# Clear Saved Interior Transforms
+	# ==================================================
+
+	has_saved_run_room_party_transform = false
+
+
+	# ==================================================
+	# Close Exterior Room
+	# ==================================================
 
 	if is_instance_valid(active_room_scene):
 
@@ -1370,6 +1451,8 @@ func close_active_room() -> void:
 		active_room_scene.queue_free()
 
 	active_room_scene = null
+
+	print("ACTIVE ROOM CLEANUP COMPLETE")
 
 
 func close_player_party() -> void:

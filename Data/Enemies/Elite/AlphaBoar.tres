@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://bnmm0xqkm6atb" path="res://Scripts/Moves/MoveResource.gd" id="2_6cwd0"]
 [ext_resource type="Script" uid="uid://byxi3hsf2x8dx" path="res://Scripts/Enemies/EnemyResource.gd" id="2_epcwc"]
 [ext_resource type="Resource" uid="uid://8fymemyaaa2m" path="res://Data/Moves/attack.tres" id="3_ax2ji"]
-[ext_resource type="Resource" uid="uid://djvhx41gomy2n" path="res://Data/Genes/TurtleShell.tres" id="3_s2l6d"]
+[ext_resource type="Resource" uid="uid://dbvny84bw1pvp" path="res://Data/Genes/ChameleonSkin.tres" id="3_s2l6d"]
 [ext_resource type="Resource" uid="uid://dssodq4lr1182" path="res://Data/Moves/Protect.tres" id="4_s2l6d"]
 [ext_resource type="Resource" uid="uid://b1eti45dqkuo7" path="res://Data/Moves/Rage.tres" id="5_v6x3d"]
 [ext_resource type="Resource" uid="uid://fkdeujyg7eca" path="res://Data/Genes/BoarSkinGene.tres" id="7_oqte2"]

@@ -73,16 +73,25 @@ func _unhandled_input(event: InputEvent) -> void:
 	if not lab_ui.lab_finished.is_connected(_on_lab_finished):
 		lab_ui.lab_finished.connect(_on_lab_finished)
 
-	# Reuse the existing run room's lab data and state.
-	if lab_data == null:
+	# Use the LabResource assigned to the current RoomResource.
+	var current_lab_data: LabResource = current_room.lab_data
+
+	if current_lab_data == null:
 		lab_ui.queue_free()
 		lab_ui = null
 		push_error(
-			"LabWorkstation3D: Assign a LabResource in the Inspector."
+			"LabWorkstation3D: Current RoomResource has no LabResource assigned."
 		)
 		return
 
-	lab_ui.open(lab_data, current_room)
+	print(
+		"WORKSTATION LAB:",
+		current_lab_data.lab_name,
+		"| STATUS:",
+		LabResource.LabStatus.keys()[current_lab_data.lab_status]
+	)
+
+	lab_ui.open(current_lab_data, current_room)
 	get_viewport().set_input_as_handled()
 
 

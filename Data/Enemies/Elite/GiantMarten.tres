@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://cnlwwn0eoa0pn" path="res://Scripts/Genes/GeneResource.gd" id="1_wvkqo"]
 [ext_resource type="Script" uid="uid://bnmm0xqkm6atb" path="res://Scripts/Moves/MoveResource.gd" id="2_i2cj7"]
 [ext_resource type="Script" uid="uid://byxi3hsf2x8dx" path="res://Scripts/Enemies/EnemyResource.gd" id="2_i4ky3"]
-[ext_resource type="Resource" uid="uid://djvhx41gomy2n" path="res://Data/Genes/TurtleShell.tres" id="3_fxhr2"]
+[ext_resource type="Resource" uid="uid://dbvny84bw1pvp" path="res://Data/Genes/ChameleonSkin.tres" id="3_fxhr2"]
 [ext_resource type="Resource" uid="uid://8fymemyaaa2m" path="res://Data/Moves/attack.tres" id="3_lq1ka"]
 [ext_resource type="Resource" uid="uid://dssodq4lr1182" path="res://Data/Moves/Protect.tres" id="4_3d1gm"]
 [ext_resource type="Resource" uid="uid://b63650onw8qfj" path="res://Data/Genes/MartensRage.tres" id="4_s4w7u"]

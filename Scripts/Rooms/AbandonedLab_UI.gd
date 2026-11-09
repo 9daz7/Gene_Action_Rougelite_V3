@@ -66,6 +66,14 @@ const MUTAGEN_MANAGEMENT_SCENE = preload(
 	$VBoxContainer/ContinueButton
 )
 
+@onready var upload_genes_button: Button = (
+	$VBoxContainer/OperationContainer/UploadGenesButton
+)
+
+@onready var upload_status_label: Label = (
+	$VBoxContainer/UploadStatusLabel
+)
+
 
 # ==================================================
 # Runtime References
@@ -110,6 +118,9 @@ func open(
 		return
 
 	lab_data = data
+	print("LAB RESOURCE PATH: ", lab_data.resource_path)
+	print("LAB STATUS VALUE: ", lab_data.lab_status)
+	print("LAB STATUS NAME: ", LabResource.LabStatus.keys()[lab_data.lab_status])
 	lab_context_room = context_room
 	is_between_world_lab = between_world
 
@@ -270,6 +281,7 @@ func start_critical_lab() -> void:
 	edit_mutagen_button.disabled = true
 	heal_button.disabled = true
 	continue_button.disabled = true
+	upload_genes_button.disabled = true
 
 	## --------------------------------------------------
 	## Mark critical battle as active
@@ -382,6 +394,15 @@ func _update_lab_state() -> void:
 
 		return
 
+	upload_genes_button.disabled = (
+		run_manager.pending_genes.is_empty()
+	)
+
+	upload_genes_button.text = (
+		"Upload Genes ("
+		+ str(run_manager.pending_genes.size())
+		+ ")"
+	)
 
 	# ==================================================
 	# Heal
@@ -839,6 +860,13 @@ func _connect_buttons() -> void:
 			_on_continue_pressed
 	)
 
+	if not upload_genes_button.pressed.is_connected(
+		_on_upload_genes_pressed
+	):
+		upload_genes_button.pressed.connect(
+			_on_upload_genes_pressed
+		)
+
 
 # ==================================================
 # Mutagen Button
@@ -860,6 +888,58 @@ func _on_heal_pressed() -> void:
 	use_lab_action(
 		"heal"
 	)
+
+
+# ==================================================
+# Upload Genes Button
+# ==================================================
+
+func _on_upload_genes_pressed() -> void:
+
+	if run_manager == null or room_manager == null:
+		push_error("AbandonedLab_UI: Missing manager reference.")
+		return
+
+	if run_manager.pending_genes.is_empty():
+
+		upload_status_label.text = (
+			"No pending genes to upload."
+		)
+
+		return
+
+	var result: Dictionary = (
+		room_manager.upload_pending_genes()
+	)
+
+	var uploaded: int = result.get("uploaded", 0)
+	var remaining: int = result.get("remaining", 0)
+
+	if uploaded > 0:
+
+		upload_status_label.text = (
+			"Uploaded "
+			+ str(uploaded)
+			+ " gene(s). "
+			+ str(remaining)
+			+ " remaining."
+		)
+
+	elif remaining > 0:
+
+		upload_status_label.text = (
+			"Storage full! "
+			+ str(remaining)
+			+ " gene(s) still pending."
+		)
+
+	else:
+
+		upload_status_label.text = (
+			"No genes were uploaded."
+		)
+
+	_update_lab_state()
 
 
 # ==================================================
