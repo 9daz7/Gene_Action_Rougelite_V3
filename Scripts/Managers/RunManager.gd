@@ -1094,20 +1094,11 @@ func _create_world_one_room(
 	total_layers: int
 ) -> RoomResource:
 
-	#if node.layer == 1:
-#
-		#return _duplicate_room_template(
-			#get_random_room(
-				#RoomResource.RoomType.BATTLE,
-				#exit_count
-			#)
-		#)
-
 	if node.layer == 1:
 
 		return _duplicate_room_template(
 			get_random_room(
-				RoomResource.RoomType.ELITE,
+				RoomResource.RoomType.BATTLE,
 				exit_count
 			)
 		)
