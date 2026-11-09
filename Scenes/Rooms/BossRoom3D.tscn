@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://xvcbdjcds0vl"]
 
+[ext_resource type="Script" uid="uid://b2ogemdivmf48" path="res://Scripts/Rooms/BossRoom3D.gd" id="1_7x77h"]
 [ext_resource type="Script" uid="uid://cspmv2g4l51rq" path="res://Scenes/Test3D/Test3DEnemy.gd" id="1_ek2xv"]
 [ext_resource type="Texture2D" uid="uid://c6e161570jr8u" path="res://Assets/treepng.png" id="1_ugln0"]
 [ext_resource type="Resource" uid="uid://dy4ad2xrgeisp" path="res://Data/Enemies/Elite/GiantMarten.tres" id="2_7x77h"]
@@ -65,6 +66,7 @@ height = 1.6782227
 radius = 1.1
 
 [node name="BossRoom3D" type="Node3D" unique_id=1206797817]
+script = ExtResource("1_7x77h")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=550564257]
 

@@ -116,6 +116,37 @@ const MAX_POTION_POCKET_SIZE: int = 3
 var gene_collection: Array[GeneResource] = []
 
 
+# ==================================================
+# Pending Gene Uploads
+# ==================================================
+
+var pending_genes: Array[GeneResource] = []
+
+
+func add_pending_gene(gene: GeneResource) -> bool:
+
+	if gene == null:
+		return false
+
+	pending_genes.append(gene)
+
+	print(
+		"PENDING GENE ADDED:",
+		gene.gene_name,
+		"| Pending total:",
+		pending_genes.size()
+	)
+
+	return true
+
+
+func clear_pending_genes() -> void:
+
+	pending_genes.clear()
+
+	print("PENDING GENES CLEARED")
+
+
 func remove_gene(
 	gene: GeneResource
 ) -> bool:
@@ -2427,6 +2458,8 @@ func start_run():
 
 		return
 
+	pending_genes.clear()
+
 # ----------------------------------------------
 # Start Run
 # ----------------------------------------------
@@ -2504,6 +2537,8 @@ func reset_run() -> void:
 		"Player bag:",
 		get_run_potions()
 	)
+
+	pending_genes.clear()
 
 
 # ==================================================

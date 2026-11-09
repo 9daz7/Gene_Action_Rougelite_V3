@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://byxi3hsf2x8dx" path="res://Scripts/Enemies/EnemyResource.gd" id="2_yk136"]
 [ext_resource type="Script" uid="uid://bnmm0xqkm6atb" path="res://Scripts/Moves/MoveResource.gd" id="3_0sn7n"]
 [ext_resource type="Resource" uid="uid://8fymemyaaa2m" path="res://Data/Moves/attack.tres" id="3_5werd"]
+[ext_resource type="Resource" uid="uid://djvhx41gomy2n" path="res://Data/Genes/TurtleShell.tres" id="3_etkej"]
 [ext_resource type="Resource" uid="uid://drakyvl6jwh0f" path="res://Data/Moves/FerociousBite.tres" id="4_oq5mc"]
 [ext_resource type="Resource" uid="uid://dssodq4lr1182" path="res://Data/Moves/Protect.tres" id="5_5werd"]
 [ext_resource type="Resource" uid="uid://bjcqdkaq6oa1o" path="res://Data/Genes/WolfFangs.tres" id="7_hsgvl"]
@@ -21,5 +22,5 @@ base_attack = 7
 base_speed = 16
 starting_genes = Array[ExtResource("1_06xb4")]([ExtResource("7_hsgvl")])
 moves = Array[ExtResource("3_0sn7n")]([ExtResource("3_5werd"), ExtResource("5_5werd"), ExtResource("4_oq5mc")])
-drop_gene_pool = Array[ExtResource("1_06xb4")]([ExtResource("7_hsgvl")])
+drop_gene_pool = Array[ExtResource("1_06xb4")]([ExtResource("7_hsgvl"), ExtResource("3_etkej")])
 sprite = ExtResource("8_hsgvl")

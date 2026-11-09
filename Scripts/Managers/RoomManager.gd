@@ -1150,28 +1150,21 @@ func apply_reward(
 
 	if reward is GeneResource:
 
-		var added: bool = (
-			PermanentProgressionManager.add_gene(
-				reward
-			)
+		var added: bool = run_manager.add_pending_gene(
+			reward
 		)
 
 		if added:
 
-			save_manager.save_game(
-				PermanentProgressionManager,
-				run_manager
-			)
-
 			print(
-				"Permanent gene reward added:",
+				"GENE STORED FOR LAB UPLOAD:",
 				reward.gene_name
 			)
 
 		else:
 
 			print(
-				"Could not add gene reward:",
+				"COULD NOT STORE PENDING GENE:",
 				reward.gene_name
 			)
 

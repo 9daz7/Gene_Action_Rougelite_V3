@@ -234,7 +234,20 @@ func _update_detection() -> void:
 
 
 func _physics_process(delta: float) -> void:
+#temp
+	if Engine.get_physics_frames() % 120 == 0:
+		print(
+			"ENEMY AI | ",
+			enemy.name if is_instance_valid(enemy) else "INVALID",
+			" | Player: ", is_instance_valid(player),
+			" | Deebo: ", is_instance_valid(deebo),
+			" | State: ", awareness_state,
+			" | Processing: ", is_physics_processing()
+		)
 
+	if is_dead or enemy == null or not is_instance_valid(player):
+		return
+#to here
 	if is_dead or enemy == null or not is_instance_valid(player):
 		return
 
