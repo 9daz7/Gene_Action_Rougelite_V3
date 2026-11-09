@@ -1112,92 +1112,83 @@ func _create_world_one_room(
 			)
 		)
 
+	# ==================================================
+	# Layer 2 = treasure / shop / battle
+	# ==================================================
+
 	if node.layer == 2:
+
+		var candidates: Array[RoomResource.RoomType] = []
+
+		# --------------------------------------------------
+		# Battle
+		# --------------------------------------------------
+
+		if _has_room_with_exit_count(
+			RoomResource.RoomType.BATTLE,
+			exit_count
+		):
+
+			# 40 weight units
+			for i in range(40):
+				candidates.append(
+					RoomResource.RoomType.BATTLE
+				)
+
+
+		# --------------------------------------------------
+		# Treasure
+		# --------------------------------------------------
+
+		if _has_room_with_exit_count(
+			RoomResource.RoomType.TREASURE,
+			exit_count
+		):
+
+			# 30 weight units
+			for i in range(30):
+				candidates.append(
+					RoomResource.RoomType.TREASURE
+				)
+
+
+		# --------------------------------------------------
+		# Shop
+		# --------------------------------------------------
+
+		if _has_room_with_exit_count(
+			RoomResource.RoomType.SHOP,
+			exit_count
+		):
+
+			# 30 weight units
+			for i in range(30):
+				candidates.append(
+					RoomResource.RoomType.SHOP
+				)
+
+
+		if candidates.is_empty():
+
+			push_error(
+				"RunManager: No World 1 room available for "
+				+ str(exit_count)
+				+ " exits."
+			)
+
+			return null
+
+
+		var selected_type: RoomResource.RoomType = (
+			candidates.pick_random()
+		)
 
 		return _duplicate_room_template(
 			get_random_room(
-				RoomResource.RoomType.LAB,
+				selected_type,
 				exit_count
 			)
 		)
-
-	## ==================================================
-	## Layer 2 = treasure / shop / battle
-	## ==================================================
-#
-	#if node.layer == 2:
-#
-		#var candidates: Array[RoomResource.RoomType] = []
-#
-		## --------------------------------------------------
-		## Battle
-		## --------------------------------------------------
-#
-		#if _has_room_with_exit_count(
-			#RoomResource.RoomType.BATTLE,
-			#exit_count
-		#):
-#
-			## 40 weight units
-			#for i in range(40):
-				#candidates.append(
-					#RoomResource.RoomType.BATTLE
-				#)
-#
-#
-		## --------------------------------------------------
-		## Treasure
-		## --------------------------------------------------
-#
-		#if _has_room_with_exit_count(
-			#RoomResource.RoomType.TREASURE,
-			#exit_count
-		#):
-#
-			## 30 weight units
-			#for i in range(30):
-				#candidates.append(
-					#RoomResource.RoomType.TREASURE
-				#)
-#
-#
-		## --------------------------------------------------
-		## Shop
-		## --------------------------------------------------
-#
-		#if _has_room_with_exit_count(
-			#RoomResource.RoomType.SHOP,
-			#exit_count
-		#):
-#
-			## 30 weight units
-			#for i in range(30):
-				#candidates.append(
-					#RoomResource.RoomType.SHOP
-				#)
-
-
-		#if candidates.is_empty():
-#
-			#push_error(
-				#"RunManager: No World 1 room available for "
-				#+ str(exit_count)
-				#+ " exits."
-			#)
-#
-			#return null
-#
-#
-		#var selected_type: RoomResource.RoomType = (
-			#candidates.pick_random()
-		#)
-#
-		#return _duplicate_room_template(
-			#get_random_room(
-				#selected_type,
-				#exit_count
-			#)
-		#)
 
 	var room_type := (
 		_get_random_world_one_type(
