@@ -53,6 +53,8 @@ var tutorial_completed: bool = false
 
 var world_transition_pending: bool = false
 
+@export_range(1, 20, 1) var max_worlds: int = 4
+
 
 # ==================================================
 # Room Pools
@@ -873,45 +875,17 @@ func get_world_layer_sizes() -> Array[int]:
 
 		1:
 
-			# --------------------------------------------------
-			# First-time tutorial
-			# --------------------------------------------------
-
 			if not tutorial_completed:
 
 				return [
-					1,
-					2,
-					4,
-					5,
-					5,
-					4,
-					3,
-					2,
-					1
+					1, 2, 4, 5, 5, 4, 3, 2, 1
 				]
 
-			# --------------------------------------------------
-			# Regular World 1
-			# --------------------------------------------------
-
 			return [
-				1,
-				2,
-				3,
-				4,
-				4,
-				4,
-				3,
-				2,
-				1
+				1, 2, 3, 4, 4, 4, 3, 2, 1
 			]
 
-		_:
-
-			# --------------------------------------------------
-			# World 2
-			# --------------------------------------------------
+		2:
 
 			return [
 				1,
@@ -925,24 +899,45 @@ func get_world_layer_sizes() -> Array[int]:
 				1
 			]
 
-			## --------------------------------------------------
-			## World 3+
-			## --------------------------------------------------
-#
-			#return [
-				#1,
-				#randi_range(2, 3),
-				#randi_range(3, 5),
-				#randi_range(4, 5),
-				#randi_range(4, 6),
-				#randi_range(4, 6),
-				#randi_range(4, 5),
-				#randi_range(4, 5),
-				#randi_range(3, 5),
-				#randi_range(3, 4),
-				#2,
-				#1
-			#]
+		3:
+
+			return [
+				1,
+				randi_range(2, 3),
+				randi_range(3, 5),
+				randi_range(4, 6),
+				randi_range(4, 6),
+				randi_range(4, 6),
+				randi_range(3, 5),
+				randi_range(3, 4),
+				2,
+				1
+			]
+
+		4:
+
+			return [
+				1,
+				randi_range(2, 3),
+				randi_range(3, 5),
+				randi_range(4, 6),
+				randi_range(4, 6),
+				randi_range(4, 6),
+				randi_range(4, 6),
+				randi_range(3, 5),
+				randi_range(3, 4),
+				2,
+				1
+			]
+
+		_:
+
+			push_error(
+				"RunManager: Unsupported world: "
+				+ str(current_world)
+			)
+
+			return []
 
 
 # ==================================================
@@ -1483,7 +1478,13 @@ func complete_world() -> void:
 	print("================================")
 	print("WORLD COMPLETED")
 	print("Current World:", current_world)
+	print("Maximum Worlds:", max_worlds)
 	print("================================")
+
+	# Prevent duplicate world transitions.
+	if world_transition_pending:
+		print("World transition is already pending.")
+		return
 
 	# ==================================================
 	# Tutorial completion
@@ -1493,9 +1494,7 @@ func complete_world() -> void:
 
 		tutorial_completed = true
 
-		print(
-			"Tutorial World completed permanently."
-		)
+		print("Tutorial World completed permanently.")
 
 		# Save the permanent tutorial unlock immediately.
 		save_manager.save_game(
@@ -1504,13 +1503,9 @@ func complete_world() -> void:
 		)
 
 		world_transition_pending = true
-
 		current_world = 2
 
-		print(
-			"Next World:",
-			current_world
-		)
+		print("Next World:", current_world)
 
 		return
 
@@ -1518,16 +1513,17 @@ func complete_world() -> void:
 	# Normal World Progression
 	# ==================================================
 
-	if current_world < 2:
+	if current_world < max_worlds:
 
 		current_world += 1
-
 		world_transition_pending = true
 
-		print(
-			"Advanced to World:",
-			current_world
-		)
+		print("Advanced to World:", current_world)
+
+	else:
+
+		print("FINAL WORLD COMPLETED")
+		print("No further world transition available.")
 
 
 # ==================================================

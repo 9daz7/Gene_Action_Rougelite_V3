@@ -2,6 +2,8 @@ extends Node
 class_name RoomManager
 
 
+signal between_world_transition_requested
+
 const PLAYER_PARTY_SCENE: PackedScene = preload(
 	"res://Scenes/Animals/Player3D.tscn"
 )
@@ -1045,6 +1047,11 @@ func _on_reward_finished(reward) -> void:
 
 	print("Chosen: ", reward)
 
+	var completed_boss_room: bool = (
+		current_room != null
+		and current_room.room_type == RoomResource.RoomType.BOSS
+	)
+
 	if reward:
 		print(
 			"Chosen:",
@@ -1090,6 +1097,20 @@ func _on_reward_finished(reward) -> void:
 		push_error(
 			"RoomManager: Active room scene is invalid."
 		)
+
+	# ==================================================
+	# World Progression
+	# ==================================================
+
+	if completed_boss_room:
+
+		print("BOSS REWARD COMPLETED - CHECKING WORLD PROGRESSION")
+
+		run_manager.complete_world()
+
+		if run_manager.world_transition_pending:
+			print("WORLD TRANSITION REQUESTED")
+			between_world_transition_requested.emit()
 
 	# ==================================================
 	# Return To Battle Room

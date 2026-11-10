@@ -52,6 +52,8 @@ const BETWEEN_WORLD_LAB_DATA = preload(
 	"res://Data/Labs/BetweenWorldLab.tres"
 )
 
+var between_world_lab_scene: PackedScene = null
+
 
 # ==================================================
 # State
@@ -64,6 +66,15 @@ var returning_to_hub_after_battle: bool = false
 
 func _ready():
 
+	between_world_lab_scene = ResourceLoader.load(
+		"res://Scenes/Rooms/BetweenWorldLab.tscn"
+	) as PackedScene
+
+	if between_world_lab_scene == null:
+		push_error("Main: Failed to load BetweenWorldLab.tscn as PackedScene.")
+	else:
+		print("BETWEEN WORLD LAB LOADED SUCCESSFULLY")
+
 	var pause_menu = $UI/PauseMenu
 
 	if not pause_menu.return_home_requested.is_connected(
@@ -75,6 +86,13 @@ func _ready():
 	)
 
 	print("THIS IS THE CURRENT MAIN SCRIPT")
+
+	if not room_manager.between_world_transition_requested.is_connected(
+		open_between_world_lab
+	):
+		room_manager.between_world_transition_requested.connect(
+			open_between_world_lab
+		)
 
 	gene_database.load_genes()
 
