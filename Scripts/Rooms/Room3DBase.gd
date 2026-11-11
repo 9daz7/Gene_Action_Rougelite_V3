@@ -170,10 +170,12 @@ func _on_required_character_died() -> void:
 func _stop_combat() -> void:
 
 	if is_instance_valid(player):
+		player.set("combat_disabled", true)
 		player.set_physics_process(false)
 		player.velocity = Vector3.ZERO
 
 	if is_instance_valid(deebo):
+		deebo.set("combat_disabled", true)
 		deebo.set_physics_process(false)
 		deebo.velocity = Vector3.ZERO
 

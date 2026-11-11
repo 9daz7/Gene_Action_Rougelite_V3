@@ -16,6 +16,7 @@ signal died
 
 var current_health: float = -1.0
 var is_dead: bool = false
+var combat_disabled: bool = false
 
 var protect_timer: float = 0.0
 var protect_reduction: float = 0.6
@@ -90,7 +91,7 @@ func heal(amount: float) -> void:
 
 func take_damage(amount: float, attacker: Node3D = null) -> void:
 
-	if is_dead or amount <= 0.0:
+	if combat_disabled or is_dead or amount <= 0.0:
 		return
 
 	var final_damage := amount
