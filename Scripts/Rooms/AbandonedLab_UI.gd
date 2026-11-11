@@ -783,47 +783,41 @@ func heal_player() -> void:
 	)
 
 	if current_room == null:
-
 		return
-
 
 	if current_room.lab_healing_used:
-
 		return
 
-
 	if run_manager == null:
-
 		push_error(
 			"AbandonedLab_UI: RunManager not found."
 		)
-
 		return
 
+	var player = room_manager.player_character
+	var deebo = room_manager.deebo_character
 
-	var heal_amount: int = int(
-		run_manager.max_hp * 0.50
-	)
-
-
-	if heal_amount <= 0:
-
+	if not is_instance_valid(player):
+		push_error("AbandonedLab_UI: Player character is missing.")
 		return
 
+	if not is_instance_valid(deebo):
+		push_error("AbandonedLab_UI: Deebo character is missing.")
+		return
 
-	run_manager.heal_player(
-		heal_amount
-	)
+	var heal_amount: float = run_manager.max_hp * 0.25
 
+	player.heal(heal_amount)
+	deebo.heal(heal_amount)
 
 	current_room.lab_healing_used = true
 
-
-	print(
-		"Lab healed player for:",
-		heal_amount
-	)
-
+	print("================================")
+	print("LAB HEALING COMPLETE")
+	print("Player HP:", player.current_health, "/", player.base_health)
+	print("Deebo HP:", deebo.current_health, "/", deebo.max_health)
+	print("Healing amount:", heal_amount)
+	print("================================")
 
 	_update_lab_state()
 

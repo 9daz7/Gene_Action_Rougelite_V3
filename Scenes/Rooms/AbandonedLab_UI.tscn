@@ -33,7 +33,7 @@ text = "Manage Mutagen"
 
 [node name="HealButton" type="Button" parent="VBoxContainer/OperationContainer" unique_id=1306994066]
 layout_mode = 2
-text = "Heal 50%"
+text = "Heal 25%"
 
 [node name="UploadGenesButton" type="Button" parent="VBoxContainer/OperationContainer" unique_id=1521460567]
 layout_mode = 2

@@ -1280,6 +1280,20 @@ func _create_room_for_node(
 		)
 
 	# ==================================================
+	# First Room After Start = Normal Battle
+	# Applies to every world and tutorial state.
+	# ==================================================
+
+	if node.layer == 1:
+
+		return _duplicate_room_template(
+			get_random_room(
+				RoomResource.RoomType.BATTLE,
+				required_exit_count
+			)
+		)
+
+	# ==================================================
 	# Tutorial World
 	# ==================================================
 

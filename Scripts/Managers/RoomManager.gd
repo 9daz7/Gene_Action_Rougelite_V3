@@ -1194,7 +1194,7 @@ func _on_reward_finished(reward) -> void:
 
 		if run_manager.world_transition_pending:
 			print("WORLD TRANSITION REQUESTED")
-			between_world_transition_requested.emit()
+			#between_world_transition_requested.emit()
 
 	# ==================================================
 	# Return To Battle Room
@@ -1391,6 +1391,30 @@ func select_room_exit(exit_id: int) -> void:
 	print("ROOM MANAGER: EXIT SELECTED")
 	print("Exit ID:", exit_id)
 	print("================================")
+
+	# ==================================================
+	# Between-World Boss Exit
+	# ==================================================
+
+	if (
+		current_room != null
+		and current_room.room_type == RoomResource.RoomType.BOSS
+	):
+		if not current_room.completed:
+			print("Boss roomis not complete yet.")
+			return
+
+		if not run_manager.world_transition_pending:
+			push_warning(
+				"RoomManager: World transition is not ready."
+			)
+			return
+
+		print("BOSS EXIT SELECTED")
+		print("Opening Between-World Lab.")
+
+		between_world_transition_requested.emit()
+		return
 
 	# ==================================================
 	# Validate Current Node
