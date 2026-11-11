@@ -3,6 +3,7 @@ class_name RoomManager
 
 
 signal between_world_transition_requested
+signal between_world_lab_exited
 
 const PLAYER_PARTY_SCENE: PackedScene = preload(
 	"res://Scenes/Animals/Player3D.tscn"
@@ -467,6 +468,89 @@ func _on_reward_requested(enemy_data: EnemyResource) -> void:
 	)
 
 	open_reward(rewards)
+
+
+# ==================================================
+# Between-World Lab
+# ==================================================
+
+func enter_between_world_lab(
+	lab_scene: PackedScene
+) -> void:
+
+	if lab_scene == null:
+		push_error("RoomManager: Between-World Lab scene is missing.")
+		return
+
+	if not is_instance_valid(player_character):
+		push_error("RoomManager: Player reference is missing.")
+		return
+
+	if not is_instance_valid(deebo_character):
+		push_error("RoomManager: Deebo reference is missing.")
+		return
+
+	print("================================")
+	print("ENTERING BETWEEN-WORLD LAB")
+	print("================================")
+
+	# Remove the completed boss room.
+	close_active_room()
+
+	# Create the standalone lab.
+	var lab_instance := lab_scene.instantiate()
+
+	if lab_instance == null:
+		push_error("RoomManager: Failed to instantiate Between-World Lab.")
+		return
+
+	# Give the lab the existing party references.
+	if lab_instance.has_method("configure_party"):
+		lab_instance.configure_party(
+			player_character,
+			deebo_character
+		)
+
+	get_tree().current_scene.add_child(lab_instance)
+
+	active_room_scene = lab_instance
+
+	# Connect the dedicated lab exit.
+	var lab_exit := lab_instance.find_child(
+		"LabExit",
+		true,
+		false
+	) as BetweenWorldLabExit3D
+
+	if lab_exit == null:
+		push_error("RoomManager: Between-World Lab exit not found.")
+		return
+
+	if not lab_exit.exit_requested.is_connected(
+		_on_between_world_lab_exit_requested
+	):
+		lab_exit.exit_requested.connect(
+			_on_between_world_lab_exit_requested
+		)
+
+	# Place the existing party at the lab spawn.
+	_place_party_at_room_spawn(lab_instance)
+
+	print("BETWEEN-WORLD LAB LOADED")
+	print("Player HP:", player_character.current_health)
+	print("Deebo HP:", deebo_character.current_health)
+
+
+func _on_between_world_lab_exit_requested() -> void:
+
+	print("================================")
+	print("LEAVING BETWEEN-WORLD LAB")
+	print("================================")
+
+	# Remove the lab, but preserve the party.
+	close_active_room()
+
+	between_world_lab_exited.emit()
 
 
 func _place_party_at_room_spawn(room: Node) -> void:

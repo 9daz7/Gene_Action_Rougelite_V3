@@ -4,8 +4,8 @@
 [ext_resource type="Script" uid="uid://dlhu2ggbygnqo" path="res://Scripts/Rooms/LabWorkstation3D.gd" id="2_ulano"]
 [ext_resource type="Resource" uid="uid://8lhsco4lqgqq" path="res://Data/Labs/BetweenWorldLab.tres" id="3_mqhgk"]
 [ext_resource type="Texture2D" uid="uid://c7s0f0icm3a10" path="res://Assets/shop.png" id="4_2ypbf"]
+[ext_resource type="Script" uid="uid://d2f6i3xx3bfua" path="res://Scripts/Rooms/BetweenWorldLabExit3D.gd" id="5_73sww"]
 [ext_resource type="PackedScene" uid="uid://03hih1xoemdv" path="res://Scenes/Battle/ActionBattleUI.tscn" id="5_s67cx"]
-[ext_resource type="Script" uid="uid://dx27dhnmd17cs" path="res://Scripts/Rooms/LabExit3D.gd" id="6_jppw4"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_w5l4r"]
 size = Vector2(2.5, 2.5)
@@ -66,6 +66,7 @@ collision_layer = 7
 collision_mask = 6
 script = ExtResource("2_ulano")
 lab_data = ExtResource("3_mqhgk")
+is_between_world_lab = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="LabWorkstation" unique_id=746256649]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.17565918, 0, -0.020141602)
@@ -90,7 +91,7 @@ shape = SubResource("BoxShape3D_gs0tk")
 [node name="LabExit" type="Area3D" parent="." unique_id=867877414]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.1228285, 0.5067622, 12.36485)
 collision_mask = 6
-script = ExtResource("6_jppw4")
+script = ExtResource("5_73sww")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="LabExit" unique_id=202546690]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.04018408, 0)

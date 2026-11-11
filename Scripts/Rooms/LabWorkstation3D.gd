@@ -7,8 +7,8 @@ const LAB_UI_SCENE: PackedScene = preload(
 )
 
 @export var interaction_text: String = "Workstation [E]"
-
 @export var lab_data: LabResource
+@export var is_between_world_lab: bool = false
 
 var player_in_range: bool = false
 var lab_ui: AbandonedLab_UI = null
@@ -47,10 +47,37 @@ func _unhandled_input(event: InputEvent) -> void:
 		push_error("LabWorkstation3D: RoomManager not found.")
 		return
 
-	var current_room: RoomResource = room_manager.current_room
+	var current_lab_data: LabResource
+	var context_room: RoomResource
 
-	if current_room == null:
-		push_error("LabWorkstation3D: Current room is missing.")
+	if is_between_world_lab:
+
+		# Create a fresh context for this standalone lab visit.
+		context_room = RoomResource.new()
+		context_room.room_name = "Between-World Lab"
+		context_room.room_type = RoomResource.RoomType.LAB
+		context_room.lab_battle_completed = true
+		context_room.lab_mutagen_editing_completed = false
+		context_room.lab_healing_used = false
+		context_room.pending_lab_mutagen_reward = null
+		context_room.lab_data = lab_data
+
+		current_lab_data = lab_data
+
+	else:
+
+		context_room = room_manager.current_room
+
+		if context_room == null:
+			push_error("LabWorkstation3D: Current room is missing.")
+			return
+
+		current_lab_data = context_room.lab_data
+
+	if current_lab_data == null:
+		push_error(
+			"LabWorkstation3D: No LabResource assigned."
+		)
 		return
 
 	lab_ui = LAB_UI_SCENE.instantiate() as AbandonedLab_UI
@@ -73,17 +100,6 @@ func _unhandled_input(event: InputEvent) -> void:
 	if not lab_ui.lab_finished.is_connected(_on_lab_finished):
 		lab_ui.lab_finished.connect(_on_lab_finished)
 
-	# Use the LabResource assigned to the current RoomResource.
-	var current_lab_data: LabResource = current_room.lab_data
-
-	if current_lab_data == null:
-		lab_ui.queue_free()
-		lab_ui = null
-		push_error(
-			"LabWorkstation3D: Current RoomResource has no LabResource assigned."
-		)
-		return
-
 	print(
 		"WORKSTATION LAB:",
 		current_lab_data.lab_name,
@@ -91,7 +107,12 @@ func _unhandled_input(event: InputEvent) -> void:
 		LabResource.LabStatus.keys()[current_lab_data.lab_status]
 	)
 
-	lab_ui.open(current_lab_data, current_room)
+	lab_ui.open(
+		current_lab_data,
+		context_room,
+		is_between_world_lab
+	)
+
 	get_viewport().set_input_as_handled()
 
 

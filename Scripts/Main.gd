@@ -94,6 +94,13 @@ func _ready():
 			open_between_world_lab
 		)
 
+	if not room_manager.between_world_lab_exited.is_connected(
+		_on_between_world_lab_finished
+	):
+		room_manager.between_world_lab_exited.connect(
+			_on_between_world_lab_finished
+		)
+
 	gene_database.load_genes()
 
 	save_manager.load_game(
@@ -255,112 +262,125 @@ func open_between_world_lab() -> void:
 	print("OPENING BETWEEN-WORLD LAB")
 	print("================================")
 
-	# ==================================================
-	# Prevent duplicate UI
-	# ==================================================
-
-	if is_instance_valid(between_world_lab_ui):
-
-		print(
-			"Between-world Lab is already open."
-		)
-
+	if between_world_lab_scene == null:
+		push_error("Main: Between-World Lab scene is missing.")
 		return
 
-	# ==================================================
-	# Validate LabResource
-	# ==================================================
-
-	if BETWEEN_WORLD_LAB_DATA == null:
-
-		push_error(
-			"Main: Between-world LabResource is missing."
-		)
-
-		return
-
-	# ==================================================
-	# Create temporary room state
-	# ==================================================
-
-	var temporary_room := RoomResource.new()
-
-	temporary_room.room_name = "Between-World Lab"
-
-	temporary_room.room_type = (
-		RoomResource.RoomType.LAB
+	room_manager.enter_between_world_lab(
+		between_world_lab_scene
 	)
-
-	# --------------------------------------------------
-	# Prevent Critical Lab battle
-	# --------------------------------------------------
-
-	temporary_room.lab_battle_completed = true
-
-	# --------------------------------------------------
-	# Fresh state for this Lab visit
-	# --------------------------------------------------
-
-	temporary_room.lab_mutagen_editing_completed = false
-	temporary_room.lab_healing_used = false
-	temporary_room.pending_lab_mutagen_reward = null
-
-	# Use the dedicated Between-World LabResource.
-	temporary_room.lab_data = (
-		BETWEEN_WORLD_LAB_DATA
-	)
-
-	# ==================================================
-	# Create Lab UI
-	# ==================================================
-
-	between_world_lab_ui = (
-		ABANDONED_LAB_UI_SCENE.instantiate()
-		as AbandonedLab_UI
-	)
-
-	if between_world_lab_ui == null:
-
-		push_error(
-			"Main: Failed to create Between-World Lab UI."
-		)
-
-		return
-
-	$UI.add_child(
-		between_world_lab_ui
-	)
-
-	between_world_lab_ui.set_anchors_and_offsets_preset(
-		Control.PRESET_FULL_RECT
-	)
-
-	# ==================================================
-	# Connect Finish
-	# ==================================================
-
-	if not between_world_lab_ui.lab_finished.is_connected(
-		_on_between_world_lab_finished
-	):
-
-		between_world_lab_ui.lab_finished.connect(
-			_on_between_world_lab_finished
-		)
-
-	# ==================================================
-	# Open
-	# ==================================================
-
-	between_world_lab_ui.open(
-		temporary_room.lab_data,
-		#battle_manager,
-		temporary_room,
-		true
-	)
-
-	print(
-		"Between-World Lab opened."
-	)
+#func open_between_world_lab() -> void:
+#
+	#print("================================")
+	#print("OPENING BETWEEN-WORLD LAB")
+	#print("================================")
+#
+	## ==================================================
+	## Prevent duplicate UI
+	## ==================================================
+#
+	#if is_instance_valid(between_world_lab_ui):
+#
+		#print(
+			#"Between-world Lab is already open."
+		#)
+#
+		#return
+#
+	## ==================================================
+	## Validate LabResource
+	## ==================================================
+#
+	#if BETWEEN_WORLD_LAB_DATA == null:
+#
+		#push_error(
+			#"Main: Between-world LabResource is missing."
+		#)
+#
+		#return
+#
+	## ==================================================
+	## Create temporary room state
+	## ==================================================
+#
+	#var temporary_room := RoomResource.new()
+#
+	#temporary_room.room_name = "Between-World Lab"
+#
+	#temporary_room.room_type = (
+		#RoomResource.RoomType.LAB
+	#)
+#
+	## --------------------------------------------------
+	## Prevent Critical Lab battle
+	## --------------------------------------------------
+#
+	#temporary_room.lab_battle_completed = true
+#
+	## --------------------------------------------------
+	## Fresh state for this Lab visit
+	## --------------------------------------------------
+#
+	#temporary_room.lab_mutagen_editing_completed = false
+	#temporary_room.lab_healing_used = false
+	#temporary_room.pending_lab_mutagen_reward = null
+#
+	## Use the dedicated Between-World LabResource.
+	#temporary_room.lab_data = (
+		#BETWEEN_WORLD_LAB_DATA
+	#)
+#
+	## ==================================================
+	## Create Lab UI
+	## ==================================================
+#
+	#between_world_lab_ui = (
+		#ABANDONED_LAB_UI_SCENE.instantiate()
+		#as AbandonedLab_UI
+	#)
+#
+	#if between_world_lab_ui == null:
+#
+		#push_error(
+			#"Main: Failed to create Between-World Lab UI."
+		#)
+#
+		#return
+#
+	#$UI.add_child(
+		#between_world_lab_ui
+	#)
+#
+	#between_world_lab_ui.set_anchors_and_offsets_preset(
+		#Control.PRESET_FULL_RECT
+	#)
+#
+	## ==================================================
+	## Connect Finish
+	## ==================================================
+#
+	#if not between_world_lab_ui.lab_finished.is_connected(
+		#_on_between_world_lab_finished
+	#):
+#
+		#between_world_lab_ui.lab_finished.connect(
+			#_on_between_world_lab_finished
+		#)
+#
+	## ==================================================
+	## Open
+	## ==================================================
+#
+	#between_world_lab_ui.open(
+		#temporary_room.lab_data,
+		##battle_manager,
+		#temporary_room,
+		#true
+	#)
+#
+	#print(
+		#"Between-World Lab opened."
+	#)
 
 
 func _on_between_world_lab_finished() -> void:
@@ -369,67 +389,91 @@ func _on_between_world_lab_finished() -> void:
 	print("BETWEEN-WORLD LAB FINISHED")
 	print("================================")
 
-	if is_instance_valid(
-		between_world_lab_ui
-	):
-
-		between_world_lab_ui.close()
-		between_world_lab_ui.queue_free()
-
-	between_world_lab_ui = null
-
-	# ==================================================
-	# Transition is finished
-	# ==================================================
-
 	run_manager.world_transition_pending = false
 
-	print(
-		"Starting World:",
-		run_manager.current_world
-	)
+	print("Starting World:", run_manager.current_world)
+	print("Creating new run map...")
 
-	print(
-		"Creating new run map..."
-	)
-
-
-	# ==================================================
-	# Generate next world
-	# ==================================================
-
+	# This automatically starts the new world's first room.
 	run_manager.create_run_map()
 
-	print(
-		"create_run_map() returned."
-	)
-
-	print(
-		"Current run map:",
-		run_manager.current_run_map
-	)
+	print("create_run_map() returned.")
+	print("Current run map:", run_manager.current_run_map)
 
 	if run_manager.current_run_map == null:
-
-		push_error(
-			"MAIN: World map generation failed."
-		)
-
+		push_error("MAIN: World map generation failed.")
 		return
 
-	print(
-		"World map exists."
-	)
-
-	print(
-		"Layer count:",
-		run_manager.current_run_map.layers.size()
-	)
-
-	print(
-		"Node count:",
-		run_manager.current_run_map.all_nodes.size()
-	)
+	print("World map exists.")
+	print("Layer count:", run_manager.current_run_map.layers.size())
+	print("Node count:", run_manager.current_run_map.all_nodes.size())
+#func _on_between_world_lab_finished() -> void:
+#
+	#print("================================")
+	#print("BETWEEN-WORLD LAB FINISHED")
+	#print("================================")
+#
+	#if is_instance_valid(
+		#between_world_lab_ui
+	#):
+#
+		#between_world_lab_ui.close()
+		#between_world_lab_ui.queue_free()
+#
+	#between_world_lab_ui = null
+#
+	## ==================================================
+	## Transition is finished
+	## ==================================================
+#
+	#run_manager.world_transition_pending = false
+#
+	#print(
+		#"Starting World:",
+		#run_manager.current_world
+	#)
+#
+	#print(
+		#"Creating new run map..."
+	#)
+#
+#
+	## ==================================================
+	## Generate next world
+	## ==================================================
+#
+	#run_manager.create_run_map()
+#
+	#print(
+		#"create_run_map() returned."
+	#)
+#
+	#print(
+		#"Current run map:",
+		#run_manager.current_run_map
+	#)
+#
+	#if run_manager.current_run_map == null:
+#
+		#push_error(
+			#"MAIN: World map generation failed."
+		#)
+#
+		#return
+#
+	#print(
+		#"World map exists."
+	#)
+#
+	#print(
+		#"Layer count:",
+		#run_manager.current_run_map.layers.size()
+	#)
+#
+	#print(
+		#"Node count:",
+		#run_manager.current_run_map.all_nodes.size()
+	#)
 
 
 func _on_lab_hub_closed() -> void:

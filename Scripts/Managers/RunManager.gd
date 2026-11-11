@@ -782,9 +782,21 @@ func validate_run_graph() -> bool:
 
 		return false
 
-	var final_layer_index := (
+	if current_run_map.layers.is_empty():
+
+		push_error(
+			"RunManager: Generated map has no layers."
+		)
+
+		return false
+
+	var final_layer_index: int = (
 		current_run_map.layers.size() - 1
 	)
+
+	# ==================================================
+	# Validate Every Node
+	# ==================================================
 
 	for node in current_run_map.all_nodes:
 
@@ -796,28 +808,42 @@ func validate_run_graph() -> bool:
 
 			return false
 
-		# ==================================================
-		# Exit Count Validation
-		# ==================================================
+		# Physical exits must match generated paths.
 
-		if node.next_nodes.size() != (
-			node.room.exit_count
-		):
+		if node.next_nodes.size() != node.room.exit_count:
 
 			push_error(
 				"RunManager: Exit mismatch in "
 				+ node.room.room_name
-				+ " | Physical exits: "
-				+ str(node.room.exit_count)
-				+ " | Generated paths: "
-				+ str(node.next_nodes.size())
 			)
 
 			return false
 
-		# ==================================================
-		# Previous Path Validation
-		# ==================================================
+		# Maximum three outgoing paths.
+
+		if node.next_nodes.size() > 3:
+
+			push_error(
+				"RunManager: Node exceeds maximum exits: "
+				+ node.room.room_name
+			)
+
+			return false
+
+		# Every non-final node needs a forward path.
+
+		if node.layer < final_layer_index:
+
+			if node.next_nodes.is_empty():
+
+				push_error(
+					"RunManager: Dead end detected: "
+					+ node.room.room_name
+				)
+
+				return false
+
+		# Every node after the start needs a parent.
 
 		if node.layer > 0:
 
@@ -830,17 +856,48 @@ func validate_run_graph() -> bool:
 
 				return false
 
+		# Validate every outgoing connection.
+
+		for next_node in node.next_nodes:
+
+			if next_node == null:
+
+				push_error(
+					"RunManager: Null connection detected."
+				)
+
+				return false
+
+			if not current_run_map.all_nodes.has(next_node):
+
+				push_error(
+					"RunManager: Connection points "
+					+ "outside the generated map."
+				)
+
+				return false
+
+			if not can_connect_nodes(node, next_node):
+
+				push_error(
+					"RunManager: Invalid connection between "
+					+ node.room.room_name
+					+ " and "
+					+ next_node.room.room_name
+				)
+
+				return false
+
 		# ==================================================
 		# Final Layer Validation
 		# ==================================================
-		
+
 		if node.layer == final_layer_index:
 
 			if not node.next_nodes.is_empty():
 
 				push_error(
-					"RunManager: Final node has "
-					+ "outgoing paths: "
+					"RunManager: Final node has outgoing paths: "
 					+ node.room.room_name
 				)
 
@@ -849,95 +906,300 @@ func validate_run_graph() -> bool:
 			if node.room.exit_count != 0:
 
 				push_error(
-					"RunManager: Final room must have "
-					+ "0 exits: "
+					"RunManager: Final room must have 0 exits: "
 					+ node.room.room_name
 				)
 
 				return false
 
+	# ==================================================
+	# Reachability Validation
+	# ==================================================
+
+	var start_layer: Array = current_run_map.layers[0]
+
+	if start_layer.is_empty():
+
+		push_error(
+			"RunManager: Start layer is empty."
+		)
+
+		return false
+
+	var start_node: RunMapNode = start_layer[0]
+
+	var visited: Array[RunMapNode] = []
+	var pending: Array[RunMapNode] = []
+
+	pending.append(start_node)
+
+	while not pending.is_empty():
+
+		var current_node: RunMapNode = pending.pop_front()
+
+		if visited.has(current_node):
+
+			continue
+
+		visited.append(current_node)
+
+		for next_node in current_node.next_nodes:
+
+			if not visited.has(next_node):
+
+				pending.append(next_node)
+
+	# Every generated node must be reachable.
+
+	if visited.size() != current_run_map.all_nodes.size():
+
+		push_error(
+			"RunManager: Unreachable nodes detected. "
+			+ "Reachable: "
+			+ str(visited.size())
+			+ " / "
+			+ str(current_run_map.all_nodes.size())
+		)
+
+		return false
+
+	print(
+		"================================"
+	)
 
 	print(
 		"RUN GRAPH VALIDATION PASSED"
 	)
 
+	print(
+		"Total Nodes: ",
+		current_run_map.all_nodes.size()
+	)
+
+	print(
+		"Total Layers: ",
+		current_run_map.layers.size()
+	)
+
+	print(
+		"All nodes reachable."
+	)
+
+	print(
+		"Maximum exits respected."
+	)
+
+	print(
+		"All connections valid."
+	)
+
+	print(
+		"================================"
+	)
+
 	return true
+
+	#if current_run_map == null:
+#
+		#push_error(
+			#"RunManager: No generated run map."
+		#)
+#
+		#return false
+#
+	#var final_layer_index := (
+		#current_run_map.layers.size() - 1
+	#)
+#
+	#for node in current_run_map.all_nodes:
+#
+		#if node.room == null:
+#
+			#push_error(
+				#"RunManager: Node has no room."
+			#)
+#
+			#return false
+#
+		## ==================================================
+		## Exit Count Validation
+		## ==================================================
+#
+		#if node.next_nodes.size() != (
+			#node.room.exit_count
+		#):
+#
+			#push_error(
+				#"RunManager: Exit mismatch in "
+				#+ node.room.room_name
+				#+ " | Physical exits: "
+				#+ str(node.room.exit_count)
+				#+ " | Generated paths: "
+				#+ str(node.next_nodes.size())
+			#)
+#
+			#return false
+#
+		## ==================================================
+		## Previous Path Validation
+		## ==================================================
+#
+		#if node.layer > 0:
+#
+			#if node.previous_nodes.is_empty():
+#
+				#push_error(
+					#"RunManager: Orphan node: "
+					#+ node.room.room_name
+				#)
+#
+				#return false
+#
+		## ==================================================
+		## Final Layer Validation
+		## ==================================================
+		#
+		#if node.layer == final_layer_index:
+#
+			#if not node.next_nodes.is_empty():
+#
+				#push_error(
+					#"RunManager: Final node has "
+					#+ "outgoing paths: "
+					#+ node.room.room_name
+				#)
+#
+				#return false
+#
+			#if node.room.exit_count != 0:
+#
+				#push_error(
+					#"RunManager: Final room must have "
+					#+ "0 exits: "
+					#+ node.room.room_name
+				#)
+#
+				#return false
+#
+#
+	#print(
+		#"RUN GRAPH VALIDATION PASSED"
+	#)
+#
+	#return true
 
 
 # ==================================================
 # World Layer Sizes
 # ==================================================
 
-
 func get_world_layer_sizes() -> Array[int]:
 
 	match current_world:
 
+		# ==========================================
+		# WORLD 1
+		# ==========================================
 		1:
-
 			if not tutorial_completed:
+				return [1, 2, 4, 5, 5, 4, 3, 2, 1]
 
-				return [
-					1, 2, 4, 5, 5, 4, 3, 2, 1
-				]
+			return [1, 2, 3, 4, 4, 4, 3, 2, 1]
 
-			return [
-				1, 2, 3, 4, 4, 4, 3, 2, 1
-			]
 
+		# ==========================================
+		# WORLD 2
+		# ==========================================
 		2:
+			return [1, 2, 3, 4, 5, 4, 3, 2, 1]
 
-			return [
-				1,
-				randi_range(2, 3),
-				randi_range(3, 5),
-				randi_range(4, 5),
-				randi_range(4, 5),
-				randi_range(3, 5),
-				randi_range(3, 4),
-				2,
-				1
-			]
 
+		# ==========================================
+		# WORLD 3
+		# ==========================================
 		3:
+			return [1, 2, 3, 4, 5, 5, 4, 3, 2, 1]
 
-			return [
-				1,
-				randi_range(2, 3),
-				randi_range(3, 5),
-				randi_range(4, 6),
-				randi_range(4, 6),
-				randi_range(4, 6),
-				randi_range(3, 5),
-				randi_range(3, 4),
-				2,
-				1
-			]
 
+		# ==========================================
+		# WORLD 4
+		# ==========================================
 		4:
+			return [1, 2, 3, 4, 5, 5, 5, 4, 3, 2, 1]
 
-			return [
-				1,
-				randi_range(2, 3),
-				randi_range(3, 5),
-				randi_range(4, 6),
-				randi_range(4, 6),
-				randi_range(4, 6),
-				randi_range(4, 6),
-				randi_range(3, 5),
-				randi_range(3, 4),
-				2,
-				1
-			]
 
 		_:
+			return [1, 2, 3, 4, 5, 4, 3, 2, 1]
 
-			push_error(
-				"RunManager: Unsupported world: "
-				+ str(current_world)
-			)
-
-			return []
+#func get_world_layer_sizes() -> Array[int]:
+#
+	#match current_world:
+#
+		#1:
+#
+			#if not tutorial_completed:
+#
+				#return [
+					#1, 2, 4, 5, 5, 4, 3, 2, 1
+				#]
+#
+			#return [
+				#1, 2, 3, 4, 4, 4, 3, 2, 1
+			#]
+#
+		#2:
+#
+			#return [
+				#1,
+				#randi_range(2, 3),
+				#randi_range(3, 5),
+				#randi_range(4, 5),
+				#randi_range(4, 5),
+				#randi_range(3, 5),
+				#randi_range(3, 4),
+				#2,
+				#1
+			#]
+#
+		#3:
+#
+			#return [
+				#1,
+				#randi_range(2, 3),
+				#randi_range(3, 5),
+				#randi_range(4, 6),
+				#randi_range(4, 6),
+				#randi_range(4, 6),
+				#randi_range(3, 5),
+				#randi_range(3, 4),
+				#2,
+				#1
+			#]
+#
+		#4:
+#
+			#return [
+				#1,
+				#randi_range(2, 3),
+				#randi_range(3, 5),
+				#randi_range(4, 6),
+				#randi_range(4, 6),
+				#randi_range(4, 6),
+				#randi_range(4, 6),
+				#randi_range(3, 5),
+				#randi_range(3, 4),
+				#2,
+				#1
+			#]
+#
+		#_:
+#
+			#push_error(
+				#"RunManager: Unsupported world: "
+				#+ str(current_world)
+			#)
+#
+			#return []
 
 
 # ==================================================
