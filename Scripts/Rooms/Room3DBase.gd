@@ -9,6 +9,7 @@ class_name Room3DBase
 signal room_exit_selected(exit_id: int)
 signal room_finished
 signal reward_requested(enemy_data: EnemyResource)
+signal run_defeated
 
 
 # ==================================================
@@ -162,6 +163,8 @@ func _on_required_character_died() -> void:
 	print("RUN FAILED: Player or Deebo died.")
 
 	_stop_combat()
+
+	run_defeated.emit()
 
 
 func _stop_combat() -> void:

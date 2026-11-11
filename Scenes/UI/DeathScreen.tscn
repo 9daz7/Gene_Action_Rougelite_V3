@@ -1,0 +1,80 @@
+[gd_scene format=3 uid="uid://cmnam62ykchf4"]
+
+[ext_resource type="Script" uid="uid://dn5ox7sf0cqr3" path="res://Scripts/UI/DeathScreen.gd" id="1_xkv6f"]
+
+[node name="DeathScreen" type="Control" unique_id=1009317989]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_xkv6f")
+
+[node name="Background" type="ColorRect" parent="." unique_id=1607338420]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.06879827, 0.06879828, 0.06879828, 0.81960785)
+
+[node name="Content" type="CenterContainer" parent="." unique_id=656796983]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="Content" unique_id=770379745]
+custom_minimum_size = Vector2(650, 550)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Content/Panel" unique_id=2055651817]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -233.0
+offset_top = -201.0
+offset_right = 217.0
+offset_bottom = 299.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Title" type="Label" parent="Content/Panel/VBoxContainer" unique_id=706103104]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.70487857, 0, 0.05501885, 1)
+theme_override_font_sizes/font_size = 30
+text = "Defeat"
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="Content/Panel/VBoxContainer" unique_id=841164140]
+layout_mode = 2
+
+[node name="ReportTitle" type="Label" parent="Content/Panel/VBoxContainer" unique_id=602716060]
+layout_mode = 2
+text = "Report"
+
+[node name="reportplaceholder" type="Label" parent="Content/Panel/VBoxContainer" unique_id=370198956]
+layout_mode = 2
+text = "Run statistics will appear here."
+
+[node name="ReturnHomeButton" type="Button" parent="Content/Panel" unique_id=1547135112]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -117.5
+offset_top = -54.0
+offset_right = 117.5
+offset_bottom = -23.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Return Home"

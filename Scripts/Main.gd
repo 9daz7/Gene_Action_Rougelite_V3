@@ -52,6 +52,10 @@ const BETWEEN_WORLD_LAB_DATA = preload(
 	"res://Data/Labs/BetweenWorldLab.tres"
 )
 
+const DEATH_SCREEN_SCENE = preload(
+	"res://Scenes/UI/DeathScreen.tscn"
+)
+
 var between_world_lab_scene: PackedScene = null
 
 
@@ -62,6 +66,8 @@ var between_world_lab_scene: PackedScene = null
 var lab_hub: LabHub = null
 var between_world_lab_ui: AbandonedLab_UI = null
 var returning_to_hub_after_battle: bool = false
+var death_screen: Control = null
+var return_home_in_progress: bool = false
 
 
 func _ready():
@@ -76,6 +82,8 @@ func _ready():
 		print("BETWEEN WORLD LAB LOADED SUCCESSFULLY")
 
 	var pause_menu = $UI/PauseMenu
+
+	_create_death_screen()
 
 	if not pause_menu.return_home_requested.is_connected(
 		_on_return_home_requested
@@ -99,6 +107,13 @@ func _ready():
 	):
 		room_manager.between_world_lab_exited.connect(
 			_on_between_world_lab_finished
+		)
+
+	if not room_manager.run_defeated.is_connected(
+		_on_run_defeated
+	):
+		room_manager.run_defeated.connect(
+			_on_run_defeated
 		)
 
 	gene_database.load_genes()
@@ -169,6 +184,31 @@ func _ready():
 
 	if is_instance_valid(lab_hub):
 		lab_hub.hide()
+
+
+func _create_death_screen() -> void:
+
+	if is_instance_valid(death_screen):
+		return
+
+	death_screen = DEATH_SCREEN_SCENE.instantiate()
+
+	$UI.add_child(death_screen)
+
+	death_screen.set_anchors_and_offsets_preset(
+		Control.PRESET_FULL_RECT
+	)
+
+	death_screen.hide()
+
+	if not death_screen.return_home_requested.is_connected(
+		_on_return_home_requested
+	):
+		death_screen.return_home_requested.connect(
+			_on_return_home_requested
+		)
+
+	print("Death Screen created.")
 
 
 # ==================================================
@@ -497,7 +537,9 @@ func _on_animal_lab_requested() -> void:
 
 
 func start_run():
-	
+
+	return_home_in_progress = false
+
 	print("======================")
 	print("MAIN START_RUN CALLED")
 	print("======================")
@@ -558,6 +600,17 @@ func start_run():
 	#map_manager.enable_scanner()
 
 	map_ui.close_map()
+
+
+func _on_run_defeated() -> void:
+
+	print("================================")
+	print("MAIN: RUN DEFEATED")
+	print("================================")
+
+	if is_instance_valid(death_screen):
+
+		death_screen.open()
 
 
 func save_game() -> void:
@@ -641,6 +694,14 @@ func finish_run():
 
 
 func _on_return_home_requested() -> void:
+
+	if return_home_in_progress:
+		return
+
+	return_home_in_progress = true
+
+	if is_instance_valid(death_screen):
+		death_screen.hide()
 
 	print("================================")
 	print("RETURN HOME REQUESTED")

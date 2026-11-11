@@ -4,6 +4,7 @@ class_name RoomManager
 
 signal between_world_transition_requested
 signal between_world_lab_exited
+signal run_defeated
 
 const PLAYER_PARTY_SCENE: PackedScene = preload(
 	"res://Scenes/Animals/Player3D.tscn"
@@ -382,6 +383,14 @@ func open_room_scene(room: RoomResource) -> void:
 			Callable(self, "_on_reward_requested")
 		)
 
+	if active_room_scene.has_signal("run_defeated"):
+		if not active_room_scene.run_defeated.is_connected(
+			_on_active_room_run_defeated
+		):
+			active_room_scene.run_defeated.connect(
+				_on_active_room_run_defeated
+			)
+
 	get_tree().current_scene.add_child(
 		active_room_scene
 	)
@@ -442,6 +451,13 @@ func open_room_scene(room: RoomResource) -> void:
 
 		_:
 			pass
+
+
+func _on_active_room_run_defeated() -> void:
+
+	print("ROOM MANAGER: RUN DEFEATED")
+
+	run_defeated.emit()
 
 
 func _on_reward_requested(enemy_data: EnemyResource) -> void:
