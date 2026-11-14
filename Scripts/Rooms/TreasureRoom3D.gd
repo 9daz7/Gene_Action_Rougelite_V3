@@ -11,9 +11,9 @@ var treasure_ui: TreasureRoom_UI = null
 	get_node_or_null("TreasureInteractable3D") as TreasureInteractable3D
 )
 
-@onready var run_manager: RunManager = get_node(
-	"../Managers/RunManager"
-)
+#@onready var run_manager: RunManager = get_node(
+	#"../Managers/RunManager"
+#)
 
 
 func _ready() -> void:

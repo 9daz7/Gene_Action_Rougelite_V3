@@ -29,7 +29,7 @@ const EVENT_UI_SCENE = preload(
 # ==================================================
 
 var room_manager: RoomManager = null
-var run_manager: RunManager = null
+#var run_manager: RunManager = null
 
 
 # ==================================================

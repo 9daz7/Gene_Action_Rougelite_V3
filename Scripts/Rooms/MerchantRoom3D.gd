@@ -28,7 +28,7 @@ const SHOP_UI_SCENE = preload(
 # Managers
 # ==================================================
 
-var run_manager: RunManager = null
+#var run_manager: RunManager = null
 var room_manager: RoomManager = null
 
 

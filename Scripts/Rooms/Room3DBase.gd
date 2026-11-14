@@ -19,6 +19,8 @@ signal run_defeated
 var player: CharacterBody3D = null
 var deebo: CharacterBody3D = null
 
+var run_manager: RunManager = null
+
 var room_exits: Array[RoomExit3D] = []
 
 
@@ -36,30 +38,66 @@ var room_completed: bool = false
 
 func configure_party(
 	player_ref: CharacterBody3D,
-	deebo_ref: CharacterBody3D
+	deebo_ref: CharacterBody3D,
+	run_manager_ref: RunManager = null
 ) -> void:
 
 	player = player_ref
 	deebo = deebo_ref
+	run_manager = run_manager_ref
+
+	_setup_party_references()
+	_configure_enemy_references()
 
 
-func _ready() -> void:
+func _setup_party_references() -> void:
 
 	if is_instance_valid(player):
+
 		player.add_to_group("player")
 
 		if player.has_signal("died"):
-			if not player.died.is_connected(_on_required_character_died):
-				player.died.connect(_on_required_character_died)
+			if not player.died.is_connected(
+				_on_required_character_died
+			):
+				player.died.connect(
+					_on_required_character_died
+				)
 
 	if is_instance_valid(deebo):
+
 		if deebo.has_signal("died"):
-			if not deebo.died.is_connected(_on_required_character_died):
-				deebo.died.connect(_on_required_character_died)
+			if not deebo.died.is_connected(
+				_on_required_character_died
+			):
+				deebo.died.connect(
+					_on_required_character_died
+				)
+
+
+#func _ready() -> void:
+#
+	#if is_instance_valid(player):
+		#player.add_to_group("player")
+#
+		#if player.has_signal("died"):
+			#if not player.died.is_connected(_on_required_character_died):
+				#player.died.connect(_on_required_character_died)
+#
+	#if is_instance_valid(deebo):
+		#if deebo.has_signal("died"):
+			#if not deebo.died.is_connected(_on_required_character_died):
+				#deebo.died.connect(_on_required_character_died)
+#
+	#_register_room_exits()
+#
+	#_configure_enemy_references()
+#
+	## Initialize health UI after room setup.
+	#call_deferred("_setup_action_battle_ui")
+func _ready() -> void:
 
 	_register_room_exits()
-
-	_configure_enemy_references()
 
 	# Initialize health UI after room setup.
 	call_deferred("_setup_action_battle_ui")

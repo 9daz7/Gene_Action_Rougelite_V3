@@ -347,19 +347,19 @@ func open_room_scene(room: RoomResource) -> void:
 		)
 		return
 
-	# --------------------------------------------------
-	# Configure Persistent Party
-	# --------------------------------------------------
-
-	if active_room_scene.has_method("configure_party"):
-		if (
-			is_instance_valid(player_character)
-			and is_instance_valid(deebo_character)
-		):
-			active_room_scene.configure_party(
-				player_character,
-				deebo_character
-			)
+	## --------------------------------------------------
+	## Configure Persistent Party
+	## --------------------------------------------------
+#
+	#if active_room_scene.has_method("configure_party"):
+		#if (
+			#is_instance_valid(player_character)
+			#and is_instance_valid(deebo_character)
+		#):
+			#active_room_scene.configure_party(
+				#player_character,
+				#deebo_character
+			#)
 
 	# --------------------------------------------------
 	# Connect 3D Room Exit Signal
@@ -394,6 +394,21 @@ func open_room_scene(room: RoomResource) -> void:
 	get_tree().current_scene.add_child(
 		active_room_scene
 	)
+
+	# --------------------------------------------------
+	# Configure Persistent Party
+	# --------------------------------------------------
+
+	if active_room_scene.has_method("configure_party"):
+		if (
+			is_instance_valid(player_character)
+			and is_instance_valid(deebo_character)
+		):
+			active_room_scene.configure_party(
+				player_character,
+				deebo_character,
+				run_manager
+			)
 
 	_place_party_at_room_spawn(active_room_scene)
 
@@ -524,7 +539,8 @@ func enter_between_world_lab(
 	if lab_instance.has_method("configure_party"):
 		lab_instance.configure_party(
 			player_character,
-			deebo_character
+			deebo_character,
+			run_manager
 		)
 
 	get_tree().current_scene.add_child(lab_instance)
@@ -703,7 +719,8 @@ func enter_temporary_interior(interior_scene: PackedScene) -> void:
 	if active_temporary_interior_scene.has_method("configure_party"):
 		active_temporary_interior_scene.configure_party(
 			player_character,
-			deebo_character
+			deebo_character,
+			run_manager
 		)
 
 	get_tree().current_scene.add_child(
@@ -874,6 +891,8 @@ func complete_room() -> void:
 		return
 
 	current_room.completed = true
+
+	run_manager.record_room_cleared()
 
 	if current_run_node != null:
 

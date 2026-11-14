@@ -77,6 +77,9 @@ var run_active := false
 
 var enemies_defeated: int = 0
 
+var rooms_cleared: int = 0
+var highest_world_reached: int = 1
+
 
 # ==================================================
 # Run Mutagens
@@ -1783,6 +1786,11 @@ func complete_world() -> void:
 
 		print("Next World:", current_world)
 
+		highest_world_reached = max(
+			highest_world_reached,
+			current_world
+		)
+
 		return
 
 	# ==================================================
@@ -1790,9 +1798,13 @@ func complete_world() -> void:
 	# ==================================================
 
 	if current_world < max_worlds:
-
 		current_world += 1
 		world_transition_pending = true
+
+		highest_world_reached = max(
+			highest_world_reached,
+			current_world
+		)
 
 		print("Advanced to World:", current_world)
 
@@ -2735,6 +2747,9 @@ func start_run():
 
 	GameEvents.gold_changed.emit(gold)
 
+	rooms_cleared = 0
+	highest_world_reached = current_world
+
 # ----------------------------------------------
 # Setup Animal
 # ----------------------------------------------
@@ -2771,6 +2786,13 @@ func start_run():
 		"Animal:",
 		current_animal_build.animal_name
 	)
+
+
+func record_room_cleared() -> void:
+
+	rooms_cleared += 1
+
+	print("Rooms cleared this run:", rooms_cleared)
 
 
 func reset_run() -> void:
@@ -2811,15 +2833,7 @@ func reset_run() -> void:
 
 func record_battle_victory(defeated_enemies: Array) -> void:
 
-	var defeated_count := 0
-
-	for enemy in defeated_enemies:
-
-		if enemy == null:
-			continue
-
-		if not enemy.is_alive():
-			defeated_count += 1
+	var defeated_count := defeated_enemies.size()
 
 	enemies_defeated += defeated_count
 
@@ -3057,3 +3071,45 @@ func discard_unbrought_run_potions() -> void:
 
 		run_potion_pocket[i] = null
 		run_potion_brought_from_hub[i] = false
+
+
+# ==================================================
+# Death Report
+# ==================================================
+
+func create_run_report() -> Dictionary:
+
+	var genes_used: Array[String] = []
+	var mutagens_used: Array[String] = []
+
+	# Genes equipped for this run
+	if current_animal_build != null:
+
+		for gene in current_animal_build.genes:
+
+			if gene == null:
+				continue
+
+			genes_used.append(
+				gene.gene_name
+			)
+
+	# Currently equipped mutagens
+	if run_mutagen_manager != null:
+
+		for mutagen in run_mutagen_manager.get_equipped_mutagens():
+
+			if mutagen == null:
+				continue
+
+			mutagens_used.append(
+				mutagen.mutagen_name
+			)
+
+	return{
+		"genes": genes_used,
+		"mutagens": mutagens_used,
+		"enemies_defeated": enemies_defeated,
+		"rooms_cleared": rooms_cleared,
+		"world_reached": highest_world_reached
+	}

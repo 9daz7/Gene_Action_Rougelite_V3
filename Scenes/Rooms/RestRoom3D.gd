@@ -13,7 +13,7 @@ const REST_UI_SCENE = preload(
 @onready var action_battle_ui: ActionBattleUI = $ActionBattleUI
 
 var rest_ui: Control = null
-var run_manager: RunManager = null
+#var run_manager: RunManager = null
 var room_manager: RoomManager = null
 
 var previous_mouse_mode: Input.MouseMode = Input.MOUSE_MODE_VISIBLE

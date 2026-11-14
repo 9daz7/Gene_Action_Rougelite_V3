@@ -9,10 +9,59 @@ var remaining_enemies: int = 0
 var reward_enemy_data: EnemyResource = null
 var reward_requested_once: bool = false
 
+var registered_enemies: Array[CharacterBody3D] = []
 
+
+#func _ready() -> void:
+#
+	#super._ready()
+#
+	#if not is_instance_valid(player):
+		#push_error("BattleRoom3D: Player reference is missing.")
+		#return
+#
+	#var party_root := player.get_parent()
+#
+	#if party_root == null:
+		#push_error("BattleRoom3D: Player has no party root.")
+		#return
+#
+	#combat_controller = party_root.get_node_or_null(
+		#"ActionCombatController3D"
+	#) as ActionCombatController3D
+#
+	#if combat_controller == null:
+		#push_error(
+			#"BattleRoom3D: ActionCombatController3D "
+			#+ "was not found in Player3D."
+		#)
+		#return
+#
+	#action_battle_ui.setup(
+		#player,
+		#deebo,
+		#combat_controller
+	#)
+#
+	#print(
+		#"TEST ROOM HEALTH AFTER UI SETUP | ",
+		#"Player: ", player.current_health,
+		#"/", player.max_health,
+		#" | Deebo: ", deebo.current_health,
+		#"/", deebo.max_health
+	#)
+#
+	#action_battle_ui.update_move_names()
+#
+	#_register_enemies()
 func _ready() -> void:
 
 	super._ready()
+
+	call_deferred("_setup_battle_room")
+
+
+func _setup_battle_room() -> void:
 
 	if not is_instance_valid(player):
 		push_error("BattleRoom3D: Player reference is missing.")
@@ -53,7 +102,6 @@ func _ready() -> void:
 
 	_register_enemies()
 
-
 #func _on_required_character_died() -> void:
 #
 	#if run_failed:
@@ -81,6 +129,7 @@ func _register_enemies() -> void:
 			continue
 
 		connected_enemies.append(enemy)
+		registered_enemies.append(enemy)
 
 		# Get this enemy's resource.
 		var enemy_data := enemy.get("enemy_data") as EnemyResource
@@ -140,6 +189,14 @@ func _on_battle_defeated() -> void:
 		return
 
 	reward_requested_once = true
+
+	print("BATTLE ROOM: RUN MANAGER VALID: ", is_instance_valid(run_manager))
+	print("BATTLE ROOM: REGISTERED ENEMIES: ", registered_enemies.size())
+
+	if is_instance_valid(run_manager):
+		run_manager.record_battle_victory(registered_enemies)
+	else:
+		push_error("BattleRoom3D: RunManager reference is missing.")
 
 	print("================================")
 	print("BATTLE ENCOUNTER DEFEATED")

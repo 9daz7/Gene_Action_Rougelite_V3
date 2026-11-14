@@ -610,6 +610,10 @@ func _on_run_defeated() -> void:
 
 	if is_instance_valid(death_screen):
 
+		death_screen.set_report(
+			run_manager.create_run_report()
+		)
+
 		death_screen.open()
 
 
