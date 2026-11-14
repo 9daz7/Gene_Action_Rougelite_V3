@@ -132,7 +132,7 @@ texture = ExtResource("4_b0u8h")
 transform = Transform3D(1, 0, 0, 0, 0.9985837, 0.053202253, 0, -0.053202253, 0.9985837, 0.29890823, 0.4036882, 0.037970543)
 shape = SubResource("CapsuleShape3D_l4lsx")
 
-[node name="ActionEnemyController3D" type="Node" parent="Enemies/Wolf" unique_id=649885131]
+[node name="ActionEnemyController3D" type="Node" parent="Enemies/Wolf" unique_id=649885131 groups=["enemies_3d"]]
 script = ExtResource("5_um0xf")
 
 [node name="Environment" type="Node3D" parent="." unique_id=1683898163]

@@ -20,6 +20,7 @@ var battle_initialized: bool = false
 
 var reward_enemy_data: EnemyResource = null
 var reward_requested_once: bool = false
+var registered_enemies: Array[CharacterBody3D] = []
 
 
 # ==================================================
@@ -29,6 +30,9 @@ var reward_requested_once: bool = false
 func _ready() -> void:
 
 	super._ready()
+	call_deferred("_setup_elite_room")
+
+func _setup_elite_room() -> void:
 
 	print("================================")
 	print("ELITE ROOM INITIALIZING")
@@ -83,9 +87,8 @@ func _register_enemies() -> void:
 	var connected_enemies: Array[Node] = []
 
 	for controller in find_children("*", "", true, false):
-		if controller.get_script() != preload(
-			"res://Scripts/ActionBattle/ActionEnemyController3D.gd"
-		):
+
+		if not controller.is_in_group("enemies_3d"):
 			continue
 
 		var enemy := controller.get_parent() as CharacterBody3D
@@ -101,20 +104,27 @@ func _register_enemies() -> void:
 			continue
 
 		connected_enemies.append(enemy)
+		registered_enemies.append(enemy)
 
 		# Store the highest-tier enemy resource for this encounter.
 		var enemy_data := enemy.get("enemy_data") as EnemyResource
 
 		if enemy_data != null:
-			if reward_enemy_data == null or enemy_data.enemy_type > reward_enemy_data.enemy_type:
+			if (
+				reward_enemy_data == null
+				or enemy_data.enemy_type > reward_enemy_data.enemy_type
+			):
 				reward_enemy_data = enemy_data
 
 		if not enemy.died.is_connected(_on_enemy_died):
 			enemy.died.connect(_on_enemy_died)
 
+	print("ELITE CONTROLLERS FOUND: ", connected_enemies.size())
+
 	remaining_enemies = connected_enemies.size()
 
 	print("ELITE ENEMIES REGISTERED: ", remaining_enemies)
+	print("ELITE REWARD ENEMY: ", reward_enemy_data)
 
 	if remaining_enemies == 0:
 		push_error(
@@ -159,6 +169,16 @@ func _on_elite_defeated() -> void:
 
 	reward_requested_once = true
 
+	print(
+		"ELITE ROOM: REGISTERED ENEMIES: ",
+		registered_enemies.size()
+	)
+
+	if is_instance_valid(run_manager):
+		run_manager.record_battle_victory(registered_enemies)
+	else:
+		push_error("EliteRoom3D: RunManager reference is missing.")
+
 	print("================================")
 	print("ELITE ENCOUNTER DEFEATED")
 	print("REQUESTING ELITE REWARD")
@@ -166,3 +186,5 @@ func _on_elite_defeated() -> void:
 	print("================================")
 
 	reward_requested.emit(reward_enemy_data)
+
+	print("ELITE REWARD REQUEST SENT")
