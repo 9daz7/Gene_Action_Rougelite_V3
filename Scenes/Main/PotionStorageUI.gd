@@ -2,6 +2,8 @@ extends Control
 class_name PotionStorageUI
 
 
+signal closed
+
 # ==================================================
 # Managers
 # ==================================================
@@ -320,3 +322,4 @@ func _save_game() -> void:
 func _close() -> void:
 
 	hide()
+	closed.emit()

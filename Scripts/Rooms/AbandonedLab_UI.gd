@@ -125,6 +125,7 @@ func open(
 	is_between_world_lab = between_world
 
 	show()
+	_set_player_controls_enabled(false)
 
 
 	# ==================================================
@@ -236,6 +237,25 @@ func close() -> void:
 	is_between_world_lab = false
 
 	hide()
+	_set_player_controls_enabled(true)
+
+
+# ==================================================
+# Player Movement
+# ==================================================
+
+func _set_player_controls_enabled(enabled: bool) -> void:
+
+	if room_manager == null:
+		return
+
+	var player = room_manager.player_character
+
+	if (
+		is_instance_valid(player)
+		and player.has_method("set_controls_enabled")
+	):
+		player.call("set_controls_enabled", enabled)
 
 
 # ==================================================
@@ -291,6 +311,7 @@ func start_critical_lab() -> void:
 
 	# Prevent this UI from blocking BattleUI input.
 	hide()
+	_set_player_controls_enabled(true)
 	_set_lab_exit_locked(true)
 
 
@@ -376,7 +397,7 @@ func critical_battle_won() -> void:
 	# ==================================================
 
 	show()
-
+	_set_player_controls_enabled(false)
 	_update_lab_state()
 
 

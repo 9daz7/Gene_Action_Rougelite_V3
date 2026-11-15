@@ -2,6 +2,9 @@ extends Control
 class_name ItemShopUI
 
 
+signal closed
+
+
 # ==================================================
 # Managers
 # ==================================================
@@ -293,5 +296,5 @@ func _store_purchased_potion(
 func _close() -> void:
 
 	current_shop = null
-
 	hide()
+	closed.emit()

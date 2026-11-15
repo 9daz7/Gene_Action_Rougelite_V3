@@ -1137,6 +1137,15 @@ func open_reward(rewards) -> void:
 		reward_room
 	)
 
+	# Lock player movement while choosing a reward.
+	#if is_instance_valid(player_character):
+		#player_character.set_controls_enabled(false)
+	if (
+		is_instance_valid(player_character)
+		and player_character.has_method("set_controls_enabled")
+	):
+		player_character.call("set_controls_enabled", false)
+
 	reward_room.set_anchors_and_offsets_preset(
 		Control.PRESET_FULL_RECT
 	)
@@ -1230,6 +1239,15 @@ func _on_reward_finished(reward) -> void:
 		if run_manager.world_transition_pending:
 			print("WORLD TRANSITION REQUESTED")
 			#between_world_transition_requested.emit()
+
+	# Restore player movement after reward selection.
+	#if is_instance_valid(player_character):
+		#player_character.set_controls_enabled(true)
+	if (
+		is_instance_valid(player_character)
+		and player_character.has_method("set_controls_enabled")
+	):
+		player_character.call("set_controls_enabled", true)
 
 	# ==================================================
 	# Return To Battle Room

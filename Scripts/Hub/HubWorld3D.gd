@@ -31,6 +31,31 @@ func setup(
 	item_shop_ui = p_item_shop_ui
 	upgrade_shop_ui = p_upgrade_shop_ui
 
+	# Connect UI close signals.
+	if potion_storage_ui != null:
+		if not potion_storage_ui.closed.is_connected(
+			_update_hub_player_controls
+		):
+			potion_storage_ui.closed.connect(
+				_update_hub_player_controls
+			)
+
+	if item_shop_ui != null:
+		if not item_shop_ui.closed.is_connected(
+			_update_hub_player_controls
+		):
+			item_shop_ui.closed.connect(
+				_update_hub_player_controls
+			)
+
+	if upgrade_shop_ui != null:
+		if not upgrade_shop_ui.closed.is_connected(
+			_update_hub_player_controls
+		):
+			upgrade_shop_ui.closed.connect(
+				_update_hub_player_controls
+			)
+
 
 func open() -> void:
 
@@ -125,6 +150,8 @@ func _on_storage_interacted() -> void:
 
 	potion_storage_ui.open()
 
+	_update_hub_player_controls()
+
 
 func _on_item_shop_interacted() -> void:
 
@@ -135,6 +162,8 @@ func _on_item_shop_interacted() -> void:
 		return
 
 	item_shop_ui.open(item_shop_data)
+
+	_update_hub_player_controls()
 
 
 func _on_upgrade_shop_interacted() -> void:
@@ -149,7 +178,31 @@ func _on_upgrade_shop_interacted() -> void:
 
 	upgrade_shop_ui.open()
 
+	_update_hub_player_controls()
+
 
 func _on_animal_lab_interacted() -> void:
 
 	animal_lab_requested.emit()
+
+
+# ==================================================
+# Hub UI Movement Control
+# ==================================================
+
+func _update_hub_player_controls() -> void:
+
+	var player := get_node_or_null(
+		"HubPlayer3D/Player"
+	) as HubPlayer3D
+
+	if player == null:
+		return
+
+	var ui_open: bool = (
+		(potion_storage_ui != null and potion_storage_ui.visible)
+		or (item_shop_ui != null and item_shop_ui.visible)
+		or (upgrade_shop_ui != null and upgrade_shop_ui.visible)
+	)
+
+	player.set_controls_enabled(not ui_open)

@@ -2,6 +2,9 @@ extends Control
 class_name UpgradeShopUI
 
 
+signal closed
+
+
 # ==================================================
 # Signals
 # ==================================================
@@ -101,3 +104,4 @@ func _on_purchase_pressed() -> void:
 func _on_close_pressed() -> void:
 
 	hide()
+	closed.emit()
