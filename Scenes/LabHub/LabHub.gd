@@ -8,7 +8,7 @@ class_name LabHub
 
 signal start_run_requested
 signal build_confirmed(build: AnimalBuildResource)
-#signal lab_closed
+signal lab_closed
 
 var run_manager: RunManager
 var save_manager
@@ -60,7 +60,6 @@ func setup(
 # Public Functions
 # ==================================================
 
-
 func open() -> void:
 
 	print("Lab Hub opened")
@@ -73,12 +72,12 @@ func open() -> void:
 func close() -> void:
 
 	hide()
-	
-	
+	lab_closed.emit()
+
+
 # ==================================================
 # Private Functions
 # ==================================================
-
 
 func _setup_connections() -> void:
 
@@ -143,7 +142,6 @@ func _update_gene_storage_label() -> void:
 # ==================================================
 # Animal Creation
 # ==================================================
-
 
 func _open_animal_creation() -> void:
 

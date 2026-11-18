@@ -245,9 +245,12 @@ func _create_lab_hub() -> void:
 			_on_hub_start_run_requested
 		)
 
-	#lab_hub.lab_closed.connect(
-		#_on_lab_hub_closed
-	#)
+	if not lab_hub.lab_closed.is_connected(
+		_on_lab_hub_closed
+	):
+		lab_hub.lab_closed.connect(
+			_on_lab_hub_closed
+		)
 
 	lab_hub.hide()
 
