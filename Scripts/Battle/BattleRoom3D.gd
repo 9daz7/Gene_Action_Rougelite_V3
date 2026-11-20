@@ -207,35 +207,6 @@ func _on_battle_defeated() -> void:
 	reward_requested.emit(reward_enemy_data)
 
 
-#func _register_room_exits() -> void:
-#
-	#room_exits.clear()
-#
-	#for node in find_children("*", "RoomExit3D", true, false):
-		#if not node is RoomExit3D:
-			#continue
-#
-		#var exit := node as RoomExit3D
-		#room_exits.append(exit)
-		#exit.set_enabled(false)
-#
-		#if not exit.exit_entered.is_connected(_on_room_exit_entered):
-			#exit.exit_entered.connect(_on_room_exit_entered)
-#
-		#print("Registered 3D exit: ", exit.name, " | ID: ", exit.exit_id)
-#
-	#print("Total 3D exits registered: ", room_exits.size())
-#
-#
-#func _on_room_exit_entered(exit_id: int) -> void:
-#
-	#if run_failed or not room_completed:
-		#return
-#
-	#print("Room exit selected: ", exit_id)
-	#room_exit_selected.emit(exit_id)
-
-
 #func _stop_combat() -> void:
 #
 	## Stop the player.

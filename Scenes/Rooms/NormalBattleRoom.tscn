@@ -733,18 +733,6 @@ position = Vector2(138, 1055)
 
 [node name="Enemies" type="Node2D" parent="." unique_id=1496383845]
 
-[node name="RoamingEnemy2" parent="Enemies" unique_id=1998266480]
-position = Vector2(719, 487)
-collision_mask = 3
-
-[node name="RoamingEnemy3" parent="Enemies" unique_id=568425942]
-position = Vector2(1197, 645)
-collision_mask = 3
-
-[node name="RoamingEnemy4" parent="Enemies" unique_id=642758756]
-position = Vector2(1197, 182)
-collision_mask = 3
-
 [node name="Exit1" parent="." unique_id=279376350 instance=ExtResource("3_yefhr")]
 position = Vector2(1576, -2)
 
