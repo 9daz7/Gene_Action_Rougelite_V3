@@ -1,8 +1,6 @@
 [gd_scene format=3 uid="uid://hyskbwvcixnu"]
 
 [ext_resource type="PackedScene" uid="uid://s4vol5fxx17b" path="res://Scenes/Rooms/RoomExit.tscn" id="3_yefhr"]
-[ext_resource type="Script" uid="uid://cyxrv2eg82j7j" path="res://Scripts/ActionBattle/ActionTargeting.gd" id="4_iusyf"]
-[ext_resource type="PackedScene" uid="uid://deuudtgda4sb6" path="res://Scenes/Rooms/RoamingEnemy.tscn" id="5_ujrim"]
 
 [sub_resource type="GDScript" id="GDScript_0fj0b"]
 script/source = "extends RoomWorld
@@ -458,6 +456,179 @@ size = Vector2(59, 98)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_npkn0"]
 size = Vector2(580, 31.089996)
 
+[sub_resource type="GDScript" id="GDScript_av6k5"]
+script/source = "extends Node
+class_name ActionTargeting
+
+
+# ==================================================
+# State
+# ==================================================
+
+var selected_target: AnimalBase = null
+
+
+@onready var target_marker: Polygon2D = (
+	get_parent().get_node(\"TargetMarker\")
+)
+
+
+# ==================================================
+# Initialization
+# ==================================================
+
+func _ready() -> void:
+
+	print(\"ActionTargeting ready\")
+
+
+# ==================================================
+# Input
+# ==================================================
+
+func _input(event: InputEvent) -> void:
+
+	if not event is InputEventMouseButton:
+		return
+
+	if not event.pressed:
+		return
+
+	if event.button_index != MOUSE_BUTTON_MIDDLE:
+		return
+
+	if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
+		return
+
+	var player_character := get_parent().get_node_or_null(\"ActionPlayerCharacter\")
+
+	if player_character != null:
+		_select_target_at_mouse(
+			player_character.get_global_mouse_position()
+		)
+
+
+# ==================================================
+# Target Selection
+# ==================================================
+
+func _select_target_at_mouse(mouse_position: Vector2) -> void:
+
+	var parent_scene = get_parent()
+
+	if parent_scene == null:
+		return
+
+	var enemies = parent_scene.get_node_or_null(\"Enemies\")
+
+	if enemies == null:
+		return
+
+	for child in enemies.get_children():
+
+		if not child is AnimalBase:
+			continue
+
+		var enemy := child as AnimalBase
+
+		if not enemy.is_alive():
+			continue
+
+		var distance := (
+			enemy.global_position
+			.distance_to(mouse_position)
+		)
+
+		if distance <= 100.0:
+
+			selected_target = enemy
+
+			target_marker.global_position = (
+				enemy.global_position
+			)
+
+			target_marker.visible = true
+
+			print(
+				\"TARGET SELECTED: \",
+				enemy.name
+			)
+
+			return
+
+	# --------------------------------------------------
+	# Nothing Selected
+	# --------------------------------------------------
+
+	selected_target = null
+
+	target_marker.visible = false
+
+	print(\"TARGET DESELECTED\")
+
+
+# ==================================================
+# Public Access
+# ==================================================
+
+func get_selected_target() -> AnimalBase:
+
+	return selected_target
+
+
+func _process(_delta: float) -> void:
+
+	if selected_target == null:
+		return
+
+	if not is_instance_valid(selected_target):
+		selected_target = null
+		target_marker.visible = false
+		return
+
+	if not selected_target.is_alive():
+		selected_target = null
+		target_marker.visible = false
+		return
+
+	target_marker.global_position = (
+		selected_target.global_position
+	)
+
+
+func is_enemy_at_position(mouse_position: Vector2) -> bool:
+
+	var parent_scene = get_parent()
+
+	if parent_scene == null:
+		return false
+
+	var enemies = parent_scene.get_node_or_null(\"Enemies\")
+
+	if enemies == null:
+		return false
+
+	for child in enemies.get_children():
+
+		if not child is AnimalBase:
+			continue
+
+		var enemy := child as AnimalBase
+
+		if not enemy.is_alive():
+			continue
+
+		var distance := enemy.global_position.distance_to(
+			mouse_position
+		)
+
+		if distance <= 100.0:
+			return true
+
+	return false
+	
+"
+
 [node name="NormalBattleRoom" type="Node2D" unique_id=1973370823]
 script = SubResource("GDScript_0fj0b")
 exits_available_on_entry = false
@@ -562,15 +733,15 @@ position = Vector2(138, 1055)
 
 [node name="Enemies" type="Node2D" parent="." unique_id=1496383845]
 
-[node name="RoamingEnemy2" parent="Enemies" unique_id=1998266480 instance=ExtResource("5_ujrim")]
+[node name="RoamingEnemy2" parent="Enemies" unique_id=1998266480]
 position = Vector2(719, 487)
 collision_mask = 3
 
-[node name="RoamingEnemy3" parent="Enemies" unique_id=568425942 instance=ExtResource("5_ujrim")]
+[node name="RoamingEnemy3" parent="Enemies" unique_id=568425942]
 position = Vector2(1197, 645)
 collision_mask = 3
 
-[node name="RoamingEnemy4" parent="Enemies" unique_id=642758756 instance=ExtResource("5_ujrim")]
+[node name="RoamingEnemy4" parent="Enemies" unique_id=642758756]
 position = Vector2(1197, 182)
 collision_mask = 3
 
@@ -603,4 +774,4 @@ color = Color(0.84, 0, 0, 1)
 polygon = PackedVector2Array(0, -5, 3, -4, 5, 0, 3, 4, 0, 5, -3, 4, -5, 0, -3, -4)
 
 [node name="ActionTargeting" type="Node" parent="." unique_id=1495561450]
-script = ExtResource("4_iusyf")
+script = SubResource("GDScript_av6k5")
