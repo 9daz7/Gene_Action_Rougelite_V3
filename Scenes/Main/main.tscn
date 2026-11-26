@@ -10,7 +10,6 @@
 [ext_resource type="Script" uid="uid://dp476n1iocl1b" path="res://Scripts/Managers/MutagenDatabase.gd" id="7_2ok46"]
 [ext_resource type="Script" uid="uid://d4kb13ao82g53" path="res://Scripts/Managers/PotionDatabase.gd" id="8_es6iu"]
 [ext_resource type="Script" uid="uid://bbfr6ua0f4fu" path="res://Scripts/Managers/RoomManager.gd" id="8_hfg1r"]
-[ext_resource type="PackedScene" uid="uid://duo7vnk5nhe3f" path="res://Scenes/UI/GeneLoadoutScreen.tscn" id="8_imbg2"]
 [ext_resource type="PackedScene" uid="uid://c77fp71r8tcxd" path="res://Scenes/UI/MapUI.tscn" id="9_imbg2"]
 [ext_resource type="Script" uid="uid://b6376cidh46so" path="res://Scripts/Managers/PotionStorageManager.gd" id="9_tdwxr"]
 [ext_resource type="PackedScene" uid="uid://behj6glwxh240" path="res://Scenes/LabHub/LabHub.tscn" id="12_4e4y2"]
@@ -75,15 +74,6 @@ script = ExtResource("8_hfg1r")
 
 [node name="LabHub" parent="UI" unique_id=219335493 instance=ExtResource("12_4e4y2")]
 visible = false
-
-[node name="GeneLoadoutScreen" parent="UI" unique_id=38721201 instance=ExtResource("8_imbg2")]
-
-[node name="GeneRewardUI" type="Control" parent="UI" unique_id=1805312372]
-visible = false
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
 
 [node name="LabUI" type="Control" parent="UI" unique_id=204244767]
 visible = false
