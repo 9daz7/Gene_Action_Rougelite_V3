@@ -1,6 +1,9 @@
-extends Node
-class_name MoveEffect
+# TODO: Create a 3D-compatible version.
+# Legacy implementation disabled during 2D cleanup.
 
-
-func apply(user:AnimalBase, target:AnimalBase):
-	pass
+#extends Node
+#class_name MoveEffect
+#
+#
+#func apply(user:AnimalBase, target:AnimalBase):
+	#pass
