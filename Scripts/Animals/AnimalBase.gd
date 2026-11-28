@@ -990,42 +990,42 @@ func modify_evasion(amount:int):
 	evasion_modifier += amount
 
 
-func calculate_hit_chance(
-	target,
-	move_accuracy: int
-) -> int:
-
-	if target == null:
-		return 0
-
-	var chance: int = int(get_accuracy())
-
-	chance += move_accuracy - 100
-
-	var target_evasion: int = int(target.get_evasion())
-
-	chance -= target_evasion
-
-	var final_chance: int = clamp(
-		chance,
-		10,
-		100
-	)
-
-	print(
-		"HIT CHANCE DEBUG | Attacker:",
-		name,
-		"| Accuracy:",
-		get_accuracy(),
-		"| Move Accuracy:",
-		move_accuracy,
-		"| Target Evasion:",
-		target_evasion,
-		"| Final Hit Chance:",
-		final_chance
-	)
-
-	return final_chance
+#func calculate_hit_chance(
+	#target,
+	#move_accuracy: int
+#) -> int:
+#
+	#if target == null:
+		#return 0
+#
+	#var chance: int = int(get_accuracy())
+#
+	#chance += move_accuracy - 100
+#
+	#var target_evasion: int = int(target.get_evasion())
+#
+	#chance -= target_evasion
+#
+	#var final_chance: int = clamp(
+		#chance,
+		#10,
+		#100
+	#)
+#
+	#print(
+		#"HIT CHANCE DEBUG | Attacker:",
+		#name,
+		#"| Accuracy:",
+		#get_accuracy(),
+		#"| Move Accuracy:",
+		#move_accuracy,
+		#"| Target Evasion:",
+		#target_evasion,
+		#"| Final Hit Chance:",
+		#final_chance
+	#)
+#
+	#return final_chance
 
 
 func setup_player_hp(
@@ -1059,12 +1059,12 @@ func setup_player_hp(
 # Combat Functions
 # ==================================================
 
-var is_protecting := false
+#var is_protecting := false
 
 var stunned: bool = false
 
-# 60% damage reduction
-var protect_reduction := 0.6
+## 60% damage reduction
+#var protect_reduction := 0.6
 
 
 func take_damage(
@@ -1092,16 +1092,16 @@ func take_damage(
 	# Protect first
 	# ==========================================
 
-	if not is_status_damage and is_protecting:
+	#if not is_status_damage and is_protecting:
+#
+		#amount = int(
+			#amount * (1.0 - protect_reduction)
+		#)
 
-		amount = int(
-			amount * (1.0 - protect_reduction)
-		)
-
-		print(
-			name,
-			" blocked damage with protect"
-		)
+		#print(
+			#name,
+			#" blocked damage with protect"
+		#)
 
 
 	# ==========================================
@@ -1149,44 +1149,44 @@ func take_damage(
 
 	play_hit_flash()
 
-	print(
-		"PROTECT MUTAGEN DEBUG | Target:",
-		name,
-		"| Protect:",
-		is_protecting,
-		"| Attacker:",
-		attacker.name if attacker != null else "NULL",
-		"| Move:",
-		move.move_name if move != null else "NULL",
-		"| Damage Type:",
-		move.damage_type if move != null else "NULL",
-		"| Physical:",
-		(
-			move.damage_type
-			== MoveResource.DamageType.PHYSICAL
-		) if move != null else false
-	)
+	#print(
+		#"PROTECT MUTAGEN DEBUG | Target:",
+		#name,
+		#"| Protect:",
+		#is_protecting,
+		#"| Attacker:",
+		#attacker.name if attacker != null else "NULL",
+		#"| Move:",
+		#move.move_name if move != null else "NULL",
+		#"| Damage Type:",
+		#move.damage_type if move != null else "NULL",
+		#"| Physical:",
+		#(
+			#move.damage_type
+			#== MoveResource.DamageType.PHYSICAL
+		#) if move != null else false
+	#)
 
 	# ==================================================
 	# Protect Mutagens
 	# ==================================================
 
-	if (
-		not is_status_damage
-		and
-		attacker != null
-		and
-		move != null
-		and
-		is_protecting
-		and
-		move.damage_type == MoveResource.DamageType.PHYSICAL
-	):
-
-		trigger_protect_mutagens(
-			attacker,
-			move
-		)
+	#if (
+		#not is_status_damage
+		#and
+		#attacker != null
+		#and
+		#move != null
+		#and
+		#is_protecting
+		#and
+		#move.damage_type == MoveResource.DamageType.PHYSICAL
+	#):
+#
+		#trigger_protect_mutagens(
+			#attacker,
+			#move
+		#)
 
 	print(
 		name,
@@ -1417,76 +1417,76 @@ func heal(amount:int):
 		die()
 
 
-func calculate_move_damage(
-	move: MoveResource,
-	target: AnimalBase = null
-) -> int:
-
-	var damage := 0
-
-	match move.damage_type:
-
-		MoveResource.DamageType.PHYSICAL:
-			damage = get_attack()
-
-		MoveResource.DamageType.SPECIAL:
-			damage = get_attack()
-
-		MoveResource.DamageType.TRUE:
-			damage = 0
-
-	damage += move.power
-
-	damage = int(
-		damage * move.damage_multiplier
-	)
-
-	# ==========================================
-	# Ability Mutagen Bonus
-	# ==========================================
-
-	var mutagen_bonus := get_mutagen_damage_bonus(
-		move
-	)
-
-	if mutagen_bonus != 0:
-
-		print(
-			"MUTAGEN DAMAGE BONUS:",
-			move.move_name,
-			"| Bonus:",
-			mutagen_bonus
-		)
-
-		damage += mutagen_bonus
-
-	# ==========================================
-	# Conditional Mutagen Bonus
-	# ==========================================
-
-	var conditional_bonus := (
-		get_mutagen_conditional_damage_bonus(
-			move,
-			target
-		)
-	)
-
-	if conditional_bonus != 0:
-
-		damage += conditional_bonus
-
-	# ==========================================
-	# Passive Effects
-	# ==========================================
-
-	for passive in passive_effects:
-
-		damage = passive.modify_damage_dealt(
-			self,
-			damage
-		)
-
-	return int(damage)
+#func calculate_move_damage(
+	#move: MoveResource,
+	#target: AnimalBase = null
+#) -> int:
+#
+	#var damage := 0
+#
+	#match move.damage_type:
+#
+		#MoveResource.DamageType.PHYSICAL:
+			#damage = get_attack()
+#
+		#MoveResource.DamageType.SPECIAL:
+			#damage = get_attack()
+#
+		#MoveResource.DamageType.TRUE:
+			#damage = 0
+#
+	#damage += move.power
+#
+	#damage = int(
+		#damage * move.damage_multiplier
+	#)
+#
+	## ==========================================
+	## Ability Mutagen Bonus
+	## ==========================================
+#
+	#var mutagen_bonus := get_mutagen_damage_bonus(
+		#move
+	#)
+#
+	#if mutagen_bonus != 0:
+#
+		#print(
+			#"MUTAGEN DAMAGE BONUS:",
+			#move.move_name,
+			#"| Bonus:",
+			#mutagen_bonus
+		#)
+#
+		#damage += mutagen_bonus
+#
+	## ==========================================
+	## Conditional Mutagen Bonus
+	## ==========================================
+#
+	#var conditional_bonus := (
+		#get_mutagen_conditional_damage_bonus(
+			#move,
+			#target
+		#)
+	#)
+#
+	#if conditional_bonus != 0:
+#
+		#damage += conditional_bonus
+#
+	## ==========================================
+	## Passive Effects
+	## ==========================================
+#
+	#for passive in passive_effects:
+#
+		#damage = passive.modify_damage_dealt(
+			#self,
+			#damage
+		#)
+#
+	#return int(damage)
 
 
 func calculate_damage_taken(amount: int) -> int:
@@ -1518,17 +1518,17 @@ func get_current_hp() -> int:
 # PROTECT
 # ==================================================
 
-func activate_protect():
-
-	is_protecting = true
-
-	BattleLog.add_message(
-		"%s is protecting itself!" % name
-	)
-
-
-func clear_protect():
-	is_protecting = false
+#func activate_protect():
+#
+	#is_protecting = true
+#
+	#BattleLog.add_message(
+		#"%s is protecting itself!" % name
+	#)
+#
+#
+#func clear_protect():
+	#is_protecting = false
 
 
 # ==================================================
@@ -1994,98 +1994,98 @@ func _has_status_name(
 	return false
 
 
-func trigger_protect_mutagens(
-	attacker: AnimalBase,
-	move: MoveResource
-) -> void:
-
-	print("===== PROTECT MUTAGEN DEBUG =====")
-
-	if attacker == null:
-
-		print("NO ATTACKER")
-		return
-
-	if move == null:
-
-		print("NO MOVE")
-		return
-
-	print(
-		"Target:",
-		name
-	)
-
-	print(
-		"Protected:",
-		is_protecting
-	)
-
-	print(
-		"Move:",
-		move.move_name
-	)
-
-	print(
-		"Damage Type:",
-		move.damage_type
-	)
-
-	print(
-		"Physical:",
-		move.damage_type
-		== MoveResource.DamageType.PHYSICAL
-	)
-
-	var mutagens := get_run_mutagens()
-
-	print(
-		"Mutagens found:",
-		mutagens.size()
-	)
-
-	for mutagen in mutagens:
-
-		if mutagen == null:
-			continue
-
-		print(
-			"Mutagen:",
-			mutagen.mutagen_name,
-			"| Trigger:",
-			mutagen.triggers_on_physical_hit_while_protected,
-			"| Effects:",
-			mutagen.added_effects.size()
-		)
-
-		if not mutagen.triggers_on_physical_hit_while_protected:
-			continue
-
-		# ==================================================
-		# Apply Mutagen Effects
-		# ==================================================
-
-		for effect in mutagen.added_effects:
-
-			if effect == null:
-				continue
-
-			var new_effect: StatusEffect = (
-				effect.duplicate(true)
-			)
-
-			attacker.apply_status_effect(
-				new_effect
-			)
-
-			print(
-				"Protect Mutagen:",
-				mutagen.mutagen_name,
-				" applied:",
-				new_effect.effect_name,
-				"to:",
-				attacker.name
-			)
+#func trigger_protect_mutagens(
+	#attacker: AnimalBase,
+	#move: MoveResource
+#) -> void:
+#
+	#print("===== PROTECT MUTAGEN DEBUG =====")
+#
+	#if attacker == null:
+#
+		#print("NO ATTACKER")
+		#return
+#
+	#if move == null:
+#
+		#print("NO MOVE")
+		#return
+#
+	#print(
+		#"Target:",
+		#name
+	#)
+#
+	#print(
+		#"Protected:",
+		#is_protecting
+	#)
+#
+	#print(
+		#"Move:",
+		#move.move_name
+	#)
+#
+	#print(
+		#"Damage Type:",
+		#move.damage_type
+	#)
+#
+	#print(
+		#"Physical:",
+		#move.damage_type
+		#== MoveResource.DamageType.PHYSICAL
+	#)
+#
+	#var mutagens := get_run_mutagens()
+#
+	#print(
+		#"Mutagens found:",
+		#mutagens.size()
+	#)
+#
+	#for mutagen in mutagens:
+#
+		#if mutagen == null:
+			#continue
+#
+		#print(
+			#"Mutagen:",
+			#mutagen.mutagen_name,
+			#"| Trigger:",
+			#mutagen.triggers_on_physical_hit_while_protected,
+			#"| Effects:",
+			#mutagen.added_effects.size()
+		#)
+#
+		#if not mutagen.triggers_on_physical_hit_while_protected:
+			#continue
+#
+		## ==================================================
+		## Apply Mutagen Effects
+		## ==================================================
+#
+		#for effect in mutagen.added_effects:
+#
+			#if effect == null:
+				#continue
+#
+			#var new_effect: StatusEffect = (
+				#effect.duplicate(true)
+			#)
+#
+			#attacker.apply_status_effect(
+				#new_effect
+			#)
+#
+			#print(
+				#"Protect Mutagen:",
+				#mutagen.mutagen_name,
+				#" applied:",
+				#new_effect.effect_name,
+				#"to:",
+				#attacker.name
+			#)
 
 
 # ==================================================
@@ -2137,7 +2137,7 @@ func load_build(build: AnimalBuildResource):
 	evasion_modifier = 0
 	armor_modifier = 0
 
-	is_protecting = false
+	#is_protecting = false
 
 	if run_manager:
 		hp = run_manager.player_hp
